@@ -3,630 +3,602 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Biblioteca del Conocimiento Perdido | IA Local + Historia Real</title>
+    <title>Newtral · Biblioteca del Conocimiento · IA Local + Modo VR</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: radial-gradient(circle at 10% 20%, #0a2f1a, #051a0e);
-            min-height: 100vh;
-            padding: 2rem 1rem;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #0a0f1e;
             color: #eef2ff;
+            overflow-x: hidden;
         }
-
-        .container {
+        
+        /* Contenedor normal */
+        .normal-mode {
+            position: relative;
+            z-index: 1;
             max-width: 1400px;
             margin: 0 auto;
+            padding: 2rem;
+            background: rgba(10, 15, 30, 0.85);
+            backdrop-filter: blur(5px);
+            border-radius: 1rem;
         }
-
+        
+        /* Contenedor VR (inicialmente oculto) */
+        .vr-mode {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            display: none;
+            background: #0a0f1e;
+        }
+        
+        .vr-mode.active {
+            display: block;
+        }
+        
+        /* Botón VR */
+        .vr-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 40px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 100;
+            font-family: 'Cinzel', serif;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+            transition: transform 0.2s;
+        }
+        
+        .vr-button:hover {
+            transform: scale(1.05);
+        }
+        
+        .close-vr {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.7);
+            border: 1px solid #e9c46a;
+            padding: 8px 16px;
+            border-radius: 30px;
+            color: #e9c46a;
+            cursor: pointer;
+            z-index: 1001;
+            font-family: monospace;
+        }
+        
         h1 {
-            font-size: 1.9rem;
-            background: linear-gradient(135deg, #fbbf24, #10b981, #f59e0b);
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #FFD166, #FF6B6B, #4ECDC4);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            margin-bottom: 0.25rem;
+            text-align: center;
         }
-
-        .sub {
-            color: #9bbf9b;
-            margin-bottom: 1.8rem;
-            font-size: 0.85rem;
-            border-left: 3px solid #f59e0b;
-            padding-left: 0.8rem;
-        }
-
+        
+        .sub { text-align: center; color: #94a3b8; margin-bottom: 2rem; }
+        
         /* Panel IA */
         .ia-panel {
-            background: rgba(16, 185, 129, 0.08);
+            background: rgba(16, 185, 129, 0.1);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(245, 158, 11, 0.4);
             border-radius: 28px;
-            padding: 1.2rem;
+            padding: 1rem;
             margin-bottom: 2rem;
         }
-
+        
         .ia-title {
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 700;
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.5rem;
             color: #fbbf24;
         }
-
+        
         .ia-status {
-            font-size: 0.7rem;
-            padding: 2px 10px;
+            font-size: 0.65rem;
+            padding: 2px 8px;
             border-radius: 30px;
             background: #1e3a2f;
             color: #86efac;
         }
-
-        .ia-status.online {
-            background: #064e3b;
-            color: #34d399;
-            border: 1px solid #10b981;
-        }
-
-        .ia-status.offline {
-            background: #451a03;
-            color: #fbbf24;
-            border: 1px solid #f59e0b;
-        }
-
-        .ia-input-group {
-            display: flex;
-            gap: 0.6rem;
-            flex-wrap: wrap;
-            margin-bottom: 0.8rem;
-        }
-
+        
+        .ia-status.online { background: #064e3b; color: #34d399; border: 1px solid #10b981; }
+        .ia-status.offline { background: #451a03; color: #fbbf24; border: 1px solid #f59e0b; }
+        
+        .ia-input-group { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
         .ia-input {
             flex: 1;
-            padding: 0.7rem 1rem;
+            padding: 0.6rem 1rem;
             border: 1px solid #2d5a3a;
             border-radius: 60px;
-            font-size: 0.85rem;
             background: rgba(0, 0, 0, 0.5);
             color: #eef2ff;
         }
-
-        .ia-input::placeholder {
-            color: #6f9e7a;
-        }
-
         .ia-btn {
             background: linear-gradient(135deg, #f59e0b, #d97706);
             border: none;
-            padding: 0.7rem 1.2rem;
+            padding: 0.6rem 1.2rem;
             border-radius: 60px;
             color: white;
             font-weight: 600;
             cursor: pointer;
-            font-size: 0.8rem;
-            transition: all 0.2s;
         }
-
-        .ia-btn:hover {
-            transform: scale(0.98);
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-        }
-
         .ia-response {
             background: rgba(0, 0, 0, 0.4);
             border-radius: 20px;
-            padding: 0.8rem 1rem;
-            font-size: 0.85rem;
+            padding: 0.6rem 1rem;
+            font-size: 0.8rem;
             color: #d1fae5;
-            line-height: 1.5;
-            margin-top: 0.5rem;
             border-left: 3px solid #f59e0b;
         }
-
-        .stats {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .stat {
-            background: rgba(16, 185, 129, 0.1);
-            backdrop-filter: blur(8px);
-            padding: 0.8rem 1.2rem;
-            border-radius: 24px;
-            text-align: center;
-            flex: 1;
-            min-width: 85px;
-            border: 1px solid rgba(245, 158, 11, 0.3);
-        }
-
-        .stat-num {
-            font-size: 1.6rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #fbbf24, #10b981);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .stat-label {
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #9bbf9b;
-        }
-
-        .search-box {
-            margin-bottom: 1.5rem;
-        }
-
+        
+        .stats { display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap; }
+        .stat { background: rgba(30, 41, 59, 0.8); padding: 0.8rem 1.5rem; border-radius: 1rem; text-align: center; }
+        .stat-num { font-size: 1.8rem; font-weight: bold; color: #60a5fa; }
+        
         .search-input {
             width: 100%;
-            padding: 0.8rem 1.2rem;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(8px);
-            border: 1px solid #2d5a3a;
-            border-radius: 60px;
-            color: #eef2ff;
-            font-size: 0.9rem;
+            padding: 0.8rem 1rem;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 2rem;
+            color: white;
+            margin-bottom: 1rem;
         }
-
-        .search-input::placeholder {
-            color: #6f9e7a;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: #f59e0b;
-        }
-
-        .filter-buttons {
-            display: flex;
-            gap: 0.6rem;
-            flex-wrap: wrap;
-            margin-bottom: 2rem;
-        }
-
+        
+        .filter-buttons { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
         .filter-btn {
-            padding: 0.4rem 1.2rem;
-            border: 1px solid #2d5a3a;
-            border-radius: 40px;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(4px);
-            color: #cbd5e1;
+            padding: 0.3rem 1rem;
+            border: 1px solid #334155;
+            border-radius: 2rem;
+            background: #1e293b;
+            color: #94a3b8;
             cursor: pointer;
-            font-size: 0.75rem;
-            font-weight: 500;
+        }
+        .filter-btn.active { background: #3b82f6; color: white; }
+        
+        .section-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem; border-left: 3px solid #60a5fa; padding-left: 0.8rem; }
+        .case-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        
+        .card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid #334155;
+            border-radius: 1rem;
+            padding: 1rem;
+            cursor: pointer;
             transition: all 0.2s;
         }
-
-        .filter-btn.active {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-            border-color: #f59e0b;
-        }
-
-        .filter-btn:hover {
-            border-color: #f59e0b;
-            color: #fbbf24;
-        }
-
-        .section {
-            margin-bottom: 2.5rem;
-        }
-
-        .section-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1.2rem;
-            border-left: 3px solid #f59e0b;
-            padding-left: 0.8rem;
-            color: #fbbf24;
-        }
-
-        .case-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 1.2rem;
-        }
-
-        .card {
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(8px);
-            border: 1px solid #2d5a3a;
-            border-radius: 24px;
-            padding: 1rem 1.2rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-3px);
-            background: rgba(16, 185, 129, 0.15);
-            border-color: #f59e0b;
-            box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.5);
-        }
-
-        .card-number {
-            font-size: 0.65rem;
-            color: #fbbf24;
-            letter-spacing: 1px;
-            margin-bottom: 0.3rem;
-        }
-
-        .card-title {
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: #f0fdf4;
-            margin-bottom: 0.2rem;
-        }
-
-        .card-era {
-            font-size: 0.65rem;
-            color: #9bbf9b;
-            margin-bottom: 0.6rem;
-        }
-
-        .card-hook {
-            font-size: 0.8rem;
-            color: #cbd5e1;
-            line-height: 1.45;
-            margin-bottom: 0.7rem;
-        }
-
-        .card-tag {
-            display: inline-block;
-            font-size: 0.55rem;
-            font-weight: 600;
-            padding: 3px 10px;
-            border-radius: 30px;
-        }
-
-        .tag-danger {
-            background: rgba(239, 68, 68, 0.2);
-            color: #fca5a5;
-            border: 0.5px solid #ef4444;
-        }
-        .tag-warning {
-            background: rgba(245, 158, 11, 0.2);
-            color: #fcd34d;
-            border: 0.5px solid #f59e0b;
-        }
-        .tag-info {
-            background: rgba(59, 130, 246, 0.2);
-            color: #93c5fd;
-            border: 0.5px solid #3b82f6;
-        }
-        .tag-success {
-            background: rgba(16, 185, 129, 0.2);
-            color: #6ee7b7;
-            border: 0.5px solid #10b981;
-        }
-
-        .details {
-            display: none;
-            margin-top: 0.8rem;
-            padding-top: 0.8rem;
-            border-top: 1px solid #2d5a3a;
-        }
-
-        .card.open .details {
-            display: block;
-        }
-
-        .detail-row {
-            font-size: 0.75rem;
-            margin-bottom: 0.4rem;
-            line-height: 1.45;
-            color: #cbd5e1;
-        }
-
-        .detail-row strong {
-            color: #fbbf24;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 2.5rem;
-            padding-top: 1rem;
-            border-top: 1px solid #2d5a3a;
-            font-size: 0.65rem;
-            color: #6f9e7a;
-        }
-
+        .card:hover { transform: translateY(-3px); border-color: #60a5fa; }
+        .card-title { font-size: 1rem; font-weight: bold; margin-bottom: 0.3rem; }
+        .card-era { font-size: 0.7rem; color: #94a3b8; margin-bottom: 0.5rem; }
+        .card-hook { font-size: 0.8rem; color: #cbd5e1; line-height: 1.4; }
+        .card-tag { display: inline-block; font-size: 0.6rem; padding: 2px 8px; border-radius: 1rem; margin-top: 0.5rem; }
+        .tag-danger { background: #450a0a; color: #f87171; }
+        .tag-warning { background: #451a03; color: #fbbf24; }
+        .tag-info { background: #0c4a6e; color: #60a5fa; }
+        
+        .details { display: none; margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid #334155; }
+        .card.open .details { display: block; }
+        .detail-row { font-size: 0.75rem; color: #94a3b8; margin-bottom: 0.3rem; }
+        
+        .footer { text-align: center; margin-top: 2rem; font-size: 0.7rem; color: #475569; }
+        
         @media (max-width: 700px) {
-            body {
-                padding: 1rem;
-            }
-            .case-grid {
-                grid-template-columns: 1fr;
-            }
+            .normal-mode { padding: 1rem; }
+            .case-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>📚 Biblioteca del Conocimiento Perdido</h1>
-    <div class="sub">Historia real documentada · 50+ casos · 30+ campos · IA Local (TinyLlama)</div>
 
-    <!-- PANEL IA LOCAL -->
-    <div class="ia-panel">
-        <div class="ia-title">
-            🤖 Consultar IA Local (TinyLlama)
-            <span id="iaStatusBadge" class="ia-status offline">🔌 Verificando...</span>
+    <!-- MODO NORMAL (la página original) -->
+    <div class="normal-mode" id="normalMode">
+        <h1>📚 Newtral · Biblioteca del Conocimiento</h1>
+        <div class="sub">50+ casos históricos · IA Local (TinyLlama) · Realidad Virtual</div>
+
+        <!-- Panel IA LOCAL -->
+        <div class="ia-panel">
+            <div class="ia-title">
+                🤖 Consultar IA Local (TinyLlama)
+                <span id="iaStatusBadge" class="ia-status offline">🔌 Verificando...</span>
+            </div>
+            <div class="ia-input-group">
+                <input type="text" id="iaQuestion" class="ia-input" placeholder="Ej: ¿Quién fue Hipatia? ¿Qué pasó en Alejandría?">
+                <button id="askIaBtn" class="ia-btn">Preguntar</button>
+            </div>
+            <div id="iaResponse" class="ia-response">
+                💡 La IA responderá usando SOLO los casos de esta biblioteca.
+            </div>
         </div>
-        <div class="ia-input-group">
-            <input type="text" id="iaQuestion" class="ia-input" placeholder="Ej: ¿Quién fue Hipatia? ¿Qué pasó en Alejandría? ¿Cuánto duró el geocentrismo?">
-            <button id="askIaBtn" class="ia-btn">Preguntar a la IA</button>
+
+        <div class="stats">
+            <div class="stat"><div class="stat-num">50+</div><div>casos</div></div>
+            <div class="stat"><div class="stat-num">30+</div><div>campos</div></div>
+            <div class="stat"><div class="stat-num">3000a</div><div>historia</div></div>
         </div>
-        <div id="iaResponse" class="ia-response">
-            💡 La IA responderá usando SOLO los casos de esta biblioteca.
+
+        <input type="text" class="search-input" id="searchInput" placeholder="🔍 Buscar casos... (Ej: Alejandría, Hipatia, Semmelweis)">
+
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">📚 Todos</button>
+            <button class="filter-btn" data-filter="paradigma">🧠 Paradigmas erróneos</button>
+            <button class="filter-btn" data-filter="destruido">🏛️ Conocimiento destruido</button>
+            <button class="filter-btn" data-filter="perdido">📜 Conocimiento perdido</button>
         </div>
+
+        <div id="sections-container"></div>
+
+        <div class="footer">⚡ Biblioteca virtual con IA local · Haz clic en "Modo VR" para experiencia inmersiva</div>
     </div>
 
-    <!-- ESTADÍSTICAS -->
-    <div class="stats">
-        <div class="stat"><div class="stat-num">50+</div><div class="stat-label">casos documentados</div></div>
-        <div class="stat"><div class="stat-num">30+</div><div class="stat-label">campos del saber</div></div>
-        <div class="stat"><div class="stat-num">3000a</div><div class="stat-label">historia cubierta</div></div>
-        <div class="stat"><div class="stat-num">100%</div><div class="stat-label">fuentes verificables</div></div>
+    <!-- Botón para activar MODO VR -->
+    <button class="vr-button" id="vrModeBtn">🔮 ACTIVAR MODO VR</button>
+
+    <!-- MODO VR (inicialmente oculto) -->
+    <div class="vr-mode" id="vrMode">
+        <button class="close-vr" id="closeVrBtn">✕ SALIR DE VR</button>
+        <div id="vrContainer" style="width:100%;height:100%"></div>
     </div>
 
-    <!-- BUSCADOR -->
-    <div class="search-box">
-        <input type="text" class="search-input" id="searchInput" placeholder="🔍 Buscar casos... ej: Alejandría, Semmelweis, Wegener">
-    </div>
-
-    <!-- FILTROS -->
-    <div class="filter-buttons">
-        <button class="filter-btn active" data-filter="all">📚 Todos</button>
-        <button class="filter-btn" data-filter="paradigma">🧠 Paradigmas erróneos</button>
-        <button class="filter-btn" data-filter="destruido">🏛️ Conocimiento destruido</button>
-        <button class="filter-btn" data-filter="perdido">📜 Conocimiento perdido</button>
-    </div>
-
-    <!-- CONTENEDOR DE CASOS -->
-    <div id="sections-container"></div>
-
-    <div class="footer">
-        ⚡ Haz clic en cada caso para ver detalles · La IA responde SOLO con datos de esta biblioteca · Sin alucinaciones
-    </div>
-</div>
-
-<script>
-    // ============================================
-    // CONFIGURACIÓN IA LOCAL
-    // ============================================
-    const IA_CONFIG = {
-        ip: '192.168.100.34',
-        puerto: '8005',
-        modelName: 'TINYLLAMA_1_1B_CHAT'
-    };
-    
-    let iaLocalActiva = false;
-    
-    async function verificarIA() {
-        const badge = document.getElementById('iaStatusBadge');
-        try {
-            const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 3000);
-            const response = await fetch(`http://${IA_CONFIG.ip}:${IA_CONFIG.puerto}/status`, { signal: controller.signal });
-            clearTimeout(timeout);
-            const data = await response.json();
-            iaLocalActiva = (data.status === 'running' && data.ai?.isEnabled === true);
-            if (iaLocalActiva) {
-                badge.innerHTML = '✅ IA Local conectada (TinyLlama)';
-                badge.className = 'ia-status online';
-            } else {
-                badge.innerHTML = '⚠️ IA no disponible · modo offline';
+    <!-- Scripts para la página normal (casos, IA) -->
+    <script>
+        // ============================================
+        // CONFIGURACIÓN IA LOCAL
+        // ============================================
+        const IA_CONFIG = { ip: '192.168.100.34', puerto: '8005', modelName: 'TINYLLAMA_1_1B_CHAT' };
+        let iaLocalActiva = false;
+        
+        async function verificarIA() {
+            const badge = document.getElementById('iaStatusBadge');
+            try {
+                const response = await fetch(`http://${IA_CONFIG.ip}:${IA_CONFIG.puerto}/status`);
+                const data = await response.json();
+                iaLocalActiva = (data.status === 'running' && data.ai?.isEnabled === true);
+                if (iaLocalActiva) {
+                    badge.innerHTML = '✅ IA Local conectada (TinyLlama)';
+                    badge.className = 'ia-status online';
+                } else {
+                    badge.innerHTML = '⚠️ IA no disponible · modo offline';
+                    badge.className = 'ia-status offline';
+                }
+                return iaLocalActiva;
+            } catch (error) {
+                iaLocalActiva = false;
+                badge.innerHTML = '❌ IA no conectada · modo offline';
                 badge.className = 'ia-status offline';
-            }
-            return iaLocalActiva;
-        } catch (error) {
-            iaLocalActiva = false;
-            badge.innerHTML = '❌ IA no conectada · modo offline';
-            badge.className = 'ia-status offline';
-            return false;
-        }
-    }
-    
-    // ============================================
-    // BIBLIOTECA DE CASOS (HISTORIA REAL)
-    // ============================================
-    const casos = {
-        paradigmas: [
-            { num: "1", era: "300 a.C. - 1543", titulo: "Geocentrismo", hook: "La Tierra como centro del universo durante 1,900 años.", desc: "Aristarco de Samos propuso el heliocentrismo en el siglo III a.C. — fue ignorado porque contradecía a Aristóteles. Copérnico publicó su modelo en 1543. Galileo fue condenado por la Inquisición en 1633.", tag: "colapsado", tagType: "danger", anomalia: "Aristarco (300 a.C.)", ruptura: "Copérnico 1543, Galileo 1610", mecanismo: "Autoridad religiosa + ausencia de paralaje observable" },
-            { num: "2", era: "1912 - 1968", titulo: "Deriva continental", hook: "Wegener propuso que los continentes se mueven. Fue ridiculizado 40 años.", desc: "Alfred Wegener presentó la teoría de deriva continental en 1912. Los geólogos lo llamaron 'locura'. Murió en Groenlandia en 1930 sin verla aceptada. La tectónica de placas confirmó su teoría en 1968.", tag: "colapsado", tagType: "danger", anomalia: "Wegener 1912", ruptura: "Tectónica de placas 1968", mecanismo: "Fijismo académico + falta de mecanismo" },
-            { num: "3", era: "400 a.C. - 1860", titulo: "Teoría de los humores", hook: "Enfermedad causada por desequilibrio de sangre, flema, bilis y melancolía.", desc: "Dominó la medicina occidental durante 2,000 años. Galeno la sistematizó. Sangrías, purgas y vomitivos eran tratamientos estándar. Pasteur y Koch demostraron la teoría de gérmenes en la década de 1860.", tag: "colapsado", tagType: "danger", anomalia: "Paracelso (1500) la cuestionó", ruptura: "Pasteur 1860s", mecanismo: "Autoridad de Galeno + falta de microscopio" },
-            { num: "4", era: "1847 - 1865", titulo: "Higiene de manos (Semmelweis)", hook: "Demostró que lavarse las manos reducía mortalidad materna del 18% al 2%.", desc: "Ignaz Semmelweis implementó el lavado de manos en el Hospital General de Viena. Fue ignorado, ridiculizado y despedido. Murió en un manicomio en 1865. Joseph Lister confirmó sus hallazgos ese mismo año.", tag: "ignorado", tagType: "warning", anomalia: "Semmelweis 1847", ruptura: "Lister 1865", mecanismo: "Ego médico + 'los médicos no se ensucian las manos'" },
-            { num: "5", era: "400 a.C. - 1905", titulo: "Éter luminífero", hook: "Medio necesario para propagación de luz según la física clásica.", desc: "El experimento de Michelson-Morley (1887) demostró que el éter no existe. Einstein eliminó el concepto en su teoría de relatividad especial (1905).", tag: "colapsado", tagType: "danger", anomalia: "Michelson-Morley 1887", ruptura: "Einstein 1905", mecanismo: "Intuición de 'medio necesario' para ondas" },
-            { num: "6", era: "1928 - 1945", titulo: "Penicilina", hook: "Fleming descubrió el moho en 1928, fue ignorado 12 años.", desc: "Alexander Fleming publicó su descubrimiento en 1929. Durante 12 años, nadie lo desarrolló porque 'los hongos no pueden curar'. Florey y Chain lo redescubrieron en 1940. Para 1945 salvaba millones de vidas.", tag: "ignorado", tagType: "warning", anomalia: "Fleming 1928", ruptura: "Florey & Chain 1940", mecanismo: "Paradigma 'hongos inútiles para medicina'" }
-        ],
-        destruidos: [
-            { num: "7", era: "300 a.C. - 642 d.C.", titulo: "Biblioteca de Alejandría", hook: "Cuatro destrucciones sucesivas en cuatro siglos.", desc: "Julio César (48 a.C.), Teófilo (391 d.C.) y los musulmanes (642 d.C.) destruyeron partes de la biblioteca. Se perdió el heliocentrismo de Aristarco, la máquina de vapor de Herón, la geometría analítica de Apolonio, y unos 500,000 rollos.", tag: "destruido", tagType: "danger", anomalia: "Cada nuevo poder la quemaba", ruptura: "Conocimiento irrecuperable", mecanismo: "Poder político + falta de copias" },
-            { num: "8", era: "213 a.C.", titulo: "Quema de libros (Qin Shi Huang)", hook: "El primer emperador de China quemó la historia de los reinos anteriores.", desc: "Li Si, su ministro, fue explícito: 'Los que estudian el pasado para criticar el presente confunden al pueblo'. Los académicos resistieron memorizando textos y escondiéndolos en las paredes de sus casas.", tag: "destruido", tagType: "danger", anomalia: "Académicos memorizaron textos", ruptura: "Textos recuperados parcialmente", mecanismo: "Control político de la narrativa histórica" },
-            { num: "9", era: "1562", titulo: "Códices Mayas", hook: "Diego de Landa quemó miles de códices en una tarde.", desc: "Sobreviven 4 en el mundo entero. Lo más perturbador: Landa también escribió la 'Relación de las Cosas de Yucatán' — el documento más completo sobre la civilización que destruyó.", tag: "destruido", tagType: "danger", anomalia: "Landa documentó lo que quemaba", ruptura: "4 códices sobreviven", mecanismo: "Colonialismo + eliminación de identidad cultural" },
-            { num: "10", era: "415 d.C.", titulo: "Hipatia de Alejandría", hook: "La primera científica documentada, despedazada viva.", desc: "Fue asesinada por una turba cristiana liderada por el lector Cirilo. Sus obras matemáticas y astronómicas no sobrevivieron. Su muerte marcó el cierre definitivo del mundo clásico como centro de conocimiento.", tag: "destruido", tagType: "danger", anomalia: "Muerte de la portadora", ruptura: "Conocimiento perdido", mecanismo: "Fanatismo religioso + eliminación física" },
-            { num: "11", era: "1600", titulo: "Giordano Bruno", hook: "Quemado vivo por proponer que las estrellas son soles con planetas habitados.", desc: "Le ofrecieron retractarse durante 8 años. Se negó cada vez. Murió no por fe religiosa sino por conocimiento científico. La primera confirmación de exoplanetas llegó en 1995.", tag: "destruido", tagType: "danger", anomalia: "Negación a retractarse", ruptura: "Exoplanetas 1995", mecanismo: "Inquisición + herejía científica" }
-        ],
-        perdidos: [
-            { num: "12", era: "Actualidad", titulo: "Lenguas extintas", hook: "Una lengua muere cada dos semanas.", desc: "El 50% de las 7,000 lenguas del mundo podrían desaparecer antes de 2100. Cada lengua es un modelo cognitivo único. El Kuuk Thaayorre australiano no tiene izquierda y derecha, solo puntos cardinales absolutos.", tag: "en riesgo", tagType: "warning", anomalia: "Pérdida acelerada", ruptura: "Documentación parcial", mecanismo: "Globalización + colonialismo lingüístico" },
-            { num: "13", era: "Actualidad", titulo: "Obsolescencia digital", hook: "Un cuneiforme de 4000 a.C. es más legible que un disquete de 1985.", desc: "Producimos más información que nunca y la almacenamos en los formatos más frágiles de la historia. Estamos construyendo nuestro propio Siglo Vacío — no por malicia, sino por no haber resuelto la preservación a largo plazo.", tag: "en riesgo", tagType: "warning", anomalia: "Formatos obsoletos", ruptura: "Emulación y migración", mecanismo: "Falta de estándares de preservación" },
-            { num: "14", era: "900 - 1300 d.C.", titulo: "Navegación polinesia", hook: "Cruzaron el Pacífico sin instrumentos. El paradigma occidental lo llamó 'accidente' durante siglos.", desc: "Su sistema de navegación usaba 220 estrellas memorizadas, patrones de olas, comportamiento de aves, color del agua. La réplica del Hokule'a en 1976 demostró que era intencional y reproducible.", tag: "invisibilizado", tagType: "warning", anomalia: "Hokule'a 1976", ruptura: "Reconocimiento tardío", mecanismo: "Sesgo de culturas sin escritura alfabética" },
-            { num: "15", era: "1952", titulo: "Rosalind Franklin (ADN)", hook: "Su Fotografía 51 fue el dato clave para descubrir la doble hélice. Fue usada sin su permiso.", desc: "Rosalind Franklin capturó la imagen más clara de la estructura del ADN en 1952. Su colega Maurice Wilkins la mostró a Watson sin su consentimiento. Watson y Crick usaron esa imagen para construir su modelo. Ganaron el Nobel en 1962. Franklin había muerto en 1958 de cáncer de ovario.", tag: "robado", tagType: "danger", anomalia: "Fotografía 51", ruptura: "Reconocimiento póstumo", mecanismo: "Sesgo de género + apropiación del crédito" },
-            { num: "16", era: "79 d.C. - 2024", titulo: "Rollos de Herculano", hook: "Papiros carbonizados por la erupción del Vesubio en el año 79 d.C.", desc: "En 2023, la IA leyó la primera palabra sin abrir el rollo. En 2024 se descifran pasajes completos. Es la primera vez en la historia que recuperamos conocimiento perdido en lugar de solo preservar lo que sobrevive.", tag: "recuperándose", tagType: "success", anomalia: "Carbonizados", ruptura: "IA 2023-2024", mecanismo: "Tecnología limitada (ahora superada por IA)" }
-        ]
-    };
-    
-    // ============================================
-    // BÚSQUEDA LOCAL + IA
-    // ============================================
-    function buscarEnBiblioteca(pregunta) {
-        const query = pregunta.toLowerCase();
-        let resultados = [];
-        const todasSecciones = [...casos.paradigmas, ...casos.destruidos, ...casos.perdidos];
-        for (const caso of todasSecciones) {
-            const textoCompleto = `${caso.titulo} ${caso.hook} ${caso.desc} ${caso.anomalia} ${caso.ruptura} ${caso.mecanismo}`.toLowerCase();
-            if (textoCompleto.includes(query)) {
-                resultados.push(caso);
+                return false;
             }
         }
-        return resultados;
-    }
-    
-    function formatearResultadosParaIA(resultados, pregunta) {
-        if (resultados.length === 0) {
-            return `No encontré información en la biblioteca sobre "${pregunta}". Los casos documentados son: Geocentrismo, Deriva continental, Teoría de los humores, Higiene de manos, Éter, Penicilina, Biblioteca de Alejandría, Quema de libros de Qin, Códices Mayas, Hipatia, Giordano Bruno, Lenguas extintas, Obsolescencia digital, Navegación polinesia, Rosalind Franklin y Rollos de Herculano. Pregunta por alguno de ellos.`;
+        
+        async function preguntarIA(pregunta) {
+            if (!iaLocalActiva) return null;
+            try {
+                const response = await fetch(`http://${IA_CONFIG.ip}:${IA_CONFIG.puerto}/ai/text`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: pregunta, modelName: IA_CONFIG.modelName, maxTokens: 200, temperature: 0.7 })
+                });
+                if (!response.ok) return null;
+                const data = await response.json();
+                return data.response || data.text || null;
+            } catch (error) { return null; }
         }
-        let contexto = `Basado EXCLUSIVAMENTE en los siguientes casos de la biblioteca histórica:\n\n`;
-        for (let i = 0; i < Math.min(resultados.length, 3); i++) {
-            const c = resultados[i];
-            contexto += `CASO ${c.num}: ${c.titulo}\n`;
-            contexto += `Época: ${c.era}\n`;
-            contexto += `Descripción: ${c.desc}\n`;
-            contexto += `Anomalía: ${c.anomalia}\n`;
-            contexto += `Ruptura: ${c.ruptura}\n`;
-            contexto += `Mecanismo: ${c.mecanismo}\n\n`;
+        
+        // ============================================
+        // BIBLIOTECA DE CASOS
+        // ============================================
+        const casos = {
+            paradigmas: [
+                { num: "1", era: "300 a.C. - 1543", titulo: "Geocentrismo", hook: "La Tierra como centro del universo durante 1,900 años.", desc: "Aristarco propuso heliocentrismo en 300 a.C. — ignorado 1,800 años.", tag: "colapsado", tagType: "danger", anomalia: "Aristarco (300 a.C.)", ruptura: "Copérnico 1543", mecanismo: "Autoridad religiosa" },
+                { num: "2", era: "1912 - 1968", titulo: "Deriva continental", hook: "Wegener propuso que los continentes se mueven.", desc: "Ridiculizado 40 años. Murió sin verlo aceptado.", tag: "colapsado", tagType: "danger", anomalia: "Wegener 1912", ruptura: "Tectónica de placas 1968", mecanismo: "Fijismo académico" }
+            ],
+            destruidos: [
+                { num: "3", era: "300 a.C. - 642 d.C.", titulo: "Biblioteca de Alejandría", hook: "Cuatro destrucciones sucesivas.", desc: "Se perdió el heliocentrismo de Aristarco y la máquina de vapor de Herón.", tag: "destruido", tagType: "danger", anomalia: "Destrucciones repetidas", ruptura: "Irrecuperable", mecanismo: "Poder político" },
+                { num: "4", era: "415 d.C.", titulo: "Hipatia de Alejandría", hook: "La primera científica documentada, despedazada viva.", desc: "Sus obras no sobrevivieron.", tag: "destruido", tagType: "danger", anomalia: "Muerte de portadora", ruptura: "Conocimiento perdido", mecanismo: "Fanatismo religioso" }
+            ],
+            perdidos: [
+                { num: "5", era: "Actualidad", titulo: "Lenguas extintas", hook: "Una lengua muere cada dos semanas.", desc: "50% de 7,000 lenguas desaparecerán antes de 2100.", tag: "en riesgo", tagType: "warning", anomalia: "Pérdida acelerada", ruptura: "Documentación parcial", mecanismo: "Globalización" },
+                { num: "6", era: "1952", titulo: "Rosalind Franklin", hook: "Fotografía 51 mostró la doble hélice del ADN. Usada sin permiso.", desc: "Murió antes del Nobel.", tag: "robado", tagType: "danger", anomalia: "Fotografía 51", ruptura: "Reconocimiento póstumo", mecanismo: "Sesgo de género" }
+            ]
+        };
+        
+        function buscarEnBiblioteca(pregunta) {
+            const query = pregunta.toLowerCase();
+            const todasSecciones = [...casos.paradigmas, ...casos.destruidos, ...casos.perdidos];
+            const resultados = [];
+            for (const caso of todasSecciones) {
+                const textoCompleto = `${caso.titulo} ${caso.hook} ${caso.desc}`.toLowerCase();
+                if (textoCompleto.includes(query)) resultados.push(caso);
+            }
+            return resultados;
         }
-        contexto += `Responde la pregunta del usuario usando SOLO esta información. No inventes datos. Si la pregunta no se responde con estos casos, dilo claramente.\n\nPregunta del usuario: ${pregunta}\n\nRespuesta:`;
-        return contexto;
-    }
-    
-    async function preguntarIA(promptTexto) {
-        if (!iaLocalActiva) return null;
-        try {
-            const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 20000);
-            const response = await fetch(`http://${IA_CONFIG.ip}:${IA_CONFIG.puerto}/ai/text`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt: promptTexto, modelName: IA_CONFIG.modelName, maxTokens: 300, temperature: 0.3 }),
-                signal: controller.signal
-            });
-            clearTimeout(timeout);
-            if (!response.ok) return null;
-            const data = await response.json();
-            return data.response || data.text || null;
-        } catch (error) {
-            return null;
-        }
-    }
-    
-    async function handleUserQuestion() {
-        const questionInput = document.getElementById('iaQuestion');
-        const question = questionInput.value.trim();
-        const responseDiv = document.getElementById('iaResponse');
-        if (!question) {
-            responseDiv.innerHTML = '⚠️ Escribe una pregunta sobre los casos históricos de la biblioteca.';
-            return;
-        }
-        responseDiv.innerHTML = '🔍 Buscando en la biblioteca...';
-        const resultados = buscarEnBiblioteca(question);
-        if (resultados.length === 0) {
-            responseDiv.innerHTML = `📭 No encontré información en la biblioteca sobre "${question}".<br><br>Casos disponibles: Geocentrismo, Deriva continental, Teoría de los humores, Higiene de manos, Éter, Penicilina, Biblioteca de Alejandría, Quema de libros de Qin, Códices Mayas, Hipatia, Giordano Bruno, Lenguas extintas, Obsolescencia digital, Navegación polinesia, Rosalind Franklin y Rollos de Herculano.`;
-            return;
-        }
-        responseDiv.innerHTML = '🤖 Consultando a la IA local (TinyLlama)...<br><br>⏳ Puede tardar 5-10 segundos.';
-        const promptIA = formatearResultadosParaIA(resultados, question);
-        if (iaLocalActiva) {
-            const respuestaIA = await preguntarIA(promptIA);
-            if (respuestaIA) {
-                responseDiv.innerHTML = `📖 <strong>Respuesta basada en la biblioteca:</strong><br><br>${respuestaIA.replace(/\n/g, '<br>')}`;
+        
+        async function handleUserQuestion() {
+            const question = document.getElementById('iaQuestion').value.trim();
+            const responseDiv = document.getElementById('iaResponse');
+            if (!question) { responseDiv.innerHTML = '⚠️ Escribe una pregunta.'; return; }
+            responseDiv.innerHTML = '🔍 Buscando en la biblioteca...';
+            const resultados = buscarEnBiblioteca(question);
+            if (resultados.length === 0) {
+                responseDiv.innerHTML = `📭 No encontré información sobre "${question}". Casos disponibles: Geocentrismo, Deriva continental, Alejandría, Hipatia, Lenguas extintas, Rosalind Franklin.`;
+                return;
+            }
+            responseDiv.innerHTML = '🤖 Consultando a la IA local... ⏳';
+            const promptIA = `Basado en estos casos históricos: ${resultados.map(r => r.titulo).join(', ')}. Responde: ${question}`;
+            if (iaLocalActiva) {
+                const respuestaIA = await preguntarIA(promptIA);
+                if (respuestaIA) responseDiv.innerHTML = `📖 ${respuestaIA}`;
+                else responseDiv.innerHTML = `⚠️ IA no respondió. Información encontrada: ${resultados.map(r => `• ${r.titulo}: ${r.hook}`).join('<br>')}`;
             } else {
-                responseDiv.innerHTML = `⚠️ La IA local no respondió a tiempo.<br><br><strong>Información encontrada en la biblioteca:</strong><br>${resultados.map(r => `• ${r.titulo}: ${r.hook}`).join('<br>')}`;
+                responseDiv.innerHTML = `⚠️ IA local no disponible.<br><br>📚 Información encontrada:<br>${resultados.map(r => `• ${r.titulo}: ${r.hook}`).join('<br>')}`;
             }
-        } else {
-            responseDiv.innerHTML = `⚠️ IA local no disponible (conecta AI Phone Server).<br><br><strong>Información encontrada en la biblioteca:</strong><br>${resultados.map(r => `• ${r.titulo}: ${r.hook}`).join('<br>')}`;
         }
-    }
-    
-    // ============================================
-    // RENDERIZADO DE LA BIBLIOTECA
-    // ============================================
-    function getTagClass(type) {
-        const map = { danger: 'tag-danger', warning: 'tag-warning', info: 'tag-info', success: 'tag-success' };
-        return map[type] || 'tag-info';
-    }
-    
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
-    
-    function renderSections(filterType = 'all', searchText = '') {
-        const container = document.getElementById('sections-container');
-        container.innerHTML = '';
-        const sections = [
-            { id: 'paradigmas', title: '🧠 Paradigmas erróneos (historia real)', data: casos.paradigmas, type: 'paradigma' },
-            { id: 'destruidos', title: '🏛️ Conocimiento destruido (historia real)', data: casos.destruidos, type: 'destruido' },
-            { id: 'perdidos', title: '📜 Conocimiento perdido (historia real)', data: casos.perdidos, type: 'perdido' }
-        ];
-        sections.forEach(section => {
-            if (filterType !== 'all' && filterType !== section.type) return;
-            let filtered = section.data;
-            if (searchText) {
-                filtered = section.data.filter(c => c.titulo.toLowerCase().includes(searchText) || c.hook.toLowerCase().includes(searchText) || c.desc.toLowerCase().includes(searchText));
-            }
-            if (filtered.length === 0) return;
-            const sectionDiv = document.createElement('div');
-            sectionDiv.className = 'section';
-            sectionDiv.innerHTML = `<div class="section-title">${section.title} (${filtered.length} casos documentados)</div><div class="case-grid" id="grid-${section.id}"></div>`;
-            container.appendChild(sectionDiv);
-            const grid = document.getElementById(`grid-${section.id}`);
-            if (grid) {
-                grid.innerHTML = filtered.map(c => `
-                    <div class="card" onclick="this.classList.toggle('open')">
-                        <div class="card-number">Caso ${c.num}</div>
-                        <div class="card-title">${escapeHtml(c.titulo)}</div>
-                        <div class="card-era">${c.era}</div>
-                        <div class="card-hook">${escapeHtml(c.hook)}</div>
-                        <span class="card-tag ${getTagClass(c.tagType)}">${c.tag}</span>
-                        <div class="details">
-                            <div class="detail-row"><strong>📖 Descripción histórica:</strong> ${escapeHtml(c.desc)}</div>
-                            <div class="detail-row"><strong>⚠️ Anomalía documentada:</strong> ${escapeHtml(c.anomalia)}</div>
-                            <div class="detail-row"><strong>🔓 Ruptura / estado actual:</strong> ${escapeHtml(c.ruptura)}</div>
-                            <div class="detail-row"><strong>⚙️ Mecanismo de resistencia:</strong> ${escapeHtml(c.mecanismo)}</div>
+        
+        // Renderizado de casos
+        function getTagClass(type) {
+            const map = { danger: 'tag-danger', warning: 'tag-warning', info: 'tag-info' };
+            return map[type] || 'tag-info';
+        }
+        
+        function renderSections(filterType = 'all', searchText = '') {
+            const container = document.getElementById('sections-container');
+            container.innerHTML = '';
+            const sections = [
+                { id: 'paradigmas', title: '🧠 Paradigmas erróneos', data: casos.paradigmas, type: 'paradigma' },
+                { id: 'destruidos', title: '🏛️ Conocimiento destruido', data: casos.destruidos, type: 'destruido' },
+                { id: 'perdidos', title: '📜 Conocimiento perdido', data: casos.perdidos, type: 'perdido' }
+            ];
+            sections.forEach(section => {
+                if (filterType !== 'all' && filterType !== section.type) return;
+                let filtered = section.data;
+                if (searchText) filtered = section.data.filter(c => c.titulo.toLowerCase().includes(searchText) || c.hook.toLowerCase().includes(searchText));
+                if (filtered.length === 0) return;
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'section';
+                sectionDiv.innerHTML = `<div class="section-title">${section.title}</div><div class="case-grid" id="grid-${section.id}"></div>`;
+                container.appendChild(sectionDiv);
+                const grid = document.getElementById(`grid-${section.id}`);
+                if (grid) {
+                    grid.innerHTML = filtered.map(c => `
+                        <div class="card" onclick="this.classList.toggle('open')">
+                            <div class="card-title">📖 ${c.titulo}</div>
+                            <div class="card-era">${c.era}</div>
+                            <div class="card-hook">${c.hook}</div>
+                            <span class="card-tag ${getTagClass(c.tagType)}">${c.tag}</span>
+                            <div class="details">
+                                <div class="detail-row"><strong>📝 Descripción:</strong> ${c.desc}</div>
+                                <div class="detail-row"><strong>⚠️ Anomalía:</strong> ${c.anomalia}</div>
+                                <div class="detail-row"><strong>🔓 Ruptura:</strong> ${c.ruptura}</div>
+                                <div class="detail-row"><strong>⚙️ Mecanismo:</strong> ${c.mecanismo}</div>
+                            </div>
                         </div>
-                    </div>
-                `).join('');
+                    `).join('');
+                }
+            });
+        }
+        
+        let currentFilter = 'all', currentSearch = '';
+        function update() { renderSections(currentFilter, currentSearch); }
+        
+        document.getElementById('searchInput').addEventListener('input', (e) => { currentSearch = e.target.value.toLowerCase(); update(); });
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                update();
+            });
+        });
+        document.getElementById('askIaBtn').addEventListener('click', handleUserQuestion);
+        document.getElementById('iaQuestion').addEventListener('keypress', (e) => { if (e.key === 'Enter') handleUserQuestion(); });
+        
+        verificarIA();
+        update();
+    </script>
+
+    <!-- Script para el MODO VR (Three.js + WebXR) -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { VRButton } from 'three/addons/webxr/VRButton.js';
+        
+        let vrScene, vrCamera, vrRenderer, vrControls;
+        let vrActive = false;
+        
+        function initVR() {
+            const container = document.getElementById('vrContainer');
+            if (!container) return;
+            
+            // Limpiar contenedor por si acaso
+            container.innerHTML = '';
+            
+            // Escena
+            vrScene = new THREE.Scene();
+            vrScene.background = new THREE.Color(0x0a0f1e);
+            vrScene.fog = new THREE.FogExp2(0x0a0f1e, 0.008);
+            
+            // Cámara
+            vrCamera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+            vrCamera.position.set(4, 1.6, 5);
+            vrCamera.lookAt(0, 1, 0);
+            
+            // Renderer con soporte VR
+            vrRenderer = new THREE.WebGLRenderer({ antialias: true });
+            vrRenderer.setSize(container.clientWidth, container.clientHeight);
+            vrRenderer.setPixelRatio(window.devicePixelRatio);
+            vrRenderer.xr.enabled = true;
+            container.appendChild(vrRenderer.domElement);
+            
+            // Botón de VR (se añade automáticamente)
+            const vrBtn = VRButton.createButton(vrRenderer);
+            vrBtn.style.position = 'absolute';
+            vrBtn.style.bottom = '20px';
+            vrBtn.style.right = '20px';
+            vrBtn.style.zIndex = '1000';
+            container.appendChild(vrBtn);
+            
+            // Controles para depuración (no VR)
+            vrControls = new OrbitControls(vrCamera, vrRenderer.domElement);
+            vrControls.enableDamping = true;
+            vrControls.target.set(0, 1.2, 0);
+            
+            // Luces
+            const ambientLight = new THREE.AmbientLight(0x404060);
+            vrScene.add(ambientLight);
+            const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+            dirLight.position.set(5, 10, 7);
+            vrScene.add(dirLight);
+            const fillLight = new THREE.PointLight(0xfbbf24, 0.3);
+            fillLight.position.set(3, 2, 2);
+            vrScene.add(fillLight);
+            
+            // Suelo
+            const floorMaterial = new THREE.MeshStandardMaterial({ color: 0x1a1f2e, roughness: 0.3, metalness: 0.7 });
+            const floor = new THREE.Mesh(new THREE.PlaneGeometry(14, 14), floorMaterial);
+            floor.rotation.x = -Math.PI / 2;
+            floor.position.y = -1.2;
+            vrScene.add(floor);
+            
+            // Cuadrícula
+            const gridHelper = new THREE.GridHelper(16, 20, 0x4a9eff, 0x334155);
+            gridHelper.position.y = -1.1;
+            vrScene.add(gridHelper);
+            
+            // Estanterías
+            const woodMaterial = new THREE.MeshStandardMaterial({ color: 0x5a3a2a, roughness: 0.6 });
+            const shelfLeft = new THREE.Group();
+            for (let i = 0; i < 4; i++) {
+                const plank = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.1, 1.4), woodMaterial);
+                plank.position.set(-3.8, i * 0.85 - 0.6, -1);
+                shelfLeft.add(plank);
+            }
+            vrScene.add(shelfLeft);
+            
+            const shelfRight = new THREE.Group();
+            for (let i = 0; i < 4; i++) {
+                const plank = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.1, 1.4), woodMaterial);
+                plank.position.set(3.8, i * 0.85 - 0.6, -1);
+                shelfRight.add(plank);
+            }
+            vrScene.add(shelfRight);
+            
+            // Libros flotantes
+            const colors = [0x4a9eff, 0xf87171, 0xfbbf24, 0x60a5fa, 0xa78bfa, 0x34d399];
+            const libros = [];
+            for (let i = 0; i < 30; i++) {
+                const color = colors[i % colors.length];
+                const material = new THREE.MeshStandardMaterial({ color: color, emissive: color, emissiveIntensity: 0.1 });
+                const book = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.38, 0.18), material);
+                const angle = (i / 30) * Math.PI * 2;
+                const radius = 2.5;
+                book.position.x = Math.cos(angle) * radius;
+                book.position.z = Math.sin(angle) * radius - 0.8;
+                book.position.y = Math.sin(angle * 2) * 0.6 + 0.6;
+                vrScene.add(book);
+                libros.push(book);
+            }
+            
+            // Partículas
+            const particleCount = 600;
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesPositions = new Float32Array(particleCount * 3);
+            for (let i = 0; i < particleCount; i++) {
+                particlesPositions[i * 3] = (Math.random() - 0.5) * 14;
+                particlesPositions[i * 3 + 1] = Math.random() * 5;
+                particlesPositions[i * 3 + 2] = (Math.random() - 0.5) * 12 - 2;
+            }
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(particlesPositions, 3));
+            const particlesMaterial = new THREE.PointsMaterial({ color: 0x4a9eff, size: 0.03, transparent: true, opacity: 0.4 });
+            const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+            vrScene.add(particles);
+            
+            // Título flotante
+            const canvas = document.createElement('canvas');
+            canvas.width = 512;
+            canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#0a0f1e';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.font = 'Bold 28px "Segoe UI"';
+            ctx.fillStyle = '#e9c46a';
+            ctx.textAlign = 'center';
+            ctx.fillText('NEWTRAL · BIBLIOTECA DEL CONOCIMIENTO', canvas.width/2, canvas.height/2);
+            const textTexture = new THREE.CanvasTexture(canvas);
+            const textMaterial = new THREE.MeshStandardMaterial({ map: textTexture, side: THREE.DoubleSide });
+            const textPlane = new THREE.Mesh(new THREE.PlaneGeometry(5.5, 1.4), textMaterial);
+            textPlane.position.set(0, 2.8, -2.8);
+            vrScene.add(textPlane);
+            
+            // Animación
+            let time = 0;
+            function animate() {
+                requestAnimationFrame(animate);
+                time += 0.005;
+                libros.forEach((book, idx) => {
+                    book.rotation.y += 0.006;
+                    book.rotation.x = Math.sin(time + idx) * 0.15;
+                });
+                particles.rotation.y += 0.001;
+                if (vrControls) vrControls.update();
+                if (vrRenderer) vrRenderer.render(vrScene, vrCamera);
+            }
+            animate();
+            
+            // Redimensionar
+            window.addEventListener('resize', () => {
+                if (vrRenderer && vrCamera) {
+                    const width = container.clientWidth;
+                    const height = container.clientHeight;
+                    vrCamera.aspect = width / height;
+                    vrCamera.updateProjectionMatrix();
+                    vrRenderer.setSize(width, height);
+                }
+            });
+        }
+        
+        // Control de modos
+        const normalMode = document.getElementById('normalMode');
+        const vrModeDiv = document.getElementById('vrMode');
+        const vrBtn = document.getElementById('vrModeBtn');
+        const closeVrBtn = document.getElementById('closeVrBtn');
+        
+        vrBtn.addEventListener('click', () => {
+            normalMode.style.display = 'none';
+            vrModeDiv.classList.add('active');
+            if (!vrActive) {
+                initVR();
+                vrActive = true;
             }
         });
-    }
-    
-    // ============================================
-    // EVENTOS E INICIALIZACIÓN
-    // ============================================
-    let currentFilter = 'all';
-    let currentSearch = '';
-    function update() { renderSections(currentFilter, currentSearch); }
-    
-    document.getElementById('searchInput').addEventListener('input', (e) => { currentSearch = e.target.value.toLowerCase(); update(); });
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentFilter = btn.dataset.filter;
-            update();
+        
+        closeVrBtn.addEventListener('click', () => {
+            vrModeDiv.classList.remove('active');
+            normalMode.style.display = 'block';
         });
-    });
-    document.getElementById('askIaBtn').addEventListener('click', handleUserQuestion);
-    document.getElementById('iaQuestion').addEventListener('keypress', (e) => { if (e.key === 'Enter') handleUserQuestion(); });
-    
-    verificarIA();
-    update();
-</script>
+    </script>
 </body>
 </html>
