@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Newtral · Biblioteca del Conocimiento · IA Local + Modo VR</title>
+    <title>Newtral · Biblioteca del Conocimiento</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -88,64 +88,6 @@
         
         .sub { text-align: center; color: #94a3b8; margin-bottom: 2rem; }
         
-        /* Panel IA */
-        .ia-panel {
-            background: rgba(16, 185, 129, 0.1);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(245, 158, 11, 0.4);
-            border-radius: 28px;
-            padding: 1rem;
-            margin-bottom: 2rem;
-        }
-        
-        .ia-title {
-            font-size: 0.9rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 0.5rem;
-            color: #fbbf24;
-        }
-        
-        .ia-status {
-            font-size: 0.65rem;
-            padding: 2px 8px;
-            border-radius: 30px;
-            background: #1e3a2f;
-            color: #86efac;
-        }
-        
-        .ia-status.online { background: #064e3b; color: #34d399; border: 1px solid #10b981; }
-        .ia-status.offline { background: #451a03; color: #fbbf24; border: 1px solid #f59e0b; }
-        
-        .ia-input-group { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
-        .ia-input {
-            flex: 1;
-            padding: 0.6rem 1rem;
-            border: 1px solid #2d5a3a;
-            border-radius: 60px;
-            background: rgba(0, 0, 0, 0.5);
-            color: #eef2ff;
-        }
-        .ia-btn {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            border: none;
-            padding: 0.6rem 1.2rem;
-            border-radius: 60px;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .ia-response {
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 20px;
-            padding: 0.6rem 1rem;
-            font-size: 0.8rem;
-            color: #d1fae5;
-            border-left: 3px solid #f59e0b;
-        }
-        
         .stats { display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap; }
         .stat { background: rgba(30, 41, 59, 0.8); padding: 0.8rem 1.5rem; border-radius: 1rem; text-align: center; }
         .stat-num { font-size: 1.8rem; font-weight: bold; color: #60a5fa; }
@@ -198,6 +140,22 @@
         
         .footer { text-align: center; margin-top: 2rem; font-size: 0.7rem; color: #475569; }
         
+        /* Publicidad al final */
+        .ad-container {
+            text-align: center;
+            margin: 30px 0 0 0;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+        }
+        .ad-label {
+            font-size: 11px;
+            color: #7a9aae;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
         @media (max-width: 700px) {
             .normal-mode { padding: 1rem; }
             .case-grid { grid-template-columns: 1fr; }
@@ -206,25 +164,10 @@
 </head>
 <body>
 
-    <!-- MODO NORMAL (la página original) -->
+    <!-- MODO NORMAL -->
     <div class="normal-mode" id="normalMode">
         <h1>📚 Newtral · Biblioteca del Conocimiento</h1>
-        <div class="sub">50+ casos históricos · IA Local (TinyLlama) · Realidad Virtual</div>
-
-        <!-- Panel IA LOCAL -->
-        <div class="ia-panel">
-            <div class="ia-title">
-                🤖 Consultar IA Local (TinyLlama)
-                <span id="iaStatusBadge" class="ia-status offline">🔌 Verificando...</span>
-            </div>
-            <div class="ia-input-group">
-                <input type="text" id="iaQuestion" class="ia-input" placeholder="Ej: ¿Quién fue Hipatia? ¿Qué pasó en Alejandría?">
-                <button id="askIaBtn" class="ia-btn">Preguntar</button>
-            </div>
-            <div id="iaResponse" class="ia-response">
-                💡 La IA responderá usando SOLO los casos de esta biblioteca.
-            </div>
-        </div>
+        <div class="sub">50+ casos históricos · Realidad Virtual</div>
 
         <div class="stats">
             <div class="stat"><div class="stat-num">50+</div><div>casos</div></div>
@@ -243,7 +186,17 @@
 
         <div id="sections-container"></div>
 
-        <div class="footer">⚡ Biblioteca virtual con IA local · Haz clic en "Modo VR" para experiencia inmersiva</div>
+        <div class="footer">⚡ Biblioteca virtual · Haz clic en "Modo VR" para experiencia inmersiva</div>
+        
+        <!-- PUBLICIDAD AL FINAL (SMART LINKS) -->
+        <div class="ad-container">
+            <div class="ad-label">⚡ PATROCINADORES OFICIALES ⚡</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 10px;">
+                <a href="https://www.profitablecpmratenetwork.com/cuitcvgz?key=85ca230e218898f76e48c348cafb2311" target="_blank" rel="nofollow" style="background: linear-gradient(90deg, #e9c46a, #f4a261); color: #1a222c; padding: 10px 20px; border-radius: 40px; text-decoration: none; font-weight: bold; font-family: 'Cinzel', serif;">🎮 OFERTA 1</a>
+                <a href="https://www.profitablecpmratenetwork.com/b27uffyn?key=5b35819451353807b0e99b21addde69a" target="_blank" rel="nofollow" style="background: linear-gradient(90deg, #2a9d8f, #264653); color: white; padding: 10px 20px; border-radius: 40px; text-decoration: none; font-weight: bold; font-family: 'Cinzel', serif;">🎲 OFERTA 2</a>
+                <div style="background: rgba(255,255,255,0.1); border: 2px dashed #e9c46a; border-radius: 40px; padding: 10px 20px; min-width: 120px; text-align: center; font-size: 0.7rem; color: #e9c46a;">⏳ PRÓXIMAMENTE</div>
+            </div>
+        </div>
     </div>
 
     <!-- Botón para activar MODO VR -->
@@ -255,52 +208,9 @@
         <div id="vrContainer" style="width:100%;height:100%"></div>
     </div>
 
-    <!-- Scripts para la página normal (casos, IA) -->
     <script>
         // ============================================
-        // CONFIGURACIÓN IA LOCAL
-        // ============================================
-        const IA_CONFIG = { ip: '192.168.100.34', puerto: '8005', modelName: 'TINYLLAMA_1_1B_CHAT' };
-        let iaLocalActiva = false;
-        
-        async function verificarIA() {
-            const badge = document.getElementById('iaStatusBadge');
-            try {
-                const response = await fetch(`http://${IA_CONFIG.ip}:${IA_CONFIG.puerto}/status`);
-                const data = await response.json();
-                iaLocalActiva = (data.status === 'running' && data.ai?.isEnabled === true);
-                if (iaLocalActiva) {
-                    badge.innerHTML = '✅ IA Local conectada (TinyLlama)';
-                    badge.className = 'ia-status online';
-                } else {
-                    badge.innerHTML = '⚠️ IA no disponible · modo offline';
-                    badge.className = 'ia-status offline';
-                }
-                return iaLocalActiva;
-            } catch (error) {
-                iaLocalActiva = false;
-                badge.innerHTML = '❌ IA no conectada · modo offline';
-                badge.className = 'ia-status offline';
-                return false;
-            }
-        }
-        
-        async function preguntarIA(pregunta) {
-            if (!iaLocalActiva) return null;
-            try {
-                const response = await fetch(`http://${IA_CONFIG.ip}:${IA_CONFIG.puerto}/ai/text`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: pregunta, modelName: IA_CONFIG.modelName, maxTokens: 200, temperature: 0.7 })
-                });
-                if (!response.ok) return null;
-                const data = await response.json();
-                return data.response || data.text || null;
-            } catch (error) { return null; }
-        }
-        
-        // ============================================
-        // BIBLIOTECA DE CASOS
+        // BIBLIOTECA DE CASOS (SIN IA)
         // ============================================
         const casos = {
             paradigmas: [
@@ -316,38 +226,6 @@
                 { num: "6", era: "1952", titulo: "Rosalind Franklin", hook: "Fotografía 51 mostró la doble hélice del ADN. Usada sin permiso.", desc: "Murió antes del Nobel.", tag: "robado", tagType: "danger", anomalia: "Fotografía 51", ruptura: "Reconocimiento póstumo", mecanismo: "Sesgo de género" }
             ]
         };
-        
-        function buscarEnBiblioteca(pregunta) {
-            const query = pregunta.toLowerCase();
-            const todasSecciones = [...casos.paradigmas, ...casos.destruidos, ...casos.perdidos];
-            const resultados = [];
-            for (const caso of todasSecciones) {
-                const textoCompleto = `${caso.titulo} ${caso.hook} ${caso.desc}`.toLowerCase();
-                if (textoCompleto.includes(query)) resultados.push(caso);
-            }
-            return resultados;
-        }
-        
-        async function handleUserQuestion() {
-            const question = document.getElementById('iaQuestion').value.trim();
-            const responseDiv = document.getElementById('iaResponse');
-            if (!question) { responseDiv.innerHTML = '⚠️ Escribe una pregunta.'; return; }
-            responseDiv.innerHTML = '🔍 Buscando en la biblioteca...';
-            const resultados = buscarEnBiblioteca(question);
-            if (resultados.length === 0) {
-                responseDiv.innerHTML = `📭 No encontré información sobre "${question}". Casos disponibles: Geocentrismo, Deriva continental, Alejandría, Hipatia, Lenguas extintas, Rosalind Franklin.`;
-                return;
-            }
-            responseDiv.innerHTML = '🤖 Consultando a la IA local... ⏳';
-            const promptIA = `Basado en estos casos históricos: ${resultados.map(r => r.titulo).join(', ')}. Responde: ${question}`;
-            if (iaLocalActiva) {
-                const respuestaIA = await preguntarIA(promptIA);
-                if (respuestaIA) responseDiv.innerHTML = `📖 ${respuestaIA}`;
-                else responseDiv.innerHTML = `⚠️ IA no respondió. Información encontrada: ${resultados.map(r => `• ${r.titulo}: ${r.hook}`).join('<br>')}`;
-            } else {
-                responseDiv.innerHTML = `⚠️ IA local no disponible.<br><br>📚 Información encontrada:<br>${resultados.map(r => `• ${r.titulo}: ${r.hook}`).join('<br>')}`;
-            }
-        }
         
         // Renderizado de casos
         function getTagClass(type) {
@@ -404,10 +282,7 @@
                 update();
             });
         });
-        document.getElementById('askIaBtn').addEventListener('click', handleUserQuestion);
-        document.getElementById('iaQuestion').addEventListener('keypress', (e) => { if (e.key === 'Enter') handleUserQuestion(); });
         
-        verificarIA();
         update();
     </script>
 
@@ -433,27 +308,22 @@
             const container = document.getElementById('vrContainer');
             if (!container) return;
             
-            // Limpiar contenedor por si acaso
             container.innerHTML = '';
             
-            // Escena
             vrScene = new THREE.Scene();
             vrScene.background = new THREE.Color(0x0a0f1e);
             vrScene.fog = new THREE.FogExp2(0x0a0f1e, 0.008);
             
-            // Cámara
             vrCamera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
             vrCamera.position.set(4, 1.6, 5);
             vrCamera.lookAt(0, 1, 0);
             
-            // Renderer con soporte VR
             vrRenderer = new THREE.WebGLRenderer({ antialias: true });
             vrRenderer.setSize(container.clientWidth, container.clientHeight);
             vrRenderer.setPixelRatio(window.devicePixelRatio);
             vrRenderer.xr.enabled = true;
             container.appendChild(vrRenderer.domElement);
             
-            // Botón de VR (se añade automáticamente)
             const vrBtn = VRButton.createButton(vrRenderer);
             vrBtn.style.position = 'absolute';
             vrBtn.style.bottom = '20px';
@@ -461,12 +331,10 @@
             vrBtn.style.zIndex = '1000';
             container.appendChild(vrBtn);
             
-            // Controles para depuración (no VR)
             vrControls = new OrbitControls(vrCamera, vrRenderer.domElement);
             vrControls.enableDamping = true;
             vrControls.target.set(0, 1.2, 0);
             
-            // Luces
             const ambientLight = new THREE.AmbientLight(0x404060);
             vrScene.add(ambientLight);
             const dirLight = new THREE.DirectionalLight(0xffffff, 1);
@@ -476,19 +344,16 @@
             fillLight.position.set(3, 2, 2);
             vrScene.add(fillLight);
             
-            // Suelo
             const floorMaterial = new THREE.MeshStandardMaterial({ color: 0x1a1f2e, roughness: 0.3, metalness: 0.7 });
             const floor = new THREE.Mesh(new THREE.PlaneGeometry(14, 14), floorMaterial);
             floor.rotation.x = -Math.PI / 2;
             floor.position.y = -1.2;
             vrScene.add(floor);
             
-            // Cuadrícula
             const gridHelper = new THREE.GridHelper(16, 20, 0x4a9eff, 0x334155);
             gridHelper.position.y = -1.1;
             vrScene.add(gridHelper);
             
-            // Estanterías
             const woodMaterial = new THREE.MeshStandardMaterial({ color: 0x5a3a2a, roughness: 0.6 });
             const shelfLeft = new THREE.Group();
             for (let i = 0; i < 4; i++) {
@@ -506,7 +371,6 @@
             }
             vrScene.add(shelfRight);
             
-            // Libros flotantes
             const colors = [0x4a9eff, 0xf87171, 0xfbbf24, 0x60a5fa, 0xa78bfa, 0x34d399];
             const libros = [];
             for (let i = 0; i < 30; i++) {
@@ -522,7 +386,6 @@
                 libros.push(book);
             }
             
-            // Partículas
             const particleCount = 600;
             const particlesGeometry = new THREE.BufferGeometry();
             const particlesPositions = new Float32Array(particleCount * 3);
@@ -536,7 +399,6 @@
             const particles = new THREE.Points(particlesGeometry, particlesMaterial);
             vrScene.add(particles);
             
-            // Título flotante
             const canvas = document.createElement('canvas');
             canvas.width = 512;
             canvas.height = 128;
@@ -553,7 +415,6 @@
             textPlane.position.set(0, 2.8, -2.8);
             vrScene.add(textPlane);
             
-            // Animación
             let time = 0;
             function animate() {
                 requestAnimationFrame(animate);
@@ -568,7 +429,6 @@
             }
             animate();
             
-            // Redimensionar
             window.addEventListener('resize', () => {
                 if (vrRenderer && vrCamera) {
                     const width = container.clientWidth;
@@ -580,7 +440,6 @@
             });
         }
         
-        // Control de modos
         const normalMode = document.getElementById('normalMode');
         const vrModeDiv = document.getElementById('vrMode');
         const vrBtn = document.getElementById('vrModeBtn');
