@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Newtral · Biblioteca del Conocimiento</title>
+    <title>Newtral · Biblioteca del Conocimiento con IA</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -122,11 +122,10 @@
             border: 1px solid #334155;
             border-radius: 1rem;
             padding: 1rem;
-            cursor: pointer;
             transition: all 0.2s;
         }
         .card:hover { transform: translateY(-3px); border-color: #60a5fa; }
-        .card-title { font-size: 1rem; font-weight: bold; margin-bottom: 0.3rem; }
+        .card-title { font-size: 1rem; font-weight: bold; margin-bottom: 0.3rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
         .card-era { font-size: 0.7rem; color: #94a3b8; margin-bottom: 0.5rem; }
         .card-hook { font-size: 0.8rem; color: #cbd5e1; line-height: 1.4; }
         .card-tag { display: inline-block; font-size: 0.6rem; padding: 2px 8px; border-radius: 1rem; margin-top: 0.5rem; }
@@ -137,6 +136,31 @@
         .details { display: none; margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid #334155; }
         .card.open .details { display: block; }
         .detail-row { font-size: 0.75rem; color: #94a3b8; margin-bottom: 0.3rem; }
+        
+        .ia-btn {
+            background: linear-gradient(90deg, #8b5cf6, #3b82f6);
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            margin-top: 8px;
+            width: 100%;
+            transition: all 0.2s;
+        }
+        .ia-btn:hover { transform: scale(1.02); opacity: 0.9; }
+        .ia-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        .ia-explicacion {
+            background: rgba(139, 92, 246, 0.2);
+            border-left: 3px solid #8b5cf6;
+            padding: 8px;
+            margin-top: 8px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            line-height: 1.5;
+        }
         
         .footer { text-align: center; margin-top: 2rem; font-size: 0.7rem; color: #475569; }
         
@@ -156,6 +180,14 @@
             letter-spacing: 1px;
         }
         
+        .ia-badge {
+            background: #8b5cf6;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 0.6rem;
+            margin-left: 8px;
+        }
+        
         @media (max-width: 700px) {
             .normal-mode { padding: 1rem; }
             .case-grid { grid-template-columns: 1fr; }
@@ -166,8 +198,8 @@
 
     <!-- MODO NORMAL -->
     <div class="normal-mode" id="normalMode">
-        <h1>📚 Newtral · Biblioteca del Conocimiento</h1>
-        <div class="sub">50+ casos históricos · Realidad Virtual</div>
+        <h1>📚 Newtral · Biblioteca del Conocimiento <span class="ia-badge">GROQ IA</span></h1>
+        <div class="sub">50+ casos históricos · Explicaciones con IA · Realidad Virtual</div>
 
         <div class="stats">
             <div class="stat"><div class="stat-num">50+</div><div>casos</div></div>
@@ -186,9 +218,9 @@
 
         <div id="sections-container"></div>
 
-        <div class="footer">⚡ Biblioteca virtual · Haz clic en "Modo VR" para experiencia inmersiva</div>
+        <div class="footer">⚡ Biblioteca virtual · Haz clic en "Modo VR" para experiencia inmersiva · 🤖 IA con Groq</div>
         
-        <!-- PUBLICIDAD AL FINAL (SMART LINKS) -->
+        <!-- PUBLICIDAD: OFERTAS 1 y 2 (enlaces directos) -->
         <div class="ad-container">
             <div class="ad-label">⚡ PATROCINADORES OFICIALES ⚡</div>
             <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 10px;">
@@ -196,6 +228,18 @@
                 <a href="https://www.profitablecpmratenetwork.com/b27uffyn?key=5b35819451353807b0e99b21addde69a" target="_blank" rel="nofollow" style="background: linear-gradient(90deg, #2a9d8f, #264653); color: white; padding: 10px 20px; border-radius: 40px; text-decoration: none; font-weight: bold; font-family: 'Cinzel', serif;">🎲 OFERTA 2</a>
                 <div style="background: rgba(255,255,255,0.1); border: 2px dashed #e9c46a; border-radius: 40px; padding: 10px 20px; min-width: 120px; text-align: center; font-size: 0.7rem; color: #e9c46a;">⏳ PRÓXIMAMENTE</div>
             </div>
+        </div>
+
+        <!-- SMART LINK 1 de Adsterra -->
+        <div class="ad-container" style="margin-top: 15px;">
+            <div class="ad-label">🔗 RECOMENDACIONES</div>
+            <script src="https://www.profitablecpmratenetwork.com/hfbcqgkv?key=c318b34c55ad7f3a70c974fce455fb18"></script>
+        </div>
+
+        <!-- SMART LINK 2 de Adsterra -->
+        <div class="ad-container" style="margin-top: 15px;">
+            <div class="ad-label">🎁 OFERTAS ESPECIALES</div>
+            <script src="https://www.profitablecpmratenetwork.com/sy5uvbav4x?key=c29e1fd554f321e910c2944fc5395589"></script>
         </div>
     </div>
 
@@ -210,7 +254,28 @@
 
     <script>
         // ============================================
-        // BIBLIOTECA DE CASOS (SIN IA)
+        // CONFIGURACIÓN GROQ
+        // ============================================
+        const GROQ_API_KEY = "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";
+        const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
+        const MODEL = "llama-3.3-70b-versatile";
+        
+        // Límite de 100 consultas/día por navegador
+        const limite = {
+            get hoy() { return new Date().toDateString(); },
+            get usadas() { 
+                if(localStorage.getItem('dia_newtral') !== this.hoy) return 0;
+                return parseInt(localStorage.getItem('consultas_newtral') || 0);
+            },
+            puede() { return this.usadas < 100; },
+            registrar() { 
+                localStorage.setItem('dia_newtral', this.hoy);
+                localStorage.setItem('consultas_newtral', this.usadas + 1);
+            }
+        };
+        
+        // ============================================
+        // BIBLIOTECA DE CASOS
         // ============================================
         const casos = {
             paradigmas: [
@@ -226,6 +291,58 @@
                 { num: "6", era: "1952", titulo: "Rosalind Franklin", hook: "Fotografía 51 mostró la doble hélice del ADN. Usada sin permiso.", desc: "Murió antes del Nobel.", tag: "robado", tagType: "danger", anomalia: "Fotografía 51", ruptura: "Reconocimiento póstumo", mecanismo: "Sesgo de género" }
             ]
         };
+        
+        // Función para explicar con IA
+        async function explicarConIA(caso, cardElement) {
+            if (!limite.puede()) {
+                const iaDiv = cardElement.querySelector('.ia-explicacion');
+                if (iaDiv) iaDiv.innerHTML = "🛡️ Límite de IA alcanzado (100 explicaciones/día). Vuelve mañana.";
+                return;
+            }
+            
+            const prompt = `Explica de forma breve pero profunda (máximo 80 palabras) por qué el siguiente caso histórico es importante para entender cómo funciona el conocimiento humano:
+
+Título: ${caso.titulo}
+Época: ${caso.era}
+Descripción: ${caso.desc}
+
+Enfócate en: la lección que nos deja sobre la ciencia, el poder o la memoria histórica.`;
+            
+            try {
+                const response = await fetch(GROQ_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${GROQ_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: MODEL,
+                        messages: [
+                            { 
+                                role: "system", 
+                                content: "Eres un historiador divulgador. Explicas casos históricos de forma clara, interesante y con perspectiva crítica. Hablas español." 
+                            },
+                            { role: "user", content: prompt }
+                        ],
+                        max_tokens: 200,
+                        temperature: 0.7
+                    })
+                });
+                
+                if (!response.ok) throw new Error("Error en la API");
+                const data = await response.json();
+                const explicacion = data.choices?.[0]?.message?.content || "No se pudo generar una explicación.";
+                
+                limite.registrar();
+                
+                const iaDiv = cardElement.querySelector('.ia-explicacion');
+                if (iaDiv) iaDiv.innerHTML = `🤖 ${explicacion}`;
+                
+            } catch (error) {
+                const iaDiv = cardElement.querySelector('.ia-explicacion');
+                if (iaDiv) iaDiv.innerHTML = "⚠️ Error al conectar con la IA. Intenta de nuevo.";
+            }
+        }
         
         // Renderizado de casos
         function getTagClass(type) {
@@ -253,8 +370,10 @@
                 const grid = document.getElementById(`grid-${section.id}`);
                 if (grid) {
                     grid.innerHTML = filtered.map(c => `
-                        <div class="card" onclick="this.classList.toggle('open')">
-                            <div class="card-title">📖 ${c.titulo}</div>
+                        <div class="card" data-caso='${JSON.stringify(c)}'>
+                            <div class="card-title" onclick="this.closest('.card').classList.toggle('open')">
+                                📖 ${c.titulo}
+                            </div>
                             <div class="card-era">${c.era}</div>
                             <div class="card-hook">${c.hook}</div>
                             <span class="card-tag ${getTagClass(c.tagType)}">${c.tag}</span>
@@ -263,6 +382,8 @@
                                 <div class="detail-row"><strong>⚠️ Anomalía:</strong> ${c.anomalia}</div>
                                 <div class="detail-row"><strong>🔓 Ruptura:</strong> ${c.ruptura}</div>
                                 <div class="detail-row"><strong>⚙️ Mecanismo:</strong> ${c.mecanismo}</div>
+                                <button class="ia-btn" onclick="explicarConIA(${JSON.stringify(c).replace(/"/g, '&quot;')}, this.closest('.card'))">🤖 Explicar con IA</button>
+                                <div class="ia-explicacion"></div>
                             </div>
                         </div>
                     `).join('');
@@ -284,6 +405,8 @@
         });
         
         update();
+        
+        console.log("🤖 Newtral con Groq - Límite diario:", limite.usadas, "/100 usadas");
     </script>
 
     <!-- Script para el MODO VR (Three.js + WebXR) -->
