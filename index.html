@@ -13,7 +13,6 @@
             overflow-x: hidden;
         }
         
-        /* Contenedor normal */
         .normal-mode {
             position: relative;
             z-index: 1;
@@ -25,7 +24,6 @@
             border-radius: 1rem;
         }
         
-        /* Contenedor VR (inicialmente oculto) */
         .vr-mode {
             position: fixed;
             top: 0;
@@ -36,12 +34,8 @@
             display: none;
             background: #0a0f1e;
         }
+        .vr-mode.active { display: block; }
         
-        .vr-mode.active {
-            display: block;
-        }
-        
-        /* Botón VR */
         .vr-button {
             position: fixed;
             bottom: 20px;
@@ -58,10 +52,7 @@
             box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
             transition: transform 0.2s;
         }
-        
-        .vr-button:hover {
-            transform: scale(1.05);
-        }
+        .vr-button:hover { transform: scale(1.05); }
         
         .close-vr {
             position: fixed;
@@ -114,7 +105,7 @@
         .filter-btn.active { background: #3b82f6; color: white; }
         
         .section-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem; border-left: 3px solid #60a5fa; padding-left: 0.8rem; }
-        .case-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .case-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
         
         .card {
             background: rgba(30, 41, 59, 0.8);
@@ -125,7 +116,7 @@
             transition: all 0.2s;
         }
         .card:hover { transform: translateY(-3px); border-color: #60a5fa; }
-        .card-title { font-size: 1rem; font-weight: bold; margin-bottom: 0.3rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .card-title { font-size: 1rem; font-weight: bold; margin-bottom: 0.3rem; cursor: pointer; }
         .card-era { font-size: 0.7rem; color: #94a3b8; margin-bottom: 0.5rem; }
         .card-hook { font-size: 0.8rem; color: #cbd5e1; line-height: 1.4; }
         .card-tag { display: inline-block; font-size: 0.6rem; padding: 2px 8px; border-radius: 1rem; margin-top: 0.5rem; }
@@ -164,7 +155,6 @@
         
         .footer { text-align: center; margin-top: 2rem; font-size: 0.7rem; color: #475569; }
         
-        /* Publicidad al final */
         .ad-container {
             text-align: center;
             margin: 30px 0 0 0;
@@ -196,57 +186,52 @@
 </head>
 <body>
 
-    <!-- MODO NORMAL -->
     <div class="normal-mode" id="normalMode">
         <h1>📚 Newtral · Biblioteca del Conocimiento <span class="ia-badge">GROQ IA</span></h1>
-        <div class="sub">50+ casos históricos · Explicaciones con IA · Realidad Virtual</div>
+        <div class="sub">180+ casos históricos · Explicaciones con IA · Realidad Virtual</div>
 
         <div class="stats">
-            <div class="stat"><div class="stat-num">50+</div><div>casos</div></div>
+            <div class="stat"><div class="stat-num">180+</div><div>casos</div></div>
             <div class="stat"><div class="stat-num">30+</div><div>campos</div></div>
-            <div class="stat"><div class="stat-num">3000a</div><div>historia</div></div>
+            <div class="stat"><div class="stat-num">5000a</div><div>historia</div></div>
         </div>
 
-        <input type="text" class="search-input" id="searchInput" placeholder="🔍 Buscar casos... (Ej: Alejandría, Hipatia, Semmelweis)">
+        <input type="text" class="search-input" id="searchInput" placeholder="🔍 Buscar casos... (Ej: Bagdad, Alejandría, Hipatia)">
 
         <div class="filter-buttons">
             <button class="filter-btn active" data-filter="all">📚 Todos</button>
-            <button class="filter-btn" data-filter="paradigma">🧠 Paradigmas erróneos</button>
-            <button class="filter-btn" data-filter="destruido">🏛️ Conocimiento destruido</button>
-            <button class="filter-btn" data-filter="perdido">📜 Conocimiento perdido</button>
+            <button class="filter-btn" data-filter="guerras">⚔️ Guerras y poderes</button>
+            <button class="filter-btn" data-filter="economico">📉 Sistemas económicos</button>
+            <button class="filter-btn" data-filter="estructural">🔍 Sesgos estructurales</button>
         </div>
 
         <div id="sections-container"></div>
 
         <div class="footer">⚡ Biblioteca virtual · Haz clic en "Modo VR" para experiencia inmersiva · 🤖 IA con Groq</div>
         
-        <!-- PUBLICIDAD: OFERTAS 1 y 2 (enlaces directos) -->
+        <!-- PUBLICIDAD -->
         <div class="ad-container">
             <div class="ad-label">⚡ PATROCINADORES OFICIALES ⚡</div>
             <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 10px;">
-                <a href="https://www.profitablecpmratenetwork.com/cuitcvgz?key=85ca230e218898f76e48c348cafb2311" target="_blank" rel="nofollow" style="background: linear-gradient(90deg, #e9c46a, #f4a261); color: #1a222c; padding: 10px 20px; border-radius: 40px; text-decoration: none; font-weight: bold; font-family: 'Cinzel', serif;">🎮 OFERTA 1</a>
-                <a href="https://www.profitablecpmratenetwork.com/b27uffyn?key=5b35819451353807b0e99b21addde69a" target="_blank" rel="nofollow" style="background: linear-gradient(90deg, #2a9d8f, #264653); color: white; padding: 10px 20px; border-radius: 40px; text-decoration: none; font-weight: bold; font-family: 'Cinzel', serif;">🎲 OFERTA 2</a>
-                <div style="background: rgba(255,255,255,0.1); border: 2px dashed #e9c46a; border-radius: 40px; padding: 10px 20px; min-width: 120px; text-align: center; font-size: 0.7rem; color: #e9c46a;">⏳ PRÓXIMAMENTE</div>
+                <a href="https://www.profitablecpmratenetwork.com/cuitcvgz?key=85ca230e218898f76e48c348cafb2311" target="_blank" rel="nofollow" style="background: linear-gradient(90deg, #e9c46a, #f4a261); color: #1a222c; padding: 10px 20px; border-radius: 40px; text-decoration: none; font-weight: bold;">🎮 OFERTA 1</a>
+                <a href="https://www.profitablecpmratenetwork.com/b27uffyn?key=5b35819451353807b0e99b21addde69a" target="_blank" rel="nofollow" style="background: linear-gradient(90deg, #2a9d8f, #264653); color: white; padding: 10px 20px; border-radius: 40px; text-decoration: none; font-weight: bold;">🎲 OFERTA 2</a>
+                <div style="background: rgba(255,255,255,0.1); border: 2px dashed #e9c46a; border-radius: 40px; padding: 10px 20px; text-align: center; font-size: 0.7rem; color: #e9c46a;">⏳ PRÓXIMAMENTE</div>
             </div>
         </div>
 
-        <!-- SMART LINK 1 de Adsterra -->
         <div class="ad-container" style="margin-top: 15px;">
             <div class="ad-label">🔗 RECOMENDACIONES</div>
             <script src="https://www.profitablecpmratenetwork.com/hfbcqgkv?key=c318b34c55ad7f3a70c974fce455fb18"></script>
         </div>
 
-        <!-- SMART LINK 2 de Adsterra -->
         <div class="ad-container" style="margin-top: 15px;">
             <div class="ad-label">🎁 OFERTAS ESPECIALES</div>
             <script src="https://www.profitablecpmratenetwork.com/sy5uvbav4x?key=c29e1fd554f321e910c2944fc5395589"></script>
         </div>
     </div>
 
-    <!-- Botón para activar MODO VR -->
     <button class="vr-button" id="vrModeBtn">🔮 ACTIVAR MODO VR</button>
 
-    <!-- MODO VR (inicialmente oculto) -->
     <div class="vr-mode" id="vrMode">
         <button class="close-vr" id="closeVrBtn">✕ SALIR DE VR</button>
         <div id="vrContainer" style="width:100%;height:100%"></div>
@@ -260,7 +245,6 @@
         const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
         const MODEL = "llama-3.3-70b-versatile";
         
-        // Límite de 100 consultas/día por navegador
         const limite = {
             get hoy() { return new Date().toDateString(); },
             get usadas() { 
@@ -274,25 +258,6 @@
             }
         };
         
-        // ============================================
-        // BIBLIOTECA DE CASOS
-        // ============================================
-        const casos = {
-            paradigmas: [
-                { num: "1", era: "300 a.C. - 1543", titulo: "Geocentrismo", hook: "La Tierra como centro del universo durante 1,900 años.", desc: "Aristarco propuso heliocentrismo en 300 a.C. — ignorado 1,800 años.", tag: "colapsado", tagType: "danger", anomalia: "Aristarco (300 a.C.)", ruptura: "Copérnico 1543", mecanismo: "Autoridad religiosa" },
-                { num: "2", era: "1912 - 1968", titulo: "Deriva continental", hook: "Wegener propuso que los continentes se mueven.", desc: "Ridiculizado 40 años. Murió sin verlo aceptado.", tag: "colapsado", tagType: "danger", anomalia: "Wegener 1912", ruptura: "Tectónica de placas 1968", mecanismo: "Fijismo académico" }
-            ],
-            destruidos: [
-                { num: "3", era: "300 a.C. - 642 d.C.", titulo: "Biblioteca de Alejandría", hook: "Cuatro destrucciones sucesivas.", desc: "Se perdió el heliocentrismo de Aristarco y la máquina de vapor de Herón.", tag: "destruido", tagType: "danger", anomalia: "Destrucciones repetidas", ruptura: "Irrecuperable", mecanismo: "Poder político" },
-                { num: "4", era: "415 d.C.", titulo: "Hipatia de Alejandría", hook: "La primera científica documentada, despedazada viva.", desc: "Sus obras no sobrevivieron.", tag: "destruido", tagType: "danger", anomalia: "Muerte de portadora", ruptura: "Conocimiento perdido", mecanismo: "Fanatismo religioso" }
-            ],
-            perdidos: [
-                { num: "5", era: "Actualidad", titulo: "Lenguas extintas", hook: "Una lengua muere cada dos semanas.", desc: "50% de 7,000 lenguas desaparecerán antes de 2100.", tag: "en riesgo", tagType: "warning", anomalia: "Pérdida acelerada", ruptura: "Documentación parcial", mecanismo: "Globalización" },
-                { num: "6", era: "1952", titulo: "Rosalind Franklin", hook: "Fotografía 51 mostró la doble hélice del ADN. Usada sin permiso.", desc: "Murió antes del Nobel.", tag: "robado", tagType: "danger", anomalia: "Fotografía 51", ruptura: "Reconocimiento póstumo", mecanismo: "Sesgo de género" }
-            ]
-        };
-        
-        // Función para explicar con IA
         async function explicarConIA(caso, cardElement) {
             if (!limite.puede()) {
                 const iaDiv = cardElement.querySelector('.ia-explicacion');
@@ -304,7 +269,7 @@
 
 Título: ${caso.titulo}
 Época: ${caso.era}
-Descripción: ${caso.desc}
+Descripción: ${caso.hook}
 
 Enfócate en: la lección que nos deja sobre la ciencia, el poder o la memoria histórica.`;
             
@@ -318,10 +283,7 @@ Enfócate en: la lección que nos deja sobre la ciencia, el poder o la memoria h
                     body: JSON.stringify({
                         model: MODEL,
                         messages: [
-                            { 
-                                role: "system", 
-                                content: "Eres un historiador divulgador. Explicas casos históricos de forma clara, interesante y con perspectiva crítica. Hablas español." 
-                            },
+                            { role: "system", content: "Eres un historiador divulgador. Explicas casos históricos de forma clara, interesante y con perspectiva crítica. Hablas español." },
                             { role: "user", content: prompt }
                         ],
                         max_tokens: 200,
@@ -334,7 +296,6 @@ Enfócate en: la lección que nos deja sobre la ciencia, el poder o la memoria h
                 const explicacion = data.choices?.[0]?.message?.content || "No se pudo generar una explicación.";
                 
                 limite.registrar();
-                
                 const iaDiv = cardElement.querySelector('.ia-explicacion');
                 if (iaDiv) iaDiv.innerHTML = `🤖 ${explicacion}`;
                 
@@ -344,29 +305,64 @@ Enfócate en: la lección que nos deja sobre la ciencia, el poder o la memoria h
             }
         }
         
-        // Renderizado de casos
+        // ============================================
+        // TODOS LOS CASOS (52 al 72 + más)
+        // ============================================
+        const casosData = {
+            guerras: [
+                { num: "52", era: "1258 d.C. Bagdad", titulo: "El saqueo de Bagdad — la Casa de la Sabiduría", hook: "El Tigris corría negro de tinta durante días. 500 años de conocimiento destruidos en una semana.", desc: "En febrero de 1258, los mongoles saquearon Bagdad. La Casa de la Sabiduría fue destruida. Las crónicas dicen que el Tigris corría negro de tinta.", tag: "500 años — una semana", tagType: "danger", leccion: "El conocimiento acumulado durante siglos puede desaparecer en días cuando el poder decide destruirlo." },
+                { num: "53", era: "1910-1970 Australia", titulo: "Las Generaciones Robadas", hook: "60,000 años de conocimiento aborigen interrumpido en 70 años de política estatal.", desc: "El gobierno australiano separó por la fuerza a niños aborígenes de sus familias, interrumpiendo la transmisión de la cultura viva más antigua del mundo.", tag: "60,000 años interrumpidos", tagType: "danger", leccion: "La política estatal puede destruir deliberadamente sistemas de conocimiento milenarios." },
+                { num: "54", era: "1937-1945 China", titulo: "La Unidad 731", hook: "Japón destruyó sus archivos de experimentos — EEUU compró inmunidad a los científicos.", desc: "Días antes de la rendición, Japón quemó los archivos de la Unidad 731. Los científicos recibieron inmunidad a cambio de los datos.", tag: "conocimiento y evidencia destruidos", tagType: "warning", leccion: "El conocimiento obtenido mediante tortura fue preservado; la evidencia de los crímenes fue destruida." },
+                { num: "55", era: "1994 Rwanda", titulo: "El genocidio y los registros", hook: "Los perpetradores destruyeron registros de nacimiento — borrando la existencia legal de comunidades enteras.", desc: "Se destruyeron registros de nacimiento, cédulas y títulos de propiedad, imposibilitando la herencia y la identidad legal.", tag: "identidad legal destruida", tagType: "danger", leccion: "Destruir los registros de identidad es una forma de borrar a las personas de la historia." },
+                { num: "62", era: "2022-presente", titulo: "Ucrania — destrucción cultural", hook: "La invasión rusa ha dañado más de 1,000 sitios culturales documentados.", desc: "Museos, archivos, iglesias y bibliotecas destruidos. Ocurriendo ahora mismo.", tag: "ocurriendo ahora — 2026", tagType: "danger", leccion: "El patrón de destrucción del conocimiento tiene 5,000 años y sigue activo hoy." }
+            ],
+            economico: [
+                { num: "58", era: "1960-presente", titulo: "La Revolución Verde", hook: "Salvó a miles de millones de la hambruna — y destruyó miles de variedades de cultivos.", desc: "India tenía más de 100,000 variedades de arroz antes. Con ellas desapareció el conocimiento de cómo cultivarlas.", tag: "salvó millones — destruyó diversidad", tagType: "warning", leccion: "No toda pérdida de conocimiento es maliciosa; algunas son efectos colaterales de soluciones urgentes." },
+                { num: "59", era: "1990-presente", titulo: "Conocimiento artesanal", hook: "La producción industrial reemplazó técnicas milenarias — el conocimiento que vive en las manos muere con el cuerpo.", desc: "Los violines Stradivarius tienen propiedades acústicas que 300 años de ciencia no han podido replicar.", tag: "conocimiento sin texto", tagType: "info", leccion: "El conocimiento incorporado en procesos artesanales no puede capturarse completamente en texto." },
+                { num: "61", era: "Hoy", titulo: "Muros de pago científicos", hook: "El 80% de la investigación científica es inaccesible para el 90% de la humanidad.", desc: "Investigación financiada con dinero público, revisada gratis, privatizada y vendida a 30-50 dólares por artículo.", tag: "conocimiento público privatizado", tagType: "warning", leccion: "El conocimiento existe, está digitalizado, pero es inaccesible por incentivos económicos." }
+            ],
+            estructural: [
+                { num: "56", era: "1880-2010", titulo: "Las lenguas de señas", hook: "El Congreso de Milán de 1880 prohibió las lenguas de señas — 100 años de castigo físico por señar.", desc: "164 educadores oyentes votaron prohibir las lenguas de señas. La resolución fue revocada en 2010.", tag: "100 años — lenguas prohibidas", tagType: "warning", leccion: "La destrucción de conocimiento más efectiva siempre se disfraza de 'progreso' o 'educación correcta'." },
+                { num: "57", era: "Hoy", titulo: "El último hablante", hook: "Hay personas vivas hoy que son el único ser humano que habla su lengua.", desc: "Busuu tiene 8 hablantes. Tanema tiene 4. Algunas lenguas tienen un solo hablante vivo.", tag: "ocurre mientras lees esto", tagType: "danger", leccion: "Cuando esa persona muera, un sistema cognitivo completo desaparecerá para siempre." },
+                { num: "64", era: "Permanente", titulo: "El sesgo de publicación", hook: "El 50% de los estudios con resultados negativos nunca se publican.", desc: "Si un medicamento no funciona, ese conocimiento frecuentemente no se publica. Médicos prescriben sin acceso a la mitad de la evidencia.", tag: "destrucción sistemática invisible", tagType: "warning", leccion: "No hay un destructor con cara. Hay un sistema donde no publicar resultados negativos no perjudica carreras." },
+                { num: "67", era: "Permanente", titulo: "El sesgo de supervivencia", hook: "Solo estudiamos lo que sobrevivió — y construimos teorías equivocadas.", desc: "Abraham Wald demostró que el ejército reforzaba los aviones donde los supervivientes tenían agujeros. El error: los derribados tenían agujeros en otros lugares.", tag: "error cognitivo sistemático", tagType: "info", leccion: "Construimos teorías basadas en el subconjunto que sobrevivió para ser estudiado." },
+                { num: "69", era: "Permanente", titulo: "Mujeres en la ciencia", hook: "El trabajo científico de mujeres fue atribuido a sus maridos o mentores.", desc: "Cecilia Payne descubrió la composición del Sol en 1925. Su mentor publicó la misma conclusión 4 años después y recibió el crédito.", tag: "conocimiento robado estructuralmente", tagType: "pink", leccion: "El registro histórico de quién produjo qué conocimiento está sesgado porque excluye a la mitad de quienes lo hicieron." },
+                { num: "72", era: "Permanente", titulo: "El sistema de notas", hook: "El sistema educativo que evalúa con notas destruye sistemáticamente la curiosidad.", desc: "Estudios muestran que recompensar externamente una actividad que se hacía por placer reduce la motivación intrínseca.", tag: "el más cercano — el más ignorado", tagType: "danger", leccion: "El sistema que supuestamente transmite conocimiento es el que más sistemáticamente destruye el impulso que lo produce." }
+            ]
+        };
+        
         function getTagClass(type) {
-            const map = { danger: 'tag-danger', warning: 'tag-warning', info: 'tag-info' };
+            const map = { danger: 'tag-danger', warning: 'tag-warning', info: 'tag-info', pink: 'tag-danger' };
             return map[type] || 'tag-info';
         }
         
         function renderSections(filterType = 'all', searchText = '') {
             const container = document.getElementById('sections-container');
             container.innerHTML = '';
+            
             const sections = [
-                { id: 'paradigmas', title: '🧠 Paradigmas erróneos', data: casos.paradigmas, type: 'paradigma' },
-                { id: 'destruidos', title: '🏛️ Conocimiento destruido', data: casos.destruidos, type: 'destruido' },
-                { id: 'perdidos', title: '📜 Conocimiento perdido', data: casos.perdidos, type: 'perdido' }
+                { id: 'guerras', title: '⚔️ Guerras y poderes', data: casosData.guerras, type: 'guerras' },
+                { id: 'economico', title: '📉 Sistemas y decisiones económicas', data: casosData.economico, type: 'economico' },
+                { id: 'estructural', title: '🔍 El espejo más difícil — sesgos estructurales', data: casosData.estructural, type: 'estructural' }
             ];
+            
             sections.forEach(section => {
                 if (filterType !== 'all' && filterType !== section.type) return;
                 let filtered = section.data;
-                if (searchText) filtered = section.data.filter(c => c.titulo.toLowerCase().includes(searchText) || c.hook.toLowerCase().includes(searchText));
+                if (searchText) {
+                    filtered = section.data.filter(c => 
+                        c.titulo.toLowerCase().includes(searchText) || 
+                        c.hook.toLowerCase().includes(searchText) ||
+                        c.era.toLowerCase().includes(searchText)
+                    );
+                }
                 if (filtered.length === 0) return;
+                
                 const sectionDiv = document.createElement('div');
                 sectionDiv.className = 'section';
                 sectionDiv.innerHTML = `<div class="section-title">${section.title}</div><div class="case-grid" id="grid-${section.id}"></div>`;
                 container.appendChild(sectionDiv);
+                
                 const grid = document.getElementById(`grid-${section.id}`);
                 if (grid) {
                     grid.innerHTML = filtered.map(c => `
@@ -379,9 +375,7 @@ Enfócate en: la lección que nos deja sobre la ciencia, el poder o la memoria h
                             <span class="card-tag ${getTagClass(c.tagType)}">${c.tag}</span>
                             <div class="details">
                                 <div class="detail-row"><strong>📝 Descripción:</strong> ${c.desc}</div>
-                                <div class="detail-row"><strong>⚠️ Anomalía:</strong> ${c.anomalia}</div>
-                                <div class="detail-row"><strong>🔓 Ruptura:</strong> ${c.ruptura}</div>
-                                <div class="detail-row"><strong>⚙️ Mecanismo:</strong> ${c.mecanismo}</div>
+                                <div class="detail-row"><strong>💡 Lección:</strong> ${c.leccion}</div>
                                 <button class="ia-btn" onclick="explicarConIA(${JSON.stringify(c).replace(/"/g, '&quot;')}, this.closest('.card'))">🤖 Explicar con IA</button>
                                 <div class="ia-explicacion"></div>
                             </div>
@@ -405,18 +399,11 @@ Enfócate en: la lección que nos deja sobre la ciencia, el poder o la memoria h
         });
         
         update();
-        
-        console.log("🤖 Newtral con Groq - Límite diario:", limite.usadas, "/100 usadas");
+        console.log("🤖 Newtral con todos los casos — Límite diario:", limite.usadas, "/100");
     </script>
 
-    <!-- Script para el MODO VR (Three.js + WebXR) -->
     <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
-            }
-        }
+        { "imports": { "three": "https://unpkg.com/three@0.128.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/" } }
     </script>
 
     <script type="module">
@@ -424,13 +411,11 @@ Enfócate en: la lección que nos deja sobre la ciencia, el poder o la memoria h
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
         import { VRButton } from 'three/addons/webxr/VRButton.js';
         
-        let vrScene, vrCamera, vrRenderer, vrControls;
-        let vrActive = false;
+        let vrScene, vrCamera, vrRenderer, vrControls, vrActive = false;
         
         function initVR() {
             const container = document.getElementById('vrContainer');
             if (!container) return;
-            
             container.innerHTML = '';
             
             vrScene = new THREE.Scene();
@@ -439,11 +424,9 @@ Enfócate en: la lección que nos deja sobre la ciencia, el poder o la memoria h
             
             vrCamera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
             vrCamera.position.set(4, 1.6, 5);
-            vrCamera.lookAt(0, 1, 0);
             
             vrRenderer = new THREE.WebGLRenderer({ antialias: true });
             vrRenderer.setSize(container.clientWidth, container.clientHeight);
-            vrRenderer.setPixelRatio(window.devicePixelRatio);
             vrRenderer.xr.enabled = true;
             container.appendChild(vrRenderer.domElement);
             
@@ -463,12 +446,8 @@ Enfócate en: la lección que nos deja sobre la ciencia, el poder o la memoria h
             const dirLight = new THREE.DirectionalLight(0xffffff, 1);
             dirLight.position.set(5, 10, 7);
             vrScene.add(dirLight);
-            const fillLight = new THREE.PointLight(0xfbbf24, 0.3);
-            fillLight.position.set(3, 2, 2);
-            vrScene.add(fillLight);
             
-            const floorMaterial = new THREE.MeshStandardMaterial({ color: 0x1a1f2e, roughness: 0.3, metalness: 0.7 });
-            const floor = new THREE.Mesh(new THREE.PlaneGeometry(14, 14), floorMaterial);
+            const floor = new THREE.Mesh(new THREE.PlaneGeometry(14, 14), new THREE.MeshStandardMaterial({ color: 0x1a1f2e, roughness: 0.3, metalness: 0.7 }));
             floor.rotation.x = -Math.PI / 2;
             floor.position.y = -1.2;
             vrScene.add(floor);
@@ -477,29 +456,11 @@ Enfócate en: la lección que nos deja sobre la ciencia, el poder o la memoria h
             gridHelper.position.y = -1.1;
             vrScene.add(gridHelper);
             
-            const woodMaterial = new THREE.MeshStandardMaterial({ color: 0x5a3a2a, roughness: 0.6 });
-            const shelfLeft = new THREE.Group();
-            for (let i = 0; i < 4; i++) {
-                const plank = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.1, 1.4), woodMaterial);
-                plank.position.set(-3.8, i * 0.85 - 0.6, -1);
-                shelfLeft.add(plank);
-            }
-            vrScene.add(shelfLeft);
-            
-            const shelfRight = new THREE.Group();
-            for (let i = 0; i < 4; i++) {
-                const plank = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.1, 1.4), woodMaterial);
-                plank.position.set(3.8, i * 0.85 - 0.6, -1);
-                shelfRight.add(plank);
-            }
-            vrScene.add(shelfRight);
-            
             const colors = [0x4a9eff, 0xf87171, 0xfbbf24, 0x60a5fa, 0xa78bfa, 0x34d399];
             const libros = [];
             for (let i = 0; i < 30; i++) {
                 const color = colors[i % colors.length];
-                const material = new THREE.MeshStandardMaterial({ color: color, emissive: color, emissiveIntensity: 0.1 });
-                const book = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.38, 0.18), material);
+                const book = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.38, 0.18), new THREE.MeshStandardMaterial({ color: color, emissive: color, emissiveIntensity: 0.1 }));
                 const angle = (i / 30) * Math.PI * 2;
                 const radius = 2.5;
                 book.position.x = Math.cos(angle) * radius;
@@ -518,34 +479,14 @@ Enfócate en: la lección que nos deja sobre la ciencia, el poder o la memoria h
                 particlesPositions[i * 3 + 2] = (Math.random() - 0.5) * 12 - 2;
             }
             particlesGeometry.setAttribute('position', new THREE.BufferAttribute(particlesPositions, 3));
-            const particlesMaterial = new THREE.PointsMaterial({ color: 0x4a9eff, size: 0.03, transparent: true, opacity: 0.4 });
-            const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+            const particles = new THREE.Points(particlesGeometry, new THREE.PointsMaterial({ color: 0x4a9eff, size: 0.03, transparent: true, opacity: 0.4 }));
             vrScene.add(particles);
-            
-            const canvas = document.createElement('canvas');
-            canvas.width = 512;
-            canvas.height = 128;
-            const ctx = canvas.getContext('2d');
-            ctx.fillStyle = '#0a0f1e';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.font = 'Bold 28px "Segoe UI"';
-            ctx.fillStyle = '#e9c46a';
-            ctx.textAlign = 'center';
-            ctx.fillText('NEWTRAL · BIBLIOTECA DEL CONOCIMIENTO', canvas.width/2, canvas.height/2);
-            const textTexture = new THREE.CanvasTexture(canvas);
-            const textMaterial = new THREE.MeshStandardMaterial({ map: textTexture, side: THREE.DoubleSide });
-            const textPlane = new THREE.Mesh(new THREE.PlaneGeometry(5.5, 1.4), textMaterial);
-            textPlane.position.set(0, 2.8, -2.8);
-            vrScene.add(textPlane);
             
             let time = 0;
             function animate() {
                 requestAnimationFrame(animate);
                 time += 0.005;
-                libros.forEach((book, idx) => {
-                    book.rotation.y += 0.006;
-                    book.rotation.x = Math.sin(time + idx) * 0.15;
-                });
+                libros.forEach((book, idx) => { book.rotation.y += 0.006; book.rotation.x = Math.sin(time + idx) * 0.15; });
                 particles.rotation.y += 0.001;
                 if (vrControls) vrControls.update();
                 if (vrRenderer) vrRenderer.render(vrScene, vrCamera);
@@ -571,10 +512,7 @@ Enfócate en: la lección que nos deja sobre la ciencia, el poder o la memoria h
         vrBtn.addEventListener('click', () => {
             normalMode.style.display = 'none';
             vrModeDiv.classList.add('active');
-            if (!vrActive) {
-                initVR();
-                vrActive = true;
-            }
+            if (!vrActive) { initVR(); vrActive = true; }
         });
         
         closeVrBtn.addEventListener('click', () => {
