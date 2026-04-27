@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Newtral · Biblioteca del Conocimiento con IA</title>
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <title>Newtral · Biblioteca del Conocimiento con IA + 3 Ads</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -192,7 +193,7 @@
 <body>
 
     <div class="normal-mode" id="normalMode">
-        <h1>📚 Newtral · Biblioteca del Conocimiento <span class="ia-badge">GROQ IA</span></h1>
+        <h1>📚 Newtral · Biblioteca del Conocimiento <span class="ia-badge">GROQ IA + 3 ADS</span></h1>
         <div class="sub">180+ casos históricos · Explicaciones con IA · Realidad Virtual</div>
 
         <div class="stats">
@@ -223,7 +224,7 @@
         </div>
 
         <div class="footer-text">
-            ⚡ Biblioteca virtual · Datos históricos · Análisis: Groq IA · Anuncios: PopAds, Adsterra, HilltopAds
+            ⚡ Biblioteca virtual · Datos históricos · Análisis: Groq IA · Anuncios: Adsterra, Popunders, HitLTopAds
         </div>
     </div>
 
@@ -236,11 +237,11 @@
 
     <script>
         // ============================================
-        // CONFIGURACIÓN GROQ
+        // CONFIGURACIÓN GROQ - TU API KEY
         // ============================================
         const GROQ_API_KEY = "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";
         const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
-        const MODEL = "llama-3.3-70b-versatile";
+        const MODEL = "llama3-70b-8192";
         
         const limite = {
             get hoy() { return new Date().toDateString(); },
@@ -363,7 +364,7 @@ Enfócate en: la lección que nos deja sobre la ciencia, el poder o la memoria h
                 const grid = document.getElementById(`grid-${section.id}`);
                 if (grid) {
                     grid.innerHTML = filtered.map(c => `
-                        <div class="card" data-caso='${JSON.stringify(c)}'>
+                        <div class="card" data-caso='${JSON.stringify(c).replace(/'/g, "\\'")}'>
                             <div class="card-title" onclick="this.closest('.card').classList.toggle('open')">
                                 📖 ${c.titulo}
                             </div>
@@ -519,20 +520,20 @@ Enfócate en: la lección que nos deja sobre la ciencia, el poder o la memoria h
     </script>
 
     <!-- ============================================ -->
-    <!-- CÓDIGOS DE PUBLICIDAD UNIFICADOS -->
+    <!-- LAS 3 PUBLICIDADES: ADSTERRA + POPUNDERS + HITLTOPADS -->
     <!-- ============================================ -->
     
-    <!-- PopAds -->
+    <!-- 1. Adsterra -->
+    <script src="https://pl29137063.profitablecpmratenetwork.com/61/2f/c0/612fc0895a4d18ef5b58ae13c6940b8d.js"></script>
+    
+    <!-- 2. Popunders -->
     <script type="text/javascript" data-cfasync="false">
     /*<![CDATA[/* */
     (function(){var y=window,j="fd00ec802f889d01aba4b20343501917",o=[["siteId",230+597-856*111+5387265],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],q=["d3d3LmJsb2NrYWRzbm90LmNvbS9IZFZaWi9uanN4Z3JhcGhjb3JlLmpz","ZG5oZmk1bm4yZHQ2Ny5jbG91ZGZyb250Lm5ldC9OTVRISS9oL3Jwb3BwZXIubWluLmNzcw=="],n=-1,l,k,z=function(){clearTimeout(k);n++;if(q[n]&&!(1802736393000<(new Date).getTime()&&1<n)){l=y.document.createElement("script");l.type="text/javascript";l.async=!0;var f=y.document.getElementsByTagName("script")[0];l.src="https://"+atob(q[n]);l.crossOrigin="anonymous";l.onerror=z;l.onload=function(){clearTimeout(k);y[j.slice(0,16)+j.slice(0,16)]||z()};k=setTimeout(z,5E3);f.parentNode.insertBefore(l,f)}};if(!y[j]){try{Object.freeze(y[j]=o)}catch(e){}z()}})();
     /*]]>/* */
     </script>
     
-    <!-- Adsterra Smart Link (NUEVO) -->
-    <script src="https://pl29137063.profitablecpmratenetwork.com/61/2f/c0/612fc0895a4d18ef5b58ae13c6940b8d.js"></script>
-    
-    <!-- Hiltop Ads -->
+    <!-- 3. HitLTopAds -->
     <script>
     (function(lba){
     var d = document,
