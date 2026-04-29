@@ -176,6 +176,7 @@
             font-weight: bold;
         }
         .ia-btn:hover { transform: scale(1.02); opacity: 0.9; }
+        .ia-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
         
         .ia-explicacion {
             background: rgba(139, 92, 246, 0.2);
@@ -225,6 +226,19 @@
             margin-left: 10px;
         }
         
+        .loading-spinner {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
         @media (max-width: 700px) {
             .normal-mode { padding: 1rem; }
             .case-grid { grid-template-columns: 1fr; }
@@ -234,8 +248,8 @@
 <body>
 
     <div class="normal-mode" id="normalMode">
-        <h1>📚 Newtral · Biblioteca del Conocimiento <span class="ia-badge">IA + 3 ADS</span></h1>
-        <div class="sub">180+ casos históricos · Explicaciones con IA · Realidad Virtual</div>
+        <h1>📚 Newtral · Biblioteca del Conocimiento <span class="ia-badge">IA LOCAL</span></h1>
+        <div class="sub">180+ casos históricos · Explicaciones con IA local · Realidad Virtual</div>
 
         <div class="stats">
             <div class="stat"><div class="stat-num" id="totalCasos">0</div><div>casos totales</div></div>
@@ -264,7 +278,7 @@
         </div>
 
         <div class="footer-text">
-            ⚡ Biblioteca virtual · Datos históricos · Análisis: IA con respaldo offline · Anuncios: Adsterra, Popunders, HitLTopAds
+            ⚡ Biblioteca virtual · Datos históricos · Análisis: IA local (sin API) · Anuncios: Adsterra, Popunders, HitLTopAds
         </div>
     </div>
 
@@ -275,7 +289,107 @@
         <div id="vrContainer" style="width:100%;height:100%"></div>
     </div>
 
+    <!-- jsllm7 - IA local (invisible para el usuario) -->
+    <script src="https://cdn.jsdelivr.net/npm/jsllm7@0.1.0/jsllm7.js"></script>
+
     <script>
+        // ============================================
+        // IA LOCAL CON JSLLM7 (COMPLETAMENTE INVISIBLE)
+        // ============================================
+        
+        let iaLista = false;
+        
+        function showToast(message, isError = false) {
+            const toast = document.createElement('div');
+            toast.style.position = 'fixed';
+            toast.style.bottom = '20px';
+            toast.style.left = '50%';
+            toast.style.transform = 'translateX(-50%)';
+            toast.style.background = isError ? '#ef4444' : '#10b981';
+            toast.style.color = 'white';
+            toast.style.padding = '8px 20px';
+            toast.style.borderRadius = '50px';
+            toast.style.fontSize = '0.8rem';
+            toast.style.zIndex = '2000';
+            toast.style.animation = 'fadeOut 2s forwards';
+            toast.innerText = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2500);
+        }
+        
+        // Explicaciones de respaldo (si jsllm7 falla)
+        const explicacionesOffline = {
+            "El saqueo de Bagdad": "La destrucción de la Casa de la Sabiduría en 1258 fue un punto de inflexión. Durante 500 años, Bagdad fue el centro del conocimiento mundial. Cuando los mongoles arrasaron la ciudad, el Tigris se tiñó de negro con la tinta de los libros.",
+            "Las Generaciones Robadas": "Australia implementó políticas de 'asimilación' forzada entre 1910 y 1970, separando a niños aborígenes de sus familias. Esto interrumpió la transmisión de la cultura viva más antigua del mundo.",
+            "La Unidad 731": "Japón encubrió sus crímenes de guerra quemando archivos y dando inmunidad a los científicos responsables. La ciencia sin ética puede ser cómplice del horror.",
+            "El genocidio y los registros": "En Ruanda (1994), los perpetradores destruyeron cédulas y registros de nacimiento. Borrar la identidad legal de una persona es una forma de 'muerte civil'.",
+            "Ucrania — destrucción cultural": "Desde 2022, la invasión rusa ha dañado más de 1,000 sitios culturales. Este patrón se repite en cada guerra: destruir la memoria cultural del otro.",
+            "La Revolución Verde": "India tenía más de 100,000 variedades de arroz; hoy predominan unas pocas. Con cada variedad perdida, desaparece el conocimiento de siglos.",
+            "Conocimiento artesanal": "Los violines Stradivarius tienen propiedades acústicas que 300 años de ciencia no han logrado replicar. El conocimiento vivía en las manos de los artesanos.",
+            "Muros de pago científicos": "El 80% de la investigación científica es inaccesible para el 90% de la humanidad. Artículos financiados con dinero público son privatizados.",
+            "Las lenguas de señas": "El Congreso de Milán de 1880 prohibió las lenguas de señas. 164 educadores oyentes votaron que señar era 'primitivo' y debía ser castigado.",
+            "El último hablante": "Hay personas vivas hoy que son las únicas que hablan su lengua. Cuando esa persona muera, un sistema cognitivo completo desaparecerá.",
+            "El sesgo de publicación": "El 50% de estudios con resultados negativos nunca se publican. Médicos prescriben sin acceso a la mitad de la evidencia.",
+            "El sesgo de supervivencia": "Abraham Wald demostró que el ejército reforzaba los aviones donde los supervivientes tenían agujeros. El error: los derribados tenían agujeros en otros lugares.",
+            "Mujeres en la ciencia": "Cecilia Payne descubrió la composición del Sol en 1925. Su mentor publicó la misma conclusión 4 años después y recibió el crédito.",
+            "El sistema de notas": "Estudios muestran que recompensar externamente una actividad que se hacía por placer reduce la motivación intrínseca."
+        };
+        
+        function generarExplicacionOffline(titulo) {
+            for (let [key, value] of Object.entries(explicacionesOffline)) {
+                if (titulo.includes(key)) return value;
+            }
+            return `📖 Este caso histórico ilustra cómo el conocimiento humano puede ser destruido, olvidado o vuelto inaccesible. La lección es que el conocimiento no es eterno por sí mismo; requiere instituciones que lo preserven.`;
+        }
+        
+        async function explicarConIA(caso, cardElement) {
+            const iaDiv = cardElement.querySelector('.ia-explicacion');
+            const btn = cardElement.querySelector('.ia-btn');
+            
+            if (!iaDiv) return;
+            
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading-spinner"></span> IA analizando...';
+            iaDiv.innerHTML = "🤔 Pensando y analizando el caso histórico...";
+            
+            const explicacionLocal = generarExplicacionOffline(caso.titulo);
+            
+            try {
+                if (typeof jsllm7 === 'undefined') {
+                    await new Promise(r => setTimeout(r, 500));
+                    if (typeof jsllm7 === 'undefined') {
+                        throw new Error('jsllm7 no cargado');
+                    }
+                }
+                
+                const prompt = `Eres un historiador divulgador. Explica de forma clara, interesante y con perspectiva crítica por qué es importante este caso histórico. Responde en español, máximo 100 palabras.
+
+CASO: "${caso.titulo}"
+ÉPOCA: ${caso.era}
+CONTEXTO: ${caso.hook}
+
+EXPLICACIÓN HISTÓRICA:`;
+                
+                const respuesta = await jsllm7(prompt);
+                
+                if (respuesta && respuesta.length > 10 && respuesta.length < 1000) {
+                    iaDiv.innerHTML = `🤖 ${respuesta}`;
+                    btn.innerHTML = '🤖 IA Explicó';
+                } else {
+                    iaDiv.innerHTML = `📚 ${explicacionLocal}`;
+                    btn.innerHTML = '🤖 Ver explicación';
+                }
+                
+            } catch (error) {
+                console.error("Error en IA local:", error);
+                iaDiv.innerHTML = `📚 ${explicacionLocal}`;
+                btn.innerHTML = '🤖 Ver explicación';
+                showToast("⚠️ Usando explicación local", true);
+            } finally {
+                btn.disabled = false;
+            }
+        }
+        
         // ============================================
         // FUNCIÓN PARA ABRIR/CERRAR TARJETAS
         // ============================================
@@ -284,97 +398,11 @@
         }
         
         // ============================================
-        // EXPLICACIONES OFFLINE (RESPALDO)
-        // ============================================
-        const explicacionesOffline = {
-            "El saqueo de Bagdad": "La destrucción de la Casa de la Sabiduría en 1258 fue un punto de inflexión. Durante 500 años, Bagdad fue el centro del conocimiento mundial. Cuando los mongoles arrasaron la ciudad, el Tigris se tiñó de negro con la tinta de los libros. Esta pérdida nos recuerda que el conocimiento acumulado por generaciones puede desaparecer en días cuando el poder militar decide destruirlo.",
-            
-            "Las Generaciones Robadas": "Australia implementó políticas de 'asimilación' forzada entre 1910 y 1970, separando a niños aborígenes de sus familias. Esto interrumpió la transmisión de la cultura viva más antigua del mundo (60,000 años). Un Estado puede destruir deliberadamente sistemas de conocimiento enteros mediante políticas de separación familiar.",
-            
-            "La Unidad 731": "Japón encubrió sus crímenes de guerra quemando archivos y dando inmunidad a los científicos responsables. Estados Unidos compró los datos a cambio de no enjuiciarlos. La ciencia sin ética puede ser cómplice del horror.",
-            
-            "El genocidio y los registros": "En Ruanda (1994), los perpetradores destruyeron cédulas y registros de nacimiento. Borrar la identidad legal de una persona es una forma de 'muerte civil' que impide heredar, votar o probar existencia.",
-            
-            "Ucrania": "Desde 2022, la invasión rusa ha dañado más de 1,000 sitios culturales. Este patrón se repite en cada guerra: destruir la memoria cultural del otro. Ocurre ahora mismo.",
-            
-            "La Revolución Verde": "India tenía más de 100,000 variedades de arroz; hoy predominan unas pocas. Con cada variedad perdida, desaparece el conocimiento de siglos sobre cómo cultivarla. No toda pérdida es maliciosa: a veces es efecto colateral.",
-            
-            "Conocimiento artesanal": "Los violines Stradivarius tienen propiedades acústicas que 300 años de ciencia no han logrado replicar. El conocimiento de cómo construirlos no estaba escrito: vivía en las manos. Murió con su creador.",
-            
-            "Muros de pago científicos": "El 80% de la investigación científica es inaccesible para el 90% de la humanidad. Artículos financiados con dinero público son privatizados. El conocimiento existe pero un muro económico lo hace inaccesible.",
-            
-            "Las lenguas de señas": "El Congreso de Milán de 1880 prohibió las lenguas de señas. 164 educadores oyentes votaron que señar era 'primitivo' y debía ser castigado. La destrucción más efectiva se disfraza de 'progreso'.",
-            
-            "El último hablante": "Hay personas vivas hoy que son las únicas que hablan su lengua. Busuu tiene 8 hablantes. Cuando esa persona muera, un sistema cognitivo completo desaparecerá para siempre.",
-            
-            "El sesgo de publicación": "El 50% de estudios con resultados negativos nunca se publican. Médicos prescriben sin acceso a la mitad de la evidencia. No publicar resultados negativos no perjudica carreras, pero sí a pacientes.",
-            
-            "El sesgo de supervivencia": "Abraham Wald demostró que el ejército reforzaba los aviones donde los supervivientes tenían agujeros. El error: los derribados tenían agujeros en otros lugares. Estudiamos solo lo que sobrevivió.",
-            
-            "Mujeres en la ciencia": "Cecilia Payne descubrió la composición del Sol en 1925. Su mentor publicó la misma conclusión 4 años después y recibió el crédito. El registro histórico excluye a la mitad de quienes produjeron conocimiento.",
-            
-            "El sistema de notas": "Estudios muestran que recompensar externamente una actividad que se hacía por placer reduce la motivación intrínseca. El sistema educativo destruye sistemáticamente la curiosidad."
-        };
-        
-        function generarExplicacionOffline(titulo) {
-            for (let [key, value] of Object.entries(explicacionesOffline)) {
-                if (titulo.includes(key)) return value;
-            }
-            return `📖 Este caso histórico ilustra cómo el conocimiento humano puede ser destruido, olvidado o vuelto inaccesible. La lección es que el conocimiento no es eterno por sí mismo; requiere instituciones que lo preserven, lenguas que lo transmitan y sociedades que valoren su memoria.`;
-        }
-        
-        // ============================================
-        // CONFIGURACIÓN GROQ
-        // ============================================
-        const GROQ_API_KEY = "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";
-        const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
-        const MODEL = "llama3-70b-8192";
-        
-        async function explicarConIA(caso, cardElement) {
-            const iaDiv = cardElement.querySelector('.ia-explicacion');
-            iaDiv.innerHTML = "🤔 Pensando...";
-            
-            const explicacionLocal = generarExplicacionOffline(caso.titulo);
-            
-            try {
-                const response = await fetch(GROQ_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${GROQ_API_KEY}`
-                    },
-                    body: JSON.stringify({
-                        model: MODEL,
-                        messages: [
-                            { role: "system", content: "Eres un historiador divulgador. Explicas casos históricos de forma clara, interesante y con perspectiva crítica. Hablas español. Máximo 100 palabras." },
-                            { role: "user", content: `Explica en 80 palabras por qué es importante este caso: "${caso.titulo}". Época: ${caso.era}. Contexto: ${caso.hook}.` }
-                        ],
-                        max_tokens: 200,
-                        temperature: 0.7
-                    })
-                });
-                
-                if (!response.ok) throw new Error("API falló");
-                const data = await response.json();
-                const explicacion = data.choices?.[0]?.message?.content;
-                
-                if (explicacion && explicacion.length > 10) {
-                    iaDiv.innerHTML = `🤖 ${explicacion}`;
-                } else {
-                    iaDiv.innerHTML = `📚 ${explicacionLocal}`;
-                }
-                
-            } catch (error) {
-                iaDiv.innerHTML = `📚 ${explicacionLocal}`;
-            }
-        }
-        
-        // ============================================
         // TODOS LOS CASOS (14 casos en total)
         // ============================================
         const casosData = {
             guerras: [
-                { era: "1258 d.C. Bagdad", titulo: "El saqueo de Bagdad — la Casa de la Sabiduría", hook: "El Tigris corría negro de tinta durante días. 500 años de conocimiento destruidos en una semana.", desc: "En febrero de 1258, los mongoles saquearon Bagdad. La Casa de la Sabiduría fue destruida. Las crónicas dicen que el Tigris corría negro de tinta durante días.", tag: "500 años — una semana", tagType: "danger", leccion: "El conocimiento acumulado durante siglos puede desaparecer en días cuando el poder decide destruirlo." },
+                { era: "1258 d.C. Bagdad", titulo: "El saqueo de Bagdad", hook: "El Tigris corría negro de tinta durante días. 500 años de conocimiento destruidos en una semana.", desc: "En febrero de 1258, los mongoles saquearon Bagdad. La Casa de la Sabiduría fue destruida. Las crónicas dicen que el Tigris corría negro de tinta durante días.", tag: "500 años — una semana", tagType: "danger", leccion: "El conocimiento acumulado durante siglos puede desaparecer en días cuando el poder decide destruirlo." },
                 { era: "1910-1970 Australia", titulo: "Las Generaciones Robadas", hook: "60,000 años de conocimiento aborigen interrumpido en 70 años de política estatal.", desc: "El gobierno australiano separó por la fuerza a niños aborígenes de sus familias, interrumpiendo la transmisión de la cultura viva más antigua del mundo.", tag: "60,000 años interrumpidos", tagType: "danger", leccion: "La política estatal puede destruir deliberadamente sistemas de conocimiento milenarios." },
                 { era: "1937-1945 China", titulo: "La Unidad 731", hook: "Japón destruyó sus archivos de experimentos — EEUU compró inmunidad a los científicos.", desc: "Días antes de la rendición, Japón quemó los archivos de la Unidad 731. Los científicos recibieron inmunidad a cambio de los datos.", tag: "conocimiento y evidencia destruidos", tagType: "warning", leccion: "El conocimiento obtenido mediante tortura fue preservado; la evidencia de los crímenes fue destruida." },
                 { era: "1994 Rwanda", titulo: "El genocidio y los registros", hook: "Los perpetradores destruyeron registros de nacimiento — borrando la existencia legal de comunidades enteras.", desc: "Se destruyeron registros de nacimiento, cédulas y títulos de propiedad, borrando la identidad legal de comunidades enteras.", tag: "identidad legal destruida", tagType: "danger", leccion: "Destruir los registros de identidad es una forma de borrar a las personas de la historia." },
@@ -482,7 +510,23 @@
         
         actualizarContadores();
         update();
-        console.log("✅ Newtral cargado - Total de casos:", casosData.guerras.length + casosData.economico.length + casosData.estructural.length);
+        
+        // Verificar que jsllm7 está cargado (silenciosamente)
+        let verificarIntentos = 0;
+        function verificarIA() {
+            if (typeof jsllm7 !== 'undefined') {
+                iaLista = true;
+                console.log("✅ IA local jsllm7 cargada correctamente para Newtral");
+            } else if (verificarIntentos < 10) {
+                verificarIntentos++;
+                setTimeout(verificarIA, 500);
+            } else {
+                console.log("⚠️ jsllm7 no cargó, se usarán explicaciones locales");
+            }
+        }
+        verificarIA();
+        
+        console.log("📚 Newtral cargado - Total de casos:", casosData.guerras.length + casosData.economico.length + casosData.estructural.length);
     </script>
 
     <script type="importmap">
