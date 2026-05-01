@@ -248,8 +248,8 @@
 <body>
 
     <div class="normal-mode" id="normalMode">
-        <h1>📚 Newtral · Biblioteca del Conocimiento <span class="ia-badge">🇩🇪 IA POTENCIADA</span></h1>
-        <div class="sub">180+ casos históricos · Explicaciones con precisión alemana · Realidad Virtual</div>
+        <h1>📚 Newtral · Biblioteca del Conocimiento <span class="ia-badge">IA POTENCIADA</span></h1>
+        <div class="sub">180+ casos históricos · Explicaciones fluidas y claras · Realidad Virtual</div>
 
         <div class="stats">
             <div class="stat"><div class="stat-num" id="totalCasos">0</div><div>casos totales</div></div>
@@ -294,7 +294,7 @@
 
     <script>
         // ============================================
-        // IA POTENCIADA CON ALEMÁN (PRECISIÓN HISTÓRICA)
+        // IA POTENCIADA (inglés interno, respuesta fluida en español)
         // ============================================
         
         let iaLista = false;
@@ -343,7 +343,7 @@
         }
         
         // ============================================
-        // TÉCNICA: Pensar en ALEMÁN (precisión histórica), responder en español
+        // TÉCNICA: Pensar en inglés (fluidez), responder en español
         // ============================================
         async function explicarConIAPotenciada(caso) {
             try {
@@ -354,30 +354,30 @@
                     }
                 }
                 
-                // Pensar en alemán (rigor histórico)
-                const pensarAleman = `Du bist ein Historiker. Erkläre diesen historischen Fall auf DEUTSCH: "${caso.titulo}" (${caso.era})
+                // Pensar en inglés (fluidez y claridad histórica)
+                const pensarIngles = `You are a historian. Explain this historical case in ENGLISH: "${caso.titulo}" (${caso.era})
 
-Kontext: ${caso.hook}
+Context: ${caso.hook}
 
-Gib:
-1. Historischen Kontext
-2. Bedeutung des Falls
-3. Lehre für heute
+Give:
+1. Historical context
+2. Importance of the case
+3. Lesson for today
 
-Max 100 Wörter. Präzise und klar.`;
+Max 100 words. Clear and fluent.`;
 
-                const respuestaAleman = await jsllm7(pensarAleman);
+                const respuestaIngles = await jsllm7(pensarIngles);
                 
                 // Traducir a español natural
-                const traducir = `Übersetze diese historische Erklärung ins SPANISCHE (natürlich, klar, präzise):
+                const traducir = `Translate this historical explanation to NATURAL SPANISH (keep the clarity and fluency):
 
-DEUTSCH: "${respuestaAleman}"
+ENGLISH: "${respuestaIngles}"
 
-SPANISCH:`;
+SPANISH:`;
                 
                 const respuestaFinal = await jsllm7(traducir);
                 
-                return respuestaFinal || respuestaAleman;
+                return respuestaFinal || respuestaIngles;
                 
             } catch (error) {
                 console.error("Error en IA potenciada:", error);
@@ -393,7 +393,7 @@ SPANISCH:`;
             
             btn.disabled = true;
             btn.innerHTML = '<span class="loading-spinner"></span> IA potenciada analizando...';
-            iaDiv.innerHTML = "🇩🇪 Analizando el caso histórico con precisión alemana...";
+            iaDiv.innerHTML = "🤔 Analizando el caso histórico...";
             
             const explicacionLocal = generarExplicacionOffline(caso.titulo);
             
@@ -406,7 +406,7 @@ SPANISCH:`;
                     showToast("⚠️ Usando explicación local", true);
                 } else {
                     btn.innerHTML = '🤖 IA Explicó';
-                    showToast("✅ Explicación con IA potenciada (alemán)");
+                    showToast("✅ Explicación fluida generada");
                 }
                 
                 iaDiv.innerHTML = `🤖 ${respuesta}`;
@@ -442,7 +442,7 @@ SPANISCH:`;
             economico: [
                 { era: "1960-presente", titulo: "La Revolución Verde", hook: "Salvó a miles de millones de la hambruna — y destruyó miles de variedades de cultivos.", desc: "India tenía más de 100,000 variedades de arroz antes. Con ellas desapareció el conocimiento de cómo cultivarlas.", tag: "salvó millones — destruyó diversidad", tagType: "warning", leccion: "No toda pérdida de conocimiento es maliciosa; algunas son efectos colaterales de soluciones urgentes." },
                 { era: "1990-presente", titulo: "Conocimiento artesanal", hook: "La producción industrial reemplazó técnicas milenarias — el conocimiento que vive en las manos muere con el cuerpo.", desc: "Los violines Stradivarius tienen propiedades acústicas que 300 años de ciencia no han podido replicar.", tag: "conocimiento sin texto", tagType: "info", leccion: "El conocimiento incorporado en procesos artesanales no puede capturarse completamente en texto." },
-                { era: "Hoy", titulo: "Muros de pago científicos", hook: "El 80% de la investigación científica es inaccesible para el 90% de la humanidad.", desc: "Investigación financiada con dinero pública, revisada gratis, privatizada y vendida a 30-50 dólares por artículo.", tag: "conocimiento público privatizado", tagType: "warning", leccion: "El conocimiento existe, está digitalizado, pero es inaccesible por incentivos económicos." }
+                { era: "Hoy", titulo: "Muros de pago científicos", hook: "El 80% de la investigación científica es inaccesible para el 90% de la humanidad.", desc: "Investigación financiada con dinero público, revisada gratis, privatizada y vendida a 30-50 dólares por artículo.", tag: "conocimiento público privatizado", tagType: "warning", leccion: "El conocimiento existe, está digitalizado, pero es inaccesible por incentivos económicos." }
             ],
             estructural: [
                 { era: "1880-2010", titulo: "Las lenguas de señas", hook: "El Congreso de Milán de 1880 prohibió las lenguas de señas — 100 años de castigo físico por señar.", desc: "164 educadores oyentes votaron prohibir las lenguas de señas. La resolución fue revocada en 2010.", tag: "100 años — lenguas prohibidas", tagType: "warning", leccion: "La destrucción de conocimiento más efectiva siempre se disfraza de 'progreso' o 'educación correcta'." },
@@ -547,8 +547,8 @@ SPANISCH:`;
         function verificarIA() {
             if (typeof jsllm7 !== 'undefined') {
                 iaLista = true;
-                console.log("✅ IA potenciada con alemán - Newtral");
-                showToast("🇩🇪 IA potenciada activa · Precisión histórica");
+                console.log("✅ IA potenciada activa - Newtral");
+                showToast("✨ IA potenciada activa · Explicaciones fluidas");
             } else if (verificarIntentos < 10) {
                 verificarIntentos++;
                 setTimeout(verificarIA, 500);
