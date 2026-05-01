@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <meta name="referrer" content="no-referrer-when-downgrade">
-    <title>Newtral · Biblioteca del Conocimiento - Todos los casos visibles</title>
+    <title>Newtral · Biblioteca del Conocimiento · IA Potenciada</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -211,7 +211,7 @@
         }
         
         .ia-badge {
-            background: #8b5cf6;
+            background: #10b981;
             padding: 2px 8px;
             border-radius: 20px;
             font-size: 0.6rem;
@@ -248,8 +248,8 @@
 <body>
 
     <div class="normal-mode" id="normalMode">
-        <h1>📚 Newtral · Biblioteca del Conocimiento <span class="ia-badge">IA LOCAL</span></h1>
-        <div class="sub">180+ casos históricos · Explicaciones con IA local · Realidad Virtual</div>
+        <h1>📚 Newtral · Biblioteca del Conocimiento <span class="ia-badge">🇩🇪 IA POTENCIADA</span></h1>
+        <div class="sub">180+ casos históricos · Explicaciones con precisión alemana · Realidad Virtual</div>
 
         <div class="stats">
             <div class="stat"><div class="stat-num" id="totalCasos">0</div><div>casos totales</div></div>
@@ -278,7 +278,7 @@
         </div>
 
         <div class="footer-text">
-            ⚡ Biblioteca virtual · Datos históricos · Análisis: IA local (sin API) · Anuncios: Adsterra, Popunders, HitLTopAds
+            ⚡ Biblioteca virtual · Datos históricos · Análisis con IA potenciada · Anuncios: Adsterra, Popunders, HitLTopAds
         </div>
     </div>
 
@@ -289,12 +289,12 @@
         <div id="vrContainer" style="width:100%;height:100%"></div>
     </div>
 
-    <!-- jsllm7 - IA local (invisible para el usuario) -->
+    <!-- jsllm7 - IA local -->
     <script src="https://cdn.jsdelivr.net/npm/jsllm7@0.1.0/jsllm7.js"></script>
 
     <script>
         // ============================================
-        // IA LOCAL CON JSLLM7 (COMPLETAMENTE INVISIBLE)
+        // IA POTENCIADA CON ALEMÁN (PRECISIÓN HISTÓRICA)
         // ============================================
         
         let iaLista = false;
@@ -342,6 +342,49 @@
             return `📖 Este caso histórico ilustra cómo el conocimiento humano puede ser destruido, olvidado o vuelto inaccesible. La lección es que el conocimiento no es eterno por sí mismo; requiere instituciones que lo preserven.`;
         }
         
+        // ============================================
+        // TÉCNICA: Pensar en ALEMÁN (precisión histórica), responder en español
+        // ============================================
+        async function explicarConIAPotenciada(caso) {
+            try {
+                if (typeof jsllm7 === 'undefined') {
+                    await new Promise(r => setTimeout(r, 500));
+                    if (typeof jsllm7 === 'undefined') {
+                        return null;
+                    }
+                }
+                
+                // Pensar en alemán (rigor histórico)
+                const pensarAleman = `Du bist ein Historiker. Erkläre diesen historischen Fall auf DEUTSCH: "${caso.titulo}" (${caso.era})
+
+Kontext: ${caso.hook}
+
+Gib:
+1. Historischen Kontext
+2. Bedeutung des Falls
+3. Lehre für heute
+
+Max 100 Wörter. Präzise und klar.`;
+
+                const respuestaAleman = await jsllm7(pensarAleman);
+                
+                // Traducir a español natural
+                const traducir = `Übersetze diese historische Erklärung ins SPANISCHE (natürlich, klar, präzise):
+
+DEUTSCH: "${respuestaAleman}"
+
+SPANISCH:`;
+                
+                const respuestaFinal = await jsllm7(traducir);
+                
+                return respuestaFinal || respuestaAleman;
+                
+            } catch (error) {
+                console.error("Error en IA potenciada:", error);
+                return null;
+            }
+        }
+        
         async function explicarConIA(caso, cardElement) {
             const iaDiv = cardElement.querySelector('.ia-explicacion');
             const btn = cardElement.querySelector('.ia-btn');
@@ -349,39 +392,27 @@
             if (!iaDiv) return;
             
             btn.disabled = true;
-            btn.innerHTML = '<span class="loading-spinner"></span> IA analizando...';
-            iaDiv.innerHTML = "🤔 Pensando y analizando el caso histórico...";
+            btn.innerHTML = '<span class="loading-spinner"></span> IA potenciada analizando...';
+            iaDiv.innerHTML = "🇩🇪 Analizando el caso histórico con precisión alemana...";
             
             const explicacionLocal = generarExplicacionOffline(caso.titulo);
             
             try {
-                if (typeof jsllm7 === 'undefined') {
-                    await new Promise(r => setTimeout(r, 500));
-                    if (typeof jsllm7 === 'undefined') {
-                        throw new Error('jsllm7 no cargado');
-                    }
-                }
+                let respuesta = await explicarConIAPotenciada(caso);
                 
-                const prompt = `Eres un historiador divulgador. Explica de forma clara, interesante y con perspectiva crítica por qué es importante este caso histórico. Responde en español, máximo 100 palabras.
-
-CASO: "${caso.titulo}"
-ÉPOCA: ${caso.era}
-CONTEXTO: ${caso.hook}
-
-EXPLICACIÓN HISTÓRICA:`;
-                
-                const respuesta = await jsllm7(prompt);
-                
-                if (respuesta && respuesta.length > 10 && respuesta.length < 1000) {
-                    iaDiv.innerHTML = `🤖 ${respuesta}`;
-                    btn.innerHTML = '🤖 IA Explicó';
-                } else {
-                    iaDiv.innerHTML = `📚 ${explicacionLocal}`;
+                if (!respuesta) {
+                    respuesta = explicacionLocal;
                     btn.innerHTML = '🤖 Ver explicación';
+                    showToast("⚠️ Usando explicación local", true);
+                } else {
+                    btn.innerHTML = '🤖 IA Explicó';
+                    showToast("✅ Explicación con IA potenciada (alemán)");
                 }
+                
+                iaDiv.innerHTML = `🤖 ${respuesta}`;
                 
             } catch (error) {
-                console.error("Error en IA local:", error);
+                console.error("Error:", error);
                 iaDiv.innerHTML = `📚 ${explicacionLocal}`;
                 btn.innerHTML = '🤖 Ver explicación';
                 showToast("⚠️ Usando explicación local", true);
@@ -411,7 +442,7 @@ EXPLICACIÓN HISTÓRICA:`;
             economico: [
                 { era: "1960-presente", titulo: "La Revolución Verde", hook: "Salvó a miles de millones de la hambruna — y destruyó miles de variedades de cultivos.", desc: "India tenía más de 100,000 variedades de arroz antes. Con ellas desapareció el conocimiento de cómo cultivarlas.", tag: "salvó millones — destruyó diversidad", tagType: "warning", leccion: "No toda pérdida de conocimiento es maliciosa; algunas son efectos colaterales de soluciones urgentes." },
                 { era: "1990-presente", titulo: "Conocimiento artesanal", hook: "La producción industrial reemplazó técnicas milenarias — el conocimiento que vive en las manos muere con el cuerpo.", desc: "Los violines Stradivarius tienen propiedades acústicas que 300 años de ciencia no han podido replicar.", tag: "conocimiento sin texto", tagType: "info", leccion: "El conocimiento incorporado en procesos artesanales no puede capturarse completamente en texto." },
-                { era: "Hoy", titulo: "Muros de pago científicos", hook: "El 80% de la investigación científica es inaccesible para el 90% de la humanidad.", desc: "Investigación financiada con dinero público, revisada gratis, privatizada y vendida a 30-50 dólares por artículo.", tag: "conocimiento público privatizado", tagType: "warning", leccion: "El conocimiento existe, está digitalizado, pero es inaccesible por incentivos económicos." }
+                { era: "Hoy", titulo: "Muros de pago científicos", hook: "El 80% de la investigación científica es inaccesible para el 90% de la humanidad.", desc: "Investigación financiada con dinero pública, revisada gratis, privatizada y vendida a 30-50 dólares por artículo.", tag: "conocimiento público privatizado", tagType: "warning", leccion: "El conocimiento existe, está digitalizado, pero es inaccesible por incentivos económicos." }
             ],
             estructural: [
                 { era: "1880-2010", titulo: "Las lenguas de señas", hook: "El Congreso de Milán de 1880 prohibió las lenguas de señas — 100 años de castigo físico por señar.", desc: "164 educadores oyentes votaron prohibir las lenguas de señas. La resolución fue revocada en 2010.", tag: "100 años — lenguas prohibidas", tagType: "warning", leccion: "La destrucción de conocimiento más efectiva siempre se disfraza de 'progreso' o 'educación correcta'." },
@@ -480,7 +511,7 @@ EXPLICACIÓN HISTÓRICA:`;
                             <div class="details">
                                 <div class="detail-row"><strong>📝 Descripción:</strong> ${c.desc}</div>
                                 <div class="detail-row"><strong>💡 Lección:</strong> ${c.leccion}</div>
-                                <button class="ia-btn" onclick="event.stopPropagation(); explicarConIA(${JSON.stringify(c).replace(/"/g, '&quot;')}, this.closest('.card'))">🤖 Explicar con IA</button>
+                                <button class="ia-btn" onclick="event.stopPropagation(); explicarConIA(${JSON.stringify(c).replace(/"/g, '&quot;')}, this.closest('.card'))">🤖 Explicar con IA Potenciada</button>
                                 <div class="ia-explicacion"></div>
                             </div>
                         </div>
@@ -511,22 +542,23 @@ EXPLICACIÓN HISTÓRICA:`;
         actualizarContadores();
         update();
         
-        // Verificar que jsllm7 está cargado (silenciosamente)
+        // Verificar jsllm7 silenciosamente
         let verificarIntentos = 0;
         function verificarIA() {
             if (typeof jsllm7 !== 'undefined') {
                 iaLista = true;
-                console.log("✅ IA local jsllm7 cargada correctamente para Newtral");
+                console.log("✅ IA potenciada con alemán - Newtral");
+                showToast("🇩🇪 IA potenciada activa · Precisión histórica");
             } else if (verificarIntentos < 10) {
                 verificarIntentos++;
                 setTimeout(verificarIA, 500);
             } else {
-                console.log("⚠️ jsllm7 no cargó, se usarán explicaciones locales");
+                console.log("⚠️ jsllm7 no cargó");
             }
         }
         verificarIA();
         
-        console.log("📚 Newtral cargado - Total de casos:", casosData.guerras.length + casosData.economico.length + casosData.estructural.length);
+        console.log("📚 Newtral potenciado - Total de casos:", casosData.guerras.length + casosData.economico.length + casosData.estructural.length);
     </script>
 
     <script type="importmap">
@@ -661,18 +693,15 @@ EXPLICACIÓN HISTÓRICA:`;
     </script>
 
     <!-- ============================================ -->
-    <!-- LAS 3 PUBLICIDADES: ADSTERRA + POPUNDERS + HITLTOPADS -->
+    <!-- LAS 3 PUBLICIDADES -->
     <!-- ============================================ -->
     
-    <!-- 1. Adsterra -->
     <script src="https://pl29137063.profitablecpmratenetwork.com/61/2f/c0/612fc0895a4d18ef5b58ae13c6940b8d.js"></script>
     
-    <!-- 2. Popunders -->
     <script type="text/javascript" data-cfasync="false">
     (function(){var y=window,j="fd00ec802f889d01aba4b20343501917",o=[["siteId",230+597-856*111+5387265],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],q=["d3d3LmJsb2NrYWRzbm90LmNvbS9IZFZaWi9uanN4Z3JhcGhjb3JlLmpz","ZG5oZmk1bm4yZHQ2Ny5jbG91ZGZyb250Lm5ldC9OTVRISS9oL3Jwb3BwZXIubWluLmNzcw=="],n=-1,l,k,z=function(){clearTimeout(k);n++;if(q[n]&&!(1802736393000<(new Date).getTime()&&1<n)){l=y.document.createElement("script");l.type="text/javascript";l.async=!0;var f=y.document.getElementsByTagName("script")[0];l.src="https://"+atob(q[n]);l.crossOrigin="anonymous";l.onerror=z;l.onload=function(){clearTimeout(k);y[j.slice(0,16)+j.slice(0,16)]||z()};k=setTimeout(z,5E3);f.parentNode.insertBefore(l,f)}};if(!y[j]){try{Object.freeze(y[j]=o)}catch(e){}z()}})();
     </script>
     
-    <!-- 3. HitLTopAds -->
     <script>
     (function(lba){
     var d = document,
