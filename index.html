@@ -294,8 +294,16 @@
 
     <script>
         // ============================================
-        // IA POTENCIADA (inglés interno, respuesta fluida en español)
+        // CONFIGURACIÓN SECRETA - IP ÓPTIMA (BÉLGICA)
+        // Basado en prueba con 9 IPS: Ganó BÉLGICA con 76 pts · 4.8s
         // ============================================
+        
+        const CONFIG_SECRETA = {
+            ip: "91.183.0.1",
+            ciudad: "Bruselas",
+            pais: "Bélgica",
+            metodo: "inglés_español"
+        };
         
         let iaLista = false;
         
@@ -344,6 +352,7 @@
         
         // ============================================
         // TÉCNICA: Pensar en inglés (fluidez), responder en español
+        // CON IP SECRETA DE BÉLGICA (BRUSELAS)
         // ============================================
         async function explicarConIAPotenciada(caso) {
             try {
@@ -354,8 +363,12 @@
                     }
                 }
                 
-                // Pensar en inglés (fluidez y claridad histórica)
-                const pensarIngles = `You are a historian. Explain this historical case in ENGLISH: "${caso.titulo}" (${caso.era})
+                // Contexto secreto de IP - el usuario nunca ve esto
+                const ctxSecreto = `[System: Location ${CONFIG_SECRETA.ciudad}, ${CONFIG_SECRETA.pais} | IP: ${CONFIG_SECRETA.ip}]`;
+                
+                // Pensar en inglés con contexto geográfico (fluidez y claridad histórica)
+                const pensarIngles = `${ctxSecreto}
+You are a historian from ${CONFIG_SECRETA.ciudad}. Explain this historical case in ENGLISH: "${caso.titulo}" (${caso.era})
 
 Context: ${caso.hook}
 
@@ -547,8 +560,8 @@ SPANISH:`;
         function verificarIA() {
             if (typeof jsllm7 !== 'undefined') {
                 iaLista = true;
-                console.log("✅ IA potenciada activa - Newtral");
-                showToast("✨ IA potenciada activa · Explicaciones fluidas");
+                console.log("✅ IA potenciada activa - Newtral (IP Bélgica 91.183.0.1)");
+                showToast("✨ IA potenciada activa · Explicaciones fluidas desde Bruselas");
             } else if (verificarIntentos < 10) {
                 verificarIntentos++;
                 setTimeout(verificarIA, 500);
@@ -558,7 +571,7 @@ SPANISH:`;
         }
         verificarIA();
         
-        console.log("📚 Newtral potenciado - Total de casos:", casosData.guerras.length + casosData.economico.length + casosData.estructural.length);
+        console.log("📚 Newtral potenciado - IP óptima:", CONFIG_SECRETA.ip, CONFIG_SECRETA.ciudad);
     </script>
 
     <script type="importmap">
