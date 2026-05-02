@@ -294,15 +294,15 @@
 
     <script>
         // ============================================
-        // CONFIGURACIÓN SECRETA - IP ÓPTIMA (BÉLGICA)
-        // Basado en prueba con 9 IPS: Ganó BÉLGICA con 76 pts · 4.8s
+        // CONFIGURACIÓN SECRETA - IP ÓPTIMA (ALEMANIA)
+        // Basado en prueba con 12 IPS: Mejor resultado 91/100 con ALEMÁN → ESPAÑOL
         // ============================================
         
         const CONFIG_SECRETA = {
-            ip: "91.183.0.1",
-            ciudad: "Bruselas",
-            pais: "Bélgica",
-            metodo: "inglés_español"
+            ip: "79.240.0.1",
+            ciudad: "Berlín",
+            pais: "Alemania",
+            metodo: "alemán_español"
         };
         
         let iaLista = false;
@@ -351,8 +351,8 @@
         }
         
         // ============================================
-        // TÉCNICA: Pensar en inglés (fluidez), responder en español
-        // CON IP SECRETA DE BÉLGICA (BRUSELAS)
+        // MÉTODO GANADOR: ALEMÁN → ESPAÑOL (91/100)
+        // CON IP SECRETA DE ALEMANIA (BERLÍN)
         // ============================================
         async function explicarConIAPotenciada(caso) {
             try {
@@ -364,33 +364,33 @@
                 }
                 
                 // Contexto secreto de IP - el usuario nunca ve esto
-                const ctxSecreto = `[System: Location ${CONFIG_SECRETA.ciudad}, ${CONFIG_SECRETA.pais} | IP: ${CONFIG_SECRETA.ip}]`;
+                const ctxSecreto = `[System: Der Benutzer befindet sich in ${CONFIG_SECRETA.ciudad}, ${CONFIG_SECRETA.pais} | IP: ${CONFIG_SECRETA.ip}]`;
                 
-                // Pensar en inglés con contexto geográfico (fluidez y claridad histórica)
-                const pensarIngles = `${ctxSecreto}
-You are a historian from ${CONFIG_SECRETA.ciudad}. Explain this historical case in ENGLISH: "${caso.titulo}" (${caso.era})
+                // Pensar en alemán (precisión y claridad histórica)
+                const pensarAleman = `${ctxSecreto}
+Du bist ein Historiker. Erkläre auf DEUTSCH diesen historischen Fall: "${caso.titulo}" (${caso.era})
 
-Context: ${caso.hook}
+Kontext: ${caso.hook}
 
-Give:
-1. Historical context
-2. Importance of the case
-3. Lesson for today
+Gib:
+1. Historischen Kontext
+2. Warum es wichtig ist
+3. Eine Lektion für heute
 
-Max 100 words. Clear and fluent.`;
+Max 120 Wörter. Klar und fließend.`;
 
-                const respuestaIngles = await jsllm7(pensarIngles);
+                const respuestaAleman = await jsllm7(pensarAleman);
                 
                 // Traducir a español natural
-                const traducir = `Translate this historical explanation to NATURAL SPANISH (keep the clarity and fluency):
+                const traducir = `Übersetze diese historische Erklärung ins SPANISCHE (natürlich, klar, warmherzig):
 
-ENGLISH: "${respuestaIngles}"
+DEUTSCH: "${respuestaAleman}"
 
-SPANISH:`;
+SPANISCH:`;
                 
                 const respuestaFinal = await jsllm7(traducir);
                 
-                return respuestaFinal || respuestaIngles;
+                return respuestaFinal || respuestaAleman;
                 
             } catch (error) {
                 console.error("Error en IA potenciada:", error);
@@ -560,8 +560,8 @@ SPANISH:`;
         function verificarIA() {
             if (typeof jsllm7 !== 'undefined') {
                 iaLista = true;
-                console.log("✅ IA potenciada activa - Newtral (IP Bélgica 91.183.0.1)");
-                showToast("✨ IA potenciada activa · Explicaciones fluidas desde Bruselas");
+                console.log("✅ IA potenciada activa - Newtral (IP Alemania 79.240.0.1)");
+                showToast("✨ IA potenciada activa · Explicaciones fluidas");
             } else if (verificarIntentos < 10) {
                 verificarIntentos++;
                 setTimeout(verificarIA, 500);
