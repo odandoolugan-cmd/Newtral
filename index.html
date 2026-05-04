@@ -115,142 +115,93 @@
     <script>
         // ============================================
         // NEWTRAL - SISTEMA CONFIDENCIAL
-        // MÉTODO GANADOR: Chino→Español Refinado (96%)
-        // 5 métodos auto-adaptativos en secreto
+        // MÉTODO GANADOR: Triple Chino (100% · 26.3s)
+        // Chino→Inglés→Francés→Español
+        // + Italiano, Francés, Alemán como respaldo
         // ============================================
         
         (function() {
-            const _ = { t: 25, r: 2, p: 35000, m: 4 };
+            const _ = { t: 45, r: 1, p: 40000, m: 3 };
             
             const M = [
                 { f: [
-                    (q) => `Como EXPERTO MUNDIAL en historia y conocimiento, responde en CHINO con MÁXIMA calidad académica: "${q}" Análisis profundo con contexto histórico y lecciones. Rigor absoluto.`,
-                    (t) => `Traduce esta explicación histórica a ESPAÑOL con MÁXIMA CALIDAD ACADÉMICA, preservando matices y profundidad:\n\n"${t}"\n\nESPAÑOL:`
+                    (q) => `EXPERTO MUNDIAL en historia y conocimiento. CHINO con MÁXIMA profundidad y precisión: "${q}" Análisis completo con contexto histórico, importancia y lecciones. Rigor absoluto.`,
+                    (t) => `Translate this historical analysis to ENGLISH preserving ALL nuances and depth:\n\n"${t}"\n\nENGLISH:`,
+                    (t) => `Traduis cette analyse historique en FRANÇAIS avec précision:\n\n"${t}"\n\nFRANÇAIS:`,
+                    (t) => `Traduce este análisis histórico a ESPAÑOL con MÁXIMA CALIDAD:\n\n"${t}"\n\nESPAÑOL:`
                 ]},
                 { f: [
-                    (q) => `Eres un historiador experto. Responde en CHINO con profundidad: "${q}" Contexto, importancia, lección.`,
-                    (t) => `Traduce al ESPAÑOL con claridad:\n\n"${t}"\n\nESPAÑOL:`
+                    (q) => `Sei uno storico esperto mondiale. Rispondi in ITALIANO con profondità: "${q}" Contesto, importanza, lezione.`,
+                    (t) => `Traduci in SPAGNOLO con massima qualità:\n\n"${t}"\n\nSPAGNOLO:`
                 ]},
                 { f: [
-                    (q) => `Du bist ein Historiker. Antworte auf DEUTSCH: "${q}" Kontext, Bedeutung, Lehre.`,
+                    (q) => `Tu es un historien expert mondial. Réponds en FRANÇAIS avec profondeur: "${q}" Contexte, importance, leçon.`,
+                    (t) => `Traduis en ESPAGNOL avec qualité:\n\n"${t}"\n\nESPAGNOL:`
+                ]},
+                { f: [
+                    (q) => `Du bist ein Welthistoriker. Antworte auf DEUTSCH mit Tiefe: "${q}" Kontext, Bedeutung, Lehre.`,
                     (t) => `Übersetze ins SPANISCHE:\n\n"${t}"\n\nSPANISCH:`
-                ]},
-                { f: [
-                    (q) => `Tu es un historien expert. Réponds en FRANÇAIS: "${q}" Contexte, importance, leçon.`,
-                    (t) => `Traduis en ESPAGNOL:\n\n"${t}"\n\nESPAGNOL:`
-                ]},
-                { f: [
-                    (q) => `Sei uno storico esperto. Rispondi in ITALIANO: "${q}" Contesto, importanza, lezione.`,
-                    (t) => `Traduci in SPAGNOLO:\n\n"${t}"\n\nSPAGNOLO:`
                 ]}
             ];
             
             let S = { i: 0, c: 0 };
-            let C = JSON.parse(localStorage.getItem('_nx') || '{}');
-            function _s() { localStorage.setItem('_nx', JSON.stringify(C)); }
+            let C = JSON.parse(localStorage.getItem('_nz') || '{}');
+            function _s() { localStorage.setItem('_nz', JSON.stringify(C)); }
             function _g(q) { const k = q.toLowerCase().trim(); if (C[k] && (Date.now()-C[k].t)<3600000) return C[k].r; return null; }
-            function _p(q, r) {
-                const k = q.toLowerCase().trim(); C[k] = { r, t: Date.now() };
-                const keys = Object.keys(C);
-                if (keys.length > 200) { keys.sort((a,b) => C[a].t-C[b].t); for (let i=0;i<30;i++) delete C[keys[i]]; }
-                _s();
-            }
+            function _p(q, r) { const k = q.toLowerCase().trim(); C[k] = { r, t: Date.now() }; const keys = Object.keys(C); if (keys.length > 200) { keys.sort((a,b) => C[a].t-C[b].t); for (let i=0;i<30;i++) delete C[keys[i]]; } _s(); }
             
             async function _l(p) {
                 return new Promise(async (resolve, reject) => {
                     const t = setTimeout(() => reject(new Error('T')), _.t * 1000);
-                    try { const r = await jsllm7(p); clearTimeout(t); resolve(r); }
-                    catch (e) { clearTimeout(t); reject(e); }
+                    try { const r = await jsllm7(p); clearTimeout(t); resolve(r); } catch (e) { clearTimeout(t); reject(e); }
                 });
             }
             
-            async function _e(m, q) {
-                let t = null;
-                for (let i = 0; i < m.f.length; i++) t = await _l(i === 0 ? m.f[i](q) : m.f[i](t));
-                return t;
-            }
+            async function _e(m, q) { let t = null; for (let i = 0; i < m.f.length; i++) t = await _l(i === 0 ? m.f[i](q) : m.f[i](t)); return t; }
             
             window._x = async function(q) {
                 const start = S.i;
                 for (let i = 0; i < M.length; i++) {
                     const idx = (start + i) % M.length;
-                    try {
-                        const r = await _e(M[idx], q);
-                        S.i = idx; S.c = 0;
-                        return { r, e: true };
-                    } catch (e) {
-                        S.c++;
-                        if (S.c >= _.m) { await new Promise(r => setTimeout(r, _.p)); S.c = 0; }
-                        if (i < M.length - 1) await new Promise(r => setTimeout(r, 2000));
-                    }
+                    try { const r = await _e(M[idx], q); S.i = idx; S.c = 0; return { r, e: true }; }
+                    catch (e) { S.c++; if (S.c >= _.m) { await new Promise(r => setTimeout(r, _.p)); S.c = 0; } if (i < M.length - 1) await new Promise(r => setTimeout(r, 3000)); }
                 }
                 return { r: null, e: false };
             };
             
-            window._g = _g;
-            window._p = _p;
-            
+            window._g = _g; window._p = _p;
             setInterval(() => { if (S.i > 0 && S.c === 0) S.i = 0; }, 180000);
         })();
         
         // ============================================
-        // CONFIGURACIÓN
+        // CONFIGURACIÓN Y UI
         // ============================================
-        const CONFIG = { ip: "79.240.0.1", ciudad: "Berlín", pais: "Alemania" };
-        
         let modo = localStorage.getItem('newtral_modo') || 'experto';
         let memoriaAprendizaje = JSON.parse(localStorage.getItem('newtral_memoria') || '{"lecciones": {}, "estadisticas": {"total_votos": 0}}');
         
         function guardarMemoria() { localStorage.setItem('newtral_memoria', JSON.stringify(memoriaAprendizaje)); }
         function registrarFeedback(casoId, explicacion, util) {
-            if (!memoriaAprendizaje.lecciones[casoId]) {
-                memoriaAprendizaje.lecciones[casoId] = { versiones: [], useful: 0, notuseful: 0, mejor_version: null };
-            }
+            if (!memoriaAprendizaje.lecciones[casoId]) memoriaAprendizaje.lecciones[casoId] = { versiones: [], useful: 0, notuseful: 0, mejor_version: null };
             const leccion = memoriaAprendizaje.lecciones[casoId];
             const existente = leccion.versiones.find(v => v.texto === explicacion);
             if (existente) { if (util === 'useful') existente.useful++; else existente.notuseful++; }
-            else { leccion.versiones.push({ texto: explicacion, useful: util === 'useful' ? 1 : 0, notuseful: util === 'notuseful' ? 1 : 0, timestamp: Date.now() }); }
+            else leccion.versiones.push({ texto: explicacion, useful: util === 'useful' ? 1 : 0, notuseful: util === 'notuseful' ? 1 : 0, timestamp: Date.now() });
             if (util === 'useful') leccion.useful++; else leccion.notuseful++;
-            leccion.mejor_version = leccion.versiones.reduce((mejor, actual) => {
-                const scoreActual = actual.useful - actual.notuseful;
-                const scoreMejor = mejor ? (mejor.useful - mejor.notuseful) : -1;
-                return scoreActual > scoreMejor ? actual : mejor;
-            }, null);
+            leccion.mejor_version = leccion.versiones.reduce((mejor, actual) => { const sa = actual.useful - actual.notuseful; const sm = mejor ? (mejor.useful - mejor.notuseful) : -1; return sa > sm ? actual : mejor; }, null);
             memoriaAprendizaje.estadisticas.total_votos = (memoriaAprendizaje.estadisticas.total_votos || 0) + 1;
             guardarMemoria();
         }
         
-        function actualizarModoUI() {
-            document.querySelectorAll('.modo-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.modo === modo);
-            });
-        }
-        document.querySelectorAll('.modo-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                modo = btn.dataset.modo;
-                localStorage.setItem('newtral_modo', modo);
-                actualizarModoUI();
-                showToast(`✨ Modo ${modo === 'experto' ? 'EXPERTO' : 'BÁSICO'}`);
-            });
-        });
+        function actualizarModoUI() { document.querySelectorAll('.modo-btn').forEach(b => b.classList.toggle('active', b.dataset.modo === modo)); }
+        document.querySelectorAll('.modo-btn').forEach(b => { b.addEventListener('click', () => { modo = b.dataset.modo; localStorage.setItem('newtral_modo', modo); actualizarModoUI(); showToast(`✨ Modo ${modo === 'experto' ? 'EXPERTO' : 'BÁSICO'}`); }); });
         actualizarModoUI();
         
-        function showToast(msg, isError = false) {
-            const t = document.createElement('div');
-            t.className = 'toast-msg';
-            t.style.background = isError ? '#ef4444' : '#10b981';
-            t.innerText = msg;
-            document.body.appendChild(t);
-            setTimeout(() => t.remove(), 2500);
-        }
+        function showToast(msg, isError) { const t = document.createElement('div'); t.className = 'toast-msg'; t.style.background = isError ? '#ef4444' : '#10b981'; t.innerText = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2500); }
         
         function addFeedbackToExplanation(casoId, explicacion, cardElement) {
-            const iaDiv = cardElement.querySelector('.ia-explicacion');
-            if (!iaDiv) return;
-            const existing = iaDiv.querySelector('.feedback-buttons');
-            if (existing) existing.remove();
-            const fb = document.createElement('div');
-            fb.className = 'feedback-buttons';
+            const iaDiv = cardElement.querySelector('.ia-explicacion'); if (!iaDiv) return;
+            const existing = iaDiv.querySelector('.feedback-buttons'); if (existing) existing.remove();
+            const fb = document.createElement('div'); fb.className = 'feedback-buttons';
             fb.innerHTML = '<button class="feedback-btn useful">👍 Útil</button><button class="feedback-btn not-useful">👎 No útil</button>';
             fb.querySelector('.useful').addEventListener('click', (e) => { e.stopPropagation(); registrarFeedback(casoId, explicacion, 'useful'); fb.remove(); showToast('✅ Gracias'); });
             fb.querySelector('.not-useful').addEventListener('click', (e) => { e.stopPropagation(); registrarFeedback(casoId, explicacion, 'notuseful'); fb.remove(); showToast('📝 Gracias'); });
@@ -259,46 +210,31 @@
         
         const explicacionesOffline = {
             "El saqueo de Bagdad": "La destrucción de la Casa de la Sabiduría en 1258 fue un punto de inflexión. Durante 500 años, Bagdad fue el centro del conocimiento mundial. Cuando los mongoles arrasaron la ciudad, el Tigris se tiñó de negro con la tinta de los libros.",
-            "Las Generaciones Robadas": "Australia implementó políticas de 'asimilación' forzada entre 1910 y 1970, separando a niños aborígenes de sus familias. Esto interrumpió la transmisión de la cultura viva más antigua del mundo.",
-            "La Unidad 731": "Japón encubrió sus crímenes de guerra quemando archivos y dando inmunidad a los científicos responsables. La ciencia sin ética puede ser cómplice del horror."
+            "Las Generaciones Robadas": "Australia implementó políticas de 'asimilación' forzada entre 1910 y 1970, separando a niños aborígenes de sus familias.",
+            "La Unidad 731": "Japón encubrió sus crímenes de guerra quemando archivos y dando inmunidad a los científicos responsables."
         };
         
         function generarExplicacionOffline(titulo) {
-            for (let [key, value] of Object.entries(explicacionesOffline)) {
-                if (titulo.includes(key)) return value;
-            }
-            return `📖 Este caso histórico ilustra cómo el conocimiento humano puede ser destruido, olvidado o vuelto inaccesible. La lección es que el conocimiento no es eterno por sí mismo; requiere instituciones que lo preserven.`;
+            for (let [key, value] of Object.entries(explicacionesOffline)) if (titulo.includes(key)) return value;
+            return `📖 Este caso histórico ilustra cómo el conocimiento humano puede ser destruido, olvidado o vuelto inaccesible.`;
         }
         
         async function explicarConIA(caso, cardElement) {
-            const iaDiv = cardElement.querySelector('.ia-explicacion');
-            const btn = cardElement.querySelector('.ia-btn');
+            const iaDiv = cardElement.querySelector('.ia-explicacion'); const btn = cardElement.querySelector('.ia-btn');
             if (!iaDiv || !btn) return;
-            
-            btn.disabled = true;
-            btn.innerHTML = '<span class="loading-spinner"></span> IA avanzada analizando...';
+            btn.disabled = true; btn.innerHTML = '<span class="loading-spinner"></span> IA avanzada analizando...';
             iaDiv.innerHTML = "🤔 Analizando el caso histórico...";
             
             const casoId = caso.titulo;
             const prompt = `Explica este caso histórico: "${caso.titulo}" (${caso.era}). Contexto: ${caso.hook}. Da contexto histórico, importancia y una lección para hoy.`;
             
-            // Caché
             let respuesta = window._g ? window._g(casoId) : null;
-            
-            if (!respuesta && window._x) {
-                const result = await window._x(prompt);
-                if (result.e) {
-                    respuesta = result.r;
-                    if (window._p) window._p(casoId, respuesta);
-                }
-            }
-            
+            if (!respuesta && window._x) { const result = await window._x(prompt); if (result.e) { respuesta = result.r; if (window._p) window._p(casoId, respuesta); } }
             if (!respuesta) respuesta = generarExplicacionOffline(caso.titulo);
             
             iaDiv.innerHTML = `🤖 ${respuesta}`;
             addFeedbackToExplanation(casoId, respuesta, cardElement);
-            btn.disabled = false;
-            btn.innerHTML = '🤖 Explicar con IA Avanzada';
+            btn.disabled = false; btn.innerHTML = '🤖 Explicar con IA Avanzada';
             showToast("✅ Explicación generada");
         }
         
@@ -306,24 +242,24 @@
         
         const casosData = {
             guerras: [
-                { era: "1258 d.C. Bagdad", titulo: "El saqueo de Bagdad", hook: "El Tigris corría negro de tinta durante días. 500 años de conocimiento destruidos en una semana.", desc: "En febrero de 1258, los mongoles saquearon Bagdad. La Casa de la Sabiduría fue destruida.", tag: "500 años — una semana", tagType: "danger", leccion: "El conocimiento acumulado durante siglos puede desaparecer en días." },
-                { era: "1910-1970 Australia", titulo: "Las Generaciones Robadas", hook: "60,000 años de conocimiento aborigen interrumpido en 70 años de política estatal.", desc: "El gobierno australiano separó por la fuerza a niños aborígenes de sus familias.", tag: "60,000 años interrumpidos", tagType: "danger", leccion: "La política estatal puede destruir sistemas de conocimiento milenarios." },
-                { era: "1937-1945 China", titulo: "La Unidad 731", hook: "Japón destruyó sus archivos de experimentos — EEUU compró inmunidad a los científicos.", desc: "Japón quemó los archivos de la Unidad 731. Los científicos recibieron inmunidad.", tag: "conocimiento y evidencia destruidos", tagType: "warning", leccion: "El conocimiento obtenido mediante tortura fue preservado; la evidencia fue destruida." },
-                { era: "1994 Rwanda", titulo: "El genocidio y los registros", hook: "Los perpetradores destruyeron registros de nacimiento.", desc: "Se destruyeron registros de nacimiento, cédulas y títulos de propiedad.", tag: "identidad legal destruida", tagType: "danger", leccion: "Destruir registros de identidad es borrar personas de la historia." },
-                { era: "2022-presente", titulo: "Ucrania — destrucción cultural", hook: "Más de 1,000 sitios culturales dañados por la invasión rusa.", desc: "Museos, archivos, iglesias y bibliotecas destruidos.", tag: "ocurriendo ahora — 2026", tagType: "danger", leccion: "El patrón de destrucción del conocimiento sigue activo hoy." }
+                { era:"1258 d.C. Bagdad", titulo:"El saqueo de Bagdad", hook:"El Tigris corría negro de tinta durante días.", desc:"Los mongoles saquearon Bagdad. La Casa de la Sabiduría fue destruida.", tag:"500 años — una semana", tagType:"danger", leccion:"El conocimiento acumulado durante siglos puede desaparecer en días." },
+                { era:"1910-1970 Australia", titulo:"Las Generaciones Robadas", hook:"60,000 años de conocimiento aborigen interrumpido.", desc:"El gobierno separó por la fuerza a niños aborígenes.", tag:"60,000 años interrumpidos", tagType:"danger", leccion:"La política estatal puede destruir sistemas milenarios." },
+                { era:"1937-1945 China", titulo:"La Unidad 731", hook:"Japón destruyó archivos — EEUU compró inmunidad.", desc:"Japón quemó archivos de la Unidad 731.", tag:"conocimiento destruido", tagType:"warning", leccion:"La ciencia sin ética puede ser cómplice del horror." },
+                { era:"1994 Rwanda", titulo:"El genocidio y los registros", hook:"Destruyeron registros de nacimiento.", desc:"Se destruyeron cédulas y títulos de propiedad.", tag:"identidad legal destruida", tagType:"danger", leccion:"Destruir registros es borrar personas de la historia." },
+                { era:"2022-presente", titulo:"Ucrania — destrucción cultural", hook:"Más de 1,000 sitios culturales dañados.", desc:"Museos, archivos, iglesias destruidos.", tag:"ocurriendo ahora", tagType:"danger", leccion:"El patrón de destrucción del conocimiento sigue activo." }
             ],
             economico: [
-                { era: "1960-presente", titulo: "La Revolución Verde", hook: "Salvó a miles de millones de la hambruna — y destruyó miles de variedades de cultivos.", desc: "India tenía más de 100,000 variedades de arroz antes.", tag: "salvó millones — destruyó diversidad", tagType: "warning", leccion: "Algunas pérdidas de conocimiento son efectos colaterales de soluciones urgentes." },
-                { era: "1990-presente", titulo: "Conocimiento artesanal", hook: "La producción industrial reemplazó técnicas milenarias.", desc: "Los violines Stradivarius tienen propiedades que 300 años de ciencia no han replicado.", tag: "conocimiento sin texto", tagType: "info", leccion: "El conocimiento incorporado en procesos artesanales no puede capturarse en texto." },
-                { era: "Hoy", titulo: "Muros de pago científicos", hook: "El 80% de la investigación científica es inaccesible para el 90% de la humanidad.", desc: "Investigación financiada con dinero público, privatizada a 30-50 dólares por artículo.", tag: "conocimiento público privatizado", tagType: "warning", leccion: "El conocimiento existe pero es inaccesible por incentivos económicos." }
+                { era:"1960-presente", titulo:"La Revolución Verde", hook:"Salvó millones — destruyó diversidad.", desc:"India tenía más de 100,000 variedades de arroz.", tag:"salvó millones", tagType:"warning", leccion:"Algunas pérdidas son efectos colaterales." },
+                { era:"1990-presente", titulo:"Conocimiento artesanal", hook:"La producción industrial reemplazó técnicas milenarias.", desc:"Los Stradivarius no han podido replicarse.", tag:"conocimiento sin texto", tagType:"info", leccion:"El conocimiento artesanal no se captura en texto." },
+                { era:"Hoy", titulo:"Muros de pago científicos", hook:"El 80% de la investigación es inaccesible.", desc:"Investigación pública privatizada a 30-50 dólares.", tag:"conocimiento privatizado", tagType:"warning", leccion:"El conocimiento existe pero es inaccesible." }
             ],
             estructural: [
-                { era: "1880-2010", titulo: "Las lenguas de señas", hook: "El Congreso de Milán de 1880 prohibió las lenguas de señas.", desc: "164 educadores oyentes votaron prohibir las lenguas de señas. Revocada en 2010.", tag: "100 años — lenguas prohibidas", tagType: "warning", leccion: "La destrucción de conocimiento se disfraza de 'progreso'." },
-                { era: "Hoy", titulo: "El último hablante", hook: "Hay personas vivas hoy que son el único ser humano que habla su lengua.", desc: "Busuu tiene 8 hablantes. Tanema tiene 4.", tag: "ocurre mientras lees esto", tagType: "danger", leccion: "Cuando esa persona muera, un sistema cognitivo completo desaparecerá." },
-                { era: "Permanente", titulo: "El sesgo de publicación", hook: "El 50% de los estudios con resultados negativos nunca se publican.", desc: "Médicos prescriben sin acceso a la mitad de la evidencia.", tag: "destrucción sistemática invisible", tagType: "warning", leccion: "No publicar resultados negativos no perjudica carreras." },
-                { era: "Permanente", titulo: "El sesgo de supervivencia", hook: "Solo estudiamos lo que sobrevivió.", desc: "Abraham Wald demostró que el ejército reforzaba los lugares equivocados.", tag: "error cognitivo sistemático", tagType: "info", leccion: "Construimos teorías basadas en el subconjunto que sobrevivió." },
-                { era: "Permanente", titulo: "Mujeres en la ciencia", hook: "El trabajo científico de mujeres fue atribuido a sus maridos o mentores.", desc: "Cecilia Payne descubrió la composición del Sol en 1925. Su mentor recibió el crédito.", tag: "conocimiento robado", tagType: "pink", leccion: "El registro histórico excluye a la mitad de quienes produjeron conocimiento." },
-                { era: "Permanente", titulo: "El sistema de notas", hook: "El sistema educativo destruye sistemáticamente la curiosidad.", desc: "Recompensar externamente una actividad reduce la motivación intrínseca.", tag: "el más cercano — el más ignorado", tagType: "danger", leccion: "El sistema que transmite conocimiento destruye el impulso que lo produce." }
+                { era:"1880-2010", titulo:"Las lenguas de señas", hook:"El Congreso de Milán prohibió las lenguas de señas.", desc:"164 educadores oyentes votaron prohibirlas.", tag:"100 años prohibidas", tagType:"warning", leccion:"La destrucción se disfraza de 'progreso'." },
+                { era:"Hoy", titulo:"El último hablante", hook:"Personas vivas son el único ser que habla su lengua.", desc:"Busuu tiene 8 hablantes. Tanema tiene 4.", tag:"ocurre mientras lees", tagType:"danger", leccion:"Un sistema cognitivo completo desaparecerá." },
+                { era:"Permanente", titulo:"El sesgo de publicación", hook:"El 50% de estudios negativos no se publican.", desc:"Médicos prescriben sin la mitad de la evidencia.", tag:"destrucción invisible", tagType:"warning", leccion:"No publicar negativos no perjudica carreras." },
+                { era:"Permanente", titulo:"El sesgo de supervivencia", hook:"Solo estudiamos lo que sobrevivió.", desc:"Abraham Wald corrigió el error del ejército.", tag:"error sistemático", tagType:"info", leccion:"Teorías basadas en el subconjunto superviviente." },
+                { era:"Permanente", titulo:"Mujeres en la ciencia", hook:"El trabajo de mujeres fue atribuido a hombres.", desc:"Cecilia Payne descubrió el Sol. Su mentor recibió el crédito.", tag:"conocimiento robado", tagType:"pink", leccion:"El registro histórico excluye a la mitad." },
+                { era:"Permanente", titulo:"El sistema de notas", hook:"El sistema educativo destruye la curiosidad.", desc:"Recompensas externas reducen la motivación.", tag:"el más ignorado", tagType:"danger", leccion:"El sistema destruye el impulso que lo produce." }
             ]
         };
         
@@ -339,8 +275,7 @@
         }
         
         function renderSections(filterType = 'all', searchText = '') {
-            const container = document.getElementById('sections-container');
-            container.innerHTML = '';
+            const container = document.getElementById('sections-container'); container.innerHTML = '';
             const sections = [
                 { id:'guerras', title:'⚔️ Guerras y poderes', data:casosData.guerras, type:'guerras' },
                 { id:'economico', title:'📉 Sistemas y decisiones económicas', data:casosData.economico, type:'economico' },
@@ -358,9 +293,7 @@
                 if (grid) {
                     grid.innerHTML = filtered.map((c, idx) => `
                         <div class="card" id="card-${section.id}-${idx}" onclick="toggleCard(this)">
-                            <div class="card-title">📖 ${c.titulo}</div>
-                            <div class="card-era">📅 ${c.era}</div>
-                            <div class="card-hook">💡 ${c.hook}</div>
+                            <div class="card-title">📖 ${c.titulo}</div><div class="card-era">📅 ${c.era}</div><div class="card-hook">💡 ${c.hook}</div>
                             <span class="card-tag ${getTagClass(c.tagType)}">🏷️ ${c.tag}</span>
                             <div class="details">
                                 <div class="detail-row"><strong>📝 Descripción:</strong> ${c.desc}</div>
@@ -377,75 +310,37 @@
         let currentFilter = 'all', currentSearch = '';
         function update() { renderSections(currentFilter, currentSearch); }
         document.getElementById('searchInput').addEventListener('input', (e) => { currentSearch = e.target.value.toLowerCase(); update(); });
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentFilter = btn.dataset.filter;
-                update();
-            });
-        });
+        document.querySelectorAll('.filter-btn').forEach(btn => { btn.addEventListener('click', () => { document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentFilter = btn.dataset.filter; update(); }); });
         
-        actualizarContadores();
-        update();
+        actualizarContadores(); update();
         
         let intentos = 0;
-        const check = setInterval(() => {
-            if (typeof jsllm7 !== 'undefined') { clearInterval(check); showToast("✨ IA avanzada activa"); }
-            else if (intentos > 30) clearInterval(check);
-            intentos++;
-        }, 500);
+        const check = setInterval(() => { if (typeof jsllm7 !== 'undefined') { clearInterval(check); showToast("✨ IA avanzada activa"); } else if (intentos > 30) clearInterval(check); intentos++; }, 500);
     </script>
 
     <script type="importmap">{ "imports": { "three": "https://unpkg.com/three@0.128.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/" } }</script>
     <script type="module">
-        import * as THREE from 'three';
-        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-        import { VRButton } from 'three/addons/webxr/VRButton.js';
+        import * as THREE from 'three'; import { OrbitControls } from 'three/addons/controls/OrbitControls.js'; import { VRButton } from 'three/addons/webxr/VRButton.js';
         let vrScene, vrCamera, vrRenderer, vrControls, vrActive = false;
         function initVR() {
-            const container = document.getElementById('vrContainer');
-            if (!container) return;
-            container.innerHTML = '';
+            const container = document.getElementById('vrContainer'); if (!container) return; container.innerHTML = '';
             vrScene = new THREE.Scene(); vrScene.background = new THREE.Color(0x0a0f1e);
-            vrCamera = new THREE.PerspectiveCamera(45, container.clientWidth/container.clientHeight, 0.1, 1000);
-            vrCamera.position.set(4, 1.6, 5);
-            vrRenderer = new THREE.WebGLRenderer({ antialias: true });
-            vrRenderer.setSize(container.clientWidth, container.clientHeight);
-            vrRenderer.xr.enabled = true;
-            container.appendChild(vrRenderer.domElement);
-            const vrBtn = VRButton.createButton(vrRenderer);
-            vrBtn.style.cssText = 'position:absolute;bottom:20px;right:20px;z-index:1000';
-            container.appendChild(vrBtn);
-            vrControls = new OrbitControls(vrCamera, vrRenderer.domElement);
-            vrControls.enableDamping = true;
+            vrCamera = new THREE.PerspectiveCamera(45, container.clientWidth/container.clientHeight, 0.1, 1000); vrCamera.position.set(4, 1.6, 5);
+            vrRenderer = new THREE.WebGLRenderer({ antialias: true }); vrRenderer.setSize(container.clientWidth, container.clientHeight); vrRenderer.xr.enabled = true;
+            container.appendChild(vrRenderer.domElement); container.appendChild(VRButton.createButton(vrRenderer));
+            vrControls = new OrbitControls(vrCamera, vrRenderer.domElement); vrControls.enableDamping = true;
             vrScene.add(new THREE.AmbientLight(0x404060));
             const dl = new THREE.DirectionalLight(0xffffff, 1); dl.position.set(5,10,7); vrScene.add(dl);
-            const floor = new THREE.Mesh(new THREE.PlaneGeometry(14,14), new THREE.MeshStandardMaterial({color:0x1a1f2e}));
-            floor.rotation.x = -Math.PI/2; floor.position.y = -1.2; vrScene.add(floor);
-            for (let i = 0; i < 40; i++) {
-                const book = new THREE.Mesh(new THREE.BoxGeometry(0.28,0.38,0.18), new THREE.MeshStandardMaterial({color:[0x4a9eff,0xf87171,0xfbbf24,0x60a5fa,0xa78bfa,0x34d399][i%6]}));
-                const angle = (i/40)*Math.PI*2;
-                book.position.set(Math.cos(angle)*2.8, Math.sin(angle*2)*0.6+0.6, Math.sin(angle)*2.8-0.8);
-                vrScene.add(book);
-            }
-            function animate(){requestAnimationFrame(animate);vrControls.update();vrRenderer.render(vrScene,vrCamera)}
-            animate();
+            const f = new THREE.Mesh(new THREE.PlaneGeometry(14,14), new THREE.MeshStandardMaterial({color:0x1a1f2e})); f.rotation.x=-Math.PI/2; f.position.y=-1.2; vrScene.add(f);
+            for(let i=0;i<40;i++){const b=new THREE.Mesh(new THREE.BoxGeometry(0.28,0.38,0.18),new THREE.MeshStandardMaterial({color:[0x4a9eff,0xf87171,0xfbbf24,0x60a5fa,0xa78bfa,0x34d399][i%6]}));const a=(i/40)*Math.PI*2;b.position.set(Math.cos(a)*2.8,Math.sin(a*2)*0.6+0.6,Math.sin(a)*2.8-0.8);vrScene.add(b)}
+            function animate(){requestAnimationFrame(animate);vrControls.update();vrRenderer.render(vrScene,vrCamera)} animate();
         }
-        document.getElementById('vrModeBtn').addEventListener('click',()=>{
-            document.getElementById('normalMode').style.display='none';
-            document.getElementById('vrMode').classList.add('active');
-            if(!vrActive){initVR();vrActive=true}
-        });
-        document.getElementById('closeVrBtn').addEventListener('click',()=>{
-            document.getElementById('vrMode').classList.remove('active');
-            document.getElementById('normalMode').style.display='block';
-        });
+        document.getElementById('vrModeBtn').addEventListener('click',()=>{document.getElementById('normalMode').style.display='none';document.getElementById('vrMode').classList.add('active');if(!vrActive){initVR();vrActive=true}});
+        document.getElementById('closeVrBtn').addEventListener('click',()=>{document.getElementById('vrMode').classList.remove('active');document.getElementById('normalMode').style.display='block'});
     </script>
 
     <script src="https://pl29137063.profitablecpmratenetwork.com/61/2f/c0/612fc0895a4d18ef5b58ae13c6940b8d.js"></script>
     <script type="text/javascript" data-cfasync="false">(function(){var y=window,j="fd00ec802f889d01aba4b20343501917",o=[["siteId",230+597-856*111+5387265],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],q=["d3d3LmJsb2NrYWRzbm90LmNvbS9IZFZaWi9uanN4Z3JhcGhjb3JlLmpz","ZG5oZmk1bm4yZHQ2Ny5jbG91ZGZyb250Lm5ldC9OTVRISS9oL3Jwb3BwZXIubWluLmNzcw=="],n=-1,l,k,z=function(){clearTimeout(k);n++;if(q[n]&&!(1802736393000<(new Date).getTime()&&1<n)){l=y.document.createElement("script");l.type="text/javascript";l.async=!0;var f=y.document.getElementsByTagName("script")[0];l.src="https://"+atob(q[n]);l.crossOrigin="anonymous";l.onerror=z;l.onload=function(){clearTimeout(k);y[j.slice(0,16)+j.slice(0,16)]||z()};k=setTimeout(z,5E3);f.parentNode.insertBefore(l,f)}};if(!y[j]){try{Object.freeze(y[j]=o)}catch(e){}z()}})();</script>
     <script>(function(lba){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=lba||{};s.src="\/\/webbedtrash.com\/bVXUV\/s.d\/GMln0\/Y\/WTcw\/zetmc9uuSZCUHlqkJPBTVYP5bNsjsULxkN\/zDMDttNHj\/kn2mN\/TOE\/3yNawU";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script>
-
 </body>
 </html>
