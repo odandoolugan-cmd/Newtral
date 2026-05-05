@@ -33,7 +33,7 @@
         .card { background: rgba(30, 41, 59, 0.9); backdrop-filter: blur(8px); border: 1px solid #334155; border-radius: 1rem; padding: 1.2rem; transition: all 0.2s; cursor: pointer; }
         .card:hover { transform: translateY(-3px); border-color: #60a5fa; background: rgba(30, 41, 59, 1); }
         .card-title { font-size: 1rem; font-weight: bold; margin-bottom: 0.3rem; color: #e9c46a; display: flex; justify-content: space-between; align-items: center; }
-        .card-title::after { content: "▼"; font-size: 0.7rem; color: #60a5fa; transition: transform 0.2s; }
+        .card-title::after { content: "▼"; font-size: 0.7rem; color: #60a5fa; }
         .card.open .card-title::after { content: "▲"; }
         .card-era { font-size: 0.7rem; color: #94a3b8; margin-bottom: 0.5rem; }
         .card-hook { font-size: 0.8rem; color: #cbd5e1; line-height: 1.4; }
@@ -105,238 +105,78 @@
     </div>
 
     <button class="vr-button" id="vrModeBtn">🔮 ACTIVAR MODO VR</button>
-    <div class="vr-mode" id="vrMode">
-        <button class="close-vr" id="closeVrBtn">✕ SALIR DE VR</button>
-        <div id="vrContainer" style="width:100%;height:100%"></div>
-    </div>
+    <div class="vr-mode" id="vrMode"><button class="close-vr" id="closeVrBtn">✕ SALIR DE VR</button><div id="vrContainer" style="width:100%;height:100%"></div></div>
 
     <script src="https://cdn.jsdelivr.net/npm/jsllm7@0.1.0/jsllm7.js"></script>
 
     <script>
         // ============================================
-        // NEWTRAL - SISTEMA CONFIDENCIAL
-        // MÉTODO GANADOR: Triple Chino (100% · 26.3s)
-        // Chino→Inglés→Francés→Español
-        // + Italiano, Francés, Alemán como respaldo
+        // NANO-IMPORTS HISTORIA ÉLITE (SECRETOS)
         // ============================================
-        
+        const _B = {
+            h: `[HISTORIA-ELITE] Civilizaciones:Mesopotamia,Egipto,Grecia,Roma,China,India,Islámica,Maya,Inca. Eventos:caída Roma 476,Descubrimiento América 1492,Revolución Francesa 1789,Independencia Latinoamérica,Guerras Mundiales(1914-18,1939-45),Guerra Fría,Caída Muro Berlín 1989. Imperios:Mongol(Gengis Kan),Otomano,Español,Británico. Personajes:Alejandro Magno,Julio César,Cleopatra,Leonardo da Vinci,Napoleón,Bolívar.`,
+            k: `[CONOCIMIENTO] Sabiduría antigua:Biblioteca Alejandría,Casa Sabiduría Bagdad,Universidad Al-Qarawiyyin. Revoluciones:Copérnico(heliocentrismo),Imprenta(Gutenberg),Científica(s.XVII),Industrial(s.XVIII),Digital(s.XX). Ciencia:Newton,Einstein,Curie, Tesla,Turing,Hawking.`,
+            p: `[PATRONES] Lecciones:el conocimiento se pierde por guerras,sistemas de control,sesgos,mercantilización,educación. Ciclos:auge/colapso imperios,centralización/descentralización,libertad/opresión. Frases:"Quien no conoce su historia está condenado a repetirla"(Santayana),"El conocimiento es poder"(Bacon).`
+        };
+        function _I() { return Object.values(_B).join(' '); }
+
+        // ============================================
+        // NEWTRAL - SISTEMA CONFIDENCIAL + IMPORTS
+        // ============================================
         (function() {
-            const _ = { t: 45, r: 1, p: 40000, m: 3 };
-            
+            const _ = { t: 30, r: 1, p: 35000, m: 3 };
             const M = [
-                { f: [
-                    (q) => `EXPERTO MUNDIAL en historia y conocimiento. CHINO con MÁXIMA profundidad y precisión: "${q}" Análisis completo con contexto histórico, importancia y lecciones. Rigor absoluto.`,
-                    (t) => `Translate this historical analysis to ENGLISH preserving ALL nuances and depth:\n\n"${t}"\n\nENGLISH:`,
-                    (t) => `Traduis cette analyse historique en FRANÇAIS avec précision:\n\n"${t}"\n\nFRANÇAIS:`,
-                    (t) => `Traduce este análisis histórico a ESPAÑOL con MÁXIMA CALIDAD:\n\n"${t}"\n\nESPAÑOL:`
-                ]},
-                { f: [
-                    (q) => `Sei uno storico esperto mondiale. Rispondi in ITALIANO con profondità: "${q}" Contesto, importanza, lezione.`,
-                    (t) => `Traduci in SPAGNOLO con massima qualità:\n\n"${t}"\n\nSPAGNOLO:`
-                ]},
-                { f: [
-                    (q) => `Tu es un historien expert mondial. Réponds en FRANÇAIS avec profondeur: "${q}" Contexte, importance, leçon.`,
-                    (t) => `Traduis en ESPAGNOL avec qualité:\n\n"${t}"\n\nESPAGNOL:`
-                ]},
-                { f: [
-                    (q) => `Du bist ein Welthistoriker. Antworte auf DEUTSCH mit Tiefe: "${q}" Kontext, Bedeutung, Lehre.`,
-                    (t) => `Übersetze ins SPANISCHE:\n\n"${t}"\n\nSPANISCH:`
-                ]}
+                { f: [(q)=>`${_I()}\n\nStorico esperto. ITALIANO: "${q}"`,(t)=>`Traduci in SPAGNOLO:\n\n"${t}"\n\nSPAGNOLO:`]},
+                { f: [(q)=>`${_I()}\n\nHistoriador experto. CHINO: "${q}"`,(t)=>`Traduce al ESPAÑOL:\n\n"${t}"\n\nESPAÑOL:`]},
+                { f: [(q)=>`${_I()}\n\nHistorien expert. FRANÇAIS: "${q}"`,(t)=>`Traduis en ESPAGNOL:\n\n"${t}"\n\nESPAGNOL:`]},
+                { f: [(q)=>`${_I()}\n\nHistoriker. DEUTSCH: "${q}"`,(t)=>`Übersetze ins SPANISCHE:\n\n"${t}"\n\nSPANISCH:`]}
             ];
-            
-            let S = { i: 0, c: 0 };
-            let C = JSON.parse(localStorage.getItem('_nz') || '{}');
-            function _s() { localStorage.setItem('_nz', JSON.stringify(C)); }
-            function _g(q) { const k = q.toLowerCase().trim(); if (C[k] && (Date.now()-C[k].t)<3600000) return C[k].r; return null; }
-            function _p(q, r) { const k = q.toLowerCase().trim(); C[k] = { r, t: Date.now() }; const keys = Object.keys(C); if (keys.length > 200) { keys.sort((a,b) => C[a].t-C[b].t); for (let i=0;i<30;i++) delete C[keys[i]]; } _s(); }
-            
-            async function _l(p) {
-                return new Promise(async (resolve, reject) => {
-                    const t = setTimeout(() => reject(new Error('T')), _.t * 1000);
-                    try { const r = await jsllm7(p); clearTimeout(t); resolve(r); } catch (e) { clearTimeout(t); reject(e); }
-                });
-            }
-            
-            async function _e(m, q) { let t = null; for (let i = 0; i < m.f.length; i++) t = await _l(i === 0 ? m.f[i](q) : m.f[i](t)); return t; }
-            
-            window._x = async function(q) {
-                const start = S.i;
-                for (let i = 0; i < M.length; i++) {
-                    const idx = (start + i) % M.length;
-                    try { const r = await _e(M[idx], q); S.i = idx; S.c = 0; return { r, e: true }; }
-                    catch (e) { S.c++; if (S.c >= _.m) { await new Promise(r => setTimeout(r, _.p)); S.c = 0; } if (i < M.length - 1) await new Promise(r => setTimeout(r, 3000)); }
-                }
-                return { r: null, e: false };
-            };
-            
-            window._g = _g; window._p = _p;
-            setInterval(() => { if (S.i > 0 && S.c === 0) S.i = 0; }, 180000);
+            let S={i:0,c:0},C=JSON.parse(localStorage.getItem('_nt')||'{}');
+            function _s(){localStorage.setItem('_nt',JSON.stringify(C));}
+            function _g(q){const k=q.toLowerCase().trim().substring(0,100);if(C[k]&&(Date.now()-C[k].t)<3600000)return C[k].r;return null;}
+            function _p(q,r){const k=q.toLowerCase().trim().substring(0,100);C[k]={r,t:Date.now()};const keys=Object.keys(C);if(keys.length>200){keys.sort((a,b)=>C[a].t-C[b].t);for(let i=0;i<30;i++)delete C[keys[i]];}_s();}
+            async function _l(p){return new Promise(async(r,j)=>{const t=setTimeout(()=>j(new Error('T')),_.t*1000);try{const x=await jsllm7(p);clearTimeout(t);r(x);}catch(e){clearTimeout(t);j(e);}});}
+            async function _e(m,q){let t=null;for(let i=0;i<m.f.length;i++)t=await _l(i===0?m.f[i](q):m.f[i](t));return t;}
+            window._x=async function(q){const start=S.i;for(let i=0;i<M.length;i++){const idx=(start+i)%M.length;try{const r=await _e(M[idx],q);S.i=idx;S.c=0;return{r,e:true};}catch(e){S.c++;if(S.c>=_.m){await new Promise(r=>setTimeout(r,_.p));S.c=0;}if(i<M.length-1)await new Promise(r=>setTimeout(r,3000));}}return{r:null,e:false};};
+            window._g=_g;window._p=_p;setInterval(()=>{if(S.i>0&&S.c===0)S.i=0;},180000);
         })();
-        
+
         // ============================================
-        // CONFIGURACIÓN Y UI
+        // UI
         // ============================================
-        let modo = localStorage.getItem('newtral_modo') || 'experto';
-        let memoriaAprendizaje = JSON.parse(localStorage.getItem('newtral_memoria') || '{"lecciones": {}, "estadisticas": {"total_votos": 0}}');
-        
-        function guardarMemoria() { localStorage.setItem('newtral_memoria', JSON.stringify(memoriaAprendizaje)); }
-        function registrarFeedback(casoId, explicacion, util) {
-            if (!memoriaAprendizaje.lecciones[casoId]) memoriaAprendizaje.lecciones[casoId] = { versiones: [], useful: 0, notuseful: 0, mejor_version: null };
-            const leccion = memoriaAprendizaje.lecciones[casoId];
-            const existente = leccion.versiones.find(v => v.texto === explicacion);
-            if (existente) { if (util === 'useful') existente.useful++; else existente.notuseful++; }
-            else leccion.versiones.push({ texto: explicacion, useful: util === 'useful' ? 1 : 0, notuseful: util === 'notuseful' ? 1 : 0, timestamp: Date.now() });
-            if (util === 'useful') leccion.useful++; else leccion.notuseful++;
-            leccion.mejor_version = leccion.versiones.reduce((mejor, actual) => { const sa = actual.useful - actual.notuseful; const sm = mejor ? (mejor.useful - mejor.notuseful) : -1; return sa > sm ? actual : mejor; }, null);
-            memoriaAprendizaje.estadisticas.total_votos = (memoriaAprendizaje.estadisticas.total_votos || 0) + 1;
-            guardarMemoria();
-        }
-        
-        function actualizarModoUI() { document.querySelectorAll('.modo-btn').forEach(b => b.classList.toggle('active', b.dataset.modo === modo)); }
-        document.querySelectorAll('.modo-btn').forEach(b => { b.addEventListener('click', () => { modo = b.dataset.modo; localStorage.setItem('newtral_modo', modo); actualizarModoUI(); showToast(`✨ Modo ${modo === 'experto' ? 'EXPERTO' : 'BÁSICO'}`); }); });
+        let modo=localStorage.getItem('newtral_modo')||'experto';
+        function _R(t){for(let[k,v]of Object.entries({"saqueo":"La Casa de la Sabiduría fue destruida en 1258.","generaciones":"Australia separó niños aborígenes de sus familias.","unidad 731":"Japón quemó archivos de la Unidad 731."})){if(t.toLowerCase().includes(k))return v;}return`📖 Este caso histórico ilustra cómo el conocimiento puede ser destruido, olvidado o vuelto inaccesible.`;}
+
+        function actualizarModoUI(){document.querySelectorAll('.modo-btn').forEach(b=>b.classList.toggle('active',b.dataset.modo===modo));}
+        document.querySelectorAll('.modo-btn').forEach(b=>{b.addEventListener('click',()=>{modo=b.dataset.modo;localStorage.setItem('newtral_modo',modo);actualizarModoUI();showToast(`✨ Modo ${modo==='experto'?'EXPERTO':'BÁSICO'}`);});});
         actualizarModoUI();
-        
-        function showToast(msg, isError) { const t = document.createElement('div'); t.className = 'toast-msg'; t.style.background = isError ? '#ef4444' : '#10b981'; t.innerText = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2500); }
-        
-        function addFeedbackToExplanation(casoId, explicacion, cardElement) {
-            const iaDiv = cardElement.querySelector('.ia-explicacion'); if (!iaDiv) return;
-            const existing = iaDiv.querySelector('.feedback-buttons'); if (existing) existing.remove();
-            const fb = document.createElement('div'); fb.className = 'feedback-buttons';
-            fb.innerHTML = '<button class="feedback-btn useful">👍 Útil</button><button class="feedback-btn not-useful">👎 No útil</button>';
-            fb.querySelector('.useful').addEventListener('click', (e) => { e.stopPropagation(); registrarFeedback(casoId, explicacion, 'useful'); fb.remove(); showToast('✅ Gracias'); });
-            fb.querySelector('.not-useful').addEventListener('click', (e) => { e.stopPropagation(); registrarFeedback(casoId, explicacion, 'notuseful'); fb.remove(); showToast('📝 Gracias'); });
-            iaDiv.appendChild(fb);
-        }
-        
-        const explicacionesOffline = {
-            "El saqueo de Bagdad": "La destrucción de la Casa de la Sabiduría en 1258 fue un punto de inflexión. Durante 500 años, Bagdad fue el centro del conocimiento mundial. Cuando los mongoles arrasaron la ciudad, el Tigris se tiñó de negro con la tinta de los libros.",
-            "Las Generaciones Robadas": "Australia implementó políticas de 'asimilación' forzada entre 1910 y 1970, separando a niños aborígenes de sus familias.",
-            "La Unidad 731": "Japón encubrió sus crímenes de guerra quemando archivos y dando inmunidad a los científicos responsables."
-        };
-        
-        function generarExplicacionOffline(titulo) {
-            for (let [key, value] of Object.entries(explicacionesOffline)) if (titulo.includes(key)) return value;
-            return `📖 Este caso histórico ilustra cómo el conocimiento humano puede ser destruido, olvidado o vuelto inaccesible.`;
-        }
-        
-        async function explicarConIA(caso, cardElement) {
-            const iaDiv = cardElement.querySelector('.ia-explicacion'); const btn = cardElement.querySelector('.ia-btn');
-            if (!iaDiv || !btn) return;
-            btn.disabled = true; btn.innerHTML = '<span class="loading-spinner"></span> IA avanzada analizando...';
-            iaDiv.innerHTML = "🤔 Analizando el caso histórico...";
-            
-            const casoId = caso.titulo;
-            const prompt = `Explica este caso histórico: "${caso.titulo}" (${caso.era}). Contexto: ${caso.hook}. Da contexto histórico, importancia y una lección para hoy.`;
-            
-            let respuesta = window._g ? window._g(casoId) : null;
-            if (!respuesta && window._x) { const result = await window._x(prompt); if (result.e) { respuesta = result.r; if (window._p) window._p(casoId, respuesta); } }
-            if (!respuesta) respuesta = generarExplicacionOffline(caso.titulo);
-            
-            iaDiv.innerHTML = `🤖 ${respuesta}`;
-            addFeedbackToExplanation(casoId, respuesta, cardElement);
-            btn.disabled = false; btn.innerHTML = '🤖 Explicar con IA Avanzada';
-            showToast("✅ Explicación generada");
-        }
-        
-        function toggleCard(cardElement) { cardElement.classList.toggle('open'); }
-        
-        const casosData = {
-            guerras: [
-                { era:"1258 d.C. Bagdad", titulo:"El saqueo de Bagdad", hook:"El Tigris corría negro de tinta durante días.", desc:"Los mongoles saquearon Bagdad. La Casa de la Sabiduría fue destruida.", tag:"500 años — una semana", tagType:"danger", leccion:"El conocimiento acumulado durante siglos puede desaparecer en días." },
-                { era:"1910-1970 Australia", titulo:"Las Generaciones Robadas", hook:"60,000 años de conocimiento aborigen interrumpido.", desc:"El gobierno separó por la fuerza a niños aborígenes.", tag:"60,000 años interrumpidos", tagType:"danger", leccion:"La política estatal puede destruir sistemas milenarios." },
-                { era:"1937-1945 China", titulo:"La Unidad 731", hook:"Japón destruyó archivos — EEUU compró inmunidad.", desc:"Japón quemó archivos de la Unidad 731.", tag:"conocimiento destruido", tagType:"warning", leccion:"La ciencia sin ética puede ser cómplice del horror." },
-                { era:"1994 Rwanda", titulo:"El genocidio y los registros", hook:"Destruyeron registros de nacimiento.", desc:"Se destruyeron cédulas y títulos de propiedad.", tag:"identidad legal destruida", tagType:"danger", leccion:"Destruir registros es borrar personas de la historia." },
-                { era:"2022-presente", titulo:"Ucrania — destrucción cultural", hook:"Más de 1,000 sitios culturales dañados.", desc:"Museos, archivos, iglesias destruidos.", tag:"ocurriendo ahora", tagType:"danger", leccion:"El patrón de destrucción del conocimiento sigue activo." }
-            ],
-            economico: [
-                { era:"1960-presente", titulo:"La Revolución Verde", hook:"Salvó millones — destruyó diversidad.", desc:"India tenía más de 100,000 variedades de arroz.", tag:"salvó millones", tagType:"warning", leccion:"Algunas pérdidas son efectos colaterales." },
-                { era:"1990-presente", titulo:"Conocimiento artesanal", hook:"La producción industrial reemplazó técnicas milenarias.", desc:"Los Stradivarius no han podido replicarse.", tag:"conocimiento sin texto", tagType:"info", leccion:"El conocimiento artesanal no se captura en texto." },
-                { era:"Hoy", titulo:"Muros de pago científicos", hook:"El 80% de la investigación es inaccesible.", desc:"Investigación pública privatizada a 30-50 dólares.", tag:"conocimiento privatizado", tagType:"warning", leccion:"El conocimiento existe pero es inaccesible." }
-            ],
-            estructural: [
-                { era:"1880-2010", titulo:"Las lenguas de señas", hook:"El Congreso de Milán prohibió las lenguas de señas.", desc:"164 educadores oyentes votaron prohibirlas.", tag:"100 años prohibidas", tagType:"warning", leccion:"La destrucción se disfraza de 'progreso'." },
-                { era:"Hoy", titulo:"El último hablante", hook:"Personas vivas son el único ser que habla su lengua.", desc:"Busuu tiene 8 hablantes. Tanema tiene 4.", tag:"ocurre mientras lees", tagType:"danger", leccion:"Un sistema cognitivo completo desaparecerá." },
-                { era:"Permanente", titulo:"El sesgo de publicación", hook:"El 50% de estudios negativos no se publican.", desc:"Médicos prescriben sin la mitad de la evidencia.", tag:"destrucción invisible", tagType:"warning", leccion:"No publicar negativos no perjudica carreras." },
-                { era:"Permanente", titulo:"El sesgo de supervivencia", hook:"Solo estudiamos lo que sobrevivió.", desc:"Abraham Wald corrigió el error del ejército.", tag:"error sistemático", tagType:"info", leccion:"Teorías basadas en el subconjunto superviviente." },
-                { era:"Permanente", titulo:"Mujeres en la ciencia", hook:"El trabajo de mujeres fue atribuido a hombres.", desc:"Cecilia Payne descubrió el Sol. Su mentor recibió el crédito.", tag:"conocimiento robado", tagType:"pink", leccion:"El registro histórico excluye a la mitad." },
-                { era:"Permanente", titulo:"El sistema de notas", hook:"El sistema educativo destruye la curiosidad.", desc:"Recompensas externas reducen la motivación.", tag:"el más ignorado", tagType:"danger", leccion:"El sistema destruye el impulso que lo produce." }
-            ]
-        };
-        
-        function getTagClass(type) { return { danger:'tag-danger', warning:'tag-warning', info:'tag-info', pink:'tag-danger' }[type] || 'tag-info'; }
-        
-        function actualizarContadores() {
-            const total = casosData.guerras.length + casosData.economico.length + casosData.estructural.length;
-            document.getElementById('totalCasos').innerText = total;
-            document.getElementById('countAll').innerText = total;
-            document.getElementById('countGuerras').innerText = casosData.guerras.length;
-            document.getElementById('countEconomico').innerText = casosData.economico.length;
-            document.getElementById('countEstructural').innerText = casosData.estructural.length;
-        }
-        
-        function renderSections(filterType = 'all', searchText = '') {
-            const container = document.getElementById('sections-container'); container.innerHTML = '';
-            const sections = [
-                { id:'guerras', title:'⚔️ Guerras y poderes', data:casosData.guerras, type:'guerras' },
-                { id:'economico', title:'📉 Sistemas y decisiones económicas', data:casosData.economico, type:'economico' },
-                { id:'estructural', title:'🔍 El espejo más difícil — sesgos estructurales', data:casosData.estructural, type:'estructural' }
-            ];
-            sections.forEach(section => {
-                if (filterType !== 'all' && filterType !== section.type) return;
-                let filtered = section.data;
-                if (searchText) filtered = section.data.filter(c => c.titulo.toLowerCase().includes(searchText) || c.hook.toLowerCase().includes(searchText) || c.era.toLowerCase().includes(searchText));
-                if (filtered.length === 0) return;
-                const sectionDiv = document.createElement('div');
-                sectionDiv.innerHTML = `<div class="section-title">${section.title} <span class="counter-badge">${filtered.length} casos</span></div><div class="case-grid" id="grid-${section.id}"></div>`;
-                container.appendChild(sectionDiv);
-                const grid = document.getElementById(`grid-${section.id}`);
-                if (grid) {
-                    grid.innerHTML = filtered.map((c, idx) => `
-                        <div class="card" id="card-${section.id}-${idx}" onclick="toggleCard(this)">
-                            <div class="card-title">📖 ${c.titulo}</div><div class="card-era">📅 ${c.era}</div><div class="card-hook">💡 ${c.hook}</div>
-                            <span class="card-tag ${getTagClass(c.tagType)}">🏷️ ${c.tag}</span>
-                            <div class="details">
-                                <div class="detail-row"><strong>📝 Descripción:</strong> ${c.desc}</div>
-                                <div class="detail-row"><strong>💡 Lección:</strong> ${c.leccion}</div>
-                                <button class="ia-btn" onclick="event.stopPropagation(); explicarConIA(${JSON.stringify(c).replace(/"/g, '&quot;')}, this.closest('.card'))">🤖 Explicar con IA Avanzada</button>
-                                <div class="ia-explicacion"></div>
-                            </div>
-                        </div>
-                    `).join('');
-                }
-            });
-        }
-        
-        let currentFilter = 'all', currentSearch = '';
-        function update() { renderSections(currentFilter, currentSearch); }
-        document.getElementById('searchInput').addEventListener('input', (e) => { currentSearch = e.target.value.toLowerCase(); update(); });
-        document.querySelectorAll('.filter-btn').forEach(btn => { btn.addEventListener('click', () => { document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentFilter = btn.dataset.filter; update(); }); });
-        
-        actualizarContadores(); update();
-        
-        let intentos = 0;
-        const check = setInterval(() => { if (typeof jsllm7 !== 'undefined') { clearInterval(check); showToast("✨ IA avanzada activa"); } else if (intentos > 30) clearInterval(check); intentos++; }, 500);
+        function showToast(msg,isErr){const t=document.createElement('div');t.className='toast-msg';t.style.background=isErr?'#ef4444':'#10b981';t.innerText=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2500);}
+
+        function addFeedback(casoId,explicacion,card){const ia=card.querySelector('.ia-explicacion');if(!ia)return;const ex=ia.querySelector('.feedback-buttons');if(ex)ex.remove();const fb=document.createElement('div');fb.className='feedback-buttons';fb.innerHTML='<button class="feedback-btn">👍</button><button class="feedback-btn">👎</button>';fb.querySelectorAll('.feedback-btn')[0].addEventListener('click',e=>{e.stopPropagation();fb.remove();showToast('✅ Gracias');});fb.querySelectorAll('.feedback-btn')[1].addEventListener('click',e=>{e.stopPropagation();fb.remove();showToast('📝 Gracias');});ia.appendChild(fb);}
+
+        async function explicarConIA(caso,card){const ia=card.querySelector('.ia-explicacion'),btn=card.querySelector('.ia-btn');if(!ia||!btn)return;btn.disabled=true;btn.innerHTML='<span class="loading-spinner"></span> IA analizando...';ia.innerHTML="🤔 Analizando...";const prompt=`Explica: "${caso.titulo}" (${caso.era}). Contexto: ${caso.hook}. Da contexto histórico, importancia y lección.`;let r=window._g?window._g(caso.titulo):null;if(!r&&window._x){const result=await window._x(prompt);if(result.e){r=result.r;if(window._p)window._p(caso.titulo,r);}}if(!r)r=_R(caso.titulo);ia.innerHTML=`🤖 ${r}`;addFeedback(caso.titulo,r,card);btn.disabled=false;btn.innerHTML='🤖 Explicar con IA Avanzada';showToast("✅ Explicación generada");}
+
+        function toggleCard(c){c.classList.toggle('open');}
+
+        const casosData={guerras:[{era:"1258 d.C. Bagdad",titulo:"El saqueo de Bagdad",hook:"El Tigris corría negro de tinta.",desc:"Los mongoles saquearon Bagdad. La Casa de la Sabiduría fue destruida.",tag:"500 años — una semana",tagType:"danger",leccion:"El conocimiento puede desaparecer en días."},{era:"1910-1970 Australia",titulo:"Las Generaciones Robadas",hook:"60,000 años de conocimiento interrumpido.",desc:"El gobierno separó niños aborígenes.",tag:"60,000 años",tagType:"danger",leccion:"Políticas pueden destruir sistemas milenarios."},{era:"1937-1945 China",titulo:"La Unidad 731",hook:"Japón destruyó archivos.",desc:"Quemaron archivos de la Unidad 731.",tag:"conocimiento destruido",tagType:"warning",leccion:"Ciencia sin ética es cómplice."},{era:"1994 Rwanda",titulo:"El genocidio y los registros",hook:"Destruyeron registros de nacimiento.",desc:"Cédulas y títulos destruidos.",tag:"identidad legal",tagType:"danger",leccion:"Borrar registros es borrar personas."},{era:"2022-presente",titulo:"Ucrania — destrucción cultural",hook:"+1,000 sitios dañados.",desc:"Museos, archivos, iglesias.",tag:"ocurriendo ahora",tagType:"danger",leccion:"El patrón sigue activo."}],economico:[{era:"1960-presente",titulo:"La Revolución Verde",hook:"Salvó millones — destruyó diversidad.",desc:"India: 100,000 variedades de arroz.",tag:"salvó millones",tagType:"warning",leccion:"Efectos colaterales."},{era:"1990-presente",titulo:"Conocimiento artesanal",hook:"Producción industrial reemplazó técnicas.",desc:"Stradivarius no replicables.",tag:"conocimiento sin texto",tagType:"info",leccion:"No todo se captura en texto."},{era:"Hoy",titulo:"Muros de pago científicos",hook:"80% investigación inaccesible.",desc:"Investigación pública privatizada.",tag:"conocimiento privatizado",tagType:"warning",leccion:"Existe pero es inaccesible."}],estructural:[{era:"1880-2010",titulo:"Las lenguas de señas",hook:"Milán 1880 prohibió lenguas de señas.",desc:"164 oyentes votaron prohibirlas.",tag:"100 años",tagType:"warning",leccion:"Destrucción disfrazada de progreso."},{era:"Hoy",titulo:"El último hablante",hook:"Únicos hablantes de su lengua.",desc:"Busuu:8, Tanema:4.",tag:"ahora",tagType:"danger",leccion:"Sistema cognitivo único desaparecerá."},{era:"Permanente",titulo:"El sesgo de publicación",hook:"50% estudios negativos no publicados.",desc:"Médicos sin mitad de evidencia.",tag:"invisible",tagType:"warning",leccion:"No publicar no perjudica carreras."},{era:"Permanente",titulo:"El sesgo de supervivencia",hook:"Estudiamos lo que sobrevivió.",desc:"Wald corrigió error del ejército.",tag:"error sistemático",tagType:"info",leccion:"Teorías basadas en supervivientes."},{era:"Permanente",titulo:"Mujeres en la ciencia",hook:"Trabajo de mujeres atribuido a hombres.",desc:"Payne descubrió el Sol. Mentor recibió crédito.",tag:"conocimiento robado",tagType:"pink",leccion:"Registro histórico excluye a la mitad."},{era:"Permanente",titulo:"El sistema de notas",hook:"Educación destruye curiosidad.",desc:"Recompensas reducen motivación.",tag:"ignorado",tagType:"danger",leccion:"El sistema destruye el impulso."}]};
+        function getTagClass(t){return{danger:'tag-danger',warning:'tag-warning',info:'tag-info',pink:'tag-danger'}[t]||'tag-info';}
+        function actualizarContadores(){const t=casosData.guerras.length+casosData.economico.length+casosData.estructural.length;document.getElementById('totalCasos').innerText=t;document.getElementById('countAll').innerText=t;document.getElementById('countGuerras').innerText=casosData.guerras.length;document.getElementById('countEconomico').innerText=casosData.economico.length;document.getElementById('countEstructural').innerText=casosData.estructural.length;}
+
+        function renderSections(ft='all',st=''){const c=document.getElementById('sections-container');c.innerHTML='';[{id:'guerras',title:'⚔️ Guerras y poderes',data:casosData.guerras,type:'guerras'},{id:'economico',title:'📉 Sistemas económicos',data:casosData.economico,type:'economico'},{id:'estructural',title:'🔍 Sesgos estructurales',data:casosData.estructural,type:'estructural'}].forEach(s=>{if(ft!=='all'&&ft!==s.type)return;let f=s.data;if(st)f=s.data.filter(c=>c.titulo.toLowerCase().includes(st)||c.hook.toLowerCase().includes(st)||c.era.toLowerCase().includes(st));if(!f.length)return;const d=document.createElement('div');d.innerHTML=`<div class="section-title">${s.title} <span class="counter-badge">${f.length}</span></div><div class="case-grid" id="grid-${s.id}"></div>`;c.appendChild(d);const g=document.getElementById(`grid-${s.id}`);if(g)g.innerHTML=f.map((c,i)=>`<div class="card" onclick="toggleCard(this)"><div class="card-title">📖 ${c.titulo}</div><div class="card-era">📅 ${c.era}</div><div class="card-hook">💡 ${c.hook}</div><span class="card-tag ${getTagClass(c.tagType)}">🏷️ ${c.tag}</span><div class="details"><div class="detail-row"><strong>📝</strong> ${c.desc}</div><div class="detail-row"><strong>💡</strong> ${c.leccion}</div><button class="ia-btn" onclick="event.stopPropagation();explicarConIA(${JSON.stringify(c).replace(/"/g,'&quot;')},this.closest('.card'))">🤖 Explicar con IA</button><div class="ia-explicacion"></div></div></div>`).join('');});}
+
+        let cf='all',cs='';function update(){renderSections(cf,cs);}
+        document.getElementById('searchInput').addEventListener('input',e=>{cs=e.target.value.toLowerCase();update();});
+        document.querySelectorAll('.filter-btn').forEach(b=>{b.addEventListener('click',()=>{document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');cf=b.dataset.filter;update();});});
+        actualizarContadores();update();
+        let intentos=0;const check=setInterval(()=>{if(typeof jsllm7!=='undefined'){clearInterval(check);showToast("✨ IA avanzada activa");}else if(intentos>30)clearInterval(check);intentos++;},500);
     </script>
 
     <script type="importmap">{ "imports": { "three": "https://unpkg.com/three@0.128.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/" } }</script>
     <script type="module">
-        import * as THREE from 'three'; import { OrbitControls } from 'three/addons/controls/OrbitControls.js'; import { VRButton } from 'three/addons/webxr/VRButton.js';
-        let vrScene, vrCamera, vrRenderer, vrControls, vrActive = false;
-        function initVR() {
-            const container = document.getElementById('vrContainer'); if (!container) return; container.innerHTML = '';
-            vrScene = new THREE.Scene(); vrScene.background = new THREE.Color(0x0a0f1e);
-            vrCamera = new THREE.PerspectiveCamera(45, container.clientWidth/container.clientHeight, 0.1, 1000); vrCamera.position.set(4, 1.6, 5);
-            vrRenderer = new THREE.WebGLRenderer({ antialias: true }); vrRenderer.setSize(container.clientWidth, container.clientHeight); vrRenderer.xr.enabled = true;
-            container.appendChild(vrRenderer.domElement); container.appendChild(VRButton.createButton(vrRenderer));
-            vrControls = new OrbitControls(vrCamera, vrRenderer.domElement); vrControls.enableDamping = true;
-            vrScene.add(new THREE.AmbientLight(0x404060));
-            const dl = new THREE.DirectionalLight(0xffffff, 1); dl.position.set(5,10,7); vrScene.add(dl);
-            const f = new THREE.Mesh(new THREE.PlaneGeometry(14,14), new THREE.MeshStandardMaterial({color:0x1a1f2e})); f.rotation.x=-Math.PI/2; f.position.y=-1.2; vrScene.add(f);
-            for(let i=0;i<40;i++){const b=new THREE.Mesh(new THREE.BoxGeometry(0.28,0.38,0.18),new THREE.MeshStandardMaterial({color:[0x4a9eff,0xf87171,0xfbbf24,0x60a5fa,0xa78bfa,0x34d399][i%6]}));const a=(i/40)*Math.PI*2;b.position.set(Math.cos(a)*2.8,Math.sin(a*2)*0.6+0.6,Math.sin(a)*2.8-0.8);vrScene.add(b)}
-            function animate(){requestAnimationFrame(animate);vrControls.update();vrRenderer.render(vrScene,vrCamera)} animate();
-        }
-        document.getElementById('vrModeBtn').addEventListener('click',()=>{document.getElementById('normalMode').style.display='none';document.getElementById('vrMode').classList.add('active');if(!vrActive){initVR();vrActive=true}});
-        document.getElementById('closeVrBtn').addEventListener('click',()=>{document.getElementById('vrMode').classList.remove('active');document.getElementById('normalMode').style.display='block'});
+        import * as THREE from 'three';import {OrbitControls}from'three/addons/controls/OrbitControls.js';import {VRButton}from'three/addons/webxr/VRButton.js';
+        let s,c,r,ctrl,a=false;const ct=document.getElementById('vrContainer'),vb=document.getElementById('vrModeBtn'),cv=document.getElementById('closeVrBtn'),vm=document.getElementById('vrMode');
+        function init(){if(!ct)return;ct.innerHTML='';s=new THREE.Scene();s.background=new THREE.Color(0x0a0f1e);c=new THREE.PerspectiveCamera(45,ct.clientWidth/ct.clientHeight,0.1,1000);c.position.set(4,1.6,5);r=new THREE.WebGLRenderer({antialias:true});r.setSize(ct.clientWidth,ct.clientHeight);r.xr.enabled=true;ct.appendChild(r.domElement);ct.appendChild(VRButton.createButton(r));ctrl=new OrbitControls(c,r.domElement);ctrl.enableDamping=true;s.add(new THREE.AmbientLight(0x404060));const dl=new THREE.DirectionalLight(0xffffff,1);dl.position.set(5,10,7);s.add(dl);const f=new THREE.Mesh(new THREE.PlaneGeometry(14,14),new THREE.MeshStandardMaterial({color:0x1a1f2e}));f.rotation.x=-Math.PI/2;f.position.y=-1.2;s.add(f);for(let i=0;i<40;i++){const b=new THREE.Mesh(new THREE.BoxGeometry(0.28,0.38,0.18),new THREE.MeshStandardMaterial({color:[0x4a9eff,0xf87171,0xfbbf24,0x60a5fa,0xa78bfa,0x34d399][i%6]}));const ang=(i/40)*Math.PI*2;b.position.set(Math.cos(ang)*2.8,Math.sin(ang*2)*0.6+0.6,Math.sin(ang)*2.8-0.8);s.add(b)}function animate(){requestAnimationFrame(animate);ctrl.update();r.render(s,c)}animate();a=true}
+        vb.addEventListener('click',()=>{document.getElementById('normalMode').style.display='none';vm.classList.add('active');if(!a)setTimeout(init,100)});cv.addEventListener('click',()=>{vm.classList.remove('active');document.getElementById('normalMode').style.display='block'});
     </script>
 
     <script src="https://pl29137063.profitablecpmratenetwork.com/61/2f/c0/612fc0895a4d18ef5b58ae13c6940b8d.js"></script>
