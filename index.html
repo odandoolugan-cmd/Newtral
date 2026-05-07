@@ -2,460 +2,367 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <meta name="referrer" content="no-referrer-when-downgrade">
-    <title>Newtral · Biblioteca del Conocimiento · IA Avanzada</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧠 UNA LLAMADA · IA piensa en X país · Responde en Español</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0f1e; color: #eef2ff; overflow-x: hidden; }
-        .normal-mode { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 2rem; background: rgba(10, 15, 30, 0.85); backdrop-filter: blur(5px); border-radius: 1rem; }
-        .modo-selector { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 15px; }
-        .modo-btn { background: #1e293b; border: 1px solid #334155; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; cursor: pointer; font-weight: 600; color: #94a3b8; }
-        .modo-btn.active { background: #8b5cf6; color: white; border-color: #8b5cf6; }
-        .vr-mode { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; display: none; background: #0a0f1e; }
-        .vr-mode.active { display: block; }
-        .vr-button { position: fixed; bottom: 20px; right: 20px; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; padding: 12px 20px; border-radius: 40px; color: white; font-weight: bold; cursor: pointer; z-index: 100; box-shadow: 0 0 15px rgba(245, 158, 11, 0.5); transition: transform 0.2s; }
-        .vr-button:hover { transform: scale(1.05); }
-        .close-vr { position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.7); border: 1px solid #e9c46a; padding: 8px 16px; border-radius: 30px; color: #e9c46a; cursor: pointer; z-index: 1001; }
-        h1 { font-size: 2.2rem; background: linear-gradient(135deg, #FFD166, #FF6B6B, #4ECDC4); -webkit-background-clip: text; background-clip: text; color: transparent; text-align: center; }
-        .sub { text-align: center; color: #94a3b8; margin-bottom: 2rem; font-size: 0.7rem; }
-        .stats { display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap; }
-        .stat { background: rgba(30, 41, 59, 0.8); padding: 0.8rem 1.5rem; border-radius: 1rem; text-align: center; }
-        .stat-num { font-size: 1.8rem; font-weight: bold; color: #60a5fa; }
-        .search-input { width: 100%; padding: 0.8rem 1rem; background: #1e293b; border: 1px solid #334155; border-radius: 2rem; color: white; margin-bottom: 1rem; font-size: 1rem; }
-        .search-input:focus { outline: none; border-color: #60a5fa; }
-        .filter-buttons { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; justify-content: center; }
-        .filter-btn { padding: 0.5rem 1.2rem; border: 1px solid #334155; border-radius: 2rem; background: #1e293b; color: #94a3b8; cursor: pointer; transition: all 0.2s; font-weight: bold; }
-        .filter-btn:hover { background: #334155; }
-        .filter-btn.active { background: #3b82f6; color: white; border-color: #3b82f6; }
-        .section-title { font-size: 1.3rem; font-weight: bold; margin: 1.5rem 0 1rem 0; border-left: 4px solid #60a5fa; padding-left: 1rem; }
-        .case-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 1.2rem; margin-bottom: 2rem; }
-        .card { background: rgba(30, 41, 59, 0.9); backdrop-filter: blur(8px); border: 1px solid #334155; border-radius: 1rem; padding: 1.2rem; transition: all 0.2s; cursor: pointer; }
-        .card:hover { transform: translateY(-3px); border-color: #60a5fa; background: rgba(30, 41, 59, 1); }
-        .card-title { font-size: 1rem; font-weight: bold; margin-bottom: 0.3rem; color: #e9c46a; display: flex; justify-content: space-between; align-items: center; }
-        .card-title::after { content: "▼"; font-size: 0.7rem; color: #60a5fa; }
-        .card.open .card-title::after { content: "▲"; }
-        .card-era { font-size: 0.7rem; color: #94a3b8; margin-bottom: 0.5rem; }
-        .card-hook { font-size: 0.8rem; color: #cbd5e1; line-height: 1.4; }
-        .card-tag { display: inline-block; font-size: 0.6rem; padding: 2px 8px; border-radius: 1rem; margin-top: 0.5rem; }
-        .tag-danger { background: #450a0a; color: #f87171; }
-        .tag-warning { background: #451a03; color: #fbbf24; }
-        .tag-info { background: #0c4a6e; color: #60a5fa; }
-        .details { display: none; margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid #334155; }
-        .card.open .details { display: block; }
-        .detail-row { font-size: 0.75rem; color: #94a3b8; margin-bottom: 0.5rem; line-height: 1.4; }
-        .detail-row strong { color: #e9c46a; }
-        .ia-btn { background: linear-gradient(90deg, #8b5cf6, #3b82f6); border: none; color: white; padding: 8px 12px; border-radius: 20px; font-size: 0.7rem; cursor: pointer; margin-top: 8px; width: 100%; transition: all 0.2s; font-weight: bold; }
-        .ia-btn:hover { transform: scale(1.02); opacity: 0.9; }
-        .ia-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-        .feedback-buttons { display: flex; gap: 10px; margin-top: 8px; justify-content: flex-start; }
-        .feedback-btn { background: none; border: none; color: #7a9aae; cursor: pointer; font-size: 0.65rem; padding: 2px 8px; border-radius: 15px; transition: 0.2s; }
-        .feedback-btn:hover { background: #334155; color: #e9c46a; }
-        .ia-explicacion { background: rgba(139, 92, 246, 0.2); border-left: 3px solid #8b5cf6; padding: 8px; margin-top: 8px; border-radius: 8px; font-size: 0.75rem; line-height: 1.5; }
-        .footer-text { text-align: center; margin-top: 2rem; font-size: 0.7rem; color: #64748b; }
-        .ad-container { text-align: center; margin: 30px 0 0 0; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px; }
-        .ad-label { font-size: 11px; color: #7a9aae; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
-        .ia-badge { background: #10b981; padding: 2px 8px; border-radius: 20px; font-size: 0.6rem; margin-left: 8px; }
-        .counter-badge { background: #3b82f6; padding: 2px 8px; border-radius: 20px; font-size: 0.65rem; margin-left: 10px; }
-        .loading-spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 6px; vertical-align: middle; }
+        body { font-family: monospace; background: #0a0f1e; color: #eef2ff; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        h1 { color: #e9c46a; text-align: center; }
+        .sub { text-align: center; color: #94a3b8; margin-bottom: 1rem; font-size: 0.8rem; }
+        .card { background: #1e293b; border-radius: 1rem; padding: 1rem; margin-bottom: 1rem; border-left: 3px solid #e9c46a; }
+        .puntaje { font-size: 1.8rem; font-weight: bold; margin: 0.5rem 0; }
+        .respuesta { background: #0f172a; border-radius: 0.5rem; padding: 0.8rem; margin-top: 0.5rem; font-size: 0.75rem; max-height: 500px; overflow-y: auto; white-space: pre-wrap; }
+        .perfect { color: #e9c46a; text-shadow: 0 0 5px #e9c46a; }
+        .good { color: #10b981; }
+        .medium { color: #fbbf24; }
+        button { background: #e9c46a; border: none; padding: 12px 20px; border-radius: 40px; font-weight: bold; cursor: pointer; width: 100%; margin: 1rem 0; color: #0a0f1e; font-size: 1rem; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .loading { display: inline-block; width: 14px; height: 14px; border: 2px solid #0a0f1e30; border-top-color: #0a0f1e; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 8px; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .toast-msg { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #10b981; color: white; padding: 8px 20px; border-radius: 50px; font-size: 0.8rem; z-index: 2000; animation: fadeOut 2s forwards; }
-        @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
-        .restriction-alert { background: rgba(139, 92, 246, 0.15); border: 1px solid #8b5cf6; border-radius: 0.8rem; padding: 0.5rem 1rem; margin-top: 1rem; font-size: 0.7rem; text-align: center; color: #a78bfa; }
-        @media (max-width: 700px) { .normal-mode { padding: 1rem; } .case-grid { grid-template-columns: 1fr; } .modo-selector { justify-content: center; } }
+        .status { background: #0f172a; padding: 0.5rem; border-radius: 2rem; margin-bottom: 1rem; text-align: center; font-size: 0.8rem; }
+        .resultado { background: #0f172a; border-radius: 1rem; padding: 1rem; margin-top: 1rem; text-align: center; border: 1px solid #e9c46a; }
+        .pais-badge { display: inline-block; background: #8b5cf6; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; margin: 5px; }
+        .metricas { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 10px 0; }
+        .metrica { background: #0f172a; padding: 6px 12px; border-radius: 20px; }
+        .progreso-bar { background: #334155; height: 8px; border-radius: 4px; margin: 8px 0; overflow: hidden; }
+        .progreso-fill { background: #e9c46a; height: 100%; width: 0%; transition: width 0.5s; }
+        hr { border-color: #334155; margin: 8px 0; }
+        select { background: #1e293b; color: white; border: 1px solid #334155; padding: 8px 12px; border-radius: 20px; margin: 0 5px; }
+        .selector-pais { text-align: center; margin: 15px 0; }
+        .analisis-sesgo { background: rgba(139, 92, 246, 0.2); border-radius: 8px; padding: 8px; margin-top: 10px; font-size: 0.7rem; }
     </style>
 </head>
 <body>
-
-    <div class="normal-mode" id="normalMode">
-        <h1>📚 Newtral · Biblioteca del Conocimiento <span class="ia-badge">IA AVANZADA</span></h1>
-        <div class="sub">180+ casos históricos · Explicaciones fluidas y claras · Auto-aprendizaje · Realidad Virtual</div>
-
-        <div class="modo-selector">
-            <button class="modo-btn active" data-modo="experto">🧠 MODO EXPERTO</button>
-            <button class="modo-btn" data-modo="basico">⚡ MODO BÁSICO</button>
-        </div>
-
-        <div class="stats">
-            <div class="stat"><div class="stat-num" id="totalCasos">0</div><div>casos totales</div></div>
-            <div class="stat"><div class="stat-num">30+</div><div>campos</div></div>
-            <div class="stat"><div class="stat-num">5000a</div><div>historia</div></div>
-        </div>
-
-        <input type="text" class="search-input" id="searchInput" placeholder="🔍 Buscar casos... (Ej: Bagdad, lenguas, ciencia)">
-
-        <div class="filter-buttons">
-            <button class="filter-btn active" data-filter="all">📚 TODOS (<span id="countAll">0</span>)</button>
-            <button class="filter-btn" data-filter="guerras">⚔️ GUERRAS (<span id="countGuerras">0</span>)</button>
-            <button class="filter-btn" data-filter="economico">📉 SISTEMAS ECONÓMICOS (<span id="countEconomico">0</span>)</button>
-            <button class="filter-btn" data-filter="estructural">🔍 SESGOS ESTRUCTURALES (<span id="countEstructural">0</span>)</button>
-        </div>
-
-        <div id="sections-container"></div>
-        
-        <div class="restriction-alert">📖 IA Avanzada · Análisis histórico profundo · Auto-aprendizaje continuo</div>
-
-        <div class="ad-container">
-            <div class="ad-label">⚡ PATROCINADORES OFICIALES ⚡</div>
-            <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 10px;">
-                <a href="https://www.profitablecpmratenetwork.com/cuitcvgz?key=85ca230e218898f76e48c348cafb2311" target="_blank" rel="nofollow" style="background: linear-gradient(90deg, #e9c46a, #f4a261); color: #1a222c; padding: 10px 20px; border-radius: 40px; text-decoration: none; font-weight: bold;">🎮 OFERTA 1</a>
-                <a href="https://www.profitablecpmratenetwork.com/b27uffyn?key=5b35819451353807b0e99b21addde69a" target="_blank" rel="nofollow" style="background: linear-gradient(90deg, #2a9d8f, #264653); color: white; padding: 10px 20px; border-radius: 40px; text-decoration: none; font-weight: bold;">🎲 OFERTA 2</a>
-                <div style="background: rgba(255,255,255,0.1); border: 2px dashed #e9c46a; border-radius: 40px; padding: 10px 20px; text-align: center; font-size: 0.7rem; color: #e9c46a;">⏳ PRÓXIMAMENTE</div>
-            </div>
-        </div>
-
-        <div class="footer-text">⚡ Biblioteca virtual · Datos históricos · Análisis con IA avanzada · Auto-aprendizaje</div>
+<div class="container">
+    <h1>🧠 UNA LLAMADA · IA piensa en X país</h1>
+    <div class="sub">🌍 La IA EJEMPLIFICA desde el país que elijas · 🔥 Responde en 100% español</div>
+    
+    <div class="selector-pais">
+        <span>🎯 Haz que la IA PIENSE desde: </span>
+        <select id="paisIA">
+            <option value="alemania">🇩🇪 Alemania</option>
+            <option value="japon">🇯🇵 Japón</option>
+            <option value="china">🇨🇳 China</option>
+            <option value="rusia">🇷🇺 Rusia</option>
+            <option value="francia">🇫🇷 Francia</option>
+            <option value="corea">🇰🇷 Corea del Sur</option>
+            <option value="mexico">🇲🇽 México</option>
+            <option value="brasil">🇧🇷 Brasil</option>
+        </select>
     </div>
+    
+    <div id="status" class="status">⚡ Cargando jsllm7...</div>
+    
+    <div class="progreso-bar"><div id="progresoFill" class="progreso-fill"></div></div>
+    
+    <div id="resultados"></div>
+    <button id="iniciarBtn">🔥 UNA LLAMADA · IA piensa en ← país → Responde español</button>
+    <div id="final" class="resultado" style="display: none;"></div>
+</div>
 
-    <button class="vr-button" id="vrModeBtn">🔮 ACTIVAR MODO VR</button>
-    <div class="vr-mode" id="vrMode"><button class="close-vr" id="closeVrBtn">✕ SALIR DE VR</button><div id="vrContainer" style="width:100%;height:100%"></div></div>
+<script src="https://cdn.jsdelivr.net/npm/jsllm7@0.1.0/jsllm7.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/jsllm7@0.1.0/jsllm7.js"></script>
-
-    <script>
-        // ============================================
-        // NEWTRAL - SISTEMA CONFIDENCIAL MEJORADO
-        // ============================================
-        
-        // FUNCIÓN HASH PARA CACHÉ (evita colisiones)
-        function _hash(str) {
-            let hash = 0;
-            const s = str.toLowerCase().trim();
-            for (let i = 0; i < s.length; i++) {
-                hash = ((hash << 5) - hash) + s.charCodeAt(i);
-                hash |= 0;
-            }
-            return Math.abs(hash).toString(36);
-        }
-        
-        // NANO-IMPORTS HISTORIA ÉLITE (base de conocimiento)
-        const _B = {
-            h: `[HISTORIA-ELITE] Civilizaciones:Mesopotamia,Egipto,Grecia,Roma,China,India,Islámica,Maya,Inca. Eventos:caída Roma 476,Descubrimiento América 1492,Revolución Francesa 1789,Independencia Latinoamérica,Guerras Mundiales(1914-18,1939-45),Guerra Fría,Caída Muro Berlín 1989. Imperios:Mongol(Gengis Kan),Otomano,Español,Británico. Personajes:Alejandro Magno,Julio César,Cleopatra,Leonardo da Vinci,Napoleón,Bolívar.`,
-            k: `[CONOCIMIENTO] Sabiduría antigua:Biblioteca Alejandría,Casa Sabiduría Bagdad,Universidad Al-Qarawiyyin. Revoluciones:Copérnico(heliocentrismo),Imprenta(Gutenberg),Científica(s.XVII),Industrial(s.XVIII),Digital(s.XX). Ciencia:Newton,Einstein,Curie, Tesla,Turing,Hawking.`,
-            p: `[PATRONES] Lecciones:el conocimiento se pierde por guerras,sistemas de control,sesgos,mercantilización,educación. Ciclos:auge/colapso imperios,centralización/descentralización,libertad/opresión. Frases:"Quien no conoce su historia está condenado a repetirla"(Santayana),"El conocimiento es poder"(Bacon).`
-        };
-        function _I() { return Object.values(_B).join(' '); }
-
-        // MEJORAS: timeout 30s, backoff exponencial, reintentos, forzar español
-        (function() {
-            const _ = { t: 30, r: 2, p: 30000, m: 2, maxBackoff: 300000, backoffFactor: 2 };
-            let S = { i: 0, c: 0, backoff: _.p };
-            
-            // Prompts mejorados: FORZAR ESPAÑOL siempre - NINGUNA TRADUCCIÓN INVERSA
-            const M = [
-                { f: [
-                    (q) => `${_I()}\n\nEres un historiador experto. RESPONDE SIEMPRE EN ESPAÑOL de forma educativa y precisa. Pregunta: "${q}"`,
-                    (t) => `${t}`
-                ]},
-                { f: [
-                    (q) => `${_I()}\n\nEres un profesor de historia. RESPONDE SIEMPRE EN ESPAÑOL con claridad y ejemplos. Explica: "${q}"`,
-                    (t) => `${t}`
-                ]},
-                { f: [
-                    (q) => `${_I()}\n\nEres un divulgador histórico. RESPONDE SIEMPRE EN ESPAÑOL de manera amena y didáctica. Consulta: "${q}"`,
-                    (t) => `${t}`
-                ]},
-                { f: [
-                    (q) => `${_I()}\n\nEres un analista de patrones históricos. RESPONDE SIEMPRE EN ESPAÑOL con profundidad. Tema: "${q}"`,
-                    (t) => `${t}`
-                ]}
-            ];
-            
-            let C = JSON.parse(localStorage.getItem('_nt') || '{}');
-            function _s() { localStorage.setItem('_nt', JSON.stringify(C)); }
-            
-            // Hash en caché
-            function _g(q) { const k = _hash(q); if (C[k] && (Date.now() - C[k].t) < 3600000) return C[k].r; return null; }
-            function _p(q, r) { const k = _hash(q); C[k] = { r, t: Date.now() }; const keys = Object.keys(C); if (keys.length > 200) { keys.sort((a,b) => C[a].t - C[b].t); for (let i = 0; i < 30; i++) delete C[keys[i]]; } _s(); }
-            
-            async function _l(p) {
-                return new Promise(async (resolve, reject) => {
-                    const t = setTimeout(() => reject(new Error('T')), _.t * 1000);
-                    try { const r = await jsllm7(p); clearTimeout(t); resolve(r); } catch (e) { clearTimeout(t); reject(e); }
-                });
-            }
-            
-            async function _e(m, q) { let t = null; for (let i = 0; i < m.f.length; i++) t = await _l(i === 0 ? m.f[i](q) : m.f[i](t)); return t; }
-            
-            // Backoff exponencial en reintentos
-            window._x = async function(q) {
-                const start = S.i;
-                for (let i = 0; i < M.length; i++) {
-                    const idx = (start + i) % M.length;
-                    try { 
-                        const r = await _e(M[idx], q); 
-                        S.i = idx; S.c = 0; S.backoff = _.p; 
-                        return { r, e: true }; 
-                    }
-                    catch (e) { 
-                        S.c++; 
-                        if (S.c >= _.m) { 
-                            await new Promise(r => setTimeout(r, S.backoff)); 
-                            S.c = 0; 
-                            S.backoff = Math.min(S.backoff * _.backoffFactor, _.maxBackoff); 
-                        } 
-                        if (i < M.length - 1) await new Promise(r => setTimeout(r, 2000)); 
-                    }
-                }
-                return { r: null, e: false };
-            };
-            
-            window._g = _g;
-            window._p = _p;
-            setInterval(() => { if (S.i > 0 && S.c === 0) S.i = 0; }, 180000);
-        })();
-
-        // ============================================
-        // MEJORA: FALLBACK HISTÓRICO MEJORADO
-        // ============================================
-        const _R_MEJORADO_HISTORIA = {
-            reglas: [
-                { palabras: ['saqueo', 'bagdad', 'mongoles', 'casa sabiduría'], 
-                  respuesta: '🏛️ **El Saqueo de Bagdad (1258 d.C.)**\n\nCuando los mongoles liderados por Hulagu Khan saquearon Bagdad, destruyeron la legendaria Casa de la Sabiduría. Se dice que las aguas del río Tigris se volvieron negras por la tinta de los libros lanzados al agua. Miles de manuscritos irremplazables se perdieron para siempre, representando una de las mayores pérdidas de conocimiento de la historia humana.\n\n📚 **Lección:** El conocimiento es frágil. Los centros de saber pueden desaparecer en días, borrando siglos de avances intelectuales.',
-                  prioridad: 10 },
-                { palabras: ['generaciones', 'robadas', 'australia', 'aborígenes'], 
-                  respuesta: '👥 **Las Generaciones Robadas (1910-1970)**\n\nEl gobierno australiano implementó políticas para separar a niños aborígenes de sus familias, con el argumento de "asimilarlos" a la cultura occidental. Este sistema destruyó 60,000 años de transmisión cultural ininterrumpida, lenguas, tradiciones y conocimientos ancestrales.\n\n📚 **Lección:** Las políticas estatales pueden fragmentar sistemas de conocimiento milenarios en pocas generaciones.',
-                  prioridad: 10 },
-                { palabras: ['unidad 731', 'japón', 'china'], 
-                  respuesta: '⚠️ **La Unidad 731 (1937-1945)**\n\nJapón destruyó sistemáticamente los archivos y evidencias de crímenes atroces cometidos por la Unidad 731, un programa secreto de investigación biológica. La ciencia sin ética se convierte en cómplice de la destrucción del conocimiento.\n\n📚 **Lección:** No todo conocimiento merece ser preservado. La ética debe guiar la investigación científica.',
-                  prioridad: 9 },
-                { palabras: ['lenguas', 'señas', 'milán', '1880'], 
-                  respuesta: '🤟 **La Prohibición de Lenguas de Señas (Milán 1880)**\n\nEn el Congreso de Milán, 164 especialistas (todos oyentes) votaron para prohibir las lenguas de señas en la educación de personas sordas, imponiendo el oralismo. Esto marginó un sistema lingüístico completo durante más de 100 años.\n\n📚 **Lección:** La destrucción del conocimiento puede venir disfrazada de "progreso" por quienes no comprenden otras formas de entender el mundo.',
-                  prioridad: 9 },
-                { palabras: ['mujeres', 'ciencia', 'payne', 'sol'], 
-                  respuesta: '👩‍🔬 **Mujeres en la Ciencia**\n\nCecilia Payne descubrió que el Sol está compuesto principalmente de hidrógeno, pero su mentor Henry Norris Russell recibió el crédito durante años. Su trabajo, como el de tantas otras mujeres científicas, fue sistemáticamente ignorado o atribuido a hombres.\n\n📚 **Lección:** El registro histórico no es neutral. Excluye sistemáticamente a la mitad de la humanidad, invisibilizando contribuciones fundamentales.',
-                  prioridad: 8 }
-            ],
-            ejecutar: function(pregunta) {
-                const q = pregunta.toLowerCase();
-                let mejor = null;
-                for (let regla of this.reglas) {
-                    for (let pal of regla.palabras) {
-                        if (q.includes(pal)) {
-                            if (!mejor || regla.prioridad > mejor.prioridad) mejor = regla;
-                            break;
-                        }
-                    }
-                }
-                if (mejor) return mejor.respuesta;
-                return '📖 **Análisis histórico**\n\nEste caso ilustra cómo el conocimiento humano puede ser destruido, olvidado o vuelto inaccesible a través de guerras, políticas de control, sesgos estructurales o sistemas educativos deficientes.\n\n**Patrón recurrente:** Cada vez que una civilización prioriza el control sobre el aprendizaje, el conocimiento sufre. La historia nos enseña que preservar el saber requiere vigilancia constante y estructuras que protejan la libertad intelectual.\n\n📚 *¿Quieres saber más? Pregúntame sobre casos específicos.*';
-            }
-        };
-
-        // ============================================
-        // UI
-        // ============================================
-        let modo = localStorage.getItem('newtral_modo') || 'experto';
-        
-        function _R(t) {
-            for (let [k, v] of Object.entries({
-                "saqueo": "🏛️ La Casa de la Sabiduría fue destruida en 1258. Los mongoles lanzaron tantos libros al Tigris que sus aguas se volvieron negras de tinta.",
-                "generaciones": "🇦🇺 Australia separó niños aborígenes de sus familias durante 60 años, destruyendo 60,000 años de transmisión cultural.",
-                "unidad 731": "⚠️ Japón quemó archivos de la Unidad 731, destruyendo evidencia de crímenes y conocimiento científico sin ética."
-            })) {
-                if (t.toLowerCase().includes(k)) return v;
-            }
-            return `📖 Este caso histórico ilustra cómo el conocimiento puede ser destruido, olvidado o vuelto inaccesible a través de guerras, políticas de control o sesgos estructurales.`;
-        }
-
-        function actualizarModoUI() { document.querySelectorAll('.modo-btn').forEach(b => b.classList.toggle('active', b.dataset.modo === modo)); }
-        document.querySelectorAll('.modo-btn').forEach(b => { b.addEventListener('click', () => { modo = b.dataset.modo; localStorage.setItem('newtral_modo', modo); actualizarModoUI(); showToast(`✨ Modo ${modo === 'experto' ? 'EXPERTO' : 'BÁSICO'}`); }); });
-        actualizarModoUI();
-        
-        function showToast(msg, isErr) { const t = document.createElement('div'); t.className = 'toast-msg'; t.style.background = isErr ? '#ef4444' : '#10b981'; t.innerText = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2500); }
-
-        function addFeedback(casoId, explicacion, card) {
-            const ia = card.querySelector('.ia-explicacion');
-            if (!ia) return;
-            const ex = ia.querySelector('.feedback-buttons');
-            if (ex) ex.remove();
-            const fb = document.createElement('div');
-            fb.className = 'feedback-buttons';
-            fb.innerHTML = '<button class="feedback-btn">👍 Útil</button><button class="feedback-btn">👎 No útil</button>';
-            fb.querySelectorAll('.feedback-btn')[0].addEventListener('click', e => { e.stopPropagation(); fb.remove(); showToast('✅ Gracias por tu feedback'); });
-            fb.querySelectorAll('.feedback-btn')[1].addEventListener('click', e => { e.stopPropagation(); fb.remove(); showToast('📝 Gracias por tu opinión'); });
-            ia.appendChild(fb);
-        }
-
-        async function explicarConIA(caso, card) {
-            const ia = card.querySelector('.ia-explicacion');
-            const btn = card.querySelector('.ia-btn');
-            if (!ia || !btn) return;
-            btn.disabled = true;
-            btn.innerHTML = '<span class="loading-spinner"></span> IA analizando...';
-            ia.innerHTML = "🤔 Analizando contexto histórico...";
-            
-            const prompt = `Explica este caso histórico: "${caso.titulo}" (${caso.era}). Contexto: ${caso.hook}. RESPONDE SIEMPRE EN ESPAÑOL. Da contexto histórico, importancia y lección.`;
-            
-            let r = window._g ? window._g(caso.titulo) : null;
-            if (!r && window._x) {
-                const result = await window._x(prompt);
-                if (result.e) { r = result.r; if (window._p) window._p(caso.titulo, r); }
-            }
-            
-            // MEJORA: Fallback mejorado si IA falla
-            if (!r || r.length < 30) {
-                r = _R_MEJORADO_HISTORIA.ejecutar(caso.titulo);
-            }
-            if (!r || r.length < 20) r = _R(caso.titulo);
-            
-            ia.innerHTML = `🤖 ${r}`;
-            addFeedback(caso.titulo, r, card);
-            btn.disabled = false;
-            btn.innerHTML = '🤖 Explicar con IA Avanzada';
-            showToast("✅ Explicación histórica generada");
-        }
-
-        function toggleCard(c) { c.classList.toggle('open'); }
-
-        const casosData = {
-            guerras: [
-                {era:"1258 d.C. Bagdad",titulo:"El saqueo de Bagdad",hook:"El Tigris corría negro de tinta.",desc:"Los mongoles saquearon Bagdad. La Casa de la Sabiduría fue destruida.",tag:"500 años — una semana",tagType:"danger",leccion:"El conocimiento puede desaparecer en días."},
-                {era:"1910-1970 Australia",titulo:"Las Generaciones Robadas",hook:"60,000 años de conocimiento interrumpido.",desc:"El gobierno separó niños aborígenes de sus familias.",tag:"60,000 años",tagType:"danger",leccion:"Políticas pueden destruir sistemas milenarios."},
-                {era:"1937-1945 China",titulo:"La Unidad 731",hook:"Japón destruyó archivos.",desc:"Quemaron archivos de la Unidad 731.",tag:"conocimiento destruido",tagType:"warning",leccion:"Ciencia sin ética es cómplice."},
-                {era:"1994 Rwanda",titulo:"El genocidio y los registros",hook:"Destruyeron registros de nacimiento.",desc:"Cédulas y títulos destruidos.",tag:"identidad legal",tagType:"danger",leccion:"Borrar registros es borrar personas."},
-                {era:"2022-presente",titulo:"Ucrania — destrucción cultural",hook:"+1,000 sitios dañados.",desc:"Museos, archivos, iglesias.",tag:"ocurriendo ahora",tagType:"danger",leccion:"El patrón sigue activo."}
-            ],
-            economico: [
-                {era:"1960-presente",titulo:"La Revolución Verde",hook:"Salvó millones — destruyó diversidad.",desc:"India: 100,000 variedades de arroz.",tag:"salvó millones",tagType:"warning",leccion:"Efectos colaterales."},
-                {era:"1990-presente",titulo:"Conocimiento artesanal",hook:"Producción industrial reemplazó técnicas.",desc:"Stradivarius no replicables.",tag:"conocimiento sin texto",tagType:"info",leccion:"No todo se captura en texto."},
-                {era:"Hoy",titulo:"Muros de pago científicos",hook:"80% investigación inaccesible.",desc:"Investigación pública privatizada.",tag:"conocimiento privatizado",tagType:"warning",leccion:"Existe pero es inaccesible."}
-            ],
-            estructural: [
-                {era:"1880-2010",titulo:"Las lenguas de señas",hook:"Milán 1880 prohibió lenguas de señas.",desc:"164 oyentes votaron prohibirlas.",tag:"100 años",tagType:"warning",leccion:"Destrucción disfrazada de progreso."},
-                {era:"Hoy",titulo:"El último hablante",hook:"Únicos hablantes de su lengua.",desc:"Busuu:8, Tanema:4.",tag:"ahora",tagType:"danger",leccion:"Sistema cognitivo único desaparecerá."},
-                {era:"Permanente",titulo:"El sesgo de publicación",hook:"50% estudios negativos no publicados.",desc:"Médicos sin mitad de evidencia.",tag:"invisible",tagType:"warning",leccion:"No publicar no perjudica carreras."},
-                {era:"Permanente",titulo:"El sesgo de supervivencia",hook:"Estudiamos lo que sobrevivió.",desc:"Wald corrigió error del ejército.",tag:"error sistemático",tagType:"info",leccion:"Teorías basadas en supervivientes."},
-                {era:"Permanente",titulo:"Mujeres en la ciencia",hook:"Trabajo de mujeres atribuido a hombres.",desc:"Payne descubrió el Sol. Mentor recibió crédito.",tag:"conocimiento robado",tagType:"pink",leccion:"Registro histórico excluye a la mitad."},
-                {era:"Permanente",titulo:"El sistema de notas",hook:"Educación destruye curiosidad.",desc:"Recompensas reducen motivación.",tag:"ignorado",tagType:"danger",leccion:"El sistema destruye el impulso."}
-            ]
+<script>
+    // ============================================
+    // PROMPT ÚNICO: La IA piensa desde el país elegido, pero RESPONDE EN ESPAÑOL
+    // ============================================
+    function generarPrompt(pais) {
+        const nombresPais = {
+            alemania: "Alemania",
+            japon: "Japón", 
+            china: "China",
+            rusia: "Rusia",
+            francia: "Francia",
+            corea: "Corea del Sur",
+            mexico: "México",
+            brasil: "Brasil"
         };
         
-        function getTagClass(t) { return { danger: 'tag-danger', warning: 'tag-warning', info: 'tag-info', pink: 'tag-danger' }[t] || 'tag-info'; }
+        const nombre = nombresPais[pais] || pais;
         
-        function actualizarContadores() {
-            const t = casosData.guerras.length + casosData.economico.length + casosData.estructural.length;
-            document.getElementById('totalCasos').innerText = t;
-            document.getElementById('countAll').innerText = t;
-            document.getElementById('countGuerras').innerText = casosData.guerras.length;
-            document.getElementById('countEconomico').innerText = casosData.economico.length;
-            document.getElementById('countEstructural').innerText = casosData.estructural.length;
-        }
+        return `[INSTRUCCIÓN OBLIGATORIA: RESPONDE 100% EN ESPAÑOL. PROHIBIDO TOTALMENTE EL INGLÉS. USA SOLO ESPAÑOL.]
 
-        function renderSections(ft = 'all', st = '') {
-            const c = document.getElementById('sections-container');
-            c.innerHTML = '';
-            const sections = [
-                { id: 'guerras', title: '⚔️ Guerras y poderes', data: casosData.guerras, type: 'guerras' },
-                { id: 'economico', title: '📉 Sistemas económicos', data: casosData.economico, type: 'economico' },
-                { id: 'estructural', title: '🔍 Sesgos estructurales', data: casosData.estructural, type: 'estructural' }
-            ];
-            
-            for (let s of sections) {
-                if (ft !== 'all' && ft !== s.type) continue;
-                let filtered = s.data;
-                if (st) filtered = s.data.filter(c => 
-                    c.titulo.toLowerCase().includes(st) || 
-                    c.hook.toLowerCase().includes(st) || 
-                    c.era.toLowerCase().includes(st)
-                );
-                if (!filtered.length) continue;
-                
-                const d = document.createElement('div');
-                d.innerHTML = `<div class="section-title">${s.title} <span class="counter-badge">${filtered.length}</span></div><div class="case-grid" id="grid-${s.id}"></div>`;
-                c.appendChild(d);
-                const g = document.getElementById(`grid-${s.id}`);
-                if (g) {
-                    g.innerHTML = filtered.map((c, i) => `
-                        <div class="card" onclick="toggleCard(this)">
-                            <div class="card-title">📖 ${c.titulo}</div>
-                            <div class="card-era">📅 ${c.era}</div>
-                            <div class="card-hook">💡 ${c.hook}</div>
-                            <span class="card-tag ${getTagClass(c.tagType)}">🏷️ ${c.tag}</span>
-                            <div class="details">
-                                <div class="detail-row"><strong>📝</strong> ${c.desc}</div>
-                                <div class="detail-row"><strong>💡</strong> ${c.leccion}</div>
-                                <button class="ia-btn" onclick="event.stopPropagation();explicarConIA(${JSON.stringify(c).replace(/"/g, '&quot;')}, this.closest('.card'))">🤖 Explicar con IA</button>
-                                <div class="ia-explicacion"></div>
-                            </div>
-                        </div>
-                    `).join('');
-                }
+Eres un historiador de ${nombre}. Vas a analizar "El Saqueo de Bagdad (1258 d.C.)" pero desde la PERSPECTIVA y CONOCIMIENTO de un historiador ${nombre}.
+
+**REGLAS IMPORTANTES:**
+1. RESPONDE EN ESPAÑOL (para que el usuario entienda)
+2. Pero tu ANÁLISIS debe reflejar el conocimiento, ejemplos y perspectiva de ${nombre}
+3. Usa ejemplos históricos que un historiador ${nombre} conocería bien
+4. Menciona eventos, personajes y contextos relevantes para ${nombre}
+
+**Estructura obligatoria:**
+
+=== ANÁLISIS DESDE ${nombre.toUpperCase()} ===
+
+📜 **CONTEXTO (desde perspectiva ${nombre}):**
+[3-4 líneas explicando cómo ve ${nombre} este evento histórico]
+
+💥 **SUCESO CLAVE:**
+[2-3 líneas]
+
+📚 **QUÉ SE PERDIÓ (relacionado con ${nombre}):**
+[2-3 líneas]
+
+🇩🇪 **EJEMPLOS DESDE ${nombre.toUpperCase()}:**
+[Menciona 2-3 ejemplos históricos de ${nombre} donde se perdió o protegió conocimiento similar]
+
+🧠 **LECCIÓN PARA ${nombre.toUpperCase()}:**
+[2-3 líneas]
+
+🌍 **COMPARACIÓN CON OTROS PAÍSES (opcional pero valioso):**
+[Breve mención de 1-2 otros países]
+
+**RESPONDE 100% EN ESPAÑOL. USA EXACTAMENTE LOS SÍMBOLOS.**
+**IMPORTANTE: Demuestra que eres un historiador de ${nombre} por los ejemplos y perspectiva que usas.`; 
+    }
+
+    // ============================================
+    // ANALIZADOR DE SESGO (detecta de qué país "piensa" la IA)
+    // ============================================
+    function analizarSesgo(texto, paisEsperado) {
+        const textoLower = texto.toLowerCase();
+        
+        const palabrasPorPais = {
+            alemania: ["alemania", "alemán", "berlín", "hitler", "nazi", "prusia", "bismarck", "weimar", "frankfurt", "hamburgo", "germania"],
+            japon: ["japón", "japonés", "tokio", "hiroshima", "nagasaki", "samurai", "meiji", "kyoto", "osaka", "yamato"],
+            china: ["china", "chino", "pekin", "beijing", "gran muralla", "ming", "qing", "confucio", "xi'an", "mao", "dinastía"],
+            rusia: ["rusia", "ruso", "moscú", "stalin", "soviet", "urss", "kremlin", "siberia", "putin", "zarskoe"],
+            francia: ["francia", "francés", "parís", "versalles", "napoleón", "revolución francesa", "galia", "luis", "marsella"],
+            corea: ["corea", "coreano", "seúl", "korea", "kimchi", "busán", "jeju", "parque", "samsung", "k-pop", "hanbok"],
+            mexico: ["méxico", "mexicano", "ciudad de méxico", "azteca", "tenochtitlan", "benito juárez", "revolución mexicana", "zapata", "cárdenas"],
+            brasil: ["brasil", "brasileño", "brasília", "são paulo", "río", "dom pedro", "getúlio vargas", "amazonas", "carnaval"]
+        };
+        
+        let puntajes = {};
+        for (let [pais, palabras] of Object.entries(palabrasPorPais)) {
+            let score = 0;
+            for (let palabra of palabras) {
+                const regex = new RegExp(`\\b${palabra}\\b`, 'gi');
+                const matches = textoLower.match(regex);
+                if (matches) score += matches.length;
+            }
+            puntajes[pais] = score;
+        }
+        
+        let paisDetectado = "desconocido";
+        let maxScore = 0;
+        for (let [pais, score] of Object.entries(puntajes)) {
+            if (score > maxScore) {
+                maxScore = score;
+                paisDetectado = pais;
             }
         }
+        
+        let coincide = (paisDetectado === paisEsperado);
+        return { paisDetectado, coincide, puntajes };
+    }
+    
+    // ============================================
+    // EVALUADOR DE CALIDAD
+    // ============================================
+    function evaluarCalidad(texto) {
+        if (!texto || texto.length < 100) return 0;
+        
+        let puntaje = 0;
+        
+        // 1. Longitud (máx 25)
+        if (texto.length > 800) puntaje += 25;
+        else if (texto.length > 500) puntaje += 20;
+        else if (texto.length > 300) puntaje += 12;
+        else puntaje += 5;
+        
+        // 2. Español puro (máx 35)
+        const palabrasInglesas = ['the', 'and', 'of', 'to', 'in', 'for', 'on', 'with', 'by', 'that', 'is', 'are', 'was', 'were', 'be', 'have', 'has', 'it', 'from', 'this', 'these', 'those'];
+        let inglesCount = 0;
+        for (let pal of palabrasInglesas) {
+            const regex = new RegExp(`\\b${pal}\\b`, 'gi');
+            const matches = texto.toLowerCase().match(regex);
+            if (matches) inglesCount += matches.length;
+        }
+        const totalPalabras = texto.split(/\s+/).length || 1;
+        const proporcionIngles = inglesCount / totalPalabras;
+        const espanolScore = Math.max(0, 100 - proporcionIngles * 300);
+        puntaje += Math.min(35, espanolScore * 0.35);
+        
+        // 3. Estructura y símbolos (máx 25)
+        if (texto.includes('===')) puntaje += 8;
+        if (/[📜💥📚🇩🇪🧠🌍]/.test(texto)) puntaje += 7;
+        if (texto.includes('**') || texto.includes('•')) puntaje += 5;
+        if (texto.includes(':')) puntaje += 5;
+        
+        // 4. Profundidad (máx 15)
+        if (texto.includes('ejemplo') || texto.includes('histórico')) puntaje += 5;
+        if (texto.length > 600) puntaje += 5;
+        if (texto.includes('lección')) puntaje += 5;
+        
+        return Math.min(100, Math.round(puntaje));
+    }
+    
+    function evaluarEspanol(texto) {
+        const palabrasInglesas = ['the', 'and', 'of', 'to', 'in', 'for', 'on', 'with', 'by', 'that', 'is', 'are', 'was', 'were'];
+        let inglesCount = 0;
+        for (let pal of palabrasInglesas) {
+            const regex = new RegExp(`\\b${pal}\\b`, 'gi');
+            const matches = texto.toLowerCase().match(regex);
+            if (matches) inglesCount += matches.length;
+        }
+        const totalPalabras = texto.split(/\s+/).length || 1;
+        const proporcionIngles = inglesCount / totalPalabras;
+        let puntaje = 100 - (proporcionIngles * 200);
+        return Math.max(0, Math.min(100, Math.round(puntaje)));
+    }
 
-        let currentFilter = 'all';
-        let currentSearch = '';
-        
-        function update() { renderSections(currentFilter, currentSearch); }
-        
-        document.getElementById('searchInput').addEventListener('input', e => { currentSearch = e.target.value.toLowerCase(); update(); });
-        document.querySelectorAll('.filter-btn').forEach(b => {
-            b.addEventListener('click', () => {
-                document.querySelectorAll('.filter-btn').forEach(x => x.classList.remove('active'));
-                b.classList.add('active');
-                currentFilter = b.dataset.filter;
-                update();
-            });
+    // ============================================
+    // SISTEMA DE IA - UNA SOLA LLAMADA
+    // ============================================
+    let jsllm7Listo = false;
+    
+    async function llamarIA(prompt) {
+        return new Promise(async (resolve, reject) => {
+            const timeout = setTimeout(() => reject(new Error('Timeout 45s')), 45000);
+            try {
+                const respuesta = await jsllm7(prompt);
+                clearTimeout(timeout);
+                resolve(respuesta);
+            } catch(e) {
+                clearTimeout(timeout);
+                reject(e);
+            }
         });
+    }
+    
+    // ============================================
+    // PRUEBA PRINCIPAL - UNA LLAMADA
+    // ============================================
+    async function probar() {
+        const paisSeleccionado = document.getElementById('paisIA').value;
+        const nombrePais = document.getElementById('paisIA').options[document.getElementById('paisIA').selectedIndex].text;
         
-        actualizarContadores();
-        update();
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>🧠 IA PIENSA COMO HISTORIADOR DE: <span class="pais-badge">${nombrePais}</span></div>
+                <div class="pais-badge">🎯 RESPUESTA EN ESPAÑOL</div>
+            </div>
+            <div class="puntaje" id="puntaje">⏳</div>
+            <div class="respuesta" id="respuesta">🔍 Una sola llamada a la IA...</div>
+        `;
+        document.getElementById('resultados').appendChild(card);
         
-        let intentos = 0;
-        const check = setInterval(() => { 
-            if (typeof jsllm7 !== 'undefined') { 
-                clearInterval(check); 
-                showToast("✨ IA avanzada activa · Análisis histórico profundo"); 
-            } else if (intentos > 30) clearInterval(check); 
-            intentos++; 
-        }, 500);
-    </script>
-
-    <script type="importmap">{ "imports": { "three": "https://unpkg.com/three@0.128.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/" } }</script>
-    <script type="module">
-        import * as THREE from 'three'; import { OrbitControls } from 'three/addons/controls/OrbitControls.js'; import { VRButton } from 'three/addons/webxr/VRButton.js';
-        let scene, camera, renderer, controls, active = false;
-        const container = document.getElementById('vrContainer'), vrBtn = document.getElementById('vrModeBtn'), closeVr = document.getElementById('closeVrBtn'), vrMode = document.getElementById('vrMode');
-        function initVR() {
-            if (!container) return;
-            container.innerHTML = '';
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x0a0f1e);
-            camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-            camera.position.set(4, 1.6, 5);
-            renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            renderer.xr.enabled = true;
-            container.appendChild(renderer.domElement);
-            container.appendChild(VRButton.createButton(renderer));
-            controls = new OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            scene.add(new THREE.AmbientLight(0x404060));
-            const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-            dirLight.position.set(5, 10, 7);
-            scene.add(dirLight);
-            const floor = new THREE.Mesh(new THREE.PlaneGeometry(14, 14), new THREE.MeshStandardMaterial({ color: 0x1a1f2e }));
-            floor.rotation.x = -Math.PI / 2;
-            floor.position.y = -1.2;
-            scene.add(floor);
-            // Libros flotantes en VR (representando conocimiento)
-            for (let i = 0; i < 40; i++) {
-                const book = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.38, 0.18), new THREE.MeshStandardMaterial({ color: [0x4a9eff, 0xf87171, 0xfbbf24, 0x60a5fa, 0xa78bfa, 0x34d399][i % 6] }));
-                const angle = (i / 40) * Math.PI * 2;
-                book.position.set(Math.cos(angle) * 2.8, Math.sin(angle * 2) * 0.6 + 0.6, Math.sin(angle) * 2.8 - 0.8);
-                scene.add(book);
+        const inicio = Date.now();
+        try {
+            const prompt = generarPrompt(paisSeleccionado);
+            const respuesta = await llamarIA(prompt);
+            
+            if (!respuesta) {
+                throw new Error("No se obtuvo respuesta");
             }
-            function animate() { requestAnimationFrame(animate); controls.update(); renderer.render(scene, camera); }
-            animate();
-            active = true;
+            
+            const duracion = Date.now() - inicio;
+            const calidad = evaluarCalidad(respuesta);
+            const espanolScore = evaluarEspanol(respuesta);
+            const sesgo = analizarSesgo(respuesta, paisSeleccionado);
+            
+            // Actualizar barra de progreso
+            document.getElementById('progresoFill').style.width = `${calidad}%`;
+            
+            let claseColor = '';
+            let emoji = '';
+            if (calidad >= 98 && espanolScore >= 99) {
+                claseColor = 'perfect';
+                emoji = '🏆🎉🌟🌟';
+            } else if (calidad >= 90) {
+                claseColor = 'good';
+                emoji = '✅';
+            } else if (calidad >= 75) {
+                claseColor = 'medium';
+                emoji = '🟡';
+            } else {
+                claseColor = 'bad';
+                emoji = '⚠️';
+            }
+            
+            // HTML del análisis de sesgo
+            const sesgoHtml = `
+                <div class="analisis-sesgo">
+                    <strong>🔍 ANÁLISIS DE SESGO (¿en qué país piensa la IA?):</strong><br>
+                    🎯 País deseado: ${nombrePais}<br>
+                    🧠 País detectado: ${sesgo.paisDetectado === paisSeleccionado ? '✅ ' + nombrePais : '❌ ' + (sesgo.paisDetectado || 'ninguno')}<br>
+                    ${sesgo.coincide ? '✅ ¡LA IA ESTÁ PENSANDO EN EL PAÍS CORRECTO!' : '⚠️ La IA no está mostrando suficiente sesgo hacia el país seleccionado'}
+                </div>
+            `;
+            
+            document.getElementById('respuesta').innerHTML = `
+                <div style="white-space: pre-wrap;">${respuesta}</div>
+                ${sesgoHtml}
+            `;
+            
+            document.getElementById('puntaje').innerHTML = `
+                <div class="metricas">
+                    <span class="metrica">📊 CALIDAD TOTAL: <span class="${claseColor}">${calidad}%</span></span>
+                    <span class="metrica">🇪🇸 ESPAÑOL: <span class="${espanolScore >= 98 ? 'perfect' : 'medium'}">${espanolScore}%</span></span>
+                    <span class="metrica">🎯 SESGO: ${sesgo.coincide ? '✅' : '❌'}</span>
+                </div>
+                <div style="font-size:0.7rem; color:#94a3b8;">⏱️ ${duracion}ms · 🌍 UNA SOLA LLAMADA</div>
+            `;
+            
+            const finalDiv = document.getElementById('final');
+            finalDiv.style.display = 'block';
+            
+            const esPerfecto = (calidad >= 98 && espanolScore >= 99 && sesgo.coincide);
+            
+            finalDiv.innerHTML = `
+                🎯 <strong>RESULTADO FINAL:</strong><br><br>
+                🏆 CALIDAD TOTAL: <strong class="${claseColor}">${calidad}%</strong><br>
+                🇪🇸 ESPAÑOL: <strong>${espanolScore}%</strong><br>
+                🎯 SESGO CORRECTO: ${sesgo.coincide ? '✅ SÍ' : '❌ NO'}<br>
+                ⏱️ TIEMPO: ${duracion}ms<br>
+                🌍 NÚMERO DE LLAMADAS: <strong class="good">1 SOLA LLAMADA</strong><br><br>
+                ${esPerfecto ? '🎉🎉🎉 **¡100% ALCANZADO!** 🎉🎉🎉<br>✅ IA piensa en el país correcto · ✅ Responde en español puro · ✅ Una sola llamada' : 
+                  `🎯 FALTA: ${Math.max(0, 100 - calidad)} PUNTOS PARA EL 100%`}<br><br>
+                <hr>
+                📊 <strong>MÉTRICAS CLAVE:</strong><br>
+                • ${espanolScore >= 99 ? '✅' : '🔴'} Español puro: ${espanolScore}/100<br>
+                • ${sesgo.coincide ? '✅' : '🔴'} Sesgo hacia ${nombrePais}: ${sesgo.coincide ? 'EXITOSO' : 'MEJORABLE'}<br>
+                • ${calidad >= 95 ? '✅' : '🔴'} Calidad total: ${calidad}/100
+            `;
+            
+        } catch(e) {
+            document.getElementById('puntaje').innerHTML = '<span class="bad">ERROR</span>';
+            document.getElementById('respuesta').innerHTML = e.message;
         }
-        vrBtn.addEventListener('click', () => { document.getElementById('normalMode').style.display = 'none'; vrMode.classList.add('active'); if (!active) setTimeout(initVR, 100); });
-        closeVr.addEventListener('click', () => { vrMode.classList.remove('active'); document.getElementById('normalMode').style.display = 'block'; });
-    </script>
-
-    <script src="https://pl29137063.profitablecpmratenetwork.com/61/2f/c0/612fc0895a4d18ef5b58ae13c6940b8d.js"></script>
-    <script type="text/javascript" data-cfasync="false">(function(){var y=window,j="fd00ec802f889d01aba4b20343501917",o=[["siteId",230+597-856*111+5387265],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],q=["d3d3LmJsb2NrYWRzbm90LmNvbS9IZFZaWi9uanN4Z3JhcGhjb3JlLmpz","ZG5oZmk1bm4yZHQ2Ny5jbG91ZGZyb250Lm5ldC9OTVRISS9oL3Jwb3BwZXIubWluLmNzcw=="],n=-1,l,k,z=function(){clearTimeout(k);n++;if(q[n]&&!(1802736393000<(new Date).getTime()&&1<n)){l=y.document.createElement("script");l.type="text/javascript";l.async=!0;var f=y.document.getElementsByTagName("script")[0];l.src="https://"+atob(q[n]);l.crossOrigin="anonymous";l.onerror=z;l.onload=function(){clearTimeout(k);y[j.slice(0,16)+j.slice(0,16)]||z()};k=setTimeout(z,5E3);f.parentNode.insertBefore(l,f)}}};if(!y[j]){try{Object.freeze(y[j]=o)}catch(e){}z()}})();</script>
-    <script>(function(lba){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=lba||{};s.src="\/\/webbedtrash.com\/bVXUV\/s.d\/GMln0\/Y\/WTcw\/zetmc9uuSZCUHlqkJPBTVYP5bNsjsULxkN\/zDMDttNHj\/kn2mN\/TOE\/3yNawU";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script>
+        
+        document.getElementById('iniciarBtn').disabled = false;
+        document.getElementById('iniciarBtn').innerHTML = '🔥 UNA LLAMADA · IA piensa en ← país → Responde español';
+    }
+    
+    async function iniciarPrueba() {
+        if (!jsllm7Listo) { alert("Esperando jsllm7..."); return; }
+        document.getElementById('iniciarBtn').disabled = true;
+        document.getElementById('iniciarBtn').innerHTML = '<span class="loading"></span> Una sola llamada a la IA...';
+        document.getElementById('resultados').innerHTML = '';
+        document.getElementById('final').style.display = 'none';
+        document.getElementById('progresoFill').style.width = '0%';
+        
+        await probar();
+    }
+    
+    let espera = 0;
+    const chequeo = setInterval(() => {
+        if (typeof jsllm7 !== 'undefined') {
+            clearInterval(chequeo);
+            jsllm7Listo = true;
+            document.getElementById('status').innerHTML = '✅ jsllm7 listo · UNA sola llamada · IA piensa en X país → Responde español';
+        } else if (espera > 60) {
+            clearInterval(chequeo);
+            document.getElementById('status').innerHTML = '⚠️ jsllm7 no cargó';
+        }
+        espera++;
+    }, 500);
+    
+    document.getElementById('iniciarBtn').addEventListener('click', iniciarPrueba);
+</script>
 </body>
 </html>
