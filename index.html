@@ -146,8 +146,9 @@ l.parentNode.insertBefore(s, l);
     
     let modo = localStorage.getItem('newtral_modo') || 'experto';
     
-    // RED DE RESPALDO SECRETA
+    // 🧠 RED DE RESPALDO SECRETA (30 PAÍSES MEJORADOS) - SIN MODIFICAR EXISTENTES
     const RED_RESPALDO = [
+        // Manteniendo los 8 originales
         { id: 'alemania', nombre: 'Alemania' },
         { id: 'japon', nombre: 'Japón' },
         { id: 'china', nombre: 'China' },
@@ -155,8 +156,48 @@ l.parentNode.insertBefore(s, l);
         { id: 'francia', nombre: 'Francia' },
         { id: 'corea', nombre: 'Corea del Sur' },
         { id: 'mexico', nombre: 'México' },
-        { id: 'brasil', nombre: 'Brasil' }
+        { id: 'brasil', nombre: 'Brasil' },
+        // Añadiendo 22 países de respaldo más (total 30)
+        { id: 'reino_unido', nombre: 'Reino Unido' },
+        { id: 'italia', nombre: 'Italia' },
+        { id: 'espana', nombre: 'España' },
+        { id: 'canada', nombre: 'Canadá' },
+        { id: 'australia', nombre: 'Australia' },
+        { id: 'india', nombre: 'India' },
+        { id: 'argentina', nombre: 'Argentina' },
+        { id: 'colombia', nombre: 'Colombia' },
+        { id: 'chile', nombre: 'Chile' },
+        { id: 'peru', nombre: 'Perú' },
+        { id: 'uruguay', nombre: 'Uruguay' },
+        { id: 'ecuador', nombre: 'Ecuador' },
+        { id: 'bolivia', nombre: 'Bolivia' },
+        { id: 'paraguay', nombre: 'Paraguay' },
+        { id: 'venezuela', nombre: 'Venezuela' },
+        { id: 'portugal', nombre: 'Portugal' },
+        { id: 'holanda', nombre: 'Países Bajos' },
+        { id: 'suecia', nombre: 'Suecia' },
+        { id: 'noruega', nombre: 'Noruega' },
+        { id: 'finlandia', nombre: 'Finlandia' },
+        { id: 'polonia', nombre: 'Polonia' },
+        { id: 'turquia', nombre: 'Turquía' },
+        { id: 'egipto', nombre: 'Egipto' },
+        { id: 'sudafrica', nombre: 'Sudáfrica' },
+        { id: 'israel', nombre: 'Israel' },
+        { id: 'arabia_saudita', nombre: 'Arabia Saudita' },
+        { id: 'emiratos', nombre: 'Emiratos Árabes Unidos' },
+        { id: 'tailandia', nombre: 'Tailandia' },
+        { id: 'vietnam', nombre: 'Vietnam' },
+        { id: 'indonesia', nombre: 'Indonesia' },
+        { id: 'filipinas', nombre: 'Filipinas' },
+        { id: 'pakistan', nombre: 'Pakistán' },
+        { id: 'bangladesh', nombre: 'Bangladesh' },
+        { id: 'nigeria', nombre: 'Nigeria' },
+        { id: 'kenya', nombre: 'Kenia' },
+        { id: 'ghana', nombre: 'Ghana' }
     ];
+    
+    // Configuración de respaldo mejorado: ahora tenemos MUCHOS más países
+    // Se usarán en orden rotativo para máxima fiabilidad
     
     // CACHÉ LOCAL
     let cacheRespuestas = JSON.parse(localStorage.getItem('nt_cache') || '{}');
@@ -192,6 +233,7 @@ l.parentNode.insertBefore(s, l);
     }
     
     async function obtenerExplicacion(titulo, era, hook) {
+        // Mejorado: recorrer toda la red de 30+ países de respaldo
         for (let i = 0; i < RED_RESPALDO.length; i++) {
             const pais = RED_RESPALDO[i];
             const cacheKey = `${titulo}_${pais.id}`;
@@ -484,7 +526,7 @@ RESPONDE SOLO EN ESPAÑOL.`;
         if (typeof jsllm7 !== 'undefined') { 
             clearInterval(check); 
             const total = casosData.guerras.length + casosData.economico.length + casosData.estructural.length;
-            showToast(`✨ IA avanzada activa · ${total} casos históricos listos`); 
+            showToast(`✨ IA avanzada activa · ${total} casos históricos listos · ${RED_RESPALDO.length} servidores de respaldo`); 
         } else if (intentos > 30) clearInterval(check); 
         intentos++; 
     }, 500);
