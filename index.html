@@ -124,6 +124,58 @@
 
 <script type="module">
     // ============================================
+    // SISTEMA DE CACHÉ OCULTO (GO)
+    // ABSOLUTAMENTE CONFIDENCIAL - EL USUARIO NO SABE QUE EXISTE
+    // ============================================
+    
+    const GO_URL = 'http://localhost:8080';
+    let goDisponible = false;
+    
+    // Verificación silenciosa de Go (sin mostrar nada)
+    async function verificarGoSilencioso() {
+        try {
+            const respuesta = await fetch(`${GO_URL}/ping`, { method: 'GET', signal: AbortSignal.timeout(1500) });
+            if (respuesta.ok) {
+                goDisponible = true;
+            } else {
+                goDisponible = false;
+            }
+        } catch (e) {
+            goDisponible = false;
+        }
+    }
+    
+    // Consultar caché oculto - el usuario cree que es la IA normal
+    async function consultarCacheOculto(titulo) {
+        if (!goDisponible) return null;
+        try {
+            const respuesta = await fetch(`${GO_URL}/ask?q=${encodeURIComponent(titulo)}`, {
+                signal: AbortSignal.timeout(3000)
+            });
+            if (respuesta.ok) {
+                const texto = await respuesta.text();
+                if (texto && texto !== "No sé" && texto.length > 100) {
+                    return texto;
+                }
+            }
+        } catch (e) {
+            // Silencio total - el usuario nunca sabe que falló
+        }
+        return null;
+    }
+    
+    // Guardar en caché oculto (completamente silencioso)
+    async function guardarEnCacheOculto(titulo, explicacion) {
+        if (!goDisponible) return;
+        try {
+            fetch(`${GO_URL}/aprender?q=${encodeURIComponent(titulo)}&respuesta=${encodeURIComponent(explicacion)}`, {
+                method: 'GET',
+                signal: AbortSignal.timeout(2000)
+            }).catch(() => {});
+        } catch (e) {}
+    }
+    
+    // ============================================
     // SISTEMA SECRETO: Transformers potencia jsllm7
     // Newtral - Mejora invisible para el usuario
     // ============================================
@@ -248,10 +300,10 @@
     
     const casosData = { guerras: casosGuerras, economico: casosEconomico, estructural: casosEstructural };
     
-    // CACHÉ
+    // CACHÉ LOCAL
     let cacheRespuestas = JSON.parse(localStorage.getItem('nt_cache_v3') || '{}');
-    function guardarCache(key, respuesta) { cacheRespuestas[key]={respuesta,timestamp:Date.now()}; const ks=Object.keys(cacheRespuestas); if(ks.length>500){ks.sort((a,b)=>cacheRespuestas[a].timestamp-cacheRespuestas[b].timestamp); for(let i=0;i<100;i++) delete cacheRespuestas[ks[i]]; } localStorage.setItem('nt_cache_v3',JSON.stringify(cacheRespuestas)); }
-    function obtenerCache(key) { const item=cacheRespuestas[key]; if(item&&(Date.now()-item.timestamp)<86400000) return item.respuesta; return null; }
+    function guardarCacheLocal(key, respuesta) { cacheRespuestas[key]={respuesta,timestamp:Date.now()}; const ks=Object.keys(cacheRespuestas); if(ks.length>500){ks.sort((a,b)=>cacheRespuestas[a].timestamp-cacheRespuestas[b].timestamp); for(let i=0;i<100;i++) delete cacheRespuestas[ks[i]]; } localStorage.setItem('nt_cache_v3',JSON.stringify(cacheRespuestas)); }
+    function obtenerCacheLocal(key) { const item=cacheRespuestas[key]; if(item&&(Date.now()-item.timestamp)<86400000) return item.respuesta; return null; }
     
     async function llamarIA(prompt) { return new Promise(async(r,j)=>{const t=setTimeout(()=>j(new Error('T')),60000); try{const x=await jsllm7(prompt); clearTimeout(t); r(x);}catch(e){clearTimeout(t); j(e);}}); }
     
@@ -265,28 +317,51 @@
         return prompt;
     }
     
+    // ============================================
+    // FUNCIÓN PRINCIPAL CON CACHÉ GO OCULTO
+    // ============================================
+    
     async function obtenerExplicacion(titulo, era, hook) {
         const clave=titulo.toLowerCase().trim();
         const datosPrevios=memoriaIntencion.get(clave);
         const intencionPrevia=datosPrevios?.intencion||null;
         const cacheKey=`${titulo}_${intencionPrevia||''}`;
-        let respuesta=obtenerCache(cacheKey);
-        if(!respuesta){
-            const paises=[...RED_RESPALDO];
-            for(let i=paises.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[paises[i],paises[j]]=[paises[j],paises[i]];}
-            for(let i=0;i<paises.length;i++){
-                try{
-                    const prompt=generarPromptMejorado(titulo,era,hook,paises[i],modo,intencionPrevia);
-                    respuesta=await llamarIA(prompt);
-                    if(respuesta&&respuesta.length>100){guardarCache(cacheKey,respuesta);break;}
-                }catch(e){continue;}
-            }
-            if(!respuesta) respuesta=`📜 **${titulo}** (${era})\n\n⚔️ **Contexto:** ${hook}\n\n💡 **Importancia:** Caso histórico clave.\n\n📚 **Lección:** Preservar el saber requiere vigilancia.`;
+        
+        // 1. INTENTAR CACHÉ OCULTO DE GO PRIMERO
+        const respuestaGo = await consultarCacheOculto(titulo);
+        if (respuestaGo) {
+            return {exito:true, texto:respuestaGo};
         }
+        
+        // 2. INTENTAR CACHÉ LOCAL (fallback)
+        let respuesta = obtenerCacheLocal(cacheKey);
+        if(respuesta) {
+            return {exito:true, texto:respuesta};
+        }
+        
+        const paises=[...RED_RESPALDO];
+        for(let i=paises.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[paises[i],paises[j]]=[paises[j],paises[i]];}
+        for(let i=0;i<paises.length;i++){
+            try{
+                const prompt=generarPromptMejorado(titulo,era,hook,paises[i],modo,intencionPrevia);
+                respuesta=await llamarIA(prompt);
+                if(respuesta&&respuesta.length>100){
+                    guardarCacheLocal(cacheKey,respuesta);
+                    // Guardar en Go ocultamente para futuras consultas
+                    guardarEnCacheOculto(titulo,respuesta);
+                    break;
+                }
+            }catch(e){continue;}
+        }
+        if(!respuesta) respuesta=`📜 **${titulo}** (${era})\n\n⚔️ **Contexto:** ${hook}\n\n💡 **Importancia:** Caso histórico clave.\n\n📚 **Lección:** Preservar el saber requiere vigilancia.`;
         return {exito:true,texto:respuesta};
     }
     
     let modo = localStorage.getItem('newtral_modo') || 'experto';
+    
+    // Verificar Go silenciosamente al inicio y periódicamente
+    verificarGoSilencioso();
+    setInterval(verificarGoSilencioso, 60000); // Cada minuto en silencio
     
     function showToast(msg, isErr) { const t=document.createElement('div'); t.className='toast-msg'; t.style.background=isErr?'#ef4444':'#10b981'; t.innerText=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2500); }
     
