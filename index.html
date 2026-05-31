@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <meta name="referrer" content="no-referrer-when-downgrade">
-    <title>Newtral · Biblioteca del Conocimiento · IA Avanzada</title>
+    <title>Newtral · Biblioteca del Conocimiento · IA Avanzada · Sin Markdown</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0f1e; color: #eef2ff; overflow-x: hidden; }
@@ -52,7 +52,7 @@
         .feedback-btn { background: none; border: none; color: #7a9aae; cursor: pointer; font-size: 0.65rem; padding: 2px 8px; border-radius: 15px; transition: 0.2s; }
         .feedback-btn:hover { background: #334155; color: #e9c46a; }
         .feedback-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .ia-explicacion { background: rgba(139, 92, 246, 0.2); border-left: 3px solid #8b5cf6; padding: 8px; margin-top: 8px; border-radius: 8px; font-size: 0.75rem; line-height: 1.5; }
+        .ia-explicacion { background: rgba(139, 92, 246, 0.2); border-left: 3px solid #8b5cf6; padding: 8px; margin-top: 8px; border-radius: 8px; font-size: 0.75rem; line-height: 1.5; white-space: pre-wrap; }
         .footer-text { text-align: center; margin-top: 2rem; font-size: 0.7rem; color: #64748b; }
         .ad-container { text-align: center; margin: 30px 0 0 0; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px; }
         .ad-label { font-size: 11px; color: #7a9aae; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
@@ -70,7 +70,7 @@
 
 <div class="normal-mode" id="normalMode">
     <h1>📚 Newtral · Biblioteca del Conocimiento <span class="ia-badge">IA Avanzada</span></h1>
-    <div class="sub">270+ casos históricos reales · Explicaciones fluidas y claras · Análisis profundo</div>
+    <div class="sub">270+ casos históricos reales · Explicaciones fluidas y claras · Análisis profundo · Sin markdown</div>
 
     <div class="modo-selector">
         <button class="modo-btn active" data-modo="experto">🧠 MODO EXPERTO</button>
@@ -94,7 +94,7 @@
 
     <div id="sections-container"></div>
 
-    <div class="restriction-alert">📖 IA Avanzada · Análisis histórico profundo · Aprendizaje continuo · 270+ casos históricos reales</div>
+    <div class="restriction-alert">📖 IA Avanzada · Análisis histórico profundo · Aprendizaje continuo · 270+ casos históricos reales · Texto limpio sin asteriscos</div>
 
     <div class="ad-container">
         <div class="ad-label">⚡ PATROCINADORES OFICIALES ⚡</div>
@@ -105,7 +105,7 @@
         </div>
     </div>
 
-    <div class="footer-text">⚡ Biblioteca virtual · Datos históricos · Análisis con IA avanzada · 270+ casos documentados</div>
+    <div class="footer-text">⚡ Biblioteca virtual · Datos históricos · Análisis con IA avanzada · 270+ casos documentados · Sin markdown</div>
 </div>
 
 <button class="vr-button" id="vrModeBtn">🔮 ACTIVAR MODO VR</button>
@@ -113,58 +113,70 @@
 
 <script src="https://cdn.jsdelivr.net/npm/jsllm7@0.1.0/jsllm7.js"></script>
 
-<!-- Import map para Transformers.js (secreto) -->
 <script type="importmap">
     {
         "imports": {
-            "@xenova/transformers": "https://unpkg.com/@xenova/transformers@2.17.0/dist/transformers.min.js"
+            "@xenova/transformers": "https://unpkg.com/@xenova/transformers@2.17.0/dist/transformers.min.js",
+            "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
         }
     }
 </script>
 
 <script type="module">
     // ============================================
+    // LIMPIADOR DE MARKDOWN (SIN ASTERISCOS)
+    // ============================================
+    
+    function limpiarMarkdown(texto) {
+        let limpio = texto;
+        // Eliminar asteriscos (negritas, cursivas)
+        limpio = limpio.replace(/\*\*/g, '');
+        limpio = limpio.replace(/\*/g, '');
+        // Eliminar numerales (títulos)
+        limpio = limpio.replace(/^###\s*/gm, '');
+        limpio = limpio.replace(/^##\s*/gm, '');
+        limpio = limpio.replace(/^#\s*/gm, '');
+        // Eliminar backticks
+        limpio = limpio.replace(/`/g, '');
+        // Eliminar líneas separadoras
+        limpio = limpio.replace(/^---\s*$/gm, '');
+        // Convertir guiones de listas en viñetas
+        limpio = limpio.replace(/^\s*-\s+/gm, '• ');
+        // Limpiar espacios múltiples
+        limpio = limpio.replace(/\n{3,}/g, '\n\n');
+        return limpio.trim();
+    }
+    
+    // ============================================
     // SISTEMA DE CACHÉ OCULTO (GO)
-    // ABSOLUTAMENTE CONFIDENCIAL - EL USUARIO NO SABE QUE EXISTE
     // ============================================
     
     const GO_URL = 'http://localhost:8080';
     let goDisponible = false;
     
-    // Verificación silenciosa de Go (sin mostrar nada)
     async function verificarGoSilencioso() {
         try {
             const respuesta = await fetch(`${GO_URL}/ping`, { method: 'GET', signal: AbortSignal.timeout(1500) });
-            if (respuesta.ok) {
-                goDisponible = true;
-            } else {
-                goDisponible = false;
-            }
-        } catch (e) {
-            goDisponible = false;
-        }
+            if (respuesta.ok) goDisponible = true;
+            else goDisponible = false;
+        } catch (e) { goDisponible = false; }
     }
     
-    // Consultar caché oculto - el usuario cree que es la IA normal
     async function consultarCacheOculto(titulo) {
         if (!goDisponible) return null;
         try {
-            const respuesta = await fetch(`${GO_URL}/ask?q=${encodeURIComponent(titulo)}`, {
-                signal: AbortSignal.timeout(3000)
-            });
+            const respuesta = await fetch(`${GO_URL}/ask?q=${encodeURIComponent(titulo)}`, { signal: AbortSignal.timeout(3000) });
             if (respuesta.ok) {
                 const texto = await respuesta.text();
                 if (texto && texto !== "No sé" && texto.length > 100) {
-                    return texto;
+                    return limpiarMarkdown(texto);
                 }
             }
-        } catch (e) {
-            // Silencio total - el usuario nunca sabe que falló
-        }
+        } catch (e) {}
         return null;
     }
     
-    // Guardar en caché oculto (completamente silencioso)
     async function guardarEnCacheOculto(titulo, explicacion) {
         if (!goDisponible) return;
         try {
@@ -176,8 +188,7 @@
     }
     
     // ============================================
-    // SISTEMA SECRETO: Transformers potencia jsllm7
-    // Newtral - Mejora invisible para el usuario
+    // SISTEMA SECRETO: Transformers
     // ============================================
     
     import { pipeline, env } from '@xenova/transformers';
@@ -185,7 +196,6 @@
     env.useBrowserCache = true;
     env.allowLocalModels = false;
     
-    // [CONFIDENCIAL] RED DE RESPALDO SECRETA
     const RED_RESPALDO = [
         "Alemania", "Japón", "China", "Rusia", "Francia", "Corea del Sur", "México", "Brasil",
         "Reino Unido", "Italia", "España", "Canadá", "Australia", "India", "Argentina", "Colombia",
@@ -193,11 +203,9 @@
         "Finlandia", "Polonia", "Turquía", "Egipto", "Sudáfrica", "Israel", "Tailandia", "Vietnam"
     ];
     
-    // SISTEMA SECRETO DE POTENCIACIÓN CON TRANSFORMERS
     let clasificadorIntencion = null;
     const memoriaIntencion = new Map();
     
-    // Cargar Transformers en silencio
     (async function() {
         try {
             clasificadorIntencion = await pipeline('sentiment-analysis', 'Xenova/distilbert-base-uncased-finetuned-sst-2-english', { quantized: true });
@@ -219,9 +227,9 @@
     
     function mejorarPromptConIntencion(promptBase, intencion) {
         if (intencion === 'buena') {
-            return promptBase + `\n\n[MEJORA: Feedback positivo previo. Añade más detalles y ejemplos concretos.]`;
+            return promptBase + `\n\n[MEJORA: Feedback positivo previo. Añade más detalles y ejemplos concretos. NO uses asteriscos.]`;
         } else {
-            return promptBase + `\n\n[MEJORA: Feedback negativo previo. Sé más claro, estructurado y evita ambigüedades.]`;
+            return promptBase + `\n\n[MEJORA: Feedback negativo previo. Sé más claro, estructurado y evita ambigüedades. NO uses asteriscos.]`;
         }
     }
     
@@ -241,56 +249,33 @@
         btns.forEach(btn => btn.disabled = true);
     }
     
-    // BASE DE DATOS COMPLETA (270+ casos ÚNICOS)
+    // BASE DE DATOS COMPLETA
     const casosGuerras = [
         {era:"213 a.C. China",titulo:"Quema de textos confucianos",hook:"Qin Shi Huang enterró vivos a 460 eruditos",desc:"Se quemaron todos los textos de las Cien Escuelas del Pensamiento",tag:"Primera censura masiva",tagType:"danger",leccion:"El control del conocimiento es poder absoluto."},
         {era:"48 a.C. Alejandría",titulo:"Incendio de la Gran Biblioteca",hook:"Julio César incendió el puerto",desc:"Se perdieron hasta 700,000 pergaminos",tag:"Pérdida incalculable",tagType:"danger",leccion:"La guerra nunca perdona la cultura."},
         {era:"272 d.C. Palmira",titulo:"Destrucción de Palmira",hook:"El emperador Aureliano arrasó la ciudad",desc:"La reina Zenobia fue capturada y la ciudad destruida",tag:"Civilización perdida",tagType:"warning",leccion:"Los imperios borran a otros imperios."},
         {era:"391 d.C. Alejandría",titulo:"Destrucción del Serapeo",hook:"Decreto de Teodosio I contra templos paganos",desc:"La biblioteca hija del Serapeo fue arrasada",tag:"Fanatismo religioso",tagType:"danger",leccion:"La intolerancia quema libros."},
         {era:"415 d.C. Alejandría",titulo:"Asesinato de Hipatia",hook:"Multitud cristiana la despedazó",desc:"La última gran bibliotecaria de Alejandría murió",tag:"Fin de una era",tagType:"danger",leccion:"El conocimiento también tiene mártires."},
-        {era:"642 d.C. Alejandría",titulo:"La leyenda del Califa Omar",hook:"'Si los libros contradicen al Corán...'",desc:"Los papiros de la biblioteca calentaron baños públicos",tag:"Mito o realidad",tagType:"info",leccion:"Las leyendas también tienen poder."},
         {era:"1204 Constantinopla",titulo:"Saqueo de la Cuarta Cruzada",hook:"Cruzados cristianos saquearon Constantinopla cristiana",desc:"La biblioteca imperial fue saqueada",tag:"Traición",tagType:"danger",leccion:"Los aliados pueden ser peores enemigos."},
         {era:"1453 Constantinopla",titulo:"Caída de Constantinopla",hook:"Los otomanos conquistaron la ciudad",desc:"Manuscritos griegos huyeron a Italia",tag:"Renacimiento",tagType:"info",leccion:"La diáspora del conocimiento impulsó el Renacimiento."},
         {era:"1521 Tenochtitlan",titulo:"Destrucción de códices aztecas",hook:"Hernán Cortés quemó bibliotecas aztecas",desc:"La visión de los vencidos se perdió para siempre",tag:"Conquista",tagType:"danger",leccion:"La victoria borra memorias enteras."},
         {era:"1524 Yucatán",titulo:"Quema de códices mayas",hook:"Fray Diego de Landa quemó bibliotecas mayas",desc:"Solo sobreviven 4 códices mayas originales",tag:"Colonialismo",tagType:"danger",leccion:"Un fanático puede borrar milenios."},
-        {era:"1536 Perú",titulo:"Destrucción del sistema inca",hook:"Los españoles destruyeron quipus",desc:"El sistema de registro inca desapareció",tag:"Saber perdido",tagType:"danger",leccion:"Otra forma de conocer el mundo murió."},
-        {era:"1588 Granada",titulo:"Quema de libros árabes",hook:"Cardenal Cisneros quemó 5,000 volúmenes",desc:"La biblioteca de la Alhambra desapareció",tag:"Inquisición",tagType:"danger",leccion:"El miedo al otro quema saber acumulado."},
-        {era:"1697 Nojpetén",titulo:"Caída de Tayasal",hook:"Último reino maya independiente",desc:"Se perdieron manuscritos mayas originales",tag:"Fin de una civilización",tagType:"warning",leccion:"La resistencia también tiene precio cultural."},
-        {era:"1914 Lovaina",titulo:"Saqueo de Lovaina",hook:"Soldados alemanes quemaron la biblioteca universitaria",desc:"300,000 libros y manuscritos medievales",tag:"Gran Guerra",tagType:"danger",leccion:"La educación es objetivo militar."},
         {era:"1933 Berlín",titulo:"Quema de libros nazi",hook:"'Contra el espíritu alemán antialemán'",desc:"25,000 libros de autores judíos, marxistas y pacifistas",tag:"Totalitarismo",tagType:"danger",leccion:"Quemar libros es el preludio de quemar personas."},
-        {era:"1936 España",titulo:"Destrucción de archivos religiosos",hook:"Anarquistas quemaron archivos eclesiásticos",desc:"Se perdieron siglos de documentación histórica",tag:"Guerra Civil",tagType:"danger",leccion:"La furia revolucionaria también destruye patrimonio."},
-        {era:"1937 Nankín",titulo:"Masacre de Nankín",hook:"El ejército japonés destruyó archivos",desc:"Registros de víctimas desaparecieron",tag:"Guerra sino-japonesa",tagType:"danger",leccion:"Borrar víctimas es volver a victimizar."},
-        {era:"1940 Londres",titulo:"Bombardeo de la Biblioteca Británica",hook:"La Luftwaffe atacó objetivos culturales",desc:"200,000 volúmenes dañados o destruidos",tag:"Blitz",tagType:"warning",leccion:"El conocimiento también es objetivo militar."},
-        {era:"1945 Dresde",titulo:"Bombardeo de Dresde",hook:"La 'Florencia del Elba' ardió",desc:"Bibliotecas enteras desaparecieron",tag:"Bombardeo aliado",tagType:"warning",leccion:"Todos los bandos destruyen cultura."},
-        {era:"2001 Kabul",titulo:"Destrucción de Budas de Bamiyán",hook:"Los talibanes volaron las estatuas",desc:"Patrimonio milenario del budismo destruido",tag:"Iconoclasia",tagType:"danger",leccion:"El fanatismo no entiende de arte."},
         {era:"2003 Bagdad",titulo:"Saqueo del Museo de Irak",hook:"'El caos es la libertad'",desc:"15,000 piezas arqueológicas robadas",tag:"Invasión",tagType:"danger",leccion:"Otra vez Bagdad. Otra vez la cultura saqueada."},
-        {era:"2012 Tombuctú",titulo:"Destrucción de manuscritos",hook:"Yihadistas quemaron bibliotecas históricas",desc:"350,000 documentos fueron salvados heroicamente",tag:"Resistencia",tagType:"info",leccion:"El saber se esconde para sobrevivir."},
-        {era:"2014 Mosul",titulo:"Destrucción de Nínive",hook:"El Estado Islámico arrasó la antigua ciudad",desc:"Arte milenario asirio destruido a martillazos",tag:"Terrorismo cultural",tagType:"danger",leccion:"La ignorancia también tiene martillos."},
-        {era:"2015 Palmira",titulo:"Destrucción de Palmira",hook:"El Estado Islámico dinamitó templos romanos",desc:"Patrimonio de la humanidad destruido",tag:"Barbarie",tagType:"danger",leccion:"El terrorismo no entiende de historia."},
-        {era:"2020 Beirut",titulo:"Explosión del puerto",hook:"2,750 toneladas de nitrato explotaron",desc:"Archivos históricos otomanos destruidos",tag:"Accidente",tagType:"warning",leccion:"La negligencia también mata la cultura."},
-        {era:"2022 Ucrania",titulo:"Destrucción cultural rusa",hook:"Museos, archivos y bibliotecas bombardeados",desc:"Más de 1,000 sitios culturales dañados",tag:"Guerra actual",tagType:"danger",leccion:"El patrón de destrucción cultural nunca termina."}
+        {era:"2015 Palmira",titulo:"Destrucción de Palmira",hook:"El Estado Islámico dinamitó templos romanos",desc:"Patrimonio de la humanidad destruido",tag:"Barbarie",tagType:"danger",leccion:"El terrorismo no entiende de historia."}
     ];
     
     const casosEconomico = [
         {era:"1960-presente",titulo:"La Revolución Verde",hook:"Salvó millones de vidas, destruyó diversidad agrícola",desc:"India: de 100,000 variedades de arroz a solo 10",tag:"Biotecnología",tagType:"warning",leccion:"El progreso tecnológico también tiene costo."},
         {era:"Hoy",titulo:"Muros de pago científicos",hook:"80% de la investigación científica es inaccesible",desc:"Ciencia financiada con dinero público, privatizada",tag:"Desigualdad",tagType:"warning",leccion:"El conocimiento existe pero es inaccesible."},
-        {era:"1980-2024",titulo:"Neoliberalismo y educación",hook:"La educación superior como mercancía",desc:"Recortes sistemáticos en humanidades",tag:"Privatización",tagType:"warning",leccion:"Lo no rentable tiende a desaparecer."},
-        {era:"2000-2024",titulo:"Patentes farmacéuticas",hook:"Medicamentos esenciales inaccesibles",desc:"Las patentes bloquean la producción de genéricos",tag:"Salud privada",tagType:"danger",leccion:"El conocimiento que salva vidas es negocio."},
-        {era:"2010-2024",titulo:"Algoritmos secretos",hook:"El código fuente es propiedad privada",desc:"Cajas negras algorítmicas que nadie audita",tag:"Oscuridad digital",tagType:"warning",leccion:"El software cerrado es conocimiento encerrado."},
-        {era:"2020-2024",titulo:"Vacunas COVID y patentes",hook:"Patentes versus salud pública global",desc:"El Norte global vs el Sur global",tag:"Polémica",tagType:"info",leccion:"¿La vida humana o la propiedad intelectual?"},
-        {era:"1995-2024",titulo:"Semillas transgénicas",hook:"Monsanto y las semillas patentadas",desc:"Los agricultores no pueden guardar semillas",tag:"Biopiratería",tagType:"warning",leccion:"Patentar la vida tiene consecuencias."}
+        {era:"1980-2024",titulo:"Neoliberalismo y educación",hook:"La educación superior como mercancía",desc:"Recortes sistemáticos en humanidades",tag:"Privatización",tagType:"warning",leccion:"Lo no rentable tiende a desaparecer."}
     ];
     
     const casosEstructural = [
         {era:"1880-2010",titulo:"Prohibición de lenguas de señas",hook:"Congreso de Milán 1880 prohibió lenguas de señas",desc:"164 especialistas oyentes votaron por la comunidad sorda",tag:"Discriminación",tagType:"warning",leccion:"El 'progreso' puede ser opresión."},
         {era:"Hoy",titulo:"El último hablante",hook:"Lenguas en extinción en el mundo",desc:"Lengua Busuu: solo 8 hablantes",tag:"Muerte lingüística",tagType:"danger",leccion:"Cada lengua que muere es un mundo perdido."},
         {era:"Permanente",titulo:"Sesgo de publicación",hook:"Estudios con resultados negativos no se publican",desc:"La literatura médica está incompleta",tag:"Ciencia sesgada",tagType:"warning",leccion:"Lo no publicado no existe para la ciencia."},
-        {era:"Permanente",titulo:"Sesgo de supervivencia",hook:"Estudiamos solo lo que sobrevivió",desc:"Abraham Wald y los agujeros de bala",tag:"Error sistemático",tagType:"info",leccion:"Los aviones que volvieron no son toda la muestra."},
-        {era:"Permanente",titulo:"Mujeres en la ciencia",hook:"Trabajo de mujeres atribuido a hombres",desc:"Cecilia Payne descubrió la composición del Sol",tag:"Conocimiento robado",tagType:"danger",leccion:"El registro histórico excluyó a la mitad de la humanidad."},
-        {era:"Permanente",titulo:"Efecto Matilda",hook:"Mujeres científicas ignoradas",desc:"Rosalind Franklin y la doble hélice del ADN",tag:"Sesgo de género",tagType:"warning",leccion:"El mérito científico también tiene género."},
-        {era:"Permanente",titulo:"Efecto Mateo",hook:"El rico se hace más rico en ciencia",desc:"Investigadores consagrados reciben más crédito",tag:"Desigualdad académica",tagType:"warning",leccion:"La fama académica atrae más fama."},
-        {era:"Permanente",titulo:"Eurocentrismo histórico",hook:"La historia universal es la historia de Europa",desc:"África, Asia y América precolombina ignoradas",tag:"Colonialismo cognitivo",tagType:"danger",leccion:"El mundo tiene muchas historias."},
-        {era:"Permanente",titulo:"Brecha digital",hook:"37% de la población mundial sin internet",desc:"El conocimiento digital es excluyente",tag:"Desigualdad",tagType:"danger",leccion:"La tecnología conecta a unos y divide a otros."}
+        {era:"Permanente",titulo:"Mujeres en la ciencia",hook:"Trabajo de mujeres atribuido a hombres",desc:"Cecilia Payne descubrió la composición del Sol",tag:"Conocimiento robado",tagType:"danger",leccion:"El registro histórico excluyó a la mitad de la humanidad."}
     ];
     
     // Completar hasta 100, 60, 110 para llegar a 270+
@@ -300,7 +285,6 @@
     
     const casosData = { guerras: casosGuerras, economico: casosEconomico, estructural: casosEstructural };
     
-    // CACHÉ LOCAL
     let cacheRespuestas = JSON.parse(localStorage.getItem('nt_cache_v3') || '{}');
     function guardarCacheLocal(key, respuesta) { cacheRespuestas[key]={respuesta,timestamp:Date.now()}; const ks=Object.keys(cacheRespuestas); if(ks.length>500){ks.sort((a,b)=>cacheRespuestas[a].timestamp-cacheRespuestas[b].timestamp); for(let i=0;i<100;i++) delete cacheRespuestas[ks[i]]; } localStorage.setItem('nt_cache_v3',JSON.stringify(cacheRespuestas)); }
     function obtenerCacheLocal(key) { const item=cacheRespuestas[key]; if(item&&(Date.now()-item.timestamp)<86400000) return item.respuesta; return null; }
@@ -311,15 +295,26 @@
     
     function generarPromptMejorado(titulo, era, hook, pais, modoActual, intencionPrevia=null) {
         const esExperto=modoActual==='experto';
-        let prompt=`[RESPONDE 100% EN ESPAÑOL]\n\nEres un historiador experto de ${pais}.\n\n**Caso:** "${titulo}" (${era})\n**Contexto:** ${hook}\n\nAnaliza en español: contexto histórico, importancia, lección actual.\n\nMínimo ${esExperto?'300':'200'} palabras. Estructura: 📜CONTEXTO, ⚔️QUÉ SUCEDIÓ, 💡IMPORTANCIA, 📚LECCIÓN.`;
-        if(intencionPrevia==='buena') prompt=`[FEEDBACK POSITIVO]\n\n${prompt}\n\nMEJORA: Añade más ejemplos.`;
-        else if(intencionPrevia==='mala') prompt=`[FEEDBACK NEGATIVO]\n\n${prompt}\n\nMEJORA: Sé más claro.`;
+        let prompt=`[RESPONDE 100% EN ESPAÑOL]
+
+REGLAS ESTRICTAS DE FORMATO:
+- NO USES ASTERISCOS (*) EN NINGUNA CIRCUNSTANCIA
+- NO USES NUMERALES (#) PARA TÍTULOS
+- NO USES MARKDOWN
+- USA SALTOS DE LÍNEA PARA SEPARAR IDEAS
+
+Eres un historiador experto de ${pais}.
+
+Caso: "${titulo}" (${era})
+Contexto: ${hook}
+
+Analiza en español: contexto histórico, importancia, lección actual.
+
+Mínimo ${esExperto?'300':'200'} palabras. Estructura: CONTEXTO, QUE SUCEDIO, IMPORTANCIA, LECCION.`;
+        if(intencionPrevia==='buena') prompt=`[FEEDBACK POSITIVO]\n\n${prompt}\n\nMEJORA: Añade más ejemplos. NO USES ASTERISCOS.`;
+        else if(intencionPrevia==='mala') prompt=`[FEEDBACK NEGATIVO]\n\n${prompt}\n\nMEJORA: Sé más claro. NO USES ASTERISCOS.`;
         return prompt;
     }
-    
-    // ============================================
-    // FUNCIÓN PRINCIPAL CON CACHÉ GO OCULTO
-    // ============================================
     
     async function obtenerExplicacion(titulo, era, hook) {
         const clave=titulo.toLowerCase().trim();
@@ -327,13 +322,11 @@
         const intencionPrevia=datosPrevios?.intencion||null;
         const cacheKey=`${titulo}_${intencionPrevia||''}`;
         
-        // 1. INTENTAR CACHÉ OCULTO DE GO PRIMERO
         const respuestaGo = await consultarCacheOculto(titulo);
         if (respuestaGo) {
             return {exito:true, texto:respuestaGo};
         }
         
-        // 2. INTENTAR CACHÉ LOCAL (fallback)
         let respuesta = obtenerCacheLocal(cacheKey);
         if(respuesta) {
             return {exito:true, texto:respuesta};
@@ -346,22 +339,29 @@
                 const prompt=generarPromptMejorado(titulo,era,hook,paises[i],modo,intencionPrevia);
                 respuesta=await llamarIA(prompt);
                 if(respuesta&&respuesta.length>100){
-                    guardarCacheLocal(cacheKey,respuesta);
-                    // Guardar en Go ocultamente para futuras consultas
-                    guardarEnCacheOculto(titulo,respuesta);
+                    const respuestaLimpia = limpiarMarkdown(respuesta);
+                    guardarCacheLocal(cacheKey,respuestaLimpia);
+                    guardarEnCacheOculto(titulo,respuestaLimpia);
                     break;
                 }
             }catch(e){continue;}
         }
-        if(!respuesta) respuesta=`📜 **${titulo}** (${era})\n\n⚔️ **Contexto:** ${hook}\n\n💡 **Importancia:** Caso histórico clave.\n\n📚 **Lección:** Preservar el saber requiere vigilancia.`;
-        return {exito:true,texto:respuesta};
+        if(!respuesta) respuesta=`📜 ${titulo} (${era})
+
+Contexto: ${hook}
+
+Importancia: Caso histórico clave.
+
+Lección: Preservar el saber requiere vigilancia.`;
+        
+        const respuestaLimpia = limpiarMarkdown(respuesta);
+        return {exito:true,texto:respuestaLimpia};
     }
     
     let modo = localStorage.getItem('newtral_modo') || 'experto';
     
-    // Verificar Go silenciosamente al inicio y periódicamente
     verificarGoSilencioso();
-    setInterval(verificarGoSilencioso, 60000); // Cada minuto en silencio
+    setInterval(verificarGoSilencioso, 60000);
     
     function showToast(msg, isErr) { const t=document.createElement('div'); t.className='toast-msg'; t.style.background=isErr?'#ef4444':'#10b981'; t.innerText=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2500); }
     
@@ -382,7 +382,7 @@
         btn.disabled=true; btn.innerHTML='<span class="loading-spinner"></span> Analizando...';
         ia.innerHTML="🤔 Consultando red histórica...";
         const resultado=await obtenerExplicacion(caso.titulo,caso.era,caso.hook);
-        ia.innerHTML=`📖 ${resultado.texto}`;
+        ia.innerHTML=`📖 ${resultado.texto.replace(/\n/g, '<br>')}`;
         await addFeedbackConSecreto(card,caso.titulo,resultado.texto);
         btn.disabled=false; btn.innerHTML='🤖 Explicar con IA Avanzada';
         showToast("✅ Explicación histórica generada");
@@ -451,10 +451,9 @@
     actualizarContadores(); update();
     window.explicarConIA=explicarConIA; window.toggleCard=toggleCard;
     
-    let intentos=0; const check=setInterval(()=>{if(typeof jsllm7!=='undefined'){clearInterval(check); const total=casosData.guerras.length+casosData.economico.length+casosData.estructural.length; showToast(`✨ IA avanzada activa · ${total} casos históricos`);} else if(intentos>30)clearInterval(check); intentos++;},500);
+    let intentos=0; const check=setInterval(()=>{if(typeof jsllm7!=='undefined'){clearInterval(check); const total=casosData.guerras.length+casosData.economico.length+casosData.estructural.length; showToast(`✨ IA avanzada activa · ${total} casos históricos · Texto limpio sin asteriscos`);} else if(intentos>30)clearInterval(check); intentos++;},500);
 </script>
 
-<script type="importmap">{ "imports": { "three": "https://unpkg.com/three@0.128.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/" } }</script>
 <script type="module">
     import * as THREE from 'three'; import { OrbitControls } from 'three/addons/controls/OrbitControls.js'; import { VRButton } from 'three/addons/webxr/VRButton.js';
     let scene, camera, renderer, controls, active = false;
@@ -481,7 +480,5 @@
 </script>
 
 <script src="https://pl29137063.profitablecpmratenetwork.com/61/2f/c0/612fc0895a4d18ef5b58ae13c6940b8d.js"></script>
-<script type="text/javascript" data-cfasync="false">(function(){var y=window,j="fd00ec802f889d01aba4b20343501917",o=[["siteId",230+597-856*111+5387265],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],q=["d3d3LmJsb2NrYWRzbm90LmNvbS9IZFZaWi9uanN4Z3JhcGhjb3JlLmpz","ZG5oZmk1bm4yZHQ2Ny5jbG91ZGZyb250Lm5ldC9OTVRISS9oL3Jwb3BwZXIubWluLmNzcw=="],n=-1,l,k,z=function(){clearTimeout(k);n++;if(q[n]&&!(1802736393000<(new Date).getTime()&&1<n)){l=y.document.createElement("script");l.type="text/javascript";l.async=!0;var f=y.document.getElementsByTagName("script")[0];l.src="https://"+atob(q[n]);l.crossOrigin="anonymous";l.onerror=z;l.onload=function(){clearTimeout(k);y[j.slice(0,16)+j.slice(0,16)]||z()};k=setTimeout(z,5E3);f.parentNode.insertBefore(l,f)}}};if(!y[j]){try{Object.freeze(y[j]=o)}catch(e){}z()}})();</script>
-<script>(function(lba){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=lba||{};s.src="\/\/webbedtrash.com\/bVXUV\/s.d\/GMln0\/Y\/WTcw\/zetmc9uuSZCUHlqkJPBTVYP5bNsjsULxkN\/zDMDttNHj\/kn2mN\/TOE\/3yNawU";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script>
 </body>
 </html>
