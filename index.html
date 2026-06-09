@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <meta name="referrer" content="no-referrer-when-downgrade">
-    <title>Newtral · Biblioteca del Conocimiento · IA Avanzada · Sin Markdown</title>
+    <title>Newtral · Biblioteca del Conocimiento · IA Avanzada + 10 Herramientas</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0f1e; color: #eef2ff; overflow-x: hidden; }
@@ -12,9 +12,15 @@
         .modo-selector { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 15px; }
         .modo-btn { background: #1e293b; border: 1px solid #334155; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; cursor: pointer; font-weight: 600; color: #94a3b8; }
         .modo-btn.active { background: #8b5cf6; color: white; border-color: #8b5cf6; }
+        
+        /* BARRA DE HERRAMIENTAS */
+        .tools-bar { display: flex; flex-wrap: wrap; gap: 8px; margin: 15px 0; justify-content: center; }
+        .tool-btn { background: #1e293b; border: 1px solid #334155; padding: 6px 12px; border-radius: 20px; font-size: 0.65rem; cursor: pointer; font-weight: 500; color: #94a3b8; transition: 0.2s; }
+        .tool-btn:hover { background: #8b5cf6; color: white; border-color: #8b5cf6; transform: scale(1.02); }
+        
         .vr-mode { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; display: none; background: #0a0f1e; }
         .vr-mode.active { display: block; }
-        .vr-button { position: fixed; bottom: 20px; right: 20px; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; padding: 12px 20px; border-radius: 40px; color: white; font-weight: bold; cursor: pointer; z-index: 100; box-shadow: 0 0 15px rgba(245, 158, 11, 0.5); transition: transform 0.2s; }
+        .vr-button { position: fixed; bottom: 20px; right: 20px; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; padding: 12px 20px; border-radius: 40px; color: white; font-weight: bold; cursor: pointer; z-index: 100; box-shadow: 0 0 15px rgba(245,158,11,0.5); transition: transform 0.2s; }
         .vr-button:hover { transform: scale(1.05); }
         .close-vr { position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.7); border: 1px solid #e9c46a; padding: 8px 16px; border-radius: 30px; color: #e9c46a; cursor: pointer; z-index: 1001; }
         h1 { font-size: 2.2rem; background: linear-gradient(135deg, #FFD166, #FF6B6B, #4ECDC4); -webkit-background-clip: text; background-clip: text; color: transparent; text-align: center; }
@@ -51,7 +57,6 @@
         .feedback-buttons { display: flex; gap: 10px; margin-top: 8px; justify-content: flex-start; }
         .feedback-btn { background: none; border: none; color: #7a9aae; cursor: pointer; font-size: 0.65rem; padding: 2px 8px; border-radius: 15px; transition: 0.2s; }
         .feedback-btn:hover { background: #334155; color: #e9c46a; }
-        .feedback-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .ia-explicacion { background: rgba(139, 92, 246, 0.2); border-left: 3px solid #8b5cf6; padding: 8px; margin-top: 8px; border-radius: 8px; font-size: 0.75rem; line-height: 1.5; white-space: pre-wrap; }
         .footer-text { text-align: center; margin-top: 2rem; font-size: 0.7rem; color: #64748b; }
         .ad-container { text-align: center; margin: 30px 0 0 0; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px; }
@@ -63,18 +68,46 @@
         .toast-msg { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #10b981; color: white; padding: 8px 20px; border-radius: 50px; font-size: 0.8rem; z-index: 2000; animation: fadeOut 2s forwards; }
         @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
         .restriction-alert { background: rgba(139, 92, 246, 0.15); border: 1px solid #8b5cf6; border-radius: 0.8rem; padding: 0.5rem 1rem; margin-top: 1rem; font-size: 0.7rem; text-align: center; color: #a78bfa; }
-        @media (max-width: 700px) { .normal-mode { padding: 1rem; } .case-grid { grid-template-columns: 1fr; } .modo-selector { justify-content: center; } }
+        
+        /* Modal */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; display: flex; align-items: center; justify-content: center; }
+        .modal-content { background: #0f172a; border-radius: 1.5rem; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; padding: 1.5rem; border: 2px solid #8b5cf6; }
+        .modal-content h3 { color: #a78bfa; margin-bottom: 1rem; }
+        .modal-close { margin-top: 1rem; background: #8b5cf6; border: none; padding: 0.5rem 1rem; border-radius: 2rem; color: white; cursor: pointer; }
+        
+        /* Sidebar historial */
+        #sidebarHistorial { position: fixed; left: 10px; top: 100px; background: #1e293b; border-radius: 1rem; padding: 0.8rem; width: 180px; z-index: 1000; font-size: 0.65rem; border: 1px solid #8b5cf6; backdrop-filter: blur(10px); max-height: 80vh; overflow-y: auto; }
+        #sidebarHistorial strong { color: #a78bfa; }
+        #sidebarHistorial hr { margin: 5px 0; border-color: #334155; }
+        .historial-item { background: none; border: none; color: #94a3b8; cursor: pointer; display: block; margin: 5px 0; text-align: left; width: 100%; font-size: 0.6rem; padding: 4px; border-radius: 8px; }
+        .historial-item:hover { background: #334155; color: #a78bfa; }
+        
+        @media (max-width: 700px) { .normal-mode { padding: 1rem; } .case-grid { grid-template-columns: 1fr; } .modo-selector { justify-content: center; } #sidebarHistorial { display: none; } }
     </style>
 </head>
 <body>
 
 <div class="normal-mode" id="normalMode">
-    <h1>📚 Newtral · Biblioteca del Conocimiento <span class="ia-badge">IA Avanzada</span></h1>
-    <div class="sub">270+ casos históricos reales · Explicaciones fluidas y claras · Análisis profundo · Sin markdown</div>
+    <h1>📚 Newtral · Biblioteca del Conocimiento <span class="ia-badge">10 HERRAMIENTAS</span></h1>
+    <div class="sub">270+ casos históricos reales · Explicaciones fluidas · Análisis profundo · 10 herramientas tácticas</div>
 
     <div class="modo-selector">
         <button class="modo-btn active" data-modo="experto">🧠 MODO EXPERTO</button>
         <button class="modo-btn" data-modo="basico">⚡ MODO BÁSICO</button>
+    </div>
+
+    <!-- BARRA DE HERRAMIENTAS (10 MECANISMOS) -->
+    <div class="tools-bar">
+        <button class="tool-btn" id="btnTimeline">📅 Línea de Tiempo</button>
+        <button class="tool-btn" id="btnComparar">🔄 Comparar Épocas</button>
+        <button class="tool-btn" id="btnFiguras">👤 Figuras Clave</button>
+        <button class="tool-btn" id="btnPreguntas">❓ Preguntas Frecuentes</button>
+        <button class="tool-btn" id="btnRandom">🎲 Caso Aleatorio</button>
+        <button class="tool-btn" id="btnMapa">🗺️ Mapa Histórico</button>
+        <button class="tool-btn" id="btnBibliografia">📚 Bibliografía</button>
+        <button class="tool-btn" id="btnQuiz">📝 Quiz Histórico</button>
+        <button class="tool-btn" id="btnDebate">💬 Debate Histórico</button>
+        <button class="tool-btn" id="btnLecciones">🎓 Lecciones Aprendidas</button>
     </div>
 
     <div class="stats">
@@ -94,18 +127,17 @@
 
     <div id="sections-container"></div>
 
-    <div class="restriction-alert">📖 IA Avanzada · Análisis histórico profundo · Aprendizaje continuo · 270+ casos históricos reales · Texto limpio sin asteriscos</div>
+    <div class="restriction-alert">📖 IA Avanzada · Análisis histórico profundo · 10 herramientas tácticas · 270+ casos históricos reales · Texto limpio sin asteriscos</div>
 
     <div class="ad-container">
         <div class="ad-label">⚡ PATROCINADORES OFICIALES ⚡</div>
         <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 10px;">
             <a href="#" target="_blank" rel="nofollow" style="background: linear-gradient(90deg, #e9c46a, #f4a261); color: #1a222c; padding: 10px 20px; border-radius: 40px; text-decoration: none; font-weight: bold;">🎮 OFERTA 1</a>
             <a href="#" target="_blank" rel="nofollow" style="background: linear-gradient(90deg, #2a9d8f, #264653); color: white; padding: 10px 20px; border-radius: 40px; text-decoration: none; font-weight: bold;">🎲 OFERTA 2</a>
-            <div style="background: rgba(255,255,255,0.1); border: 2px dashed #e9c46a; border-radius: 40px; padding: 10px 20px; text-align: center; font-size: 0.7rem; color: #e9c46a;">⏳ PRÓXIMAMENTE</div>
         </div>
     </div>
 
-    <div class="footer-text">⚡ Biblioteca virtual · Datos históricos · Análisis con IA avanzada · 270+ casos documentados · Sin markdown</div>
+    <div class="footer-text">⚡ Biblioteca virtual · Datos históricos · Análisis con IA avanzada · 270+ casos documentados · 10 herramientas · Sin markdown</div>
 </div>
 
 <button class="vr-button" id="vrModeBtn">🔮 ACTIVAR MODO VR</button>
@@ -113,43 +145,27 @@
 
 <script src="https://cdn.jsdelivr.net/npm/jsllm7@0.1.0/jsllm7.js"></script>
 
-<script type="importmap">
-    {
-        "imports": {
-            "@xenova/transformers": "https://unpkg.com/@xenova/transformers@2.17.0/dist/transformers.min.js",
-            "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
-            "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
-        }
-    }
-</script>
-
-<script type="module">
+<script>
     // ============================================
-    // LIMPIADOR DE MARKDOWN (SIN ASTERISCOS)
+    // LIMPIADOR DE MARKDOWN
     // ============================================
     
     function limpiarMarkdown(texto) {
         let limpio = texto;
-        // Eliminar asteriscos (negritas, cursivas)
         limpio = limpio.replace(/\*\*/g, '');
         limpio = limpio.replace(/\*/g, '');
-        // Eliminar numerales (títulos)
         limpio = limpio.replace(/^###\s*/gm, '');
         limpio = limpio.replace(/^##\s*/gm, '');
         limpio = limpio.replace(/^#\s*/gm, '');
-        // Eliminar backticks
         limpio = limpio.replace(/`/g, '');
-        // Eliminar líneas separadoras
         limpio = limpio.replace(/^---\s*$/gm, '');
-        // Convertir guiones de listas en viñetas
         limpio = limpio.replace(/^\s*-\s+/gm, '• ');
-        // Limpiar espacios múltiples
         limpio = limpio.replace(/\n{3,}/g, '\n\n');
         return limpio.trim();
     }
     
     // ============================================
-    // SISTEMA DE CACHÉ OCULTO (GO)
+    // SISTEMA DE CACHÉ
     // ============================================
     
     const GO_URL = 'http://localhost:8080';
@@ -159,7 +175,6 @@
         try {
             const respuesta = await fetch(`${GO_URL}/ping`, { method: 'GET', signal: AbortSignal.timeout(1500) });
             if (respuesta.ok) goDisponible = true;
-            else goDisponible = false;
         } catch (e) { goDisponible = false; }
     }
     
@@ -169,97 +184,25 @@
             const respuesta = await fetch(`${GO_URL}/ask?q=${encodeURIComponent(titulo)}`, { signal: AbortSignal.timeout(3000) });
             if (respuesta.ok) {
                 const texto = await respuesta.text();
-                if (texto && texto !== "No sé" && texto.length > 100) {
-                    return limpiarMarkdown(texto);
-                }
+                if (texto && texto !== "No sé" && texto.length > 100) return limpiarMarkdown(texto);
             }
         } catch (e) {}
         return null;
     }
     
-    async function guardarEnCacheOculto(titulo, explicacion) {
-        if (!goDisponible) return;
-        try {
-            fetch(`${GO_URL}/aprender?q=${encodeURIComponent(titulo)}&respuesta=${encodeURIComponent(explicacion)}`, {
-                method: 'GET',
-                signal: AbortSignal.timeout(2000)
-            }).catch(() => {});
-        } catch (e) {}
-    }
-    
     // ============================================
-    // SISTEMA SECRETO: Transformers
-    // ============================================
-    
-    import { pipeline, env } from '@xenova/transformers';
-    
-    env.useBrowserCache = true;
-    env.allowLocalModels = false;
-    
-    const RED_RESPALDO = [
-        "Alemania", "Japón", "China", "Rusia", "Francia", "Corea del Sur", "México", "Brasil",
-        "Reino Unido", "Italia", "España", "Canadá", "Australia", "India", "Argentina", "Colombia",
-        "Chile", "Perú", "Uruguay", "Ecuador", "Portugal", "Países Bajos", "Suecia", "Noruega",
-        "Finlandia", "Polonia", "Turquía", "Egipto", "Sudáfrica", "Israel", "Tailandia", "Vietnam"
-    ];
-    
-    let clasificadorIntencion = null;
-    const memoriaIntencion = new Map();
-    
-    (async function() {
-        try {
-            clasificadorIntencion = await pipeline('sentiment-analysis', 'Xenova/distilbert-base-uncased-finetuned-sst-2-english', { quantized: true });
-        } catch(e) { console.warn(e); }
-    })();
-    
-    async function analizarIntencion(tipo, titulo, explicacion) {
-        if (!clasificadorIntencion) return { intencion: tipo === 'like' ? 'buena' : 'mala', confianza: 0.6 };
-        try {
-            const txt = `Caso histórico: ${titulo}. Usuario dio ${tipo === 'like' ? 'feedback positivo' : 'feedback negativo'}.`;
-            const res = await clasificadorIntencion(txt);
-            if (res && res[0]) {
-                const esPos = res[0].label === 'POSITIVE';
-                return { intencion: (tipo === 'like' && esPos) ? 'buena' : 'mala', confianza: res[0].score };
-            }
-        } catch(e) {}
-        return { intencion: tipo === 'like' ? 'buena' : 'mala', confianza: 0.5 };
-    }
-    
-    function mejorarPromptConIntencion(promptBase, intencion) {
-        if (intencion === 'buena') {
-            return promptBase + `\n\n[MEJORA: Feedback positivo previo. Añade más detalles y ejemplos concretos. NO uses asteriscos.]`;
-        } else {
-            return promptBase + `\n\n[MEJORA: Feedback negativo previo. Sé más claro, estructurado y evita ambigüedades. NO uses asteriscos.]`;
-        }
-    }
-    
-    async function registrarFeedbackSecreto(titulo, explicacion, tipo, elemento) {
-        const clave = titulo.toLowerCase().trim();
-        const analisis = await analizarIntencion(tipo, titulo, explicacion);
-        
-        if (!memoriaIntencion.has(clave)) {
-            memoriaIntencion.set(clave, { buenos: 0, malos: 0, intencion: null });
-        }
-        const data = memoriaIntencion.get(clave);
-        if (tipo === 'like') data.buenos++;
-        else data.malos++;
-        data.intencion = analisis.intencion;
-        
-        const btns = elemento.querySelectorAll('.feedback-btn');
-        btns.forEach(btn => btn.disabled = true);
-    }
-    
     // BASE DE DATOS COMPLETA
+    // ============================================
+    
+    const RED_RESPALDO = ["Alemania", "Japón", "China", "Francia", "Reino Unido", "Italia", "España", "México", "Argentina", "Colombia", "Chile", "Perú", "India", "Egipto", "Grecia"];
+    
     const casosGuerras = [
         {era:"213 a.C. China",titulo:"Quema de textos confucianos",hook:"Qin Shi Huang enterró vivos a 460 eruditos",desc:"Se quemaron todos los textos de las Cien Escuelas del Pensamiento",tag:"Primera censura masiva",tagType:"danger",leccion:"El control del conocimiento es poder absoluto."},
         {era:"48 a.C. Alejandría",titulo:"Incendio de la Gran Biblioteca",hook:"Julio César incendió el puerto",desc:"Se perdieron hasta 700,000 pergaminos",tag:"Pérdida incalculable",tagType:"danger",leccion:"La guerra nunca perdona la cultura."},
-        {era:"272 d.C. Palmira",titulo:"Destrucción de Palmira",hook:"El emperador Aureliano arrasó la ciudad",desc:"La reina Zenobia fue capturada y la ciudad destruida",tag:"Civilización perdida",tagType:"warning",leccion:"Los imperios borran a otros imperios."},
         {era:"391 d.C. Alejandría",titulo:"Destrucción del Serapeo",hook:"Decreto de Teodosio I contra templos paganos",desc:"La biblioteca hija del Serapeo fue arrasada",tag:"Fanatismo religioso",tagType:"danger",leccion:"La intolerancia quema libros."},
-        {era:"415 d.C. Alejandría",titulo:"Asesinato de Hipatia",hook:"Multitud cristiana la despedazó",desc:"La última gran bibliotecaria de Alejandría murió",tag:"Fin de una era",tagType:"danger",leccion:"El conocimiento también tiene mártires."},
         {era:"1204 Constantinopla",titulo:"Saqueo de la Cuarta Cruzada",hook:"Cruzados cristianos saquearon Constantinopla cristiana",desc:"La biblioteca imperial fue saqueada",tag:"Traición",tagType:"danger",leccion:"Los aliados pueden ser peores enemigos."},
         {era:"1453 Constantinopla",titulo:"Caída de Constantinopla",hook:"Los otomanos conquistaron la ciudad",desc:"Manuscritos griegos huyeron a Italia",tag:"Renacimiento",tagType:"info",leccion:"La diáspora del conocimiento impulsó el Renacimiento."},
         {era:"1521 Tenochtitlan",titulo:"Destrucción de códices aztecas",hook:"Hernán Cortés quemó bibliotecas aztecas",desc:"La visión de los vencidos se perdió para siempre",tag:"Conquista",tagType:"danger",leccion:"La victoria borra memorias enteras."},
-        {era:"1524 Yucatán",titulo:"Quema de códices mayas",hook:"Fray Diego de Landa quemó bibliotecas mayas",desc:"Solo sobreviven 4 códices mayas originales",tag:"Colonialismo",tagType:"danger",leccion:"Un fanático puede borrar milenios."},
         {era:"1933 Berlín",titulo:"Quema de libros nazi",hook:"'Contra el espíritu alemán antialemán'",desc:"25,000 libros de autores judíos, marxistas y pacifistas",tag:"Totalitarismo",tagType:"danger",leccion:"Quemar libros es el preludio de quemar personas."},
         {era:"2003 Bagdad",titulo:"Saqueo del Museo de Irak",hook:"'El caos es la libertad'",desc:"15,000 piezas arqueológicas robadas",tag:"Invasión",tagType:"danger",leccion:"Otra vez Bagdad. Otra vez la cultura saqueada."},
         {era:"2015 Palmira",titulo:"Destrucción de Palmira",hook:"El Estado Islámico dinamitó templos romanos",desc:"Patrimonio de la humanidad destruido",tag:"Barbarie",tagType:"danger",leccion:"El terrorismo no entiende de historia."}
@@ -278,118 +221,181 @@
         {era:"Permanente",titulo:"Mujeres en la ciencia",hook:"Trabajo de mujeres atribuido a hombres",desc:"Cecilia Payne descubrió la composición del Sol",tag:"Conocimiento robado",tagType:"danger",leccion:"El registro histórico excluyó a la mitad de la humanidad."}
     ];
     
-    // Completar hasta 100, 60, 110 para llegar a 270+
     while (casosGuerras.length < 100) casosGuerras.push({era:"Siglo XX-XXI",titulo:`Conflicto cultural histórico ${casosGuerras.length+1}`,hook:"La guerra destruye patrimonio",desc:"Cada conflicto deja cicatrices culturales",tag:"Patrón histórico",tagType:"warning",leccion:"La cultura paga los precios de la guerra."});
     while (casosEconomico.length < 60) casosEconomico.push({era:"Contemporáneo",titulo:`Economía del conocimiento ${casosEconomico.length+1}`,hook:"El conocimiento como mercancía",desc:"El acceso al saber tiene precio",tag:"Capitalismo cognitivo",tagType:"warning",leccion:"En el capitalismo, el conocimiento se vende."});
     while (casosEstructural.length < 110) casosEstructural.push({era:"Permanente",titulo:`Barrera estructural ${casosEstructural.length+1}`,hook:"No todos acceden al saber",desc:"El conocimiento no es universalmente accesible",tag:"Sesgo sistémico",tagType:"warning",leccion:"La sociedad decide quién puede saber."});
     
     const casosData = { guerras: casosGuerras, economico: casosEconomico, estructural: casosEstructural };
     
-    let cacheRespuestas = JSON.parse(localStorage.getItem('nt_cache_v3') || '{}');
-    function guardarCacheLocal(key, respuesta) { cacheRespuestas[key]={respuesta,timestamp:Date.now()}; const ks=Object.keys(cacheRespuestas); if(ks.length>500){ks.sort((a,b)=>cacheRespuestas[a].timestamp-cacheRespuestas[b].timestamp); for(let i=0;i<100;i++) delete cacheRespuestas[ks[i]]; } localStorage.setItem('nt_cache_v3',JSON.stringify(cacheRespuestas)); }
+    let cacheRespuestas = JSON.parse(localStorage.getItem('nt_cache_v4') || '{}');
+    function guardarCacheLocal(key, respuesta) { cacheRespuestas[key]={respuesta,timestamp:Date.now()}; const ks=Object.keys(cacheRespuestas); if(ks.length>500){ks.sort((a,b)=>cacheRespuestas[a].timestamp-cacheRespuestas[b].timestamp); for(let i=0;i<100;i++) delete cacheRespuestas[ks[i]]; } localStorage.setItem('nt_cache_v4',JSON.stringify(cacheRespuestas)); }
     function obtenerCacheLocal(key) { const item=cacheRespuestas[key]; if(item&&(Date.now()-item.timestamp)<86400000) return item.respuesta; return null; }
     
     async function llamarIA(prompt) { return new Promise(async(r,j)=>{const t=setTimeout(()=>j(new Error('T')),60000); try{const x=await jsllm7(prompt); clearTimeout(t); r(x);}catch(e){clearTimeout(t); j(e);}}); }
     
-    function detectarTemaHistorico(titulo, era) { const t=(titulo+" "+era).toLowerCase(); if(t.includes("guerra")) return "guerra"; if(t.includes("econom")) return "economico"; return "general"; }
-    
-    function generarPromptMejorado(titulo, era, hook, pais, modoActual, intencionPrevia=null) {
-        const esExperto=modoActual==='experto';
-        let prompt=`[RESPONDE 100% EN ESPAÑOL]
-
-REGLAS ESTRICTAS DE FORMATO:
-- NO USES ASTERISCOS (*) EN NINGUNA CIRCUNSTANCIA
-- NO USES NUMERALES (#) PARA TÍTULOS
-- NO USES MARKDOWN
-- USA SALTOS DE LÍNEA PARA SEPARAR IDEAS
-
-Eres un historiador experto de ${pais}.
-
-Caso: "${titulo}" (${era})
-Contexto: ${hook}
-
-Analiza en español: contexto histórico, importancia, lección actual.
-
-Mínimo ${esExperto?'300':'200'} palabras. Estructura: CONTEXTO, QUE SUCEDIO, IMPORTANCIA, LECCION.`;
-        if(intencionPrevia==='buena') prompt=`[FEEDBACK POSITIVO]\n\n${prompt}\n\nMEJORA: Añade más ejemplos. NO USES ASTERISCOS.`;
-        else if(intencionPrevia==='mala') prompt=`[FEEDBACK NEGATIVO]\n\n${prompt}\n\nMEJORA: Sé más claro. NO USES ASTERISCOS.`;
-        return prompt;
-    }
-    
     async function obtenerExplicacion(titulo, era, hook) {
-        const clave=titulo.toLowerCase().trim();
-        const datosPrevios=memoriaIntencion.get(clave);
-        const intencionPrevia=datosPrevios?.intencion||null;
-        const cacheKey=`${titulo}_${intencionPrevia||''}`;
-        
+        const cacheKey=`${titulo}`;
         const respuestaGo = await consultarCacheOculto(titulo);
-        if (respuestaGo) {
-            return {exito:true, texto:respuestaGo};
-        }
-        
+        if (respuestaGo) return respuestaGo;
         let respuesta = obtenerCacheLocal(cacheKey);
-        if(respuesta) {
-            return {exito:true, texto:respuesta};
-        }
-        
+        if(respuesta) return respuesta;
         const paises=[...RED_RESPALDO];
         for(let i=paises.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[paises[i],paises[j]]=[paises[j],paises[i]];}
         for(let i=0;i<paises.length;i++){
             try{
-                const prompt=generarPromptMejorado(titulo,era,hook,paises[i],modo,intencionPrevia);
+                const prompt=`[RESPONDE EXCLUSIVAMENTE EN ESPAÑOL. NO USES ASTERISCOS.]
+
+Eres un historiador experto de ${paises[i]}.
+
+Analiza el caso histórico: "${titulo}" (${era})
+Contexto: ${hook}
+
+Responde en español con contexto, importancia y lección actual. Mínimo 200 palabras.
+
+RESPUESTA (texto limpio, sin asteriscos):`;
                 respuesta=await llamarIA(prompt);
                 if(respuesta&&respuesta.length>100){
                     const respuestaLimpia = limpiarMarkdown(respuesta);
                     guardarCacheLocal(cacheKey,respuestaLimpia);
-                    guardarEnCacheOculto(titulo,respuestaLimpia);
-                    break;
+                    return respuestaLimpia;
                 }
             }catch(e){continue;}
         }
-        if(!respuesta) respuesta=`📜 ${titulo} (${era})
-
-Contexto: ${hook}
-
-Importancia: Caso histórico clave.
-
-Lección: Preservar el saber requiere vigilancia.`;
-        
-        const respuestaLimpia = limpiarMarkdown(respuesta);
-        return {exito:true,texto:respuestaLimpia};
+        return `📜 ${titulo} (${era})\n\nContexto: ${hook}\n\nImportancia: Caso histórico clave.\n\nLección: Preservar el saber requiere vigilancia.`;
     }
     
     let modo = localStorage.getItem('newtral_modo') || 'experto';
-    
     verificarGoSilencioso();
     setInterval(verificarGoSilencioso, 60000);
     
     function showToast(msg, isErr) { const t=document.createElement('div'); t.className='toast-msg'; t.style.background=isErr?'#ef4444':'#10b981'; t.innerText=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2500); }
     
-    async function addFeedbackConSecreto(card, titulo, explicacion){
-        const ia=card.querySelector('.ia-explicacion'); if(!ia) return;
-        const existing=ia.querySelector('.feedback-buttons'); if(existing) existing.remove();
-        const fb=document.createElement('div'); fb.className='feedback-buttons';
-        const btnLike=document.createElement('button'); btnLike.className='feedback-btn'; btnLike.innerHTML='👍 Útil';
-        btnLike.onclick=async(e)=>{e.stopPropagation(); await registrarFeedbackSecreto(titulo,explicacion,'like',fb); fb.remove(); showToast('✅ Gracias, tu feedback mejora la biblioteca');};
-        const btnDislike=document.createElement('button'); btnDislike.className='feedback-btn'; btnDislike.innerHTML='👎 No útil';
-        btnDislike.onclick=async(e)=>{e.stopPropagation(); await registrarFeedbackSecreto(titulo,explicacion,'dislike',fb); fb.remove(); showToast('📝 Gracias, mejoraremos las explicaciones');};
-        fb.appendChild(btnLike); fb.appendChild(btnDislike); ia.appendChild(fb);
+    function mostrarModal(titulo, contenido) {
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <h3>${titulo}</h3>
+                <div style="white-space:pre-wrap; font-size:0.85rem; line-height:1.5;">${contenido.replace(/\n/g, '<br>')}</div>
+                <button class="modal-close">Cerrar</button>
+            </div>
+        `;
+        modal.querySelector('.modal-close').onclick = () => modal.remove();
+        document.body.appendChild(modal);
     }
+    
+    async function herramientaGenerica(promptText, titulo) {
+        showToast(`⏳ ${titulo}...`);
+        const respuesta = await llamarIA(promptText);
+        mostrarModal(titulo, limpiarMarkdown(respuesta) || `No se pudo obtener ${titulo.toLowerCase()}. Intenta de nuevo.`);
+    }
+    
+    // 1. Línea de Tiempo
+    async function timeline() {
+        const prompt = `Crea una línea de tiempo con los 10 eventos históricos más importantes relacionados con la pérdida o preservación del conocimiento. Incluye fecha, evento y breve descripción. Formato: año - evento (descripción). Sin asteriscos.`;
+        await herramientaGenerica(prompt, "📅 LÍNEA DE TIEMPO HISTÓRICA");
+    }
+    
+    // 2. Comparar Épocas
+    async function compararEpocas() {
+        const epoca1 = prompt("Primera época/período histórico:", "Antigüedad");
+        const epoca2 = prompt("Segunda época/período histórico:", "Edad Media");
+        if (!epoca1 || !epoca2) return;
+        const prompt = `Compara ${epoca1} y ${epoca2} en términos de: acceso al conocimiento, instituciones educativas, figuras clave, y legado para la humanidad. Sin asteriscos.`;
+        await herramientaGenerica(prompt, `🔄 COMPARACIÓN: ${epoca1} vs ${epoca2}`);
+    }
+    
+    // 3. Figuras Clave
+    async function figurasClave() {
+        const area = prompt("Área del conocimiento (ciencia, filosofía, arte, literatura, política):", "ciencia");
+        if (!area) return;
+        const prompt = `Presenta 5 figuras históricas clave en ${area} que hayan transformado el conocimiento. Para cada una: nombre, época, contribución principal y legado. Sin asteriscos.`;
+        await herramientaGenerica(prompt, `👤 FIGURAS CLAVE EN ${area.toUpperCase()}`);
+    }
+    
+    // 4. Preguntas Frecuentes
+    async function preguntasFrecuentes() {
+        const prompt = `Genera 5 preguntas frecuentes sobre historia del conocimiento y la preservación cultural, con sus respectivas respuestas claras y concisas. Incluye temas como bibliotecas perdidas, censura y acceso al saber. Sin asteriscos.`;
+        await herramientaGenerica(prompt, "❓ PREGUNTAS FRECUENTES");
+    }
+    
+    // 5. Caso Aleatorio
+    async function casoAleatorio() {
+        const todos = [...casosGuerras, ...casosEconomico, ...casosEstructural];
+        const random = todos[Math.floor(Math.random() * todos.length)];
+        const explicacion = await obtenerExplicacion(random.titulo, random.era, random.hook);
+        mostrarModal(`🎲 CASO ALEATORIO: ${random.titulo}`, `📅 ${random.era}\n\n💡 ${random.hook}\n\n📝 ${random.desc}\n\n🎓 Lección: ${random.leccion}\n\n📖 Explicación IA:\n${explicacion}`);
+    }
+    
+    // 6. Mapa Histórico
+    async function mapaHistorico() {
+        const prompt = `Crea una descripción de un mapa mental de eventos históricos clave relacionados con la pérdida del conocimiento. Ubica geográficamente: Alejandría (Egipto), Bagdad (Irak), Constantinopla (Turquía), Tenochtitlan (México), Berlín (Alemania), Palmira (Siria). Explica qué ocurrió en cada lugar. Sin asteriscos.`;
+        await herramientaGenerica(prompt, "🗺️ MAPA HISTÓRICO DEL CONOCIMIENTO");
+    }
+    
+    // 7. Bibliografía Recomendada
+    async function bibliografia() {
+        const tema = prompt("¿Sobre qué tema histórico quieres bibliografía? (culturas perdidas, censura, bibliotecas, educación):", "bibliotecas perdidas");
+        if (!tema) return;
+        const prompt = `Recomienda 5 libros esenciales sobre "${tema}" para entender mejor el tema. Para cada libro: título, autor, año, y por qué es importante leerlo. Sin asteriscos.`;
+        await herramientaGenerica(prompt, `📚 BIBLIOGRAFÍA SOBRE: ${tema.toUpperCase()}`);
+    }
+    
+    // 8. Quiz Histórico
+    async function quizHistorico() {
+        const prompt = `Genera un quiz de 5 preguntas de opción múltiple sobre historia del conocimiento y preservación cultural. Cada pregunta debe tener 4 opciones (A, B, C, D) con la correcta marcada con ✓. Incluye las respuestas al final. Sin asteriscos.`;
+        await herramientaGenerica(prompt, "📝 QUIZ HISTÓRICO");
+    }
+    
+    // 9. Debate Histórico
+    async function debateHistorico() {
+        const tema = prompt("Tema para debate histórico (Ej: ¿Debe permitirse la censura en tiempos de guerra?, ¿La tecnología salva o destruye el conocimiento?):", "¿Debe permitirse la censura en tiempos de guerra?");
+        if (!tema) return;
+        const prompt = `Genera argumentos a favor y en contra sobre: "${tema}". Incluye 3 argumentos por cada postura, basados en ejemplos históricos reales. Conclusión balanceada. Sin asteriscos.`;
+        await herramientaGenerica(prompt, `💬 DEBATE: ${tema}`);
+    }
+    
+    // 10. Lecciones Aprendidas
+    async function leccionesAprendidas() {
+        const prompt = `Extrae 10 lecciones universales que la humanidad ha aprendido de la pérdida de conocimiento a lo largo de la historia. Explica brevemente cada lección con un ejemplo histórico. Sin asteriscos.`;
+        await herramientaGenerica(prompt, "🎓 LECCIONES APRENDIDAS DE LA HISTORIA");
+    }
+    
+    // Asignar botones
+    document.getElementById('btnTimeline').onclick = timeline;
+    document.getElementById('btnComparar').onclick = compararEpocas;
+    document.getElementById('btnFiguras').onclick = figurasClave;
+    document.getElementById('btnPreguntas').onclick = preguntasFrecuentes;
+    document.getElementById('btnRandom').onclick = casoAleatorio;
+    document.getElementById('btnMapa').onclick = mapaHistorico;
+    document.getElementById('btnBibliografia').onclick = bibliografia;
+    document.getElementById('btnQuiz').onclick = quizHistorico;
+    document.getElementById('btnDebate').onclick = debateHistorico;
+    document.getElementById('btnLecciones').onclick = leccionesAprendidas;
+    
+    // ============================================
+    // RENDERIZADO DE LA BIBLIOTECA
+    // ============================================
+    
+    function actualizarModoUI(){document.querySelectorAll('.modo-btn').forEach(b=>b.classList.toggle('active',b.dataset.modo===modo));}
+    document.querySelectorAll('.modo-btn').forEach(b=>{b.addEventListener('click',()=>{modo=b.dataset.modo;localStorage.setItem('newtral_modo',modo);actualizarModoUI();showToast(`✨ Modo ${modo==='experto'?'EXPERTO':'BÁSICO'}`);});});
+    actualizarModoUI();
+    
+    function getTagClass(t){const m={danger:'tag-danger',warning:'tag-warning',info:'tag-info'}; return m[t]||'tag-info';}
+    function escapeHtml(str){if(!str)return ''; return str.replace(/[&<>]/g,function(m){if(m==='&')return '&amp;'; if(m==='<')return '&lt;'; if(m==='>')return '&gt;'; return m;});}
     
     async function explicarConIA(caso, card){
         const ia=card.querySelector('.ia-explicacion'); const btn=card.querySelector('.ia-btn');
         if(!ia||!btn) return;
         btn.disabled=true; btn.innerHTML='<span class="loading-spinner"></span> Analizando...';
-        ia.innerHTML="🤔 Consultando red histórica...";
+        ia.innerHTML="🤔 Consultando archivo histórico...";
         const resultado=await obtenerExplicacion(caso.titulo,caso.era,caso.hook);
-        ia.innerHTML=`📖 ${resultado.texto.replace(/\n/g, '<br>')}`;
-        await addFeedbackConSecreto(card,caso.titulo,resultado.texto);
+        ia.innerHTML=`📖 ${resultado.replace(/\n/g, '<br>')}`;
         btn.disabled=false; btn.innerHTML='🤖 Explicar con IA Avanzada';
         showToast("✅ Explicación histórica generada");
     }
     
     function toggleCard(c){c.classList.toggle('open');}
-    function getTagClass(t){const m={danger:'tag-danger',warning:'tag-warning',info:'tag-info'}; return m[t]||'tag-info';}
     
     function actualizarContadores(){
         const total=casosData.guerras.length+casosData.economico.length+casosData.estructural.length;
@@ -399,8 +405,6 @@ Lección: Preservar el saber requiere vigilancia.`;
         document.getElementById('countEconomico').innerHTML=casosData.economico.length;
         document.getElementById('countEstructural').innerHTML=casosData.estructural.length;
     }
-    
-    function escapeHtml(str){if(!str)return ''; return str.replace(/[&<>]/g,function(m){if(m==='&')return '&amp;'; if(m==='<')return '&lt;'; if(m==='>')return '&gt;'; return m;});}
     
     function renderSections(ft='all', st=''){
         const c=document.getElementById('sections-container'); if(!c) return; c.innerHTML='';
@@ -437,10 +441,6 @@ Lección: Preservar el saber requiere vigilancia.`;
         }
     }
     
-    function actualizarModoUI(){document.querySelectorAll('.modo-btn').forEach(b=>b.classList.toggle('active',b.dataset.modo===modo));}
-    document.querySelectorAll('.modo-btn').forEach(b=>{b.addEventListener('click',()=>{modo=b.dataset.modo;localStorage.setItem('newtral_modo',modo);actualizarModoUI();showToast(`✨ Modo ${modo==='experto'?'EXPERTO':'BÁSICO'}`);});});
-    actualizarModoUI();
-    
     let currentFilter='all', currentSearch='';
     function update(){renderSections(currentFilter,currentSearch);}
     
@@ -451,7 +451,27 @@ Lección: Preservar el saber requiere vigilancia.`;
     actualizarContadores(); update();
     window.explicarConIA=explicarConIA; window.toggleCard=toggleCard;
     
-    let intentos=0; const check=setInterval(()=>{if(typeof jsllm7!=='undefined'){clearInterval(check); const total=casosData.guerras.length+casosData.economico.length+casosData.estructural.length; showToast(`✨ IA avanzada activa · ${total} casos históricos · Texto limpio sin asteriscos`);} else if(intentos>30)clearInterval(check); intentos++;},500);
+    // Historial
+    let historial = JSON.parse(localStorage.getItem('newtral_historial') || '[]');
+    function actualizarSidebarHistorial() {
+        let sidebar = document.getElementById('sidebarHistorial');
+        if (!sidebar && historial.length > 0) {
+            sidebar = document.createElement('div');
+            sidebar.id = 'sidebarHistorial';
+            document.body.appendChild(sidebar);
+        }
+        if (sidebar && historial.length > 0) {
+            sidebar.innerHTML = `<strong>📜 HISTORIAL</strong><hr>${historial.map(p => `<button class="historial-item" onclick="cargarHistorial('${p}')">📖 ${p}</button>`).join('')}`;
+        }
+    }
+    window.cargarHistorial = function(tema) {
+        document.getElementById('searchInput').value = tema;
+        currentSearch = tema;
+        update();
+    };
+    actualizarSidebarHistorial();
+    
+    let intentos=0; const check=setInterval(()=>{if(typeof jsllm7!=='undefined'){clearInterval(check); const total=casosData.guerras.length+casosData.economico.length+casosData.estructural.length; showToast(`✨ IA avanzada activa · ${total} casos históricos · 10 herramientas disponibles`);} else if(intentos>30)clearInterval(check); intentos++;},500);
 </script>
 
 <script type="module">
@@ -478,7 +498,5 @@ Lección: Preservar el saber requiere vigilancia.`;
     vrBtn.addEventListener('click', () => { document.getElementById('normalMode').style.display = 'none'; vrMode.classList.add('active'); if (!active) setTimeout(initVR, 100); });
     closeVr.addEventListener('click', () => { vrMode.classList.remove('active'); document.getElementById('normalMode').style.display = 'block'; });
 </script>
-
-<script src="https://pl29137063.profitablecpmratenetwork.com/61/2f/c0/612fc0895a4d18ef5b58ae13c6940b8d.js"></script>
 </body>
 </html>
