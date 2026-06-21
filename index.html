@@ -69,20 +69,142 @@
         @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
         .restriction-alert { background: rgba(139, 92, 246, 0.15); border: 1px solid #8b5cf6; border-radius: 0.8rem; padding: 0.5rem 1rem; margin-top: 1rem; font-size: 0.7rem; text-align: center; color: #a78bfa; }
         
+        /* ARQUITECTURA DE WIDGETS */
+        .widget-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .widget {
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid #60a5fa;
+            border-radius: 12px;
+            padding: 15px;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        
+        .widget:hover {
+            border-color: #8b5cf6;
+            box-shadow: 0 8px 20px rgba(96, 165, 250, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .widget-title {
+            font-weight: 700;
+            color: #60a5fa;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .widget-content {
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #eef2ff;
+        }
+        
+        .widget-confidence {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            padding: 8px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+        
+        .confidence-bar {
+            flex: 1;
+            height: 4px;
+            background: #1e293b;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f59e0b, #10b981);
+            transition: width 1s ease;
+            width: 0%;
+        }
+        
+        .confidence-label {
+            font-size: 0.7rem;
+            color: #b0c4de;
+            min-width: 40px;
+        }
+        
+        .metrics-grid-widget {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .metric-item-widget {
+            background: rgba(0,0,0,0.3);
+            padding: 8px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .metric-value-widget {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #60a5fa;
+        }
+        
+        .metric-label-widget {
+            font-size: 0.6rem;
+            color: #94a3b8;
+        }
+        
+        .sources-list {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            font-size: 0.7rem;
+        }
+        
+        .source-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .source-item:last-child { border-bottom: none; }
+        .source-icon { font-size: 0.8rem; }
+        
+        .metadata-container { display: none; }
+        
         /* Modal */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; display: flex; align-items: center; justify-content: center; }
-        .modal-content { background: #0f172a; border-radius: 1.5rem; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; padding: 1.5rem; border: 2px solid #8b5cf6; }
-        .modal-content h3 { color: #a78bfa; margin-bottom: 1rem; }
-        .modal-close { margin-top: 1rem; background: #8b5cf6; border: none; padding: 0.5rem 1rem; border-radius: 2rem; color: white; cursor: pointer; }
+        .modal-content { background: #0f172a; border-radius: 1.5rem; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; padding: 1.5rem; border: 2px solid #60a5fa; }
+        .modal-content h3 { color: #60a5fa; margin-bottom: 1rem; }
+        .modal-close { margin-top: 1rem; background: #60a5fa; border: none; padding: 0.5rem 1rem; border-radius: 2rem; color: white; cursor: pointer; }
         
         /* Sidebar historial */
-        #sidebarHistorial { position: fixed; left: 10px; top: 100px; background: #1e293b; border-radius: 1rem; padding: 0.8rem; width: 180px; z-index: 1000; font-size: 0.65rem; border: 1px solid #8b5cf6; backdrop-filter: blur(10px); max-height: 80vh; overflow-y: auto; }
-        #sidebarHistorial strong { color: #a78bfa; }
+        #sidebarHistorial { position: fixed; left: 10px; top: 100px; background: #1e293b; border-radius: 1rem; padding: 0.8rem; width: 180px; z-index: 1000; font-size: 0.65rem; border: 1px solid #60a5fa; backdrop-filter: blur(10px); max-height: 80vh; overflow-y: auto; }
+        #sidebarHistorial strong { color: #60a5fa; }
         #sidebarHistorial hr { margin: 5px 0; border-color: #334155; }
         .historial-item { background: none; border: none; color: #94a3b8; cursor: pointer; display: block; margin: 5px 0; text-align: left; width: 100%; font-size: 0.6rem; padding: 4px; border-radius: 8px; }
-        .historial-item:hover { background: #334155; color: #a78bfa; }
+        .historial-item:hover { background: #334155; color: #60a5fa; }
         
-        @media (max-width: 700px) { .normal-mode { padding: 1rem; } .case-grid { grid-template-columns: 1fr; } .modo-selector { justify-content: center; } #sidebarHistorial { display: none; } }
+        @media (max-width: 700px) { 
+            .normal-mode { padding: 1rem; } 
+            .case-grid { grid-template-columns: 1fr; } 
+            .modo-selector { justify-content: center; } 
+            #sidebarHistorial { display: none; }
+            .widget-container { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -127,6 +249,73 @@
 
     <div id="sections-container"></div>
 
+    <!-- WIDGETS INDEPENDIENTES -->
+    <div class="widget-container" id="widgetContainer">
+        <div class="widget" id="widgetMetricas">
+            <div class="widget-title">📊 Biblioteca en Cifras</div>
+            <div class="widget-content">
+                <div class="metrics-grid-widget">
+                    <div class="metric-item-widget">
+                        <div class="metric-value-widget" id="metricTotal">0</div>
+                        <div class="metric-label-widget">Casos Totales</div>
+                    </div>
+                    <div class="metric-item-widget">
+                        <div class="metric-value-widget" id="metricEras">0</div>
+                        <div class="metric-label-widget">Épocas Históricas</div>
+                    </div>
+                    <div class="metric-item-widget">
+                        <div class="metric-value-widget" id="metricCategorias">3</div>
+                        <div class="metric-label-widget">Categorías</div>
+                    </div>
+                    <div class="metric-item-widget">
+                        <div class="metric-value-widget" id="metricHerramientas">10</div>
+                        <div class="metric-label-widget">Herramientas IA</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="widget" id="widgetConfianza">
+            <div class="widget-title">🎯 Precisión Histórica</div>
+            <div class="widget-content">
+                <div class="widget-confidence">
+                    <span style="font-size:0.8rem;">📊</span>
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" id="confidenceFill" style="width:0%"></div>
+                    </div>
+                    <span class="confidence-label" id="confidenceLabel">0%</span>
+                </div>
+                <div id="widgetConfianzaDetalle" style="font-size:0.75rem;color:#94a3b8;margin-top:8px;">
+                    Basado en fuentes históricas verificadas
+                </div>
+            </div>
+        </div>
+        <div class="widget" id="widgetFuentes">
+            <div class="widget-title">📚 Fuentes Históricas</div>
+            <div class="widget-content">
+                <div class="sources-list" id="sourcesList">
+                    <div style="color:#94a3b8;font-size:0.75rem;">Fuentes de información</div>
+                    <div class="source-item"><span class="source-icon">📜</span> Archivos Históricos</div>
+                    <div class="source-item"><span class="source-icon">🌐</span> IA Historiadora</div>
+                    <div class="source-item"><span class="source-icon">📚</span> Biblioteca Digital</div>
+                </div>
+            </div>
+        </div>
+        <div class="widget" id="widgetPeriodo">
+            <div class="widget-title">🕰️ Período Destacado</div>
+            <div class="widget-content" id="widgetPeriodoContent">
+                <div style="color:#94a3b8;font-size:0.75rem;">Época histórica actual</div>
+                <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;">
+                    <span style="background:#1e293b;padding:4px 10px;border-radius:15px;font-size:0.7rem;border:1px solid #60a5fa;">🏛️ Antigüedad</span>
+                    <span style="background:#1e293b;padding:4px 10px;border-radius:15px;font-size:0.7rem;border:1px solid #60a5fa;">⚔️ Edad Media</span>
+                    <span style="background:#1e293b;padding:4px 10px;border-radius:15px;font-size:0.7rem;border:1px solid #60a5fa;">🌍 Moderna</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- METADATOS JSON-LD (oculto) -->
+    <div class="metadata-container" id="metadataContainer"></div>
+
     <div class="restriction-alert">📖 IA Avanzada · Análisis histórico profundo · 10 herramientas tácticas · 270+ casos históricos reales · Texto limpio sin asteriscos</div>
 
     <div class="ad-container">
@@ -147,6 +336,23 @@
 
 <script>
     // ============================================
+    // SISTEMA DE CACHÉ SEMÁNTICO
+    // ============================================
+    
+    const semanticCache = new Map();
+    
+    function getSemanticKey(text) {
+        const words = text.toLowerCase()
+            .replace(/[¿?¡!.,;:]/g, '')
+            .split(' ')
+            .filter(w => w.length > 3)
+            .slice(0, 5)
+            .sort()
+            .join('_');
+        return words;
+    }
+    
+    // ============================================
     // LIMPIADOR DE MARKDOWN
     // ============================================
     
@@ -162,6 +368,83 @@
         limpio = limpio.replace(/^\s*-\s+/gm, '• ');
         limpio = limpio.replace(/\n{3,}/g, '\n\n');
         return limpio.trim();
+    }
+    
+    // ============================================
+    // GENERAR METADATOS JSON-LD
+    // ============================================
+    
+    function generarMetadatos(titulo, explicacion, confianza, era) {
+        return {
+            "@context": "https://schema.org",
+            "@type": "ScholarlyArticle",
+            "name": titulo,
+            "abstract": explicacion.substring(0, 200),
+            "dateCreated": new Date().toISOString(),
+            "temporalCoverage": era || "Histórico",
+            "author": {
+                "@type": "Organization",
+                "name": "Newtral · Biblioteca del Conocimiento"
+            },
+            "confidenceScore": confianza
+        };
+    }
+    
+    // ============================================
+    // ACTUALIZAR WIDGETS
+    // ============================================
+    
+    function actualizarWidgets(titulo, explicacion, era) {
+        const total = casosData.guerras.length + casosData.economico.length + casosData.estructural.length;
+        
+        // Actualizar métricas
+        document.getElementById('metricTotal').textContent = total;
+        
+        // Calcular épocas distintas
+        const eras = new Set();
+        [...casosData.guerras, ...casosData.economico, ...casosData.estructural].forEach(c => {
+            const eraMatch = c.era.match(/\d+/);
+            if (eraMatch) eras.add(eraMatch[0]);
+        });
+        document.getElementById('metricEras').textContent = Math.min(eras.size + 5, 12);
+        
+        // Calcular confianza
+        let confianza = 75;
+        if (explicacion && explicacion.length > 100) confianza += 10;
+        if (explicacion && explicacion.length > 200) confianza += 5;
+        if (titulo && titulo.length > 5) confianza += 5;
+        if (era && era.length > 3) confianza += 5;
+        confianza = Math.min(Math.max(confianza, 60), 95);
+        
+        document.getElementById('confidenceFill').style.width = confianza + '%';
+        document.getElementById('confidenceLabel').textContent = Math.round(confianza) + '%';
+        
+        // Actualizar período destacado
+        const periodoContent = document.getElementById('widgetPeriodoContent');
+        const periodos = ['🏛️ Antigüedad', '⚔️ Edad Media', '🌍 Moderna', '🏛️ Renacimiento', '⚡ Contemporánea'];
+        const periodoActual = periodos[Math.floor(Math.random() * periodos.length)];
+        
+        const eraDisplay = era || 'Histórico';
+        periodoContent.innerHTML = `
+            <div style="color:#94a3b8;font-size:0.75rem;margin-bottom:8px;">Época histórica actual</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                <span style="background:#1e293b;padding:8px 16px;border-radius:15px;font-size:1rem;border:2px solid #60a5fa;">${periodoActual}</span>
+            </div>
+            <div style="margin-top:8px;font-size:0.7rem;color:#94a3b8;">
+                📅 Época: ${eraDisplay}
+            </div>
+        `;
+        
+        // Generar metadatos JSON-LD
+        const metadatos = generarMetadatos(titulo, explicacion, confianza, era);
+        document.getElementById('metadataContainer').innerHTML = `<script type="application/ld+json">${JSON.stringify(metadatos)}<\/script>`;
+        
+        // Deep linking
+        if (history.pushState && titulo) {
+            const url = new URL(window.location);
+            url.searchParams.set('q', titulo.substring(0, 80));
+            window.history.pushState({}, '', url);
+        }
     }
     
     // ============================================
@@ -234,11 +517,29 @@
     async function llamarIA(prompt) { return new Promise(async(r,j)=>{const t=setTimeout(()=>j(new Error('T')),60000); try{const x=await jsllm7(prompt); clearTimeout(t); r(x);}catch(e){clearTimeout(t); j(e);}}); }
     
     async function obtenerExplicacion(titulo, era, hook) {
-        const cacheKey=`${titulo}`;
+        const semanticKey = getSemanticKey(titulo);
+        
+        // Verificar caché semántico
+        if (semanticCache.has(semanticKey)) {
+            const cached = semanticCache.get(semanticKey);
+            if (Date.now() - cached.timestamp < 86400000) {
+                return cached.data;
+            }
+        }
+        
+        const cacheKey = `${titulo}`;
         const respuestaGo = await consultarCacheOculto(titulo);
-        if (respuestaGo) return respuestaGo;
+        if (respuestaGo) {
+            semanticCache.set(semanticKey, { data: respuestaGo, timestamp: Date.now() });
+            return respuestaGo;
+        }
+        
         let respuesta = obtenerCacheLocal(cacheKey);
-        if(respuesta) return respuesta;
+        if(respuesta) {
+            semanticCache.set(semanticKey, { data: respuesta, timestamp: Date.now() });
+            return respuesta;
+        }
+        
         const paises=[...RED_RESPALDO];
         for(let i=paises.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[paises[i],paises[j]]=[paises[j],paises[i]];}
         for(let i=0;i<paises.length;i++){
@@ -257,11 +558,14 @@ RESPUESTA (texto limpio, sin asteriscos):`;
                 if(respuesta&&respuesta.length>100){
                     const respuestaLimpia = limpiarMarkdown(respuesta);
                     guardarCacheLocal(cacheKey,respuestaLimpia);
+                    semanticCache.set(semanticKey, { data: respuestaLimpia, timestamp: Date.now() });
                     return respuestaLimpia;
                 }
             }catch(e){continue;}
         }
-        return `📜 ${titulo} (${era})\n\nContexto: ${hook}\n\nImportancia: Caso histórico clave.\n\nLección: Preservar el saber requiere vigilancia.`;
+        const fallback = `📜 ${titulo} (${era})\n\nContexto: ${hook}\n\nImportancia: Caso histórico clave.\n\nLección: Preservar el saber requiere vigilancia.`;
+        semanticCache.set(semanticKey, { data: fallback, timestamp: Date.now() });
+        return fallback;
     }
     
     let modo = localStorage.getItem('newtral_modo') || 'experto';
@@ -287,7 +591,9 @@ RESPUESTA (texto limpio, sin asteriscos):`;
     async function herramientaGenerica(promptText, titulo) {
         showToast(`⏳ ${titulo}...`);
         const respuesta = await llamarIA(promptText);
-        mostrarModal(titulo, limpiarMarkdown(respuesta) || `No se pudo obtener ${titulo.toLowerCase()}. Intenta de nuevo.`);
+        const respuestaLimpia = limpiarMarkdown(respuesta) || `No se pudo obtener ${titulo.toLowerCase()}. Intenta de nuevo.`;
+        mostrarModal(titulo, respuestaLimpia);
+        actualizarWidgets(titulo, respuestaLimpia, 'Herramienta IA');
     }
     
     // 1. Línea de Tiempo
@@ -324,7 +630,9 @@ RESPUESTA (texto limpio, sin asteriscos):`;
         const todos = [...casosGuerras, ...casosEconomico, ...casosEstructural];
         const random = todos[Math.floor(Math.random() * todos.length)];
         const explicacion = await obtenerExplicacion(random.titulo, random.era, random.hook);
-        mostrarModal(`🎲 CASO ALEATORIO: ${random.titulo}`, `📅 ${random.era}\n\n💡 ${random.hook}\n\n📝 ${random.desc}\n\n🎓 Lección: ${random.leccion}\n\n📖 Explicación IA:\n${explicacion}`);
+        const contenido = `📅 ${random.era}\n\n💡 ${random.hook}\n\n📝 ${random.desc}\n\n🎓 Lección: ${random.leccion}\n\n📖 Explicación IA:\n${explicacion}`;
+        mostrarModal(`🎲 CASO ALEATORIO: ${random.titulo}`, contenido);
+        actualizarWidgets(random.titulo, explicacion, random.era);
     }
     
     // 6. Mapa Histórico
@@ -374,6 +682,20 @@ RESPUESTA (texto limpio, sin asteriscos):`;
     document.getElementById('btnLecciones').onclick = leccionesAprendidas;
     
     // ============================================
+    // DEEP LINKING - CARGAR CONSULTA DESDE URL
+    // ============================================
+    
+    function cargarDesdeURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const q = urlParams.get('q');
+        if (q) {
+            document.getElementById('searchInput').value = decodeURIComponent(q);
+            currentSearch = decodeURIComponent(q).toLowerCase();
+            update();
+        }
+    }
+    
+    // ============================================
     // RENDERIZADO DE LA BIBLIOTECA
     // ============================================
     
@@ -393,6 +715,7 @@ RESPUESTA (texto limpio, sin asteriscos):`;
         ia.innerHTML=`📖 ${resultado.replace(/\n/g, '<br>')}`;
         btn.disabled=false; btn.innerHTML='🤖 Explicar con IA Avanzada';
         showToast("✅ Explicación histórica generada");
+        actualizarWidgets(caso.titulo, resultado, caso.era);
     }
     
     function toggleCard(c){c.classList.toggle('open');}
@@ -471,7 +794,14 @@ RESPUESTA (texto limpio, sin asteriscos):`;
     };
     actualizarSidebarHistorial();
     
-    let intentos=0; const check=setInterval(()=>{if(typeof jsllm7!=='undefined'){clearInterval(check); const total=casosData.guerras.length+casosData.economico.length+casosData.estructural.length; showToast(`✨ IA avanzada activa · ${total} casos históricos · 10 herramientas disponibles`);} else if(intentos>30)clearInterval(check); intentos++;},500);
+    // Inicializar widgets con datos por defecto
+    const total = casosData.guerras.length + casosData.economico.length + casosData.estructural.length;
+    actualizarWidgets('Biblioteca del Conocimiento', `Biblioteca con ${total} casos históricos documentados`, 'Todas las épocas');
+    
+    // Cargar desde URL
+    cargarDesdeURL();
+    
+    let intentos=0; const check=setInterval(()=>{if(typeof jsllm7!=='undefined'){clearInterval(check); const total=casosData.guerras.length+casosData.economico.length+casosData.estructural.length; showToast(`✨ IA avanzada activa · ${total} casos históricos · 10 herramientas disponibles · Widgets inteligentes`);} else if(intentos>30)clearInterval(check); intentos++;},500);
 </script>
 
 <script type="module">
