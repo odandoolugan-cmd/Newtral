@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <meta name="referrer" content="no-referrer-when-downgrade">
-    <title>Newtral · Biblioteca del Conocimiento · IA Avanzada + Conectores</title>
+    <title>Newtral · Biblioteca del Conocimiento · IA + jsllm7 404M</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0f1e; color: #eef2ff; overflow-x: hidden; }
@@ -16,6 +16,7 @@
         .tools-bar { display: flex; flex-wrap: wrap; gap: 8px; margin: 15px 0; justify-content: center; }
         .tool-btn { background: #1e293b; border: 1px solid #334155; padding: 6px 12px; border-radius: 20px; font-size: 0.65rem; cursor: pointer; font-weight: 500; color: #94a3b8; transition: 0.2s; }
         .tool-btn:hover { background: #8b5cf6; color: white; border-color: #8b5cf6; transform: scale(1.02); }
+        .tool-btn.jsllm7 { border-color: #8b5cf6; color: #a78bfa; }
         
         .vr-mode { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; display: none; background: #0a0f1e; }
         .vr-mode.active { display: block; }
@@ -53,10 +54,7 @@
         .ia-btn { background: linear-gradient(90deg, #8b5cf6, #3b82f6); border: none; color: white; padding: 8px 12px; border-radius: 20px; font-size: 0.7rem; cursor: pointer; margin-top: 8px; width: 100%; transition: all 0.2s; font-weight: bold; }
         .ia-btn:hover { transform: scale(1.02); opacity: 0.9; }
         .ia-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-        .feedback-buttons { display: flex; gap: 10px; margin-top: 8px; justify-content: flex-start; }
-        .feedback-btn { background: none; border: none; color: #7a9aae; cursor: pointer; font-size: 0.65rem; padding: 2px 8px; border-radius: 15px; transition: 0.2s; }
-        .feedback-btn:hover { background: #334155; color: #e9c46a; }
-        .ia-explicacion { background: rgba(139, 92, 246, 0.2); border-left: 3px solid #8b5cf6; padding: 8px; margin-top: 8px; border-radius: 8px; font-size: 0.75rem; line-height: 1.5; white-space: pre-wrap; }
+        .ia-explicacion { background: rgba(139, 92, 246, 0.2); border-left: 3px solid #8b5cf6; padding: 8px; margin-top: 8px; border-radius: 8px; font-size: 0.75rem; line-height: 1.5; white-space: pre-wrap; max-height: 400px; overflow-y: auto; }
         .footer-text { text-align: center; margin-top: 2rem; font-size: 0.7rem; color: #64748b; }
         .ad-container { text-align: center; margin: 30px 0 0 0; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px; }
         .ad-label { font-size: 11px; color: #7a9aae; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
@@ -162,7 +160,6 @@
             color: #94a3b8;
         }
         
-        /* Métricas de conectores */
         .connector-metrics {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -185,25 +182,6 @@
             color: #94a3b8;
         }
         
-        .sources-list {
-            margin-top: 10px;
-            padding: 10px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 8px;
-            font-size: 0.7rem;
-        }
-        
-        .source-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 4px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        
-        .source-item:last-child { border-bottom: none; }
-        .source-icon { font-size: 0.8rem; }
-        
         .metadata-container { display: none; }
         
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; display: flex; align-items: center; justify-content: center; }
@@ -216,6 +194,8 @@
         #sidebarHistorial hr { margin: 5px 0; border-color: #334155; }
         .historial-item { background: none; border: none; color: #94a3b8; cursor: pointer; display: block; margin: 5px 0; text-align: left; width: 100%; font-size: 0.6rem; padding: 4px; border-radius: 8px; }
         .historial-item:hover { background: #334155; color: #60a5fa; }
+        
+        #jsllm7WidgetStatus { font-size: 0.65rem; color: #94a3b8; margin-top: 8px; }
         
         @media (max-width: 700px) { 
             .normal-mode { padding: 1rem; } 
@@ -230,8 +210,8 @@
 <body>
 
 <div class="normal-mode" id="normalMode">
-    <h1>📚 Newtral · Biblioteca del Conocimiento <span class="ia-badge">CONECTORES</span></h1>
-    <div class="sub">270+ casos históricos reales · Conectores: Memoria · Semántico · APIs</div>
+    <h1>📚 Newtral · Biblioteca del Conocimiento <span class="ia-badge">jsllm7 404M</span> <span class="ia-badge" style="background:#8b5cf6;">CONECTORES</span></h1>
+    <div class="sub">270+ casos históricos reales · Conectores: Memoria · Semántico · APIs · jsllm7 404M</div>
 
     <div class="modo-selector">
         <button class="modo-btn active" data-modo="experto">🧠 MODO EXPERTO</button>
@@ -249,6 +229,7 @@
         <button class="tool-btn" id="btnQuiz">📝 Quiz Histórico</button>
         <button class="tool-btn" id="btnDebate">💬 Debate Histórico</button>
         <button class="tool-btn" id="btnLecciones">🎓 Lecciones Aprendidas</button>
+        <button class="tool-btn jsllm7" id="btnTermuxStatus">🔌 Estado jsllm7</button>
     </div>
 
     <div class="stats">
@@ -313,6 +294,7 @@
                         <div class="label">Contexto</div>
                     </div>
                 </div>
+                <div id="jsllm7WidgetStatus">🧠 jsllm7: 🔍 Conectando a Termux...</div>
             </div>
         </div>
         <div class="widget" id="widgetConfianza">
@@ -345,7 +327,7 @@
 
     <div class="metadata-container" id="metadataContainer"></div>
 
-    <div class="restriction-alert">📖 IA Avanzada · Conectores activos · Análisis histórico profundo · 10 herramientas tácticas · 270+ casos históricos reales</div>
+    <div class="restriction-alert">📖 IA Avanzada · jsllm7 404M · Conectores activos · Análisis histórico profundo · 10 herramientas · 270+ casos históricos reales</div>
 
     <div class="ad-container">
         <div class="ad-label">⚡ PATROCINADORES OFICIALES ⚡</div>
@@ -355,7 +337,7 @@
         </div>
     </div>
 
-    <div class="footer-text">⚡ Biblioteca virtual · Datos históricos · Conectores activos · 270+ casos documentados · 10 herramientas</div>
+    <div class="footer-text">⚡ Biblioteca virtual · Datos históricos · Conectores activos · jsllm7 404M · 270+ casos documentados · 10 herramientas</div>
 </div>
 
 <button class="vr-button" id="vrModeBtn">🔮 ACTIVAR MODO VR</button>
@@ -364,6 +346,74 @@
 <script src="https://cdn.jsdelivr.net/npm/jsllm7@0.1.0/jsllm7.js"></script>
 
 <script>
+    // ============================================
+    // CONFIGURACIÓN - API DE TERMUX (PUERTO 8081)
+    // ============================================
+    
+    const JSLLM7_API_URL = 'http://localhost:8081';
+    let jsllm7TermuxConectado = false;
+    
+    // ============================================
+    // FUNCIÓN PARA LLAMAR A IA (PRIORIZA TERMUX)
+    // ============================================
+    
+    async function llamarIA(prompt) {
+        console.log('🔍 Intentando llamar a IA...');
+        
+        // 1. INTENTAR CON TERMUX (API local)
+        try {
+            const preguntaCodificada = encodeURIComponent(prompt);
+            const url = `${JSLLM7_API_URL}/ask?q=${preguntaCodificada}`;
+            
+            console.log('📤 Enviando a Termux (8081):', prompt.substring(0, 80) + '...');
+            
+            const response = await fetch(url);
+            
+            if (!response.ok) {
+                console.error('❌ Error HTTP:', response.status);
+                throw new Error(`HTTP ${response.status}`);
+            }
+            
+            const text = await response.text();
+            console.log('📥 Respuesta recibida (primeros 100 chars):', text.substring(0, 100));
+            
+            // USAR SIEMPRE la respuesta de Termux si tiene contenido
+            if (text && text.length > 20) {
+                jsllm7TermuxConectado = true;
+                document.getElementById('jsllm7WidgetStatus').textContent = '🧠 jsllm7: ✅ Activo (404M en Termux:8081)';
+                document.getElementById('jsllm7WidgetStatus').style.color = '#10b981';
+                console.log('✅ Usando respuesta de Termux');
+                return text;
+            } else {
+                console.warn('⚠️ Respuesta de Termux vacía, intentando CDN...');
+                throw new Error('Respuesta vacía');
+            }
+        } catch (error) {
+            console.warn('⚠️ Error conectando a Termux:', error.message);
+            jsllm7TermuxConectado = false;
+            document.getElementById('jsllm7WidgetStatus').textContent = '🧠 jsllm7: ⚠️ Usando CDN';
+            document.getElementById('jsllm7WidgetStatus').style.color = '#f59e0b';
+        }
+        
+        // 2. FALLBACK: Usar jsllm7 del CDN
+        console.log('⚠️ Termux no disponible, usando CDN...');
+        if (typeof window.jsllm7 !== 'undefined' && window.jsllm7) {
+            try {
+                const response = await window.jsllm7(prompt);
+                if (response && response.length > 50) {
+                    console.log('✅ Respuesta de CDN obtenida');
+                    return response;
+                }
+            } catch (e) {
+                console.warn('Error con jsllm7 CDN:', e);
+            }
+        }
+        
+        // 3. FALLBACK FINAL
+        console.log('⚠️ Usando fallback genérico');
+        return `📖 No se pudo obtener respuesta. Verifica que Termux esté corriendo en el puerto 8081.`;
+    }
+
     // ============================================
     // CONECTOR DE MEMORIA
     // ============================================
@@ -773,12 +823,13 @@
     function guardarCacheLocal(key, respuesta) { cacheRespuestas[key]={respuesta,timestamp:Date.now()}; const ks=Object.keys(cacheRespuestas); if(ks.length>500){ks.sort((a,b)=>cacheRespuestas[a].timestamp-cacheRespuestas[b].timestamp); for(let i=0;i<100;i++) delete cacheRespuestas[ks[i]]; } localStorage.setItem('nt_cache_v4',JSON.stringify(cacheRespuestas)); }
     function obtenerCacheLocal(key) { const item=cacheRespuestas[key]; if(item&&(Date.now()-item.timestamp)<86400000) return item.respuesta; return null; }
     
-    async function llamarIA(prompt) { return new Promise(async(r,j)=>{const t=setTimeout(()=>j(new Error('T')),60000); try{const x=await jsllm7(prompt); clearTimeout(t); r(x);}catch(e){clearTimeout(t); j(e);}}); }
+    // ============================================
+    // FUNCIÓN OBTENER EXPLICACIÓN (PRIORIZA TERMUX)
+    // ============================================
     
     async function obtenerExplicacion(titulo, era, hook) {
         const semanticKey = getSemanticKey(titulo);
         
-        // 1. Verificar caché semántico
         if (semanticCache.has(semanticKey)) {
             const cached = semanticCache.get(semanticKey);
             if (Date.now() - cached.timestamp < 86400000) {
@@ -786,7 +837,6 @@
             }
         }
         
-        // 2. Buscar en memoria consultas similares
         const memoriaSimilar = memoryConnector.recall(titulo, 2);
         let contextoMemoria = '';
         if (memoriaSimilar.length > 0) {
@@ -795,7 +845,6 @@
             ).join(' ');
         }
         
-        // 3. Consultar API para datos históricos
         const apiData = await apiConnector.call('historicalData');
         let contextoAPI = '';
         if (!apiData.error) {
@@ -803,12 +852,6 @@
         }
         
         const cacheKey = `${titulo}`;
-        const respuestaGo = await consultarCacheOculto(titulo);
-        if (respuestaGo) {
-            semanticCache.set(semanticKey, { data: respuestaGo, timestamp: Date.now() });
-            return respuestaGo;
-        }
-        
         let respuesta = obtenerCacheLocal(cacheKey);
         if(respuesta) {
             semanticCache.set(semanticKey, { data: respuesta, timestamp: Date.now() });
@@ -826,7 +869,6 @@ Eres un historiador experto de ${paises[i]}.
 Analiza el caso histórico: "${titulo}" (${era})
 Contexto: ${hook}`;
                 
-                // Añadir contexto de conectores
                 if (contextoMemoria) prompt += `\n${contextoMemoria}`;
                 if (contextoAPI) prompt += `\n${contextoAPI}`;
                 
@@ -840,7 +882,6 @@ RESPUESTA (texto limpio, sin asteriscos):`;
                     guardarCacheLocal(cacheKey,respuestaLimpia);
                     semanticCache.set(semanticKey, { data: respuestaLimpia, timestamp: Date.now() });
                     
-                    // Guardar en memoria
                     memoryConnector.remember({
                         query: titulo,
                         response: respuestaLimpia,
@@ -858,8 +899,6 @@ RESPUESTA (texto limpio, sin asteriscos):`;
     }
     
     let modo = localStorage.getItem('newtral_modo') || 'experto';
-    verificarGoSilencioso();
-    setInterval(verificarGoSilencioso, 60000);
     
     function showToast(msg, isErr) { const t=document.createElement('div'); t.className='toast-msg'; t.style.background=isErr?'#ef4444':'#10b981'; t.innerText=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2500); }
     
@@ -958,6 +997,29 @@ RESPUESTA (texto limpio, sin asteriscos):`;
         await herramientaGenerica(prompt, "🎓 LECCIONES APRENDIDAS DE LA HISTORIA");
     }
     
+    function verEstadoTermux() {
+        const estado = jsllm7TermuxConectado ? '✅ Conectado' : '❌ Desconectado';
+        const mensaje = `
+=== ESTADO DE jsllm7 ===
+
+🔌 Puerto: 8081
+📊 Registros: 404,356,967
+📡 Estado: ${estado}
+📍 Fuente: ${jsllm7TermuxConectado ? 'Termux (local)' : 'CDN (fallback)'}
+
+${jsllm7TermuxConectado ? 
+'✅ jsllm7 está funcionando correctamente con 404M registros' : 
+'⚠️ jsllm7 no está conectado a Termux. Usando CDN como respaldo.'}
+
+Para conectar:
+1. Abre Termux
+2. Ejecuta: cd ~/experimento
+3. Ejecuta: python3 servidor.py &
+4. Recarga esta página
+`;
+        mostrarModal('🔌 ESTADO DE jsllm7', mensaje);
+    }
+    
     document.getElementById('btnTimeline').onclick = timeline;
     document.getElementById('btnComparar').onclick = compararEpocas;
     document.getElementById('btnFiguras').onclick = figurasClave;
@@ -968,20 +1030,7 @@ RESPUESTA (texto limpio, sin asteriscos):`;
     document.getElementById('btnQuiz').onclick = quizHistorico;
     document.getElementById('btnDebate').onclick = debateHistorico;
     document.getElementById('btnLecciones').onclick = leccionesAprendidas;
-
-    // ============================================
-    // DEEP LINKING - CARGAR CONSULTA DESDE URL
-    // ============================================
-    
-    function cargarDesdeURL() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const q = urlParams.get('q');
-        if (q) {
-            document.getElementById('searchInput').value = decodeURIComponent(q);
-            currentSearch = decodeURIComponent(q).toLowerCase();
-            update();
-        }
-    }
+    document.getElementById('btnTermuxStatus').onclick = verEstadoTermux;
 
     // ============================================
     // RENDERIZADO DE LA BIBLIOTECA
@@ -999,11 +1048,16 @@ RESPUESTA (texto limpio, sin asteriscos):`;
         if(!ia||!btn) return;
         btn.disabled=true; btn.innerHTML='<span class="loading-spinner"></span> Analizando...';
         ia.innerHTML="🤔 Consultando archivo histórico...";
-        const resultado=await obtenerExplicacion(caso.titulo,caso.era,caso.hook);
-        ia.innerHTML=`📖 ${resultado.replace(/\n/g, '<br>')}`;
-        btn.disabled=false; btn.innerHTML='🤖 Explicar con IA Avanzada';
-        showToast("✅ Explicación histórica generada");
-        actualizarWidgets(caso.titulo, resultado, caso.era);
+        try {
+            const resultado=await obtenerExplicacion(caso.titulo,caso.era,caso.hook);
+            ia.innerHTML=`📖 ${resultado.replace(/\n/g, '<br>')}`;
+            btn.disabled=false; btn.innerHTML='🤖 Explicar con IA Avanzada';
+            showToast("✅ Explicación histórica generada");
+            actualizarWidgets(caso.titulo, resultado, caso.era);
+        } catch(e) {
+            ia.innerHTML="❌ Error al obtener explicación. Intenta de nuevo.";
+            btn.disabled=false; btn.innerHTML='🤖 Explicar con IA Avanzada';
+        }
     }
     
     function toggleCard(c){c.classList.toggle('open');}
@@ -1018,79 +1072,162 @@ RESPUESTA (texto limpio, sin asteriscos):`;
     }
     
     function renderSections(ft='all', st=''){
-        const c=document.getElementById('sections-container'); if(!c) return; c.innerHTML='';
-        const sections=[
-            {id:'guerras',title:'⚔️ Guerras y destrucción cultural',data:casosData.guerras,type:'guerras'},
-            {id:'economico',title:'📉 Sistemas económicos y conocimiento',data:casosData.economico,type:'economico'},
-            {id:'estructural',title:'🔍 Sesgos estructurales',data:casosData.estructural,type:'estructural'}
+        const c=document.getElementById('sections-container'); 
+        if(!c) return; 
+        c.innerHTML='';
+        
+        const sections = [
+            {id:'guerras', title:'⚔️ Guerras y destrucción cultural', data:casosData.guerras, type:'guerras'},
+            {id:'economico', title:'📉 Sistemas económicos y conocimiento', data:casosData.economico, type:'economico'},
+            {id:'estructural', title:'🔍 Sesgos estructurales', data:casosData.estructural, type:'estructural'}
         ];
+        
         for(let s of sections){
             if(ft!=='all' && ft!==s.type) continue;
-            let filtered=s.data;
-            if(st) filtered=s.data.filter(c=>c.titulo.toLowerCase().includes(st)||c.hook.toLowerCase().includes(st)||c.era.toLowerCase().includes(st));
+            
+            let filtered = s.data;
+            if(st) {
+                filtered = s.data.filter(c => 
+                    c.titulo.toLowerCase().includes(st) || 
+                    c.hook.toLowerCase().includes(st) || 
+                    c.era.toLowerCase().includes(st)
+                );
+            }
+            
             if(!filtered.length) continue;
-            const sectionDiv=document.createElement('div');
-            sectionDiv.innerHTML=`<div class="section-title">${s.title} <span class="counter-badge">${filtered.length}</span></div><div class="case-grid" id="grid-${s.id}"></div>`;
-            c.appendChild(sectionDiv);
-            const grid=document.getElementById(`grid-${s.id}`);
-            if(grid){
-                grid.innerHTML=filtered.map(caso=>`
+            
+            const sectionDiv = document.createElement('div');
+            const titleHtml = `<div class="section-title">${s.title} <span class="counter-badge">${filtered.length}</span></div>`;
+            const gridId = `grid-${s.id}`;
+            
+            let cardsHtml = '<div class="case-grid" id="' + gridId + '">';
+            for(let caso of filtered){
+                const tagClass = getTagClass(caso.tagType);
+                const casoJson = JSON.stringify(caso).replace(/"/g, '&quot;');
+                cardsHtml += `
                     <div class="card" onclick="window.toggleCard(this)">
                         <div class="card-title">📖 ${escapeHtml(caso.titulo)}</div>
                         <div class="card-era">📅 ${escapeHtml(caso.era)}</div>
                         <div class="card-hook">💡 ${escapeHtml(caso.hook)}</div>
-                        <span class="card-tag ${getTagClass(caso.tagType)}">🏷️ ${escapeHtml(caso.tag)}</span>
+                        <span class="card-tag ${tagClass}">🏷️ ${escapeHtml(caso.tag)}</span>
                         <div class="details">
                             <div class="detail-row"><strong>📝</strong> ${escapeHtml(caso.desc)}</div>
                             <div class="detail-row"><strong>💡</strong> ${escapeHtml(caso.leccion)}</div>
-                            <button class="ia-btn" onclick="event.stopPropagation();window.explicarConIA(${JSON.stringify(caso).replace(/"/g,'&quot;')}, this.closest('.card'))">🤖 Explicar con IA Avanzada</button>
+                            <button class="ia-btn" onclick="event.stopPropagation();window.explicarConIA(${casoJson}, this.closest('.card'))">🤖 Explicar con IA Avanzada</button>
                             <div class="ia-explicacion"></div>
                         </div>
                     </div>
-                `).join('');
+                `;
             }
+            cardsHtml += '</div>';
+            
+            sectionDiv.innerHTML = titleHtml + cardsHtml;
+            c.appendChild(sectionDiv);
+        }
+        
+        if(c.children.length === 0){
+            c.innerHTML = `<div style="text-align:center;padding:2rem;color:#94a3b8;">🔍 No se encontraron casos para "${st || 'esta categoría'}"</div>`;
         }
     }
     
     let currentFilter='all', currentSearch='';
-    function update(){renderSections(currentFilter,currentSearch);}
+    function update(){
+        renderSections(currentFilter, currentSearch);
+        actualizarContadores();
+    }
     
     const searchInput=document.getElementById('searchInput');
-    if(searchInput) searchInput.addEventListener('input',e=>{currentSearch=e.target.value.toLowerCase(); update();});
-    document.querySelectorAll('.filter-btn').forEach(b=>{b.addEventListener('click',()=>{document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');currentFilter=b.dataset.filter;update();});});
-    
-    actualizarContadores(); update();
-    window.explicarConIA=explicarConIA; window.toggleCard=toggleCard;
-    
-    // Historial
-    let historial = JSON.parse(localStorage.getItem('newtral_historial') || '[]');
-    function actualizarSidebarHistorial() {
-        let sidebar = document.getElementById('sidebarHistorial');
-        if (!sidebar && historial.length > 0) {
-            sidebar = document.createElement('div');
-            sidebar.id = 'sidebarHistorial';
-            document.body.appendChild(sidebar);
-        }
-        if (sidebar && historial.length > 0) {
-            sidebar.innerHTML = `<strong>📜 HISTORIAL</strong><hr>${historial.map(p => `<button class="historial-item" onclick="cargarHistorial('${p}')">📖 ${p}</button>`).join('')}`;
-        }
+    if(searchInput){
+        searchInput.addEventListener('input', function(e){
+            currentSearch = e.target.value.toLowerCase();
+            update();
+        });
     }
+    
+    document.querySelectorAll('.filter-btn').forEach(function(b){
+        b.addEventListener('click', function(){
+            document.querySelectorAll('.filter-btn').forEach(function(x){ x.classList.remove('active'); });
+            this.classList.add('active');
+            currentFilter = this.dataset.filter;
+            update();
+        });
+    });
+    
+    // ============================================
+    // EXPONER FUNCIONES GLOBALMENTE
+    // ============================================
+    
+    window.explicarConIA = explicarConIA;
+    window.toggleCard = toggleCard;
     window.cargarHistorial = function(tema) {
         document.getElementById('searchInput').value = tema;
         currentSearch = tema;
         update();
     };
-    actualizarSidebarHistorial();
     
-    // Inicializar widgets con datos por defecto
-    const total = casosData.guerras.length + casosData.economico.length + casosData.estructural.length;
-    actualizarWidgets('Biblioteca del Conocimiento', `Biblioteca con ${total} casos históricos documentados · Conectores activos`, 'Todas las épocas');
-    actualizarMetricasConectores();
+    // ============================================
+    // INICIALIZACIÓN
+    // ============================================
     
-    // Cargar desde URL
-    cargarDesdeURL();
+    function init() {
+        console.log('🚀 Inicializando Newtral...');
+        console.log('📚 Casos disponibles:', casosData.guerras.length + casosData.economico.length + casosData.estructural.length);
+        
+        actualizarContadores();
+        update();
+        
+        const total = casosData.guerras.length + casosData.economico.length + casosData.estructural.length;
+        actualizarWidgets('Biblioteca del Conocimiento', `Biblioteca con ${total} casos históricos documentados · Conectores activos · jsllm7 404M`, 'Todas las épocas');
+        actualizarMetricasConectores();
+        
+        // Verificar conexión con Termux
+        verificarConexionTermux();
+        
+        // Historial
+        let historial = JSON.parse(localStorage.getItem('newtral_historial') || '[]');
+        function actualizarSidebarHistorial() {
+            let sidebar = document.getElementById('sidebarHistorial');
+            if (!sidebar && historial.length > 0) {
+                sidebar = document.createElement('div');
+                sidebar.id = 'sidebarHistorial';
+                document.body.appendChild(sidebar);
+            }
+            if (sidebar && historial.length > 0) {
+                sidebar.innerHTML = `<strong>📜 HISTORIAL</strong><hr>${historial.map(p => `<button class="historial-item" onclick="window.cargarHistorial('${p}')">📖 ${p}</button>`).join('')}`;
+            }
+        }
+        actualizarSidebarHistorial();
+        
+        showToast(`✨ ${total} casos históricos · jsllm7 404M · Conectores activos`);
+    }
     
-    let intentos=0; const check=setInterval(()=>{if(typeof jsllm7!=='undefined'){clearInterval(check); const total=casosData.guerras.length+casosData.economico.length+casosData.estructural.length; showToast(`✨ IA avanzada activa · Conectores activos · ${total} casos históricos · 10 herramientas disponibles`);} else if(intentos>30)clearInterval(check); intentos++;},500);
+    async function verificarConexionTermux() {
+        try {
+            const response = await fetch(`${JSLLM7_API_URL}/stats`);
+            if (response.ok) {
+                const stats = await response.json();
+                jsllm7TermuxConectado = true;
+                document.getElementById('jsllm7WidgetStatus').textContent = `🧠 jsllm7: ✅ Activo (${stats.total?.toLocaleString() || '404M'} en Termux:8081)`;
+                document.getElementById('jsllm7WidgetStatus').style.color = '#10b981';
+                console.log('✅ jsllm7 conectado a Termux:', stats);
+            }
+        } catch(e) {
+            jsllm7TermuxConectado = false;
+            document.getElementById('jsllm7WidgetStatus').textContent = '🧠 jsllm7: ⚠️ Usando CDN';
+            document.getElementById('jsllm7WidgetStatus').style.color = '#f59e0b';
+            console.warn('⚠️ Termux no disponible en puerto 8081');
+        }
+    }
+    
+    // Iniciar la aplicación
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+    
+    // Verificar conexión cada 30 segundos
+    setInterval(verificarConexionTermux, 30000);
 </script>
 
 <script type="module">
