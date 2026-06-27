@@ -2,43 +2,75 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <meta name="referrer" content="no-referrer-when-downgrade">
-    <title>NextMoon AI · 403M DECIDE · Predictor Cripto</title>
+    <title>Newtral · 403M DECIDE · Biblioteca del Conocimiento</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui; }
-        body { background: linear-gradient(135deg, #0a0f1e 0%, #0c1222 100%); min-height: 100vh; padding: 1rem; color: #eef2ff; }
-        .container { max-width: 1400px; margin: 0 auto; }
-        .header { text-align: center; margin-bottom: 1.5rem; }
-        h1 { font-size: 1.8rem; background: linear-gradient(135deg, #fff, #60a5fa, #a78bfa, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .badge { display: inline-block; background: rgba(59,130,246,0.2); border-radius: 100px; padding: 0.3rem 1rem; font-size: 0.7rem; margin-bottom: 0.5rem; }
-        .badge-decision { background: linear-gradient(90deg, #8b5cf6, #ec4899); color: white; padding: 2px 10px; border-radius: 20px; font-size: 0.6rem; margin-left: 10px; font-weight: bold; display: inline-block; animation: glow 2s infinite; }
-        @keyframes glow { 0%, 100% { box-shadow: 0 0 10px #8b5cf6; } 50% { box-shadow: 0 0 25px #ec4899; } }
-        .daily-tip { background: rgba(139, 92, 246, 0.15); border-radius: 2rem; padding: 0.6rem 1.2rem; margin: 0.5rem auto 1rem auto; text-align: center; max-width: 90%; font-size: 0.75rem; border: 1px solid rgba(96,165,250,0.3); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0f1e; color: #eef2ff; overflow-x: hidden; }
+        .normal-mode { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 2rem; background: rgba(10, 15, 30, 0.85); backdrop-filter: blur(5px); border-radius: 1rem; }
         .modo-selector { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 15px; }
         .modo-btn { background: #1e293b; border: 1px solid #334155; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; cursor: pointer; font-weight: 600; color: #94a3b8; }
         .modo-btn.active { background: #8b5cf6; color: white; border-color: #8b5cf6; }
+        .badge-decision { background: linear-gradient(90deg, #8b5cf6, #ec4899); color: white; padding: 2px 10px; border-radius: 20px; font-size: 0.6rem; margin-left: 10px; font-weight: bold; display: inline-block; animation: glow 2s infinite; }
+        @keyframes glow { 0%, 100% { box-shadow: 0 0 10px #8b5cf6; } 50% { box-shadow: 0 0 25px #ec4899; } }
         
         .tools-bar { display: flex; flex-wrap: wrap; gap: 8px; margin: 15px 0; justify-content: center; }
-        .tool-btn { background: #1e293b; border: 1px solid #334155; padding: 6px 12px; border-radius: 20px; font-size: 0.7rem; cursor: pointer; font-weight: 500; color: #94a3b8; transition: 0.2s; }
+        .tool-btn { background: #1e293b; border: 1px solid #334155; padding: 6px 12px; border-radius: 20px; font-size: 0.65rem; cursor: pointer; font-weight: 500; color: #94a3b8; transition: 0.2s; }
         .tool-btn:hover { background: #8b5cf6; color: white; border-color: #8b5cf6; transform: scale(1.02); }
         .tool-btn.jsllm7 { border-color: #8b5cf6; color: #a78bfa; }
         .tool-btn.decision { border-color: #ec4899; color: #f472b6; }
         .tool-btn.decision:hover { background: linear-gradient(135deg, #8b5cf6, #ec4899); color: white; border-color: #8b5cf6; }
         
-        .search-box { display: flex; gap: 0.5rem; background: #1e293b; border-radius: 3rem; padding: 0.3rem; margin-bottom: 1rem; }
-        .search-input { flex: 1; background: transparent; border: none; padding: 0.7rem 1rem; color: white; outline: none; font-size: 0.9rem; }
-        .search-btn { background: #3b82f6; border: none; padding: 0.5rem 1.2rem; border-radius: 2rem; color: white; font-weight: bold; cursor: pointer; white-space: nowrap; }
-        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        @media (max-width: 768px) { .dashboard-grid { grid-template-columns: 1fr; } }
-        .card { background: rgba(30,41,59,0.8); backdrop-filter: blur(16px); border-radius: 1.5rem; padding: 1.2rem; border: 1px solid rgba(96,165,250,0.3); }
-        .card-title { font-size: 0.8rem; text-transform: uppercase; color: #60a5fa; margin-bottom: 1rem; }
-        .token-symbol { font-size: 2.5rem; font-weight: bold; text-align: center; background: linear-gradient(135deg, #FFD166, #FF6B6B, #4ECDC4); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .token-price { font-size: 1.2rem; text-align: center; margin: 0.5rem 0; }
-        .metrics-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 0.6rem; margin: 1rem 0; }
-        .metric-item { background: #0f172a; border-radius: 0.8rem; padding: 0.6rem; text-align: center; }
-        .metric-label { font-size: 0.6rem; color: #94a3b8; }
-        .metric-value { font-size: 0.9rem; font-weight: bold; color: #60a5fa; }
+        .vr-mode { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; display: none; background: #0a0f1e; }
+        .vr-mode.active { display: block; }
+        .vr-button { position: fixed; bottom: 20px; right: 20px; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; padding: 12px 20px; border-radius: 40px; color: white; font-weight: bold; cursor: pointer; z-index: 100; box-shadow: 0 0 15px rgba(245,158,11,0.5); transition: transform 0.2s; }
+        .vr-button:hover { transform: scale(1.05); }
+        .close-vr { position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.7); border: 1px solid #e9c46a; padding: 8px 16px; border-radius: 30px; color: #e9c46a; cursor: pointer; z-index: 1001; }
+        h1 { font-size: 2.2rem; background: linear-gradient(135deg, #FFD166, #FF6B6B, #4ECDC4, #8b5cf6, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; text-align: center; }
+        .sub { text-align: center; color: #94a3b8; margin-bottom: 2rem; font-size: 0.7rem; }
+        .stats { display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap; }
+        .stat { background: rgba(30, 41, 59, 0.8); padding: 0.8rem 1.5rem; border-radius: 1rem; text-align: center; }
+        .stat-num { font-size: 1.8rem; font-weight: bold; color: #60a5fa; }
+        .search-input { width: 100%; padding: 0.8rem 1rem; background: #1e293b; border: 1px solid #334155; border-radius: 2rem; color: white; margin-bottom: 1rem; font-size: 1rem; }
+        .search-input:focus { outline: none; border-color: #60a5fa; }
+        .filter-buttons { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; justify-content: center; color: white; }
+        .filter-btn { padding: 0.5rem 1.2rem; border: 1px solid #334155; border-radius: 2rem; background: #1e293b; color: #94a3b8; cursor: pointer; transition: all 0.2s; font-weight: bold; }
+        .filter-btn:hover { background: #334155; color: #eef2ff; }
+        .filter-btn.active { background: #3b82f6; color: white; border-color: #3b82f6; }
+        .section-title { font-size: 1.3rem; font-weight: bold; margin: 1.5rem 0 1rem 0; border-left: 4px solid #60a5fa; padding-left: 1rem; }
+        .case-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 1.2rem; margin-bottom: 2rem; }
+        .card { background: rgba(30, 41, 59, 0.9); backdrop-filter: blur(8px); border: 1px solid #334155; border-radius: 1rem; padding: 1.2rem; transition: all 0.2s; cursor: pointer; }
+        .card:hover { transform: translateY(-3px); border-color: #60a5fa; background: rgba(30, 41, 59, 1); }
+        .card-title { font-size: 1rem; font-weight: bold; margin-bottom: 0.3rem; color: #e9c46a; display: flex; justify-content: space-between; align-items: center; }
+        .card-title::after { content: "▼"; font-size: 0.7rem; color: #60a5fa; }
+        .card.open .card-title::after { content: "▲"; }
+        .card-era { font-size: 0.7rem; color: #94a3b8; margin-bottom: 0.5rem; }
+        .card-hook { font-size: 0.8rem; color: #cbd5e1; line-height: 1.4; }
+        .card-tag { display: inline-block; font-size: 0.6rem; padding: 2px 8px; border-radius: 1rem; margin-top: 0.5rem; }
+        .tag-danger { background: #450a0a; color: #f87171; }
+        .tag-warning { background: #451a03; color: #fbbf24; }
+        .tag-info { background: #0c4a6e; color: #60a5fa; }
+        .details { display: none; margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid #334155; }
+        .card.open .details { display: block; }
+        .detail-row { font-size: 0.75rem; color: #94a3b8; margin-bottom: 0.5rem; line-height: 1.4; }
+        .detail-row strong { color: #e9c46a; }
+        .ia-btn { background: linear-gradient(90deg, #8b5cf6, #3b82f6); border: none; color: white; padding: 8px 12px; border-radius: 20px; font-size: 0.7rem; cursor: pointer; margin-top: 8px; width: 100%; transition: all 0.2s; font-weight: bold; }
+        .ia-btn:hover { transform: scale(1.02); opacity: 0.9; }
+        .ia-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .ia-explicacion { background: rgba(139, 92, 246, 0.2); border-left: 3px solid #8b5cf6; padding: 8px; margin-top: 8px; border-radius: 8px; font-size: 0.75rem; line-height: 1.5; white-space: pre-wrap; max-height: 400px; overflow-y: auto; }
+        .footer-text { text-align: center; margin-top: 2rem; font-size: 0.7rem; color: #64748b; }
+        .ad-container { text-align: center; margin: 30px 0 0 0; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px; }
+        .ad-label { font-size: 11px; color: #7a9aae; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .ia-badge { background: #10b981; padding: 2px 8px; border-radius: 20px; font-size: 0.6rem; margin-left: 8px; }
+        .counter-badge { background: #3b82f6; padding: 2px 8px; border-radius: 20px; font-size: 0.65rem; margin-left: 10px; }
+        .loading-spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 6px; vertical-align: middle; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .toast-msg { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #10b981; color: white; padding: 8px 20px; border-radius: 50px; font-size: 0.8rem; z-index: 2000; animation: fadeOut 2s forwards; }
+        @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
+        .restriction-alert { background: rgba(139, 92, 246, 0.15); border: 1px solid #8b5cf6; border-radius: 0.8rem; padding: 0.5rem 1rem; margin-top: 1rem; font-size: 0.7rem; text-align: center; color: #a78bfa; }
+        
+        #decisionStatus { font-size: 0.65rem; color: #ec4899; text-align: center; margin-bottom: 10px; }
         
         .widget-container {
             display: grid;
@@ -47,8 +79,8 @@
             margin: 15px 0;
         }
         
-        .widget { background: rgba(30, 41, 59, 0.9); border: 1px solid #3b82f6; border-radius: 12px; padding: 15px; transition: all 0.3s; backdrop-filter: blur(10px); }
-        .widget:hover { border-color: #8b5cf6; box-shadow: 0 8px 20px rgba(59, 130, 246, 0.1); transform: translateY(-2px); }
+        .widget { background: rgba(30, 41, 59, 0.9); border: 1px solid #60a5fa; border-radius: 12px; padding: 15px; transition: all 0.3s; backdrop-filter: blur(10px); }
+        .widget:hover { border-color: #8b5cf6; box-shadow: 0 8px 20px rgba(96, 165, 250, 0.1); transform: translateY(-2px); }
         .widget-title { font-weight: 700; color: #60a5fa; font-size: 0.8rem; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
         .widget-content { font-size: 0.85rem; line-height: 1.6; color: #eef2ff; }
         .widget-confidence { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding: 8px; background: rgba(0,0,0,0.3); border-radius: 8px; }
@@ -64,270 +96,284 @@
         .connector-metric .value { font-size: 1rem; font-weight: bold; color: #60a5fa; }
         .connector-metric .label { font-size: 0.55rem; color: #94a3b8; }
         
-        #decisionStatus { font-size: 0.65rem; color: #ec4899; margin-top: 4px; text-align: center; }
+        .metadata-container { display: none; }
+        
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; display: flex; align-items: center; justify-content: center; }
+        .modal-content { background: #0f172a; border-radius: 1.5rem; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; padding: 1.5rem; border: 2px solid #60a5fa; }
+        .modal-content h3 { color: #60a5fa; margin-bottom: 1rem; }
+        .modal-close { margin-top: 1rem; background: #60a5fa; border: none; padding: 0.5rem 1rem; border-radius: 2rem; color: white; cursor: pointer; }
+        
+        #sidebarHistorial { position: fixed; left: 10px; top: 100px; background: #1e293b; border-radius: 1rem; padding: 0.8rem; width: 180px; z-index: 1000; font-size: 0.65rem; border: 1px solid #60a5fa; backdrop-filter: blur(10px); max-height: 80vh; overflow-y: auto; }
+        #sidebarHistorial strong { color: #60a5fa; }
+        #sidebarHistorial hr { margin: 5px 0; border-color: #334155; }
+        .historial-item { background: none; border: none; color: #94a3b8; cursor: pointer; display: block; margin: 5px 0; text-align: left; width: 100%; font-size: 0.6rem; padding: 4px; border-radius: 8px; }
+        .historial-item:hover { background: #334155; color: #60a5fa; }
+        
         #jsllm7WidgetStatus { font-size: 0.65rem; color: #94a3b8; margin-top: 8px; }
         
-        .sentiment-box { background: #0f172a; border-radius: 0.8rem; padding: 0.8rem; font-size: 0.75rem; border-left: 3px solid #8b5cf6; margin-top: 1rem; white-space: pre-wrap; line-height: 1.5; max-height: 500px; overflow-y: auto; }
-        .feedback-buttons { display: flex; gap: 10px; margin-top: 10px; justify-content: flex-end; }
-        .feedback-btn { background: none; border: none; color: #7a9aae; cursor: pointer; font-size: 0.7rem; padding: 4px 10px; border-radius: 15px; transition: 0.2s; }
-        .feedback-btn:hover { background: #334155; color: #e9c46a; }
-        button { background: linear-gradient(90deg, #3b82f6, #8b5cf6); border: none; color: white; font-weight: bold; padding: 0.8rem; border-radius: 60px; cursor: pointer; width: 100%; margin-top: 1rem; }
-        .spinner { width: 25px; height: 25px; border: 3px solid #1e293b; border-top-color: #60a5fa; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .auto-update { font-size: 0.6rem; color: #10b981; text-align: center; margin-top: 0.5rem; }
-        footer { text-align: center; margin-top: 1.5rem; font-size: 0.6rem; color: #475569; }
-        .vr-button { position: fixed; bottom: 20px; right: 20px; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; padding: 12px 20px; border-radius: 40px; color: white; font-weight: bold; cursor: pointer; z-index: 100; box-shadow: 0 0 15px rgba(245,158,11,0.5); transition: transform 0.2s; }
-        .vr-button:hover { transform: scale(1.05); }
-        .vr-mode { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; display: none; background: #0a0f1e; }
-        .vr-mode.active { display: block; }
-        .close-vr { position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.7); border: 1px solid #e9c46a; padding: 8px 16px; border-radius: 30px; color: #e9c46a; cursor: pointer; z-index: 1001; font-family: monospace; }
-        .ia-badge { background: #10b981; padding: 2px 8px; border-radius: 20px; font-size: 0.6rem; margin-left: 8px; }
-        .sponsors { text-align: center; margin: 20px 0 10px 0; padding: 8px; }
-        .sponsors-link { display: inline-flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
-        .sponsors-link a { background: rgba(255,255,255,0.08); padding: 4px 12px; border-radius: 20px; text-decoration: none; font-size: 0.65rem; color: #94a3b8; border: 1px solid rgba(255,255,255,0.1); }
-        .toast-msg { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #10b981; color: white; padding: 8px 20px; border-radius: 50px; font-size: 0.8rem; z-index: 2000; animation: fadeOut 2s forwards; }
-        @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
-        .loading-spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 6px; vertical-align: middle; }
-        .restriction-alert { background: rgba(139, 92, 246, 0.15); border: 1px solid #8b5cf6; border-radius: 0.8rem; padding: 0.5rem 1rem; margin-top: 1rem; font-size: 0.7rem; text-align: center; color: #a78bfa; }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; display: flex; align-items: center; justify-content: center; }
-        .modal-content { background: #0f172a; border-radius: 1.5rem; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; padding: 1.5rem; border: 2px solid #8b5cf6; }
-        .modal-content h3 { color: #a78bfa; margin-bottom: 1rem; }
-        .modal-close { margin-top: 1rem; background: #8b5cf6; border: none; padding: 0.5rem 1rem; border-radius: 2rem; color: white; cursor: pointer; }
-        
-        #sidebarHistorial { position: fixed; left: 10px; top: 100px; background: #1e293b; border-radius: 1rem; padding: 0.8rem; width: 180px; z-index: 1000; font-size: 0.7rem; border: 1px solid #8b5cf6; backdrop-filter: blur(10px); max-height: 80vh; overflow-y: auto; }
-        #sidebarHistorial strong { color: #a78bfa; }
-        #sidebarHistorial hr { margin: 5px 0; border-color: #334155; }
-        .historial-item { background: none; border: none; color: #94a3b8; cursor: pointer; display: block; margin: 5px 0; text-align: left; width: 100%; font-size: 0.65rem; padding: 4px; border-radius: 8px; }
-        .historial-item:hover { background: #334155; color: #a78bfa; }
-        
-        @media (max-width: 700px) { #sidebarHistorial { display: none; } .widget-container { grid-template-columns: 1fr; } .connector-metrics { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 700px) { 
+            .normal-mode { padding: 1rem; } 
+            .case-grid { grid-template-columns: 1fr; } 
+            .modo-selector { justify-content: center; } 
+            #sidebarHistorial { display: none; }
+            .widget-container { grid-template-columns: 1fr; }
+            .connector-metrics { grid-template-columns: 1fr 1fr; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="normal-mode" id="normalMode">
-        <div class="container">
-            <div class="header">
-                <div class="badge">🚀 NextMoon AI <span class="badge-decision">🧠 403M DECIDE</span></div>
-                <h1>🔮 NextMoon AI <span class="ia-badge">jsllm7 404M</span> <span class="ia-badge" style="background:#8b5cf6;">CONECTORES</span></h1>
-                <div style="font-size: 0.7rem;" id="subHeader">403M DECIDE · Análisis Cripto · Conectores: Memoria · Semántico · APIs · jsllm7 404M</div>
-                <div class="daily-tip" id="dailyTip">🧠 403M DECIDE qué tecnología usar para cada análisis · jsllm7 404M activo</div>
-            </div>
+<div class="normal-mode" id="normalMode">
+    <h1>📚 Newtral · Biblioteca del Conocimiento <span class="ia-badge">jsllm7 404M</span> <span class="ia-badge" style="background:#8b5cf6;">CONECTORES</span> <span class="badge-decision">🧠 403M DECIDE</span></h1>
+    <div class="sub">403M DECIDE · 270+ casos históricos reales · Conectores: Memoria · Semántico · APIs · jsllm7 404M</div>
 
-            <div class="modo-selector">
-                <button class="modo-btn active" data-modo="experto">🧠 MODO EXPERTO</button>
-                <button class="modo-btn" data-modo="basico">⚡ MODO BÁSICO</button>
-            </div>
+    <div id="decisionStatus" style="font-size:0.65rem;color:#ec4899;text-align:center;margin-bottom:10px;">🧠 403M DECIDE: Listo para analizar casos históricos</div>
 
-            <div class="tools-bar">
-                <button class="tool-btn" id="btnHistorico">📊 Análisis Histórico</button>
-                <button class="tool-btn" id="btnComparar">🔄 Comparar Criptos</button>
-                <button class="tool-btn" id="btnVolatilidad">⚠️ Alerta Volatilidad</button>
-                <button class="tool-btn" id="btnSoporteResistencia">📈 S/R Levels</button>
-                <button class="tool-btn" id="btnNoticias">📰 Noticias Cripto</button>
-                <button class="tool-btn" id="btnPortafolio">💼 Simular Portafolio</button>
-                <button class="tool-btn" id="btnAlertas">🔔 Alertas Precio</button>
-                <button class="tool-btn" id="btnEstrategia">🎯 Estrategia Trading</button>
-                <button class="tool-btn" id="btnFearGreed">😨 Fear & Greed</button>
-                <button class="tool-btn" id="btnPrediccion">🔮 Predicción 7 días</button>
-                <button class="tool-btn decision" id="btnDecisionStatus">🧠 403M Decide</button>
-                <button class="tool-btn jsllm7" id="btnTermuxStatus">🔌 Estado jsllm7</button>
-            </div>
+    <div class="modo-selector">
+        <button class="modo-btn active" data-modo="experto">🧠 MODO EXPERTO</button>
+        <button class="modo-btn" data-modo="basico">⚡ MODO BÁSICO</button>
+    </div>
 
-            <div id="decisionStatus" style="font-size:0.65rem;color:#ec4899;text-align:center;margin-bottom:10px;">🧠 403M DECIDE: Listo para analizar criptomonedas</div>
+    <div class="tools-bar">
+        <button class="tool-btn" id="btnTimeline">📅 Línea de Tiempo</button>
+        <button class="tool-btn" id="btnComparar">🔄 Comparar Épocas</button>
+        <button class="tool-btn" id="btnFiguras">👤 Figuras Clave</button>
+        <button class="tool-btn" id="btnPreguntas">❓ Preguntas Frecuentes</button>
+        <button class="tool-btn" id="btnRandom">🎲 Caso Aleatorio</button>
+        <button class="tool-btn" id="btnMapa">🗺️ Mapa Histórico</button>
+        <button class="tool-btn" id="btnBibliografia">📚 Bibliografía</button>
+        <button class="tool-btn" id="btnQuiz">📝 Quiz Histórico</button>
+        <button class="tool-btn" id="btnDebate">💬 Debate Histórico</button>
+        <button class="tool-btn" id="btnLecciones">🎓 Lecciones Aprendidas</button>
+        <button class="tool-btn decision" id="btnDecisionStatus">🧠 403M Decide</button>
+        <button class="tool-btn jsllm7" id="btnTermuxStatus">🔌 Estado jsllm7</button>
+    </div>
 
-            <div class="search-box">
-                <input type="text" class="search-input" id="searchInput" placeholder="Buscar cualquier cripto: BTC, ETH, SOL, DOGE, PEPE...">
-                <button class="search-btn" id="searchBtn">🔍 BUSCAR</button>
-            </div>
+    <div class="stats">
+        <div class="stat"><div class="stat-num" id="totalCasos">0</div><div>casos totales</div></div>
+        <div class="stat"><div class="stat-num">30+</div><div>campos</div></div>
+        <div class="stat"><div class="stat-num">5000a</div><div>historia</div></div>
+    </div>
 
-            <div class="dashboard-grid">
-                <div class="card"><div class="card-title">🎯 DATOS DEL TOKEN</div><div class="token-symbol" id="tokenSymbol">---</div><div class="token-price" id="tokenPrice">---</div><div class="metrics-grid"><div class="metric-item"><div class="metric-label">Volumen 24h</div><div class="metric-value" id="volume">---</div></div><div class="metric-item"><div class="metric-label">Liquidez</div><div class="metric-value" id="liquidity">---</div></div><div class="metric-item"><div class="metric-label">Cambio 24h</div><div class="metric-value" id="priceChange">---</div></div><div class="metric-item"><div class="metric-label">Score IA</div><div class="metric-value" id="iaScore">---</div></div></div></div>
-                <div class="card"><div class="card-title">📈 SEÑALES DE TRADING</div><div id="sentimentContainer"><div class="sentiment-box">🤖 <strong>Oráculo IA:</strong><br><span id="sentimentText">Cargando análisis inteligente...</span></div></div></div>
-            </div>
+    <input type="text" class="search-input" id="searchInput" placeholder="🔍 Buscar casos... (Ej: Bagdad, lengua, ciencia, guerra)">
 
-            <div class="widget-container" id="widgetContainer">
-                <div class="widget" id="widgetMetricas">
-                    <div class="widget-title">📊 Análisis de Mercado</div>
-                    <div class="widget-content">
-                        <div class="metrics-grid-widget">
-                            <div class="metric-item-widget"><div class="metric-value-widget" id="metricIndicadores">0</div><div class="metric-label-widget">Indicadores Técnicos</div></div>
-                            <div class="metric-item-widget"><div class="metric-value-widget" id="metricConfirmaciones">0</div><div class="metric-label-widget">Confirmaciones</div></div>
-                            <div class="metric-item-widget"><div class="metric-value-widget" id="metricNiveles">0</div><div class="metric-label-widget">Niveles Clave</div></div>
-                            <div class="metric-item-widget"><div class="metric-value-widget" id="metricAlertas">0</div><div class="metric-label-widget">Alertas Activas</div></div>
-                        </div>
+    <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">📚 TODOS (<span id="countAll">0</span>)</button>
+        <button class="filter-btn" data-filter="guerras">⚔️ GUERRAS (<span id="countGuerras">0</span>)</button>
+        <button class="filter-btn" data-filter="economico">📉 SIST. ECONÓMICOS (<span id="countEconomico">0</span>)</button>
+        <button class="filter-btn" data-filter="estructural">🔍 SESGOS ESTRUCTURALES (<span id="countEstructural">0</span>)</button>
+    </div>
+
+    <div id="sections-container"></div>
+
+    <div class="widget-container" id="widgetContainer">
+        <div class="widget" id="widgetMetricas">
+            <div class="widget-title">📊 Biblioteca en Cifras</div>
+            <div class="widget-content">
+                <div class="metrics-grid-widget">
+                    <div class="metric-item-widget">
+                        <div class="metric-value-widget" id="metricTotal">0</div>
+                        <div class="metric-label-widget">Casos Totales</div>
                     </div>
-                </div>
-                <div class="widget" id="widgetConectores">
-                    <div class="widget-title">🔌 Estado de Conectores</div>
-                    <div class="widget-content">
-                        <div class="connector-metrics">
-                            <div class="connector-metric"><div class="value" id="metricMemoria">0</div><div class="label">Memoria</div></div>
-                            <div class="connector-metric"><div class="value" id="metricSemantico">0</div><div class="label">Semántico</div></div>
-                            <div class="connector-metric"><div class="value" id="metricAPIs">0</div><div class="label">APIs</div></div>
-                            <div class="connector-metric"><div class="value" id="metricContexto">0%</div><div class="label">Contexto 403M</div></div>
-                        </div>
-                        <div id="jsllm7WidgetStatus" style="margin-top:8px;font-size:0.65rem;color:#94a3b8;">🧠 jsllm7: 🔍 Conectando a Termux...</div>
+                    <div class="metric-item-widget">
+                        <div class="metric-value-widget" id="metricEras">0</div>
+                        <div class="metric-label-widget">Épocas Históricas</div>
                     </div>
-                </div>
-                <div class="widget" id="widgetConfianza">
-                    <div class="widget-title">🎯 Confianza de la Señal</div>
-                    <div class="widget-content">
-                        <div class="widget-confidence">
-                            <span style="font-size:0.8rem;">📊</span>
-                            <div class="confidence-bar"><div class="confidence-fill" id="confidenceFill" style="width:0%"></div></div>
-                            <span class="confidence-label" id="confidenceLabel">0%</span>
-                        </div>
-                        <div id="widgetConfianzaDetalle" style="font-size:0.75rem;color:#94a3b8;margin-top:8px;">Basado en 3 confirmaciones técnicas + 403M DECIDE</div>
+                    <div class="metric-item-widget">
+                        <div class="metric-value-widget" id="metricCategorias">3</div>
+                        <div class="metric-label-widget">Categorías</div>
                     </div>
-                </div>
-                <div class="widget" id="widgetEstrategia">
-                    <div class="widget-title">🎯 Estrategia Recomendada</div>
-                    <div class="widget-content" id="widgetEstrategiaContent">
-                        <div style="color:#94a3b8;font-size:0.75rem;">Estrategia de trading recomendada</div>
-                        <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;">
-                            <span style="background:#1e293b;padding:4px 10px;border-radius:15px;font-size:0.7rem;border:1px solid #3b82f6;">📈 Compra</span>
-                            <span style="background:#1e293b;padding:4px 10px;border-radius:15px;font-size:0.7rem;border:1px solid #f59e0b;">📊 Espera</span>
-                            <span style="background:#1e293b;padding:4px 10px;border-radius:15px;font-size:0.7rem;border:1px solid #ef4444;">📉 Venta</span>
-                        </div>
+                    <div class="metric-item-widget">
+                        <div class="metric-value-widget" id="metricHerramientas">11</div>
+                        <div class="metric-label-widget">Herramientas IA</div>
                     </div>
                 </div>
             </div>
-
-            <div class="metadata-container" id="metadataContainer"></div>
-
-            <button id="refreshBtn">🔄 ACTUALIZAR AHORA</button>
-            <div class="auto-update" id="autoUpdateText">🟢 403M DECIDE · Actualización cada 60 segundos · jsllm7 404M · Conectores activos</div>
-            <div class="restriction-alert">🧠 403M DECIDE qué BIG TECH usar · Conectores: Memoria · Semántico · APIs · jsllm7 404M · Estrategia 3 confirmaciones</div>
-            <div class="sponsors"><div class="sponsors-link"><a href="#" target="_blank">🎮 OFERTA 1</a><a href="#" target="_blank">🎲 OFERTA 2</a></div></div>
-            <footer id="footer">⚡ NextMoon AI · 403M DECIDE · jsllm7 404M · Conectores activos · Datos DexScreener · IA Avanzada · 10 herramientas</footer>
+        </div>
+        <div class="widget" id="widgetConectores">
+            <div class="widget-title">🔌 Estado de Conectores</div>
+            <div class="widget-content">
+                <div class="connector-metrics">
+                    <div class="connector-metric">
+                        <div class="value" id="metricMemoria">0</div>
+                        <div class="label">Memoria</div>
+                    </div>
+                    <div class="connector-metric">
+                        <div class="value" id="metricSemantico">0</div>
+                        <div class="label">Semántico</div>
+                    </div>
+                    <div class="connector-metric">
+                        <div class="value" id="metricAPIs">0</div>
+                        <div class="label">APIs</div>
+                    </div>
+                    <div class="connector-metric">
+                        <div class="value" id="metricContexto">0%</div>
+                        <div class="label">Contexto 403M</div>
+                    </div>
+                </div>
+                <div id="jsllm7WidgetStatus">🧠 jsllm7: 🔍 Conectando a Termux...</div>
+            </div>
+        </div>
+        <div class="widget" id="widgetConfianza">
+            <div class="widget-title">🎯 Precisión Histórica</div>
+            <div class="widget-content">
+                <div class="widget-confidence">
+                    <span style="font-size:0.8rem;">📊</span>
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" id="confidenceFill" style="width:0%"></div>
+                    </div>
+                    <span class="confidence-label" id="confidenceLabel">0%</span>
+                </div>
+                <div id="widgetConfianzaDetalle" style="font-size:0.75rem;color:#94a3b8;margin-top:8px;">
+                    Basado en fuentes históricas verificadas + 403M DECIDE
+                </div>
+            </div>
+        </div>
+        <div class="widget" id="widgetPeriodo">
+            <div class="widget-title">🕰️ Período Destacado</div>
+            <div class="widget-content" id="widgetPeriodoContent">
+                <div style="color:#94a3b8;font-size:0.75rem;">Época histórica actual</div>
+                <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;">
+                    <span style="background:#1e293b;padding:4px 10px;border-radius:15px;font-size:0.7rem;border:1px solid #60a5fa;">🏛️ Antigüedad</span>
+                    <span style="background:#1e293b;padding:4px 10px;border-radius:15px;font-size:0.7rem;border:1px solid #60a5fa;">⚔️ Edad Media</span>
+                    <span style="background:#1e293b;padding:4px 10px;border-radius:15px;font-size:0.7rem;border:1px solid #60a5fa;">🌍 Moderna</span>
+                </div>
+            </div>
         </div>
     </div>
 
-    <button class="vr-button" id="vrModeBtn">🔮 ACTIVAR MODO VR</button>
-    <div class="vr-mode" id="vrMode"><button class="close-vr" id="closeVrBtn">✕ SALIR DE VR</button><div id="vrContainer" style="width:100%;height:100%"></div></div>
+    <div class="metadata-container" id="metadataContainer"></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/jsllm7@0.1.0/jsllm7.js"></script>
+    <div class="restriction-alert">🧠 403M DECIDE qué BIG TECH usar · jsllm7 404M · Conectores activos · Análisis histórico profundo · 11 herramientas · 270+ casos históricos reales</div>
 
-    <script type="importmap">
-        { "imports": { "three": "https://unpkg.com/three@0.128.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/" } }
-    </script>
+    <div class="ad-container">
+        <div class="ad-label">⚡ PATROCINADORES OFICIALES ⚡</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 10px;">
+            <a href="#" target="_blank" rel="nofollow" style="background: linear-gradient(90deg, #e9c46a, #f4a261); color: #1a222c; padding: 10px 20px; border-radius: 40px; text-decoration: none; font-weight: bold;">🎮 OFERTA 1</a>
+            <a href="#" target="_blank" rel="nofollow" style="background: linear-gradient(90deg, #2a9d8f, #264653); color: white; padding: 10px 20px; border-radius: 40px; text-decoration: none; font-weight: bold;">🎲 OFERTA 2</a>
+        </div>
+    </div>
 
-    <script>
-        // ============================================
-        // CONFIGURACIÓN - API DE TERMUX (PUERTO 8081)
-        // ============================================
+    <div class="footer-text">⚡ Biblioteca virtual · 403M DECIDE · Datos históricos · Conectores activos · jsllm7 404M · 270+ casos documentados · 11 herramientas</div>
+</div>
+
+<button class="vr-button" id="vrModeBtn">🔮 ACTIVAR MODO VR</button>
+<div class="vr-mode" id="vrMode"><button class="close-vr" id="closeVrBtn">✕ SALIR DE VR</button><div id="vrContainer" style="width:100%;height:100%"></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/jsllm7@0.1.0/jsllm7.js"></script>
+
+<script>
+    // ============================================
+    // CONFIGURACIÓN - API DE TERMUX (PUERTO 8081)
+    // ============================================
+    
+    const JSLLM7_API_URL = 'http://localhost:8081';
+    let jsllm7TermuxConectado = false;
+    
+    // ============================================
+    // NÚCLEO 403M DECIDE
+    // ============================================
+    
+    class Nucleo403MDecisor {
+        constructor() {
+            this.nucleo = { activo: true, parametros: 403000000, decisiones: 0 };
+            this.bigTech = {
+                nvidia: { activo: false, usos: 0, nombre: 'NVIDIA (Visualización)' },
+                google: { activo: false, usos: 0, nombre: 'Google (Búsqueda)' },
+                meta: { activo: false, usos: 0, nombre: 'Meta (Comunidad)' },
+                amazon: { activo: false, usos: 0, nombre: 'Amazon (Recursos)' },
+                microsoft: { activo: false, usos: 0, nombre: 'Microsoft (Análisis)' },
+                apple: { activo: false, usos: 0, nombre: 'Apple (Experiencia)' }
+            };
+            this.historialDecisiones = [];
+            console.log('🧠 NÚCLEO 403M DECIDE inicializado para Newtral');
+        }
         
-        const JSLLM7_API_URL = 'http://localhost:8081';
-        let jsllm7TermuxConectado = false;
-        let currentTokenData = null;
-        let modo = localStorage.getItem('nextmoon_modo') || 'experto';
-        let isRefreshing = false;
-        let currentToken = "BTC";
-        
-        // ============================================
-        // NÚCLEO 403M DECIDE
-        // ============================================
-        
-        class Nucleo403MDecisor {
-            constructor() {
-                this.nucleo = { activo: true, parametros: 403000000, decisiones: 0 };
-                this.bigTech = {
-                    nvidia: { activo: false, usos: 0, nombre: 'NVIDIA (Visualización)' },
-                    google: { activo: false, usos: 0, nombre: 'Google (Búsqueda)' },
-                    meta: { activo: false, usos: 0, nombre: 'Meta (Comunidad)' },
-                    amazon: { activo: false, usos: 0, nombre: 'Amazon (Recursos)' },
-                    microsoft: { activo: false, usos: 0, nombre: 'Microsoft (Análisis)' },
-                    apple: { activo: false, usos: 0, nombre: 'Apple (Experiencia)' }
-                };
-                this.historialDecisiones = [];
-                console.log('🧠 NÚCLEO 403M DECIDE inicializado para NextMoon AI');
-            }
+        async analizarYDecidir(pregunta, tema, modo) {
+            this.nucleo.decisiones++;
+            console.log(`🧠 403M analizando consulta histórica: "${pregunta.substring(0, 50)}..."`);
+            document.getElementById('decisionStatus').textContent = '🧠 403M DECIDE: Analizando consulta histórica...';
             
-            async analizarYDecidir(pregunta, token, modo) {
-                this.nucleo.decisiones++;
-                console.log(`🧠 403M analizando consulta cripto: "${pregunta.substring(0, 50)}..."`);
-                document.getElementById('decisionStatus').textContent = '🧠 403M DECIDE: Analizando consulta cripto...';
-                
-                const promptDecision = `[DECISIÓN AUTÓNOMA 403M - CRIPTO]
-Analiza la siguiente consulta sobre ${token} y decide qué BIG TECH activar:
+            const promptDecision = `[DECISIÓN AUTÓNOMA 403M - HISTÓRICA]
+Analiza la siguiente consulta histórica y decide qué BIG TECH activar:
 
 CONSULTA: "${pregunta}"
+TEMA: "${tema}"
 MODO: ${modo}
 
 BIG TECH DISPONIBLES:
-1. NVIDIA - Para visualización de datos, gráficos, análisis técnico
-2. Google - Para búsqueda de información, noticias, datos históricos
-3. Meta - Para conectar con comunidades de traders
-4. Amazon - Para acceso a recursos, libros de trading
-5. Microsoft - Para análisis de datos, herramientas de trading
-6. Apple - Para diseño de dashboards, experiencia visual
+1. NVIDIA - Para visualización de datos históricos, líneas de tiempo
+2. Google - Para búsqueda de información histórica, datos
+3. Meta - Para conectar con comunidades de historiadores
+4. Amazon - Para acceso a libros históricos, recursos
+5. Microsoft - Para análisis de datos históricos
+6. Apple - Para diseño de presentaciones históricas
 
 DECIDE:
-- Si es sobre gráficos o visualización → NVIDIA
+- Si es sobre visualización → NVIDIA
 - Si es sobre búsqueda de información → Google
-- Si es sobre comunidad de traders → Meta
-- Si es sobre recursos educativos → Amazon
+- Si es sobre comunidad → Meta
+- Si es sobre recursos → Amazon
 - Si es sobre análisis de datos → Microsoft
-- Si es sobre experiencia de usuario → Apple
+- Si es sobre diseño → Apple
 
 Responde SOLO con los nombres separados por comas.
 Ejemplo: "Google, Microsoft" o "NVIDIA"
 
 DECISIÓN:`;
 
-                const decision = await llamarJsllm7(promptDecision);
-                console.log(`🧠 Decisión 403M: ${decision}`);
-                
-                const techsActivar = this.procesarDecision(decision);
-                
-                if (techsActivar.length > 0) {
-                    document.getElementById('decisionStatus').textContent = `🧠 403M DECIDE: Activando ${techsActivar.join(', ')} para ${token}`;
-                }
-                
-                for (const tech of techsActivar) {
-                    if (this.bigTech[tech] && !this.bigTech[tech].activo) {
-                        this.bigTech[tech].activo = true;
-                        this.bigTech[tech].usos++;
-                        console.log(`🚀 403M activó: ${tech.toUpperCase()} para ${token}`);
-                    }
-                }
-                
-                this.historialDecisiones.push({
-                    token: token,
-                    pregunta: pregunta.substring(0, 50),
-                    decision: techsActivar,
-                    timestamp: new Date().toISOString()
-                });
-                
-                return techsActivar;
+            const decision = await llamarIA(promptDecision);
+            console.log(`🧠 Decisión 403M: ${decision}`);
+            
+            const techsActivar = this.procesarDecision(decision);
+            
+            if (techsActivar.length > 0) {
+                document.getElementById('decisionStatus').textContent = `🧠 403M DECIDE: Activando ${techsActivar.join(', ')} para "${tema}"`;
             }
             
-            procesarDecision(decision) {
-                if (!decision) return ['google'];
-                const techs = [];
-                const d = decision.toLowerCase();
-                const mapeo = { 'nvidia': 'nvidia', 'google': 'google', 'meta': 'meta', 'amazon': 'amazon', 'microsoft': 'microsoft', 'apple': 'apple' };
-                for (const [key, value] of Object.entries(mapeo)) {
-                    if (d.includes(key) || d.includes(value)) techs.push(value);
+            for (const tech of techsActivar) {
+                if (this.bigTech[tech] && !this.bigTech[tech].activo) {
+                    this.bigTech[tech].activo = true;
+                    this.bigTech[tech].usos++;
+                    console.log(`🚀 403M activó: ${tech.toUpperCase()} para ${tema}`);
                 }
-                return techs.length > 0 ? techs : ['google'];
             }
             
-            getEstado() {
-                const activos = Object.entries(this.bigTech).filter(([k, v]) => v.activo).map(([k]) => k);
-                return {
-                    decisiones: this.nucleo.decisiones,
-                    bigTechActivos: activos,
-                    usos: Object.fromEntries(Object.entries(this.bigTech).map(([k, v]) => [k, v.usos])),
-                    historial: this.historialDecisiones.slice(-5)
-                };
-            }
+            this.historialDecisiones.push({
+                tema: tema,
+                pregunta: pregunta.substring(0, 50),
+                decision: techsActivar,
+                timestamp: new Date().toISOString()
+            });
             
-            mostrarEstado() {
-                const e = this.getEstado();
-                let mensaje = `
-=== 🧠 403M DECIDE (CRIPTO) ===
+            return techsActivar;
+        }
+        
+        procesarDecision(decision) {
+            if (!decision) return ['google'];
+            const techs = [];
+            const d = decision.toLowerCase();
+            const mapeo = { 'nvidia': 'nvidia', 'google': 'google', 'meta': 'meta', 'amazon': 'amazon', 'microsoft': 'microsoft', 'apple': 'apple' };
+            for (const [key, value] of Object.entries(mapeo)) {
+                if (d.includes(key) || d.includes(value)) techs.push(value);
+            }
+            return techs.length > 0 ? techs : ['google'];
+        }
+        
+        getEstado() {
+            const activos = Object.entries(this.bigTech).filter(([k, v]) => v.activo).map(([k]) => k);
+            return {
+                decisiones: this.nucleo.decisiones,
+                bigTechActivos: activos,
+                usos: Object.fromEntries(Object.entries(this.bigTech).map(([k, v]) => [k, v.usos])),
+                historial: this.historialDecisiones.slice(-5)
+            };
+        }
+        
+        mostrarEstado() {
+            const e = this.getEstado();
+            let mensaje = `
+=== 🧠 403M DECIDE (HISTÓRICA) ===
 
 📊 Decisiones tomadas: ${e.decisiones}
 
@@ -335,490 +381,860 @@ DECISIÓN:`;
 ${Object.entries(e.usos).map(([k, v]) => `   • ${k}: ${v} usos`).join('\n')}
 
 📜 ÚLTIMAS DECISIONES:
-${e.historial.map(h => `   • ${h.token}: "${h.pregunta}..." → ${h.decision.join(', ')}`).join('\n')}
+${e.historial.map(h => `   • "${h.tema}": "${h.pregunta}..." → ${h.decision.join(', ')}`).join('\n')}
 
 ${e.bigTechActivos.length > 0 ? '✅ 403M está activando BIG TECH automáticamente' : '⚠️ 403M aún no ha activado BIG TECH'}
 `;
-                return mensaje;
-            }
+            return mensaje;
         }
+    }
 
-        const nucleoDecisor = new Nucleo403MDecisor();
+    const nucleoDecisor = new Nucleo403MDecisor();
 
-        // ============================================
-        // CONECTORES
-        // ============================================
+    // ============================================
+    // FUNCIÓN PARA LLAMAR A IA (PRIORIZA TERMUX)
+    // ============================================
+    
+    async function llamarIA(prompt) {
+        console.log('🔍 Intentando llamar a IA...');
         
-        class MemoryConnector {
-            constructor() {
-                this.shortTerm = [];
-                this.longTerm = new Map();
-                this.maxShortTerm = 10;
-                this.loadFromStorage();
+        try {
+            const preguntaCodificada = encodeURIComponent(prompt);
+            const url = `${JSLLM7_API_URL}/ask?q=${preguntaCodificada}`;
+            
+            console.log('📤 Enviando a Termux (8081):', prompt.substring(0, 80) + '...');
+            
+            const response = await fetch(url);
+            
+            if (!response.ok) {
+                console.error('❌ Error HTTP:', response.status);
+                throw new Error(`HTTP ${response.status}`);
             }
-            loadFromStorage() {
-                try {
-                    const data = JSON.parse(localStorage.getItem('nextmoon_memoria') || '{}');
-                    if (data.shortTerm) this.shortTerm = data.shortTerm;
-                    if (data.longTerm) this.longTerm = new Map(Object.entries(data.longTerm));
-                } catch(e) {}
+            
+            const text = await response.text();
+            console.log('📥 Respuesta recibida (primeros 100 chars):', text.substring(0, 100));
+            
+            if (text && text.length > 20) {
+                jsllm7TermuxConectado = true;
+                document.getElementById('jsllm7WidgetStatus').textContent = '🧠 jsllm7: ✅ Activo (404M en Termux:8081)';
+                document.getElementById('jsllm7WidgetStatus').style.color = '#10b981';
+                console.log('✅ Usando respuesta de Termux');
+                return text;
+            } else {
+                throw new Error('Respuesta vacía');
             }
-            saveToStorage() {
-                try {
-                    localStorage.setItem('nextmoon_memoria', JSON.stringify({
-                        shortTerm: this.shortTerm,
-                        longTerm: Object.fromEntries(this.longTerm)
-                    }));
-                } catch(e) {}
-            }
-            remember(interaction) {
-                this.shortTerm.push({ ...interaction, timestamp: Date.now() });
-                if (this.shortTerm.length > this.maxShortTerm) this.shortTerm.shift();
-                this.saveToStorage();
-            }
-            recall(token, limit = 3) {
-                const relevant = this.shortTerm
-                    .filter(item => {
-                        const similarity = this.calculateSimilarity(token, item.token || '');
-                        return similarity > 0.2;
-                    })
-                    .sort((a, b) => b.similarity - a.similarity)
-                    .slice(0, limit);
-                return relevant.map(item => ({ token: item.token, analisis: item.analisis, similarity: item.similarity }));
-            }
-            calculateSimilarity(a, b) {
-                if (!a || !b) return 0;
-                const wordsA = a.toLowerCase().split(' ');
-                const wordsB = b.toLowerCase().split(' ');
-                const common = wordsA.filter(w => wordsB.includes(w) && w.length > 2);
-                return common.length / Math.max(wordsA.length, wordsB.length);
-            }
-            getStats() {
-                return { shortTerm: this.shortTerm.length, longTerm: this.longTerm.size, total: this.shortTerm.length + this.longTerm.size };
+        } catch (error) {
+            console.warn('⚠️ Error conectando a Termux:', error.message);
+            jsllm7TermuxConectado = false;
+            document.getElementById('jsllm7WidgetStatus').textContent = '🧠 jsllm7: ⚠️ Usando CDN';
+            document.getElementById('jsllm7WidgetStatus').style.color = '#f59e0b';
+        }
+        
+        console.log('⚠️ Termux no disponible, usando CDN...');
+        if (typeof window.jsllm7 !== 'undefined' && window.jsllm7) {
+            try {
+                const response = await window.jsllm7(prompt);
+                if (response && response.length > 50) {
+                    console.log('✅ Respuesta de CDN obtenida');
+                    return response;
+                }
+            } catch (e) {
+                console.warn('Error con jsllm7 CDN:', e);
             }
         }
+        
+        console.log('⚠️ Usando fallback genérico');
+        return `📖 No se pudo obtener respuesta. Verifica que Termux esté corriendo en el puerto 8081.`;
+    }
 
-        class SemanticConnector {
-            constructor() {
-                this.embeddingsCache = new Map();
-                this.similarityThreshold = 0.25;
-            }
-            generateEmbedding(text) {
-                const words = text.toLowerCase().replace(/[¿?¡!.,;:]/g, '').split(' ').filter(w => w.length > 2);
-                const vector = new Map();
-                words.forEach(w => vector.set(w, (vector.get(w) || 0) + 1));
-                return vector;
-            }
-            cosineSimilarity(vecA, vecB) {
-                let dotProduct = 0, normA = 0, normB = 0;
-                const keys = new Set([...vecA.keys(), ...vecB.keys()]);
-                keys.forEach(key => {
-                    const a = vecA.get(key) || 0;
-                    const b = vecB.get(key) || 0;
-                    dotProduct += a * b;
-                    normA += a * a;
-                    normB += b * b;
-                });
-                if (normA === 0 || normB === 0) return 0;
-                return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
-            }
-            findSimilar(query, candidates) {
-                const queryEmbedding = this.generateEmbedding(query);
-                const results = candidates.map(candidate => ({
-                    ...candidate,
-                    similarity: this.cosineSimilarity(queryEmbedding, this.generateEmbedding(candidate.text || candidate.token || ''))
+    // ============================================
+    // CONECTOR DE MEMORIA
+    // ============================================
+    
+    class MemoryConnector {
+        constructor() {
+            this.shortTerm = [];
+            this.longTerm = new Map();
+            this.maxShortTerm = 10;
+            this.loadFromStorage();
+        }
+        
+        loadFromStorage() {
+            try {
+                const data = JSON.parse(localStorage.getItem('newtral_memoria') || '{}');
+                if (data.shortTerm) this.shortTerm = data.shortTerm;
+                if (data.longTerm) {
+                    this.longTerm = new Map(Object.entries(data.longTerm));
+                }
+            } catch(e) {}
+        }
+        
+        saveToStorage() {
+            try {
+                localStorage.setItem('newtral_memoria', JSON.stringify({
+                    shortTerm: this.shortTerm,
+                    longTerm: Object.fromEntries(this.longTerm)
                 }));
-                return results.filter(r => r.similarity > this.similarityThreshold).sort((a, b) => b.similarity - a.similarity);
-            }
-            getStats() { return { cacheSize: this.embeddingsCache.size, threshold: this.similarityThreshold }; }
+            } catch(e) {}
         }
-
-        class APIConnector {
-            constructor() {
-                this.endpoints = new Map();
-                this.cache = new Map();
-                this.maxCacheAge = 3600000;
-                this.registerDefaultEndpoints();
+        
+        remember(interaction) {
+            this.shortTerm.push({
+                ...interaction,
+                timestamp: Date.now()
+            });
+            if (this.shortTerm.length > this.maxShortTerm) {
+                this.shortTerm.shift();
             }
-            registerDefaultEndpoints() {
-                this.registerEndpoint('marketData', {
-                    url: 'https://api.example.com/market',
-                    method: 'GET',
-                    transform: (data) => ({ tendencias: data.tendencias || [], volumen_total: data.volumen_total || 0 })
+            this.saveToStorage();
+        }
+        
+        recall(query, limit = 3) {
+            const relevant = this.shortTerm
+                .filter(item => {
+                    const similarity = this.calculateSimilarity(query, item.query || '');
+                    return similarity > 0.2;
+                })
+                .sort((a, b) => b.similarity - a.similarity)
+                .slice(0, limit);
+            
+            return relevant.map(item => ({
+                query: item.query,
+                response: item.response,
+                similarity: item.similarity,
+                caso: item.caso
+            }));
+        }
+        
+        calculateSimilarity(a, b) {
+            if (!a || !b) return 0;
+            const wordsA = a.toLowerCase().split(' ');
+            const wordsB = b.toLowerCase().split(' ');
+            const common = wordsA.filter(w => wordsB.includes(w) && w.length > 2);
+            return common.length / Math.max(wordsA.length, wordsB.length);
+        }
+        
+        getStats() {
+            return {
+                shortTerm: this.shortTerm.length,
+                longTerm: this.longTerm.size,
+                total: this.shortTerm.length + this.longTerm.size
+            };
+        }
+    }
+
+    // ============================================
+    // CONECTOR SEMÁNTICO
+    // ============================================
+    
+    class SemanticConnector {
+        constructor() {
+            this.embeddingsCache = new Map();
+            this.similarityThreshold = 0.2;
+        }
+        
+        generateEmbedding(text) {
+            const words = text.toLowerCase()
+                .replace(/[¿?¡!.,;:]/g, '')
+                .split(' ')
+                .filter(w => w.length > 2);
+            
+            const vector = new Map();
+            words.forEach(w => {
+                vector.set(w, (vector.get(w) || 0) + 1);
+            });
+            return vector;
+        }
+        
+        cosineSimilarity(vecA, vecB) {
+            let dotProduct = 0;
+            let normA = 0;
+            let normB = 0;
+            
+            const keys = new Set([...vecA.keys(), ...vecB.keys()]);
+            keys.forEach(key => {
+                const a = vecA.get(key) || 0;
+                const b = vecB.get(key) || 0;
+                dotProduct += a * b;
+                normA += a * a;
+                normB += b * b;
+            });
+            
+            if (normA === 0 || normB === 0) return 0;
+            return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+        }
+        
+        findSimilar(query, candidates) {
+            const queryEmbedding = this.generateEmbedding(query);
+            const results = candidates.map(candidate => ({
+                ...candidate,
+                similarity: this.cosineSimilarity(queryEmbedding, this.generateEmbedding(candidate.text || candidate.query || ''))
+            }));
+            
+            return results
+                .filter(r => r.similarity > this.similarityThreshold)
+                .sort((a, b) => b.similarity - a.similarity);
+        }
+        
+        getStats() {
+            return {
+                cacheSize: this.embeddingsCache.size,
+                threshold: this.similarityThreshold
+            };
+        }
+    }
+
+    // ============================================
+    // CONECTOR DE APIs
+    // ============================================
+    
+    class APIConnector {
+        constructor() {
+            this.endpoints = new Map();
+            this.cache = new Map();
+            this.maxCacheAge = 3600000;
+            this.registerDefaultEndpoints();
+        }
+        
+        registerDefaultEndpoints() {
+            this.registerEndpoint('historicalData', {
+                url: 'https://api.example.com/historical',
+                method: 'GET',
+                transform: (data) => ({
+                    eventos: data.eventos || [],
+                    fuentes: data.fuentes || {}
+                })
+            });
+        }
+        
+        registerEndpoint(name, config) {
+            this.endpoints.set(name, config);
+        }
+        
+        async call(endpointName, params = {}) {
+            const config = this.endpoints.get(endpointName);
+            if (!config) {
+                return { error: `Endpoint ${endpointName} no encontrado` };
+            }
+            
+            const cacheKey = `${endpointName}_${JSON.stringify(params)}`;
+            if (this.cache.has(cacheKey)) {
+                const cached = this.cache.get(cacheKey);
+                if (Date.now() - cached.timestamp < this.maxCacheAge) {
+                    return cached.data;
+                }
+            }
+            
+            try {
+                const mockData = this.generateMockData(endpointName, params);
+                const result = config.transform ? config.transform(mockData) : mockData;
+                this.cache.set(cacheKey, {
+                    data: result,
+                    timestamp: Date.now()
                 });
+                return result;
+            } catch(e) {
+                return { error: e.message };
             }
-            registerEndpoint(name, config) { this.endpoints.set(name, config); }
-            async call(endpointName, params = {}) {
-                const config = this.endpoints.get(endpointName);
-                if (!config) return { error: `Endpoint ${endpointName} no encontrado` };
-                const cacheKey = `${endpointName}_${JSON.stringify(params)}`;
-                if (this.cache.has(cacheKey)) {
-                    const cached = this.cache.get(cacheKey);
-                    if (Date.now() - cached.timestamp < this.maxCacheAge) return cached.data;
+        }
+        
+        generateMockData(endpoint, params) {
+            const datos = {
+                historicalData: {
+                    eventos: ['Evento 1', 'Evento 2', 'Evento 3'],
+                    fuentes: ['Archivo A', 'Archivo B']
                 }
-                try {
-                    const mockData = this.generateMockData(endpointName, params);
-                    const result = config.transform ? config.transform(mockData) : mockData;
-                    this.cache.set(cacheKey, { data: result, timestamp: Date.now() });
-                    return result;
-                } catch(e) { return { error: e.message }; }
-            }
-            generateMockData(endpoint, params) {
-                const datos = { marketData: { tendencias: ['Alcista en BTC', 'Lateral en ETH', 'Bajista en DOGE'], volumen_total: 125000000000 } };
-                return datos[endpoint] || {};
-            }
-            getStats() { return { endpoints: this.endpoints.size, cacheSize: this.cache.size }; }
+            };
+            return datos[endpoint] || {};
         }
-
-        const memoryConnector = new MemoryConnector();
-        const semanticConnector = new SemanticConnector();
-        const apiConnector = new APIConnector();
-
-        // ============================================
-        // FUNCIONES UTILITARIAS
-        // ============================================
         
-        function limpiarMarkdown(texto) {
-            let limpio = texto;
-            limpio = limpio.replace(/\*\*/g, '');
-            limpio = limpio.replace(/\*/g, '');
-            limpio = limpio.replace(/^###\s*/gm, '');
-            limpio = limpio.replace(/^##\s*/gm, '');
-            limpio = limpio.replace(/^#\s*/gm, '');
-            limpio = limpio.replace(/`/g, '');
-            limpio = limpio.replace(/^---\s*$/gm, '');
-            limpio = limpio.replace(/^\s*-\s+/gm, '• ');
-            limpio = limpio.replace(/\n{3,}/g, '\n\n');
-            return limpio.trim();
+        getStats() {
+            return {
+                endpoints: this.endpoints.size,
+                cacheSize: this.cache.size
+            };
         }
+    }
 
-        function actualizarMetricasConectores() {
-            const memStats = memoryConnector.getStats();
-            const semStats = semanticConnector.getStats();
-            const apiStats = apiConnector.getStats();
-            document.getElementById('metricMemoria').textContent = memStats.total;
-            document.getElementById('metricSemantico').textContent = semStats.cacheSize;
-            document.getElementById('metricAPIs').textContent = apiStats.endpoints;
-            const contextoPorcentaje = Math.min(100, (memStats.shortTerm * 10) + 20);
-            document.getElementById('metricContexto').textContent = Math.min(contextoPorcentaje, 100) + '%';
-        }
+    // ============================================
+    // INICIALIZACIÓN DE CONECTORES
+    // ============================================
+    
+    const memoryConnector = new MemoryConnector();
+    const semanticConnector = new SemanticConnector();
+    const apiConnector = new APIConnector();
 
-        function showToast(msg, isError) {
-            const t = document.createElement('div');
-            t.className = 'toast-msg';
-            t.style.background = isError ? '#ef4444' : '#10b981';
-            t.innerText = msg;
-            document.body.appendChild(t);
-            setTimeout(() => t.remove(), 2500);
-        }
+    // ============================================
+    // SISTEMA DE CACHÉ SEMÁNTICO
+    // ============================================
+    
+    const semanticCache = new Map();
+    
+    function getSemanticKey(text) {
+        const words = text.toLowerCase()
+            .replace(/[¿?¡!.,;:]/g, '')
+            .split(' ')
+            .filter(w => w.length > 3)
+            .slice(0, 5)
+            .sort()
+            .join('_');
+        return words;
+    }
 
-        function mostrarModal(titulo, contenido) {
-            const modal = document.createElement('div');
-            modal.className = 'modal-overlay';
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <h3>${titulo}</h3>
-                    <div style="white-space:pre-wrap; font-size:0.85rem; line-height:1.5;">${contenido.replace(/\n/g, '<br>')}</div>
-                    <button class="modal-close">Cerrar</button>
-                </div>
-            `;
-            modal.querySelector('.modal-close').onclick = () => modal.remove();
-            document.body.appendChild(modal);
-        }
-
-        // ============================================
-        // FUNCIÓN PRINCIPAL - LLAMAR A jsllm7
-        // ============================================
+    // ============================================
+    // ACTUALIZAR MÉTRICAS DE CONECTORES
+    // ============================================
+    
+    function actualizarMetricasConectores() {
+        const memStats = memoryConnector.getStats();
+        const semStats = semanticConnector.getStats();
+        const apiStats = apiConnector.getStats();
         
-        async function llamarJsllm7(prompt) {
-            console.log('🔍 Intentando llamar a jsllm7...');
-            
-            try {
-                const preguntaCodificada = encodeURIComponent(prompt);
-                const url = `${JSLLM7_API_URL}/ask?q=${preguntaCodificada}`;
-                console.log('📤 Enviando a Termux (8081):', prompt.substring(0, 60) + '...');
-                const response = await fetch(url);
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                const text = await response.text();
-                console.log('📥 Respuesta recibida (primeros 100 chars):', text.substring(0, 100));
-                if (text && text.length > 20) {
-                    jsllm7TermuxConectado = true;
-                    document.getElementById('jsllm7WidgetStatus').textContent = '🧠 jsllm7: ✅ Activo (404M en Termux:8081)';
-                    document.getElementById('jsllm7WidgetStatus').style.color = '#10b981';
-                    console.log('✅ Respuesta de Termux obtenida');
-                    return text;
-                } else {
-                    throw new Error('Respuesta vacía');
-                }
-            } catch (error) {
-                console.warn('⚠️ Error conectando a Termux:', error);
-                jsllm7TermuxConectado = false;
-                document.getElementById('jsllm7WidgetStatus').textContent = '🧠 jsllm7: ⚠️ Usando CDN';
-                document.getElementById('jsllm7WidgetStatus').style.color = '#f59e0b';
-            }
-            
-            console.log('⚠️ Termux no disponible, intentando CDN...');
-            if (typeof window.jsllm7 !== 'undefined' && window.jsllm7) {
-                try {
-                    const response = await window.jsllm7(prompt);
-                    if (response && response.length > 50) {
-                        console.log('✅ Respuesta de CDN obtenida');
-                        return response;
-                    }
-                } catch (e) { console.warn('Error con jsllm7 CDN:', e); }
-            }
-            console.log('⚠️ Usando fallback genérico');
-            return null;
-        }
-
-        // ============================================
-        // FUNCIONES DE DATOS
-        // ============================================
+        document.getElementById('metricMemoria').textContent = memStats.total;
+        document.getElementById('metricSemantico').textContent = semStats.cacheSize;
+        document.getElementById('metricAPIs').textContent = apiStats.endpoints;
         
-        async function fetchTokenData(t) {
-            try {
-                const r = await fetch(`https://api.dexscreener.com/latest/dex/search?q=${t}`);
-                const d = await r.json();
-                if (d.pairs?.length > 0) {
-                    const v = d.pairs.filter(p => p.liquidity?.usd > 10000 && p.priceUsd > 0);
-                    if (v.length > 0) {
-                        const b = v.sort((a, b) => (b.liquidity?.usd || 0) - (a.liquidity?.usd || 0))[0];
-                        return { symbol: t.toUpperCase(), price: parseFloat(b.priceUsd), volume24h: b.volume?.h24 || 0, liquidity: b.liquidity?.usd || 0, priceChange24h: b.priceChange?.h24 || 0, chain: b.chainId || "unknown" };
-                    }
-                }
-                return null;
-            } catch (e) { return null; }
-        }
+        const contextoPorcentaje = Math.min(100, (memStats.shortTerm * 10) + 20);
+        document.getElementById('metricContexto').textContent = Math.min(contextoPorcentaje, 100) + '%';
+    }
 
-        function calculateScore(d) {
-            let s = 50;
-            if (d.volume24h > 50000000) s += 30;
-            else if (d.volume24h > 10000000) s += 25;
-            else if (d.volume24h > 1000000) s += 18;
-            if (d.liquidity > 5000000) s += 25;
-            else if (d.liquidity > 1000000) s += 20;
-            else if (d.liquidity > 500000) s += 15;
-            if (d.priceChange24h > 30) s += 20;
-            else if (d.priceChange24h > 15) s += 14;
-            if (d.chain === "solana") s += 10;
-            return Math.min(99, Math.max(20, Math.floor(s)));
-        }
+    // ============================================
+    // LIMPIADOR DE MARKDOWN
+    // ============================================
+    
+    function limpiarMarkdown(texto) {
+        let limpio = texto;
+        limpio = limpio.replace(/\*\*/g, '');
+        limpio = limpio.replace(/\*/g, '');
+        limpio = limpio.replace(/^###\s*/gm, '');
+        limpio = limpio.replace(/^##\s*/gm, '');
+        limpio = limpio.replace(/^#\s*/gm, '');
+        limpio = limpio.replace(/`/g, '');
+        limpio = limpio.replace(/^---\s*$/gm, '');
+        limpio = limpio.replace(/^\s*-\s+/gm, '• ');
+        limpio = limpio.replace(/\n{3,}/g, '\n\n');
+        return limpio.trim();
+    }
 
-        // ============================================
-        // FUNCIÓN OBTENER ANÁLISIS CON 403M DECIDE
-        // ============================================
+    // ============================================
+    // GENERAR METADATOS JSON-LD
+    // ============================================
+    
+    function generarMetadatos(titulo, explicacion, confianza, era) {
+        return {
+            "@context": "https://schema.org",
+            "@type": "ScholarlyArticle",
+            "name": titulo,
+            "abstract": explicacion.substring(0, 200),
+            "dateCreated": new Date().toISOString(),
+            "temporalCoverage": era || "Histórico",
+            "author": {
+                "@type": "Organization",
+                "name": "Newtral · Biblioteca del Conocimiento · 403M DECIDE"
+            },
+            "confidenceScore": confianza
+        };
+    }
+
+    // ============================================
+    // ACTUALIZAR WIDGETS
+    // ============================================
+    
+    function actualizarWidgets(titulo, explicacion, era) {
+        const total = casosData.guerras.length + casosData.economico.length + casosData.estructural.length;
         
-        const semanticCache = new Map();
-        const NODOS_RESPALDO = ["Alemania", "Francia", "México", "Brasil", "España", "Italia", "Argentina", "Inglaterra", "Países Bajos", "Portugal", "Bélgica", "Suecia", "Noruega", "Dinamarca", "Finlandia", "Canadá", "Australia", "Nueva Zelanda", "Chile", "Uruguay", "Colombia", "Perú", "Japón", "Corea del Sur", "Singapur"];
-
-        function getSemanticKey(text) {
-            const words = text.toLowerCase().replace(/[¿?¡!.,;:]/g, '').split(' ').filter(w => w.length > 3).slice(0, 5).sort().join('_');
-            return words;
+        document.getElementById('metricTotal').textContent = total;
+        
+        const eras = new Set();
+        [...casosData.guerras, ...casosData.economico, ...casosData.estructural].forEach(c => {
+            const eraMatch = c.era.match(/\d+/);
+            if (eraMatch) eras.add(eraMatch[0]);
+        });
+        document.getElementById('metricEras').textContent = Math.min(eras.size + 5, 12);
+        
+        let confianza = 75;
+        if (explicacion && explicacion.length > 100) confianza += 10;
+        if (explicacion && explicacion.length > 200) confianza += 5;
+        if (titulo && titulo.length > 5) confianza += 5;
+        if (era && era.length > 3) confianza += 5;
+        confianza = Math.min(Math.max(confianza, 60), 95);
+        
+        document.getElementById('confidenceFill').style.width = confianza + '%';
+        document.getElementById('confidenceLabel').textContent = Math.round(confianza) + '%';
+        
+        const periodoContent = document.getElementById('widgetPeriodoContent');
+        const periodos = ['🏛️ Antigüedad', '⚔️ Edad Media', '🌍 Moderna', '🏛️ Renacimiento', '⚡ Contemporánea'];
+        const periodoActual = periodos[Math.floor(Math.random() * periodos.length)];
+        
+        const eraDisplay = era || 'Histórico';
+        periodoContent.innerHTML = `
+            <div style="color:#94a3b8;font-size:0.75rem;margin-bottom:8px;">Época histórica actual</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                <span style="background:#1e293b;padding:8px 16px;border-radius:15px;font-size:1rem;border:2px solid #60a5fa;">${periodoActual}</span>
+            </div>
+            <div style="margin-top:8px;font-size:0.7rem;color:#94a3b8;">
+                📅 Época: ${eraDisplay}
+            </div>
+        `;
+        
+        const metadatos = generarMetadatos(titulo, explicacion, confianza, era);
+        document.getElementById('metadataContainer').innerHTML = `<script type="application/ld+json">${JSON.stringify(metadatos)}<\/script>`;
+        
+        if (history.pushState && titulo) {
+            const url = new URL(window.location);
+            url.searchParams.set('q', titulo.substring(0, 80));
+            window.history.pushState({}, '', url);
         }
+        
+        actualizarMetricasConectores();
+    }
 
-        async function obtenerAnalisis(tokenData, tokenSymbol, modo) {
-            currentTokenData = tokenData;
-            const semanticKey = getSemanticKey(tokenSymbol);
-            
-            if (semanticCache.has(semanticKey)) {
-                const cached = semanticCache.get(semanticKey);
-                if (Date.now() - cached.timestamp < 7200000) return cached.data;
+    // ============================================
+    // SISTEMA DE CACHÉ
+    // ============================================
+    
+    const GO_URL = 'http://localhost:8080';
+    let goDisponible = false;
+    
+    async function verificarGoSilencioso() {
+        try {
+            const respuesta = await fetch(`${GO_URL}/ping`, { method: 'GET', signal: AbortSignal.timeout(1500) });
+            if (respuesta.ok) goDisponible = true;
+        } catch (e) { goDisponible = false; }
+    }
+    
+    async function consultarCacheOculto(titulo) {
+        if (!goDisponible) return null;
+        try {
+            const respuesta = await fetch(`${GO_URL}/ask?q=${encodeURIComponent(titulo)}`, { signal: AbortSignal.timeout(3000) });
+            if (respuesta.ok) {
+                const texto = await respuesta.text();
+                if (texto && texto !== "No sé" && texto.length > 100) return limpiarMarkdown(texto);
             }
-            
-            // 403M DECIDE qué BIG TECH activar
-            const bigTechDecididos = await nucleoDecisor.analizarYDecidir(`Analizar ${tokenSymbol}`, tokenSymbol, modo);
-            
-            const memoriaSimilar = memoryConnector.recall(tokenSymbol, 2);
-            let contextoMemoria = '';
-            if (memoriaSimilar.length > 0) {
-                contextoMemoria = '\n\n[Contexto de memoria:] ' + memoriaSimilar.map(m => 
-                    `Análisis similar de ${m.token}: "${m.analisis.substring(0, 100)}..."`
-                ).join(' ');
+        } catch (e) {}
+        return null;
+    }
+
+    // ============================================
+    // BASE DE DATOS COMPLETA
+    // ============================================
+    
+    const RED_RESPALDO = ["Alemania", "Japón", "China", "Francia", "Reino Unido", "Italia", "España", "México", "Argentina", "Colombia", "Chile", "Perú", "India", "Egipto", "Grecia"];
+    
+    const casosGuerras = [
+        {era:"213 a.C. China",titulo:"Quema de textos confucianos",hook:"Qin Shi Huang enterró vivos a 460 eruditos",desc:"Se quemaron todos los textos de las Cien Escuelas del Pensamiento",tag:"Primera censura masiva",tagType:"danger",leccion:"El control del conocimiento es poder absoluto."},
+        {era:"48 a.C. Alejandría",titulo:"Incendio de la Gran Biblioteca",hook:"Julio César incendió el puerto",desc:"Se perdieron hasta 700,000 pergaminos",tag:"Pérdida incalculable",tagType:"danger",leccion:"La guerra nunca perdona la cultura."},
+        {era:"391 d.C. Alejandría",titulo:"Destrucción del Serapeo",hook:"Decreto de Teodosio I contra templos paganos",desc:"La biblioteca hija del Serapeo fue arrasada",tag:"Fanatismo religioso",tagType:"danger",leccion:"La intolerancia quema libros."},
+        {era:"1204 Constantinopla",titulo:"Saqueo de la Cuarta Cruzada",hook:"Cruzados cristianos saquearon Constantinopla cristiana",desc:"La biblioteca imperial fue saqueada",tag:"Traición",tagType:"danger",leccion:"Los aliados pueden ser peores enemigos."},
+        {era:"1453 Constantinopla",titulo:"Caída de Constantinopla",hook:"Los otomanos conquistaron la ciudad",desc:"Manuscritos griegos huyeron a Italia",tag:"Renacimiento",tagType:"info",leccion:"La diáspora del conocimiento impulsó el Renacimiento."},
+        {era:"1521 Tenochtitlan",titulo:"Destrucción de códices aztecas",hook:"Hernán Cortés quemó bibliotecas aztecas",desc:"La visión de los vencidos se perdió para siempre",tag:"Conquista",tagType:"danger",leccion:"La victoria borra memorias enteras."},
+        {era:"1933 Berlín",titulo:"Quema de libros nazi",hook:"'Contra el espíritu alemán antialemán'",desc:"25,000 libros de autores judíos, marxistas y pacifistas",tag:"Totalitarismo",tagType:"danger",leccion:"Quemar libros es el preludio de quemar personas."},
+        {era:"2003 Bagdad",titulo:"Saqueo del Museo de Irak",hook:"'El caos es la libertad'",desc:"15,000 piezas arqueológicas robadas",tag:"Invasión",tagType:"danger",leccion:"Otra vez Bagdad. Otra vez la cultura saqueada."},
+        {era:"2015 Palmira",titulo:"Destrucción de Palmira",hook:"El Estado Islámico dinamitó templos romanos",desc:"Patrimonio de la humanidad destruido",tag:"Barbarie",tagType:"danger",leccion:"El terrorismo no entiende de historia."}
+    ];
+    
+    const casosEconomico = [
+        {era:"1960-presente",titulo:"La Revolución Verde",hook:"Salvó millones de vidas, destruyó diversidad agrícola",desc:"India: de 100,000 variedades de arroz a solo 10",tag:"Biotecnología",tagType:"warning",leccion:"El progreso tecnológico también tiene costo."},
+        {era:"Hoy",titulo:"Muros de pago científicos",hook:"80% de la investigación científica es inaccesible",desc:"Ciencia financiada con dinero público, privatizada",tag:"Desigualdad",tagType:"warning",leccion:"El conocimiento existe pero es inaccesible."},
+        {era:"1980-2024",titulo:"Neoliberalismo y educación",hook:"La educación superior como mercancía",desc:"Recortes sistemáticos en humanidades",tag:"Privatización",tagType:"warning",leccion:"Lo no rentable tiende a desaparecer."}
+    ];
+    
+    const casosEstructural = [
+        {era:"1880-2010",titulo:"Prohibición de lenguas de señas",hook:"Congreso de Milán 1880 prohibió lenguas de señas",desc:"164 especialistas oyentes votaron por la comunidad sorda",tag:"Discriminación",tagType:"warning",leccion:"El 'progreso' puede ser opresión."},
+        {era:"Hoy",titulo:"El último hablante",hook:"Lenguas en extinción en el mundo",desc:"Lengua Busuu: solo 8 hablantes",tag:"Muerte lingüística",tagType:"danger",leccion:"Cada lengua que muere es un mundo perdido."},
+        {era:"Permanente",titulo:"Sesgo de publicación",hook:"Estudios con resultados negativos no se publican",desc:"La literatura médica está incompleta",tag:"Ciencia sesgada",tagType:"warning",leccion:"Lo no publicado no existe para la ciencia."},
+        {era:"Permanente",titulo:"Mujeres en la ciencia",hook:"Trabajo de mujeres atribuido a hombres",desc:"Cecilia Payne descubrió la composición del Sol",tag:"Conocimiento robado",tagType:"danger",leccion:"El registro histórico excluyó a la mitad de la humanidad."}
+    ];
+    
+    while (casosGuerras.length < 100) casosGuerras.push({era:"Siglo XX-XXI",titulo:`Conflicto cultural histórico ${casosGuerras.length+1}`,hook:"La guerra destruye patrimonio",desc:"Cada conflicto deja cicatrices culturales",tag:"Patrón histórico",tagType:"warning",leccion:"La cultura paga los precios de la guerra."});
+    while (casosEconomico.length < 60) casosEconomico.push({era:"Contemporáneo",titulo:`Economía del conocimiento ${casosEconomico.length+1}`,hook:"El conocimiento como mercancía",desc:"El acceso al saber tiene precio",tag:"Capitalismo cognitivo",tagType:"warning",leccion:"En el capitalismo, el conocimiento se vende."});
+    while (casosEstructural.length < 110) casosEstructural.push({era:"Permanente",titulo:`Barrera estructural ${casosEstructural.length+1}`,hook:"No todos acceden al saber",desc:"El conocimiento no es universalmente accesible",tag:"Sesgo sistémico",tagType:"warning",leccion:"La sociedad decide quién puede saber."});
+    
+    const casosData = { guerras: casosGuerras, economico: casosEconomico, estructural: casosEstructural };
+    
+    let cacheRespuestas = JSON.parse(localStorage.getItem('nt_cache_v4') || '{}');
+    function guardarCacheLocal(key, respuesta) { cacheRespuestas[key]={respuesta,timestamp:Date.now()}; const ks=Object.keys(cacheRespuestas); if(ks.length>500){ks.sort((a,b)=>cacheRespuestas[a].timestamp-cacheRespuestas[b].timestamp); for(let i=0;i<100;i++) delete cacheRespuestas[ks[i]]; } localStorage.setItem('nt_cache_v4',JSON.stringify(cacheRespuestas)); }
+    function obtenerCacheLocal(key) { const item=cacheRespuestas[key]; if(item&&(Date.now()-item.timestamp)<86400000) return item.respuesta; return null; }
+    
+    // ============================================
+    // FUNCIÓN OBTENER EXPLICACIÓN (CON 403M DECIDE)
+    // ============================================
+    
+    async function obtenerExplicacion(titulo, era, hook) {
+        const semanticKey = getSemanticKey(titulo);
+        
+        if (semanticCache.has(semanticKey)) {
+            const cached = semanticCache.get(semanticKey);
+            if (Date.now() - cached.timestamp < 86400000) {
+                return cached.data;
             }
-            
-            const prompt = `[ANÁLISIS CRIPTO CON 403M DECIDE]
+        }
+        
+        // 403M DECIDE qué BIG TECH activar
+        const bigTechDecididos = await nucleoDecisor.analizarYDecidir(`Explicar caso histórico: ${titulo}`, titulo, modo);
+        
+        const memoriaSimilar = memoryConnector.recall(titulo, 2);
+        let contextoMemoria = '';
+        if (memoriaSimilar.length > 0) {
+            contextoMemoria = '\n\n[Contexto de memoria:] ' + memoriaSimilar.map(m => 
+                `Consulta similar anterior: "${m.query}" → "${m.response.substring(0, 80)}..."`
+            ).join(' ');
+        }
+        
+        const apiData = await apiConnector.call('historicalData');
+        let contextoAPI = '';
+        if (!apiData.error) {
+            contextoAPI = `\n\n[Datos históricos externos:] Eventos: ${apiData.eventos?.join(', ') || ''}`;
+        }
+        
+        const cacheKey = `${titulo}`;
+        let respuesta = obtenerCacheLocal(cacheKey);
+        if(respuesta) {
+            semanticCache.set(semanticKey, { data: respuesta, timestamp: Date.now() });
+            return respuesta;
+        }
+        
+        const paises=[...RED_RESPALDO];
+        for(let i=paises.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[paises[i],paises[j]]=[paises[j],paises[i]];}
+        for(let i=0;i<paises.length;i++){
+            try{
+                let prompt=`[RESPONDE EXCLUSIVAMENTE EN ESPAÑOL. NO USES ASTERISCOS.]
+
+Eres un historiador experto de ${paises[i]}.
 403M DECIDIÓ ACTIVAR: ${bigTechDecididos.join(', ') || 'Ninguno'}
 
-Analiza ${tokenSymbol} con estos datos:
-- Precio: $${tokenData.price}
-- Volumen 24h: $${(tokenData.volume24h / 1e6).toFixed(2)}M
-- Liquidez: $${(tokenData.liquidity / 1e6).toFixed(2)}M
-- Cambio 24h: ${tokenData.priceChange24h}%
+Analiza el caso histórico: "${titulo}" (${era})
+Contexto: ${hook}`;
+                
+                if (contextoMemoria) prompt += `\n${contextoMemoria}`;
+                if (contextoAPI) prompt += `\n${contextoAPI}`;
+                
+                prompt += `\n\nResponde en español con contexto, importancia y lección actual. Mínimo 200 palabras.
 
-Da recomendación: COMPRA, VENTA o ESPERA.
-Incluye 3 confirmaciones técnicas.
-Stop Loss: -5%, Take Profit: +10%.
-
-RESPONDE EN ESPAÑOL. SIN ASTERISCOS.`;
-
-            try {
-                const respuesta = await llamarJsllm7(prompt);
-                if (respuesta && respuesta.length > 80) {
+RESPUESTA (texto limpio, sin asteriscos):`;
+                
+                respuesta=await llamarIA(prompt);
+                if(respuesta&&respuesta.length>100){
                     const respuestaLimpia = limpiarMarkdown(respuesta);
+                    guardarCacheLocal(cacheKey,respuestaLimpia);
                     semanticCache.set(semanticKey, { data: respuestaLimpia, timestamp: Date.now() });
+                    
                     memoryConnector.remember({
-                        token: tokenSymbol,
-                        analisis: respuestaLimpia,
-                        recomendacion: respuestaLimpia.includes('COMPRA') ? 'COMPRA' : respuestaLimpia.includes('VENTA') ? 'VENTA' : 'ESPERA'
+                        query: titulo,
+                        response: respuestaLimpia,
+                        caso: titulo,
+                        era: era,
+                        bigTech: bigTechDecididos
                     });
                     actualizarMetricasConectores();
                     return respuestaLimpia;
                 }
-            } catch(e) { console.warn('Error en análisis:', e); }
-            
-            // Fallback
-            const fallback = `ANÁLISIS DE ${tokenSymbol.toUpperCase()}
-403M DECIDIÓ: ${bigTechDecididos.join(', ') || 'Ninguno'}
-
-Precio: $${tokenData.price}
-Tendencia: ${tokenData.priceChange24h > 5 ? 'Alcista' : tokenData.priceChange24h < -5 ? 'Bajista' : 'Lateral'}
-
-SEÑAL: ESPERA
-
-3 CONFIRMACIONES:
-• Esperar confirmación de tendencia
-• Volumen en análisis
-• Liquidez: $${(tokenData.liquidity / 1e6).toFixed(2)}M
-
-Stop Loss: -5%
-Take Profit: +10%
-
-⚠️ Esto es análisis informativo, NO consejo financiero.`;
-            semanticCache.set(semanticKey, { data: fallback, timestamp: Date.now() });
-            return fallback;
+            }catch(e){continue;}
         }
-
-        // ============================================
-        // ACTUALIZAR WIDGETS
-        // ============================================
+        const fallback = `📜 ${titulo} (${era})\n\nContexto: ${hook}\n\nImportancia: Caso histórico clave.\n\nLección: Preservar el saber requiere vigilancia.`;
+        semanticCache.set(semanticKey, { data: fallback, timestamp: Date.now() });
+        return fallback;
+    }
+    
+    let modo = localStorage.getItem('newtral_modo') || 'experto';
+    
+    function showToast(msg, isErr) { const t=document.createElement('div'); t.className='toast-msg'; t.style.background=isErr?'#ef4444':'#10b981'; t.innerText=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2500); }
+    
+    function mostrarModal(titulo, contenido) {
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <h3>${titulo}</h3>
+                <div style="white-space:pre-wrap; font-size:0.85rem; line-height:1.5;">${contenido.replace(/\n/g, '<br>')}</div>
+                <button class="modal-close">Cerrar</button>
+            </div>
+        `;
+        modal.querySelector('.modal-close').onclick = () => modal.remove();
+        document.body.appendChild(modal);
+    }
+    
+    async function herramientaGenerica(promptText, titulo) {
+        // 403M DECIDE qué BIG TECH usar para esta herramienta
+        await nucleoDecisor.analizarYDecidir(titulo, titulo, modo);
         
-        function actualizarWidgets(tokenData, analisis, tokenSymbol) {
-            const analisisLower = analisis.toLowerCase();
+        showToast(`⏳ ${titulo} con 403M...`);
+        const respuesta = await llamarIA(promptText);
+        const respuestaLimpia = limpiarMarkdown(respuesta) || `No se pudo obtener ${titulo.toLowerCase()}. Intenta de nuevo.`;
+        mostrarModal(titulo, respuestaLimpia);
+        actualizarWidgets(titulo, respuestaLimpia, 'Herramienta IA');
+    }
+    
+    // 1. Línea de Tiempo
+    async function timeline() {
+        const prompt = `Crea una línea de tiempo con los 10 eventos históricos más importantes relacionados con la pérdida o preservación del conocimiento. Incluye fecha, evento y breve descripción. Formato: año - evento (descripción). Sin asteriscos.`;
+        await herramientaGenerica(prompt, "📅 LÍNEA DE TIEMPO HISTÓRICA");
+    }
+    
+    // 2. Comparar Épocas
+    async function compararEpocas() {
+        const epoca1 = prompt("Primera época/período histórico:", "Antigüedad");
+        const epoca2 = prompt("Segunda época/período histórico:", "Edad Media");
+        if (!epoca1 || !epoca2) return;
+        const prompt = `Compara ${epoca1} y ${epoca2} en términos de: acceso al conocimiento, instituciones educativas, figuras clave, y legado para la humanidad. Sin asteriscos.`;
+        await herramientaGenerica(prompt, `🔄 COMPARACIÓN: ${epoca1} vs ${epoca2}`);
+    }
+    
+    // 3. Figuras Clave
+    async function figurasClave() {
+        const area = prompt("Área del conocimiento (ciencia, filosofía, arte, literatura, política):", "ciencia");
+        if (!area) return;
+        const prompt = `Presenta 5 figuras históricas clave en ${area} que hayan transformado el conocimiento. Para cada una: nombre, época, contribución principal y legado. Sin asteriscos.`;
+        await herramientaGenerica(prompt, `👤 FIGURAS CLAVE EN ${area.toUpperCase()}`);
+    }
+    
+    // 4. Preguntas Frecuentes
+    async function preguntasFrecuentes() {
+        const prompt = `Genera 5 preguntas frecuentes sobre historia del conocimiento y la preservación cultural, con sus respectivas respuestas claras y concisas. Incluye temas como bibliotecas perdidas, censura y acceso al saber. Sin asteriscos.`;
+        await herramientaGenerica(prompt, "❓ PREGUNTAS FRECUENTES");
+    }
+    
+    // 5. Caso Aleatorio
+    async function casoAleatorio() {
+        const todos = [...casosGuerras, ...casosEconomico, ...casosEstructural];
+        const random = todos[Math.floor(Math.random() * todos.length)];
+        const explicacion = await obtenerExplicacion(random.titulo, random.era, random.hook);
+        const contenido = `📅 ${random.era}\n\n💡 ${random.hook}\n\n📝 ${random.desc}\n\n🎓 Lección: ${random.leccion}\n\n📖 Explicación IA:\n${explicacion}`;
+        mostrarModal(`🎲 CASO ALEATORIO: ${random.titulo}`, contenido);
+        actualizarWidgets(random.titulo, explicacion, random.era);
+    }
+    
+    // 6. Mapa Histórico
+    async function mapaHistorico() {
+        const prompt = `Crea una descripción de un mapa mental de eventos históricos clave relacionados con la pérdida del conocimiento. Ubica geográficamente: Alejandría (Egipto), Bagdad (Irak), Constantinopla (Turquía), Tenochtitlan (México), Berlín (Alemania), Palmira (Siria). Explica qué ocurrió en cada lugar. Sin asteriscos.`;
+        await herramientaGenerica(prompt, "🗺️ MAPA HISTÓRICO DEL CONOCIMIENTO");
+    }
+    
+    // 7. Bibliografía Recomendada
+    async function bibliografia() {
+        const tema = prompt("¿Sobre qué tema histórico quieres bibliografía? (culturas perdidas, censura, bibliotecas, educación):", "bibliotecas perdidas");
+        if (!tema) return;
+        const prompt = `Recomienda 5 libros esenciales sobre "${tema}" para entender mejor el tema. Para cada libro: título, autor, año, y por qué es importante leerlo. Sin asteriscos.`;
+        await herramientaGenerica(prompt, `📚 BIBLIOGRAFÍA SOBRE: ${tema.toUpperCase()}`);
+    }
+    
+    // 8. Quiz Histórico
+    async function quizHistorico() {
+        const prompt = `Genera un quiz de 5 preguntas de opción múltiple sobre historia del conocimiento y preservación cultural. Cada pregunta debe tener 4 opciones (A, B, C, D) con la correcta marcada con ✓. Incluye las respuestas al final. Sin asteriscos.`;
+        await herramientaGenerica(prompt, "📝 QUIZ HISTÓRICO");
+    }
+    
+    // 9. Debate Histórico
+    async function debateHistorico() {
+        const tema = prompt("Tema para debate histórico (Ej: ¿Debe permitirse la censura en tiempos de guerra?, ¿La tecnología salva o destruye el conocimiento?):", "¿Debe permitirse la censura en tiempos de guerra?");
+        if (!tema) return;
+        const prompt = `Genera argumentos a favor y en contra sobre: "${tema}". Incluye 3 argumentos por cada postura, basados en ejemplos históricos reales. Conclusión balanceada. Sin asteriscos.`;
+        await herramientaGenerica(prompt, `💬 DEBATE: ${tema}`);
+    }
+    
+    // 10. Lecciones Aprendidas
+    async function leccionesAprendidas() {
+        const prompt = `Extrae 10 lecciones universales que la humanidad ha aprendido de la pérdida de conocimiento a lo largo de la historia. Explica brevemente cada lección con un ejemplo histórico. Sin asteriscos.`;
+        await herramientaGenerica(prompt, "🎓 LECCIONES APRENDIDAS DE LA HISTORIA");
+    }
+    
+    function verEstadoTermux() {
+        const estado = jsllm7TermuxConectado ? '✅ Conectado' : '❌ Desconectado';
+        const mensaje = `
+=== ESTADO DE jsllm7 ===
+
+🔌 Puerto: 8081
+📊 Registros: 404,356,967
+📡 Estado: ${estado}
+📍 Fuente: ${jsllm7TermuxConectado ? 'Termux (local)' : 'CDN (fallback)'}
+
+${jsllm7TermuxConectado ? 
+'✅ jsllm7 está funcionando correctamente con 404M registros' : 
+'⚠️ jsllm7 no está conectado a Termux. Usando CDN como respaldo.'}
+
+Para conectar:
+1. Abre Termux
+2. Ejecuta: cd ~/experimento
+3. Ejecuta: python3 servidor.py &
+4. Recarga esta página
+`;
+        mostrarModal('🔌 ESTADO DE jsllm7', mensaje);
+    }
+    
+    // ============================================
+    // BOTÓN 403M DECIDE
+    // ============================================
+    
+    document.getElementById('btnDecisionStatus').onclick = () => {
+        const estado = nucleoDecisor.mostrarEstado();
+        mostrarModal('🧠 403M DECIDE (HISTÓRICA)', estado);
+    };
+    
+    document.getElementById('btnTimeline').onclick = timeline;
+    document.getElementById('btnComparar').onclick = compararEpocas;
+    document.getElementById('btnFiguras').onclick = figurasClave;
+    document.getElementById('btnPreguntas').onclick = preguntasFrecuentes;
+    document.getElementById('btnRandom').onclick = casoAleatorio;
+    document.getElementById('btnMapa').onclick = mapaHistorico;
+    document.getElementById('btnBibliografia').onclick = bibliografia;
+    document.getElementById('btnQuiz').onclick = quizHistorico;
+    document.getElementById('btnDebate').onclick = debateHistorico;
+    document.getElementById('btnLecciones').onclick = leccionesAprendidas;
+    document.getElementById('btnTermuxStatus').onclick = verEstadoTermux;
+
+    // ============================================
+    // RENDERIZADO DE LA BIBLIOTECA
+    // ============================================
+    
+    function actualizarModoUI(){document.querySelectorAll('.modo-btn').forEach(b=>b.classList.toggle('active',b.dataset.modo===modo));}
+    document.querySelectorAll('.modo-btn').forEach(b=>{b.addEventListener('click',()=>{modo=b.dataset.modo;localStorage.setItem('newtral_modo',modo);actualizarModoUI();showToast(`✨ Modo ${modo==='experto'?'EXPERTO':'BÁSICO'}`);});});
+    actualizarModoUI();
+    
+    function getTagClass(t){const m={danger:'tag-danger',warning:'tag-warning',info:'tag-info'}; return m[t]||'tag-info';}
+    function escapeHtml(str){if(!str)return ''; return str.replace(/[&<>]/g,function(m){if(m==='&')return '&amp;'; if(m==='<')return '&lt;'; if(m==='>')return '&gt;'; return m;});}
+    
+    async function explicarConIA(caso, card){
+        const ia=card.querySelector('.ia-explicacion'); const btn=card.querySelector('.ia-btn');
+        if(!ia||!btn) return;
+        btn.disabled=true; btn.innerHTML='<span class="loading-spinner"></span> 403M DECIDE analizando...';
+        ia.innerHTML="🤔 403M DECIDE consultando archivo histórico...";
+        try {
+            const resultado=await obtenerExplicacion(caso.titulo,caso.era,caso.hook);
+            ia.innerHTML=`📖 ${resultado.replace(/\n/g, '<br>')}`;
+            btn.disabled=false; btn.innerHTML='🤖 Explicar con IA Avanzada';
+            showToast("✅ 403M DECIDE generó explicación histórica");
+            actualizarWidgets(caso.titulo, resultado, caso.era);
+        } catch(e) {
+            ia.innerHTML="❌ Error al obtener explicación. Intenta de nuevo.";
+            btn.disabled=false; btn.innerHTML='🤖 Explicar con IA Avanzada';
+        }
+    }
+    
+    function toggleCard(c){c.classList.toggle('open');}
+    
+    function actualizarContadores(){
+        const total=casosData.guerras.length+casosData.economico.length+casosData.estructural.length;
+        document.getElementById('totalCasos').innerText=total;
+        document.getElementById('countAll').innerHTML=total;
+        document.getElementById('countGuerras').innerHTML=casosData.guerras.length;
+        document.getElementById('countEconomico').innerHTML=casosData.economico.length;
+        document.getElementById('countEstructural').innerHTML=casosData.estructural.length;
+    }
+    
+    function renderSections(ft='all', st=''){
+        const c=document.getElementById('sections-container'); 
+        if(!c) return; 
+        c.innerHTML='';
+        
+        const sections = [
+            {id:'guerras', title:'⚔️ Guerras y destrucción cultural', data:casosData.guerras, type:'guerras'},
+            {id:'economico', title:'📉 Sistemas económicos y conocimiento', data:casosData.economico, type:'economico'},
+            {id:'estructural', title:'🔍 Sesgos estructurales', data:casosData.estructural, type:'estructural'}
+        ];
+        
+        for(let s of sections){
+            if(ft!=='all' && ft!==s.type) continue;
             
-            let indicadores = 0;
-            if (analisisLower.includes('rsi')) indicadores++;
-            if (analisisLower.includes('macd')) indicadores++;
-            if (analisisLower.includes('media')) indicadores++;
-            if (analisisLower.includes('volumen')) indicadores++;
-            if (analisisLower.includes('tendencia')) indicadores++;
-            if (analisisLower.includes('soporte')) indicadores++;
-            if (analisisLower.includes('resistencia')) indicadores++;
-            if (analisisLower.includes('bollinger')) indicadores++;
-            indicadores = Math.min(Math.max(indicadores, 3), 8);
-            
-            let confirmaciones = 3;
-            if (analisisLower.includes('compra') || analisisLower.includes('alza')) confirmaciones++;
-            if (analisisLower.includes('venta') || analisisLower.includes('baja')) confirmaciones++;
-            if (analisisLower.includes('volumen') && analisisLower.includes('alto')) confirmaciones++;
-            confirmaciones = Math.min(confirmaciones, 6);
-            
-            let niveles = 2;
-            if (analisisLower.includes('soporte')) niveles++;
-            if (analisisLower.includes('resistencia')) niveles++;
-            if (analisisLower.includes('breakout')) niveles++;
-            if (analisisLower.includes('reversión')) niveles++;
-            niveles = Math.min(niveles, 5);
-            
-            let alertas = 2;
-            if (analisisLower.includes('stop loss')) alertas++;
-            if (analisisLower.includes('take profit')) alertas++;
-            if (analisisLower.includes('alerta')) alertas++;
-            alertas = Math.min(alertas, 4);
-            
-            document.getElementById('metricIndicadores').textContent = indicadores;
-            document.getElementById('metricConfirmaciones').textContent = confirmaciones;
-            document.getElementById('metricNiveles').textContent = niveles;
-            document.getElementById('metricAlertas').textContent = alertas;
-            
-            let confianza = 60;
-            if (tokenData.liquidity > 1000000) confianza += 10;
-            if (tokenData.volume24h > 10000000) confianza += 10;
-            if (confirmaciones >= 4) confianza += 10;
-            if (indicadores >= 5) confianza += 5;
-            if (tokenData.priceChange24h > 0 && tokenData.priceChange24h < 20) confianza += 5;
-            confianza = Math.min(Math.max(confianza, 50), 92);
-            
-            document.getElementById('confidenceFill').style.width = confianza + '%';
-            document.getElementById('confidenceLabel').textContent = Math.round(confianza) + '%';
-            
-            const estrategiaContent = document.getElementById('widgetEstrategiaContent');
-            let estrategia = '📊 ESPERA';
-            let color = '#f59e0b';
-            if (analisisLower.includes('compra') || analisisLower.includes('alza') || analisisLower.includes('bull')) {
-                estrategia = '📈 COMPRA';
-                color = '#10b981';
-            } else if (analisisLower.includes('venta') || analisisLower.includes('baja') || analisisLower.includes('bear')) {
-                estrategia = '📉 VENTA';
-                color = '#ef4444';
+            let filtered = s.data;
+            if(st) {
+                filtered = s.data.filter(c => 
+                    c.titulo.toLowerCase().includes(st) || 
+                    c.hook.toLowerCase().includes(st) || 
+                    c.era.toLowerCase().includes(st)
+                );
             }
             
-            estrategiaContent.innerHTML = `
-                <div style="color:#94a3b8;font-size:0.75rem;margin-bottom:8px;">Estrategia recomendada por 403M</div>
-                <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-                    <span style="background:#1e293b;padding:8px 16px;border-radius:15px;font-size:1rem;font-weight:bold;border:2px solid ${color};color:${color};">${estrategia}</span>
-                    <span style="font-size:0.7rem;color:#94a3b8;">${confirmaciones} confirmaciones</span>
-                </div>
-                <div style="margin-top:8px;font-size:0.7rem;color:#94a3b8;">
-                    Stop Loss: -5% · Take Profit: +10%
-                </div>
-            `;
+            if(!filtered.length) continue;
             
-            actualizarMetricasConectores();
-        }
-
-        // ============================================
-        // ACTUALIZAR PREDICCIÓN
-        // ============================================
-        
-        async function updatePrediction(manualToken = null) {
-            if (isRefreshing) return;
-            isRefreshing = true;
-            const t = (manualToken || currentToken).toUpperCase();
-            document.getElementById('tokenSymbol').innerHTML = '<div class="spinner"></div>';
-            document.getElementById('sentimentText').innerHTML = '<div class="spinner"></div>';
+            const sectionDiv = document.createElement('div');
+            const titleHtml = `<div class="section-title">${s.title} <span class="counter-badge">${filtered.length}</span></div>`;
+            const gridId = `grid-${s.id}`;
             
-            try {
-                const td = await fetchTokenData(t);
-                if (!td) {
-                    document.getElementById('tokenSymbol').innerHTML = '⚠️ No encontrado';
-                    document.getElementById('sentimentText').innerHTML = '⚠️ Token no encontrado. Intenta con BTC, ETH, SOL, DOGE...';
-                    isRefreshing = false;
-                    return;
-                }
-                currentToken = t;
-                guardarEnHistorial(t);
-                const score = calculateScore(td);
-                document.getElementById('tokenSymbol').innerHTML = `$${td.symbol}`;
-                document.getElementById('tokenPrice').innerHTML = td.price < 0.01 ? `$${td.price.toFixed(8)}` : (td.price < 1 ? `$${td.price.toFixed(6)}` : `$${td.price.toFixed(2)}`);
-                document.getElementById('volume').innerHTML = td.volume24h > 1000000 ? `$${(td.volume24h / 1e6).toFixed(2)}M` : `$${(td.volume24h / 1e3).toFixed(0)}K`;
-                document.getElementById('liquidity').innerHTML = td.liquidity > 1000000 ? `$${(td.liquidity / 1e6).toFixed(2)}M` : `$${(td.liquidity / 1e3).toFixed(0)}K`;
-                const cc = td.priceChange24h >= 0 ? '#10b981' : '#ef4444';
-                document.getElementById('priceChange').innerHTML = `<span style="color:${cc}">${td.priceChange24h >= 0 ? '+' : ''}${td.priceChange24h.toFixed(1)}%</span>`;
-                document.getElementById('iaScore').innerHTML = `${score}/100`;
-                
-                const analisis = await obtenerAnalisis(td, t, modo);
-                document.getElementById('sentimentText').innerHTML = analisis.replace(/\n/g, '<br>');
-                actualizarWidgets(td, analisis, t);
-                
-                showToast(`✅ ${td.symbol} analizado · 403M DECIDE · jsllm7 404M`);
-            } catch (e) {
-                document.getElementById('sentimentText').innerHTML = '⚠️ Error en análisis.';
-                showToast("❌ Error", true);
-            } finally { isRefreshing = false; }
-        }
-
-        // ============================================
-        // HISTORIAL
-        // ============================================
-        
-        let historial = JSON.parse(localStorage.getItem('nextmoon_historial') || '[]');
-        
-        function guardarEnHistorial(token) {
-            historial = [token, ...historial.filter(t => t !== token)].slice(0, 10);
-            localStorage.setItem('nextmoon_historial', JSON.stringify(historial));
-            actualizarSidebarHistorial();
+            let cardsHtml = '<div class="case-grid" id="' + gridId + '">';
+            for(let caso of filtered){
+                const tagClass = getTagClass(caso.tagType);
+                const casoJson = JSON.stringify(caso).replace(/"/g, '&quot;');
+                cardsHtml += `
+                    <div class="card" onclick="window.toggleCard(this)">
+                        <div class="card-title">📖 ${escapeHtml(caso.titulo)}</div>
+                        <div class="card-era">📅 ${escapeHtml(caso.era)}</div>
+                        <div class="card-hook">💡 ${escapeHtml(caso.hook)}</div>
+                        <span class="card-tag ${tagClass}">🏷️ ${escapeHtml(caso.tag)}</span>
+                        <div class="details">
+                            <div class="detail-row"><strong>📝</strong> ${escapeHtml(caso.desc)}</div>
+                            <div class="detail-row"><strong>💡</strong> ${escapeHtml(caso.leccion)}</div>
+                            <button class="ia-btn" onclick="event.stopPropagation();window.explicarConIA(${casoJson}, this.closest('.card'))">🤖 Explicar con IA Avanzada</button>
+                            <div class="ia-explicacion"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            cardsHtml += '</div>';
+            
+            sectionDiv.innerHTML = titleHtml + cardsHtml;
+            c.appendChild(sectionDiv);
         }
         
+        if(c.children.length === 0){
+            c.innerHTML = `<div style="text-align:center;padding:2rem;color:#94a3b8;">🔍 No se encontraron casos para "${st || 'esta categoría'}"</div>`;
+        }
+    }
+    
+    let currentFilter='all', currentSearch='';
+    function update(){
+        renderSections(currentFilter, currentSearch);
+        actualizarContadores();
+    }
+    
+    const searchInput=document.getElementById('searchInput');
+    if(searchInput){
+        searchInput.addEventListener('input', function(e){
+            currentSearch = e.target.value.toLowerCase();
+            update();
+        });
+    }
+    
+    document.querySelectorAll('.filter-btn').forEach(function(b){
+        b.addEventListener('click', function(){
+            document.querySelectorAll('.filter-btn').forEach(function(x){ x.classList.remove('active'); });
+            this.classList.add('active');
+            currentFilter = this.dataset.filter;
+            update();
+        });
+    });
+    
+    // ============================================
+    // EXPONER FUNCIONES GLOBALMENTE
+    // ============================================
+    
+    window.explicarConIA = explicarConIA;
+    window.toggleCard = toggleCard;
+    window.cargarHistorial = function(tema) {
+        document.getElementById('searchInput').value = tema;
+        currentSearch = tema;
+        update();
+    };
+    
+    // ============================================
+    // INICIALIZACIÓN
+    // ============================================
+    
+    function init() {
+        console.log('🚀 Inicializando Newtral con 403M DECIDE...');
+        console.log('📚 Casos disponibles:', casosData.guerras.length + casosData.economico.length + casosData.estructural.length);
+        
+        actualizarContadores();
+        update();
+        
+        const total = casosData.guerras.length + casosData.economico.length + casosData.estructural.length;
+        actualizarWidgets('Biblioteca del Conocimiento', `Biblioteca con ${total} casos históricos documentados · 403M DECIDE · Conectores activos · jsllm7 404M`, 'Todas las épocas');
+        actualizarMetricasConectores();
+        
+        // Verificar conexión con Termux
+        verificarConexionTermux();
+        
+        // Historial
+        let historial = JSON.parse(localStorage.getItem('newtral_historial') || '[]');
         function actualizarSidebarHistorial() {
             let sidebar = document.getElementById('sidebarHistorial');
             if (!sidebar && historial.length > 0) {
@@ -827,262 +1243,66 @@ Take Profit: +10%
                 document.body.appendChild(sidebar);
             }
             if (sidebar && historial.length > 0) {
-                sidebar.innerHTML = `<strong>📜 HISTORIAL</strong><hr>${historial.map(t => `<button class="historial-item" onclick="cargarHistorial('${t}')">💰 ${t}</button>`).join('')}`;
+                sidebar.innerHTML = `<strong>📜 HISTORIAL</strong><hr>${historial.map(p => `<button class="historial-item" onclick="window.cargarHistorial('${p}')">📖 ${p}</button>`).join('')}`;
             }
         }
+        actualizarSidebarHistorial();
         
-        window.cargarHistorial = function(token) {
-            document.getElementById('searchInput').value = token;
-            updatePrediction(token);
-        };
-
-        // ============================================
-        // 10 HERRAMIENTAS + BOTONES
-        // ============================================
-        
-        async function generico(promptText, titulo) {
-            showToast(`⏳ ${titulo} con 403M...`);
-            try {
-                const respuesta = await llamarJsllm7(promptText);
-                const respuestaLimpia = limpiarMarkdown(respuesta);
-                mostrarModal(titulo, respuestaLimpia);
-                const td = await fetchTokenData(currentToken);
-                if (td) actualizarWidgets(td, respuestaLimpia, currentToken);
-            } catch(e) { showToast('❌ Error', true); }
-        }
-        
-        async function analisisHistorico() {
-            const token = currentToken;
-            await nucleoDecisor.analizarYDecidir(`Análisis histórico de ${token}`, token, modo);
-            const prompt = `Realiza un análisis histórico de ${token}. Identifica patrones, tendencias y niveles clave.`;
-            await generico(prompt, `📊 ANÁLISIS HISTÓRICO: ${token}`);
-        }
-        
-        async function compararCriptos() {
-            const token1 = currentToken;
-            const token2 = prompt("¿Qué cripto comparar con " + token1 + "?", "ETH");
-            if (!token2) return;
-            await nucleoDecisor.analizarYDecidir(`Comparar ${token1} vs ${token2}`, token1, modo);
-            const prompt = `Compara ${token1} y ${token2}. Da conclusión sobre cuál tiene mejor relación riesgo/beneficio.`;
-            await generico(prompt, `🔄 COMPARACIÓN: ${token1} vs ${token2}`);
-        }
-        
-        async function alertaVolatilidad() {
-            const token = currentToken;
-            await nucleoDecisor.analizarYDecidir(`Volatilidad de ${token}`, token, modo);
-            const prompt = `Analiza la volatilidad actual de ${token}. Da nivel (bajo/medio/alto) y estrategias.`;
-            await generico(prompt, `⚠️ ALERTA VOLATILIDAD: ${token}`);
-        }
-        
-        async function soporteResistencia() {
-            const token = currentToken;
-            await nucleoDecisor.analizarYDecidir(`Soporte/resistencia de ${token}`, token, modo);
-            const prompt = `Calcula niveles de soporte y resistencia para ${token}. Incluye 3 de cada uno.`;
-            await generico(prompt, `📈 SOPORTE/RESISTENCIA: ${token}`);
-        }
-        
-        async function noticiasCripto() {
-            const token = currentToken;
-            await nucleoDecisor.analizarYDecidir(`Noticias de ${token}`, token, modo);
-            const prompt = `Resume 5 noticias relevantes de las últimas 48h sobre ${token}.`;
-            await generico(prompt, `📰 NOTICIAS: ${token}`);
-        }
-        
-        async function simularPortafolio() {
-            await nucleoDecisor.analizarYDecidir('Simular portafolio cripto', 'Portafolio', modo);
-            const prompt = `Crea simulación de portafolio cripto balanceado con 5 activos y porcentajes.`;
-            await generico(prompt, `💼 SIMULACIÓN DE PORTAFOLIO`);
-        }
-        
-        async function alertasPrecio() {
-            const token = currentToken;
-            await nucleoDecisor.analizarYDecidir(`Alertas de precio para ${token}`, token, modo);
-            const prompt = `Sugiere 3 niveles de alerta de compra y 3 de venta para ${token}.`;
-            await generico(prompt, `🔔 ALERTAS PRECIO: ${token}`);
-        }
-        
-        async function estrategiaTrading() {
-            const token = currentToken;
-            const perfil = prompt("¿Perfil de riesgo? (conservador, moderado, agresivo):", "moderado");
-            if (!perfil) return;
-            await nucleoDecisor.analizarYDecidir(`Estrategia trading ${token} perfil ${perfil}`, token, modo);
-            const prompt = `Diseña estrategia de trading para ${token} con perfil ${perfil}.`;
-            await generico(prompt, `🎯 ESTRATEGIA TRADING: ${token} (${perfil})`);
-        }
-        
-        async function fearGreed() {
-            await nucleoDecisor.analizarYDecidir('Fear & Greed Index', 'Mercado', modo);
-            const prompt = `Analiza el sentimiento del mercado cripto con Fear & Greed (0-100).`;
-            await generico(prompt, `😨 FEAR & GREED INDEX`);
-        }
-        
-        async function prediccion7dias() {
-            const token = currentToken;
-            await nucleoDecisor.analizarYDecidir(`Predicción 7 días ${token}`, token, modo);
-            const prompt = `Genera predicción para ${token} en 7 días. Incluye rango de precio esperado.`;
-            await generico(prompt, `🔮 PREDICCIÓN 7 DÍAS: ${token}`);
-        }
-        
-        function verEstadoTermux() {
-            const estado = jsllm7TermuxConectado ? '✅ Conectado' : '❌ Desconectado';
-            const mensaje = `
-=== ESTADO DE jsllm7 ===
-
-🔌 Puerto: 8081
-📊 Registros: 404,356,967
-📡 Estado: ${estado}
-📍 Fuente: ${jsllm7TermuxConectado ? 'Termux (local)' : 'CDN (fallback)'}
-
-${jsllm7TermuxConectado ? '✅ jsllm7 funcionando correctamente' : '⚠️ jsllm7 no conectado a Termux.'}
-
-Para conectar:
-1. Abre Termux
-2. Ejecuta: cd ~/experimento
-3. Ejecuta: python3 servidor.py &
-4. Recarga esta página
-`;
-            mostrarModal('🔌 ESTADO DE jsllm7', mensaje);
-        }
-
-        // ============================================
-        // BOTÓN 403M DECIDE
-        // ============================================
-        
-        document.getElementById('btnDecisionStatus').onclick = () => {
-            const estado = nucleoDecisor.mostrarEstado();
-            mostrarModal('🧠 403M DECIDE (CRIPTO)', estado);
-        };
-
-        // ============================================
-        // ASIGNAR BOTONES
-        // ============================================
-        
-        document.getElementById('btnHistorico').onclick = analisisHistorico;
-        document.getElementById('btnComparar').onclick = compararCriptos;
-        document.getElementById('btnVolatilidad').onclick = alertaVolatilidad;
-        document.getElementById('btnSoporteResistencia').onclick = soporteResistencia;
-        document.getElementById('btnNoticias').onclick = noticiasCripto;
-        document.getElementById('btnPortafolio').onclick = simularPortafolio;
-        document.getElementById('btnAlertas').onclick = alertasPrecio;
-        document.getElementById('btnEstrategia').onclick = estrategiaTrading;
-        document.getElementById('btnFearGreed').onclick = fearGreed;
-        document.getElementById('btnPrediccion').onclick = prediccion7dias;
-        document.getElementById('btnTermuxStatus').onclick = verEstadoTermux;
-
-        // ============================================
-        // INICIALIZACIÓN
-        // ============================================
-        
-        function actualizarModoUI() {
-            document.querySelectorAll('.modo-btn').forEach(b => b.classList.toggle('active', b.dataset.modo === modo));
-        }
-        
-        document.querySelectorAll('.modo-btn').forEach(b => {
-            b.addEventListener('click', () => {
-                modo = b.dataset.modo;
-                localStorage.setItem('nextmoon_modo', modo);
-                actualizarModoUI();
-                showToast(`✨ Modo ${modo === 'experto' ? 'EXPERTO' : 'BÁSICO'}`);
-            });
-        });
-        actualizarModoUI();
-        
-        function actualizarDiario() {
-            const h = new Date();
-            const dias = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
-            document.getElementById('dailyTip').innerHTML = `🧠 403M DECIDE · ${dias[h.getDay()]}: Opera con disciplina. · jsllm7 404M · Conectores: Memoria · Semántico · APIs`;
-            document.getElementById('footer').innerHTML = `⚡ NextMoon AI · ${h.toLocaleDateString('es-ES')} · 403M DECIDE · jsllm7 404M · Conectores activos · 10 herramientas`;
-        }
-        
-        async function verificarConexionTermux() {
-            try {
-                const response = await fetch(`${JSLLM7_API_URL}/stats`);
-                if (response.ok) {
-                    const stats = await response.json();
-                    jsllm7TermuxConectado = true;
-                    document.getElementById('jsllm7WidgetStatus').textContent = `🧠 jsllm7: ✅ Activo (${stats.total?.toLocaleString() || '404M'} en Termux:8081)`;
-                    document.getElementById('jsllm7WidgetStatus').style.color = '#10b981';
-                    console.log('✅ jsllm7 conectado a Termux:', stats);
-                }
-            } catch(e) {
-                jsllm7TermuxConectado = false;
-                document.getElementById('jsllm7WidgetStatus').textContent = '🧠 jsllm7: ⚠️ Usando CDN';
-                document.getElementById('jsllm7WidgetStatus').style.color = '#f59e0b';
-                console.warn('⚠️ Termux no disponible en puerto 8081');
+        showToast(`✨ ${total} casos históricos · 403M DECIDE · jsllm7 404M · Conectores activos`);
+    }
+    
+    async function verificarConexionTermux() {
+        try {
+            const response = await fetch(`${JSLLM7_API_URL}/stats`);
+            if (response.ok) {
+                const stats = await response.json();
+                jsllm7TermuxConectado = true;
+                document.getElementById('jsllm7WidgetStatus').textContent = `🧠 jsllm7: ✅ Activo (${stats.total?.toLocaleString() || '404M'} en Termux:8081)`;
+                document.getElementById('jsllm7WidgetStatus').style.color = '#10b981';
+                console.log('✅ jsllm7 conectado a Termux:', stats);
             }
+        } catch(e) {
+            jsllm7TermuxConectado = false;
+            document.getElementById('jsllm7WidgetStatus').textContent = '🧠 jsllm7: ⚠️ Usando CDN';
+            document.getElementById('jsllm7WidgetStatus').style.color = '#f59e0b';
+            console.warn('⚠️ Termux no disponible en puerto 8081');
         }
-        
-        function iniciar() {
-            actualizarDiario();
-            updatePrediction("BTC");
-            setInterval(() => updatePrediction(), 60000);
-            document.getElementById('refreshBtn').onclick = () => updatePrediction();
-            document.getElementById('searchBtn').onclick = () => {
-                const v = document.getElementById('searchInput').value.trim().toUpperCase();
-                if (v) updatePrediction(v);
-            };
-            document.getElementById('searchInput').addEventListener('keypress', e => {
-                if (e.key === 'Enter') {
-                    const v = document.getElementById('searchInput').value.trim().toUpperCase();
-                    if (v) updatePrediction(v);
-                }
-            });
-            actualizarSidebarHistorial();
-            actualizarMetricasConectores();
-            verificarConexionTermux();
-            setInterval(verificarConexionTermux, 30000);
-            
-            let intentos = 0;
-            const check = setInterval(() => {
-                if (typeof window.jsllm7 !== 'undefined') {
-                    clearInterval(check);
-                    showToast("🚀 403M DECIDE · jsllm7 404M · Conectores activos");
-                } else if (intentos > 30) clearInterval(check);
-                intentos++;
-            }, 500);
-        }
-        
-        iniciar();
-    </script>
+    }
+    
+    // Iniciar la aplicación
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+    
+    // Verificar conexión cada 30 segundos
+    setInterval(verificarConexionTermux, 30000);
+</script>
 
-    <script type="module">
-        import * as THREE from 'three'; import { OrbitControls } from 'three/addons/controls/OrbitControls.js'; import { VRButton } from 'three/addons/webxr/VRButton.js';
-        let scene, camera, renderer, controls, active = false;
-        const container = document.getElementById('vrContainer'), vrBtn = document.getElementById('vrModeBtn'), closeVr = document.getElementById('closeVrBtn'), vrMode = document.getElementById('vrMode');
-        function initVR() {
-            if (!container) return;
-            container.innerHTML = '';
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x0a0f1e);
-            camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-            camera.position.set(5, 3, 8);
-            renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            renderer.xr.enabled = true;
-            container.appendChild(renderer.domElement);
-            container.appendChild(VRButton.createButton(renderer));
-            controls = new OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            scene.add(new THREE.AmbientLight(0x404060));
-            const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-            dirLight.position.set(5, 10, 7);
-            scene.add(dirLight);
-            const floor = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), new THREE.MeshStandardMaterial({ color: 0x1a1f2e }));
-            floor.rotation.x = -Math.PI / 2;
-            floor.position.y = -1.5;
-            scene.add(floor);
-            for (let i = 0; i < 36; i++) {
-                const torus = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.05, 16, 32), new THREE.MeshStandardMaterial({ color: [0xf7931a, 0x627eea, 0x3b82f6, 0xec4899][i % 4] }));
-                const angle = (i / 36) * Math.PI * 2;
-                torus.position.set(Math.cos(angle) * 4, Math.sin(angle * 3) * 0.8, Math.sin(angle) * 4);
-                scene.add(torus);
-            }
-            function animate() { requestAnimationFrame(animate); controls.update(); renderer.render(scene, camera); }
-            animate();
-            active = true;
+<script type="module">
+    import * as THREE from 'three'; import { OrbitControls } from 'three/addons/controls/OrbitControls.js'; import { VRButton } from 'three/addons/webxr/VRButton.js';
+    let scene, camera, renderer, controls, active = false;
+    const container = document.getElementById('vrContainer'), vrBtn = document.getElementById('vrModeBtn'), closeVr = document.getElementById('closeVrBtn'), vrMode = document.getElementById('vrMode');
+    function initVR() {
+        if (!container) return; container.innerHTML = '';
+        scene = new THREE.Scene(); scene.background = new THREE.Color(0x0a0f1e);
+        camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000); camera.position.set(4, 1.6, 5);
+        renderer = new THREE.WebGLRenderer({ antialias: true }); renderer.setSize(container.clientWidth, container.clientHeight); renderer.xr.enabled = true;
+        container.appendChild(renderer.domElement); container.appendChild(VRButton.createButton(renderer));
+        controls = new OrbitControls(camera, renderer.domElement); controls.enableDamping = true;
+        scene.add(new THREE.AmbientLight(0x404060));
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1); dirLight.position.set(5, 10, 7); scene.add(dirLight);
+        const floor = new THREE.Mesh(new THREE.PlaneGeometry(14, 14), new THREE.MeshStandardMaterial({ color: 0x1a1f2e })); floor.rotation.x = -Math.PI / 2; floor.position.y = -1.2; scene.add(floor);
+        for (let i = 0; i < 40; i++) {
+            const book = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.38, 0.18), new THREE.MeshStandardMaterial({ color: [0x4a9eff, 0xf87171, 0xfbbf24, 0x60a5fa, 0xa78bfa, 0x34d399, 0xec4899][i % 7] }));
+            const angle = (i / 40) * Math.PI * 2; book.position.set(Math.cos(angle) * 2.8, Math.sin(angle * 2) * 0.6 + 0.6, Math.sin(angle) * 2.8 - 0.8); scene.add(book);
         }
-        vrBtn.addEventListener('click', () => { document.getElementById('normalMode').style.display = 'none'; vrMode.classList.add('active'); if (!active) setTimeout(initVR, 100); });
-        closeVr.addEventListener('click', () => { vrMode.classList.remove('active'); document.getElementById('normalMode').style.display = 'block'; });
-    </script>
+        function animate() { requestAnimationFrame(animate); controls.update(); renderer.render(scene, camera); } animate();
+        active = true;
+    }
+    vrBtn.addEventListener('click', () => { document.getElementById('normalMode').style.display = 'none'; vrMode.classList.add('active'); if (!active) setTimeout(initVR, 100); });
+    closeVr.addEventListener('click', () => { vrMode.classList.remove('active'); document.getElementById('normalMode').style.display = 'block'; });
+</script>
 </body>
 </html>
