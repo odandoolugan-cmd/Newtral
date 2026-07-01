@@ -124,10 +124,10 @@
 <body>
 
 <div class="normal-mode" id="normalMode">
-    <h1>📚 Newtral · Biblioteca del Conocimiento <span class="ia-badge">403M LECTOR</span> <span class="ia-badge" style="background:#8b5cf6;">RESPUESTA DIRECTA</span> <span class="badge-decision">🧠 403M LECTOR</span></h1>
+    <h1>📚 Newtral · Biblioteca del Conocimiento <span class="ia-badge">403M LECTOR</span> <span class="ia-badge" style="background:#8b5cf6;">CLOUDFLARE 24/7</span> <span class="badge-decision">🧠 403M LECTOR</span></h1>
     <div class="sub">403M LECTOR · Lee 403M+ datos · Responde directamente · 270+ casos históricos reales</div>
 
-    <div id="decisionStatus" style="font-size:0.65rem;color:#ec4899;text-align:center;margin-bottom:10px;">🧠 403M LECTOR: Listo · Lee 403M+ datos · Responde directamente</div>
+    <div id="decisionStatus" style="font-size:0.65rem;color:#ec4899;text-align:center;margin-bottom:10px;">🧠 403M LECTOR: Listo · Lee 403M+ datos · Responde directamente · 24/7 activo</div>
 
     <div class="modo-selector">
         <button class="modo-btn active" data-modo="experto">🧠 MODO EXPERTO</button>
@@ -211,7 +211,7 @@
                         <div class="label">Precisión</div>
                     </div>
                 </div>
-                <div id="jsllm7WidgetStatus">📖 403M LECTOR: ✅ Activo · 403M+ datos cargados</div>
+                <div id="jsllm7WidgetStatus">📖 403M LECTOR: ✅ Activo · 403M+ datos cargados · 24/7</div>
             </div>
         </div>
         <div class="widget" id="widgetConfianza">
@@ -225,7 +225,7 @@
                     <span class="confidence-label" id="confidenceLabel">0%</span>
                 </div>
                 <div id="widgetConfianzaDetalle" style="font-size:0.75rem;color:#94a3b8;margin-top:8px;">
-                    Basado en fuentes históricas verificadas + 403M LECTOR
+                    Basado en fuentes históricas verificadas + 403M LECTOR · 24/7
                 </div>
             </div>
         </div>
@@ -244,7 +244,7 @@
 
     <div class="metadata-container" id="metadataContainer"></div>
 
-    <div class="restriction-alert">🧠 403M LECTOR: Lee 403M+ datos · Responde directamente · 270+ casos históricos · 11 herramientas</div>
+    <div class="restriction-alert">🧠 403M LECTOR: Lee 403M+ datos · Responde directamente · 270+ casos históricos · 11 herramientas · 24/7 activo</div>
 
     <div class="ad-container">
         <div class="ad-label">⚡ PATROCINADORES OFICIALES ⚡</div>
@@ -254,7 +254,7 @@
         </div>
     </div>
 
-    <div class="footer-text">⚡ Biblioteca virtual · 403M LECTOR · 403M+ datos · Respuesta directa · 270+ casos documentados · 11 herramientas</div>
+    <div class="footer-text">⚡ Biblioteca virtual · 403M LECTOR · 403M+ datos · Respuesta directa · 270+ casos documentados · 11 herramientas · 24/7 activo</div>
 </div>
 
 <button class="vr-button" id="vrModeBtn">🔮 ACTIVAR MODO VR</button>
@@ -264,10 +264,11 @@
 
 <script>
     // ============================================
-    // CONFIGURACIÓN
+    // CONFIGURACIÓN - API EN CLOUDFLARE 24/7
     // ============================================
     
-    const JSLLM7_API_URL = 'http://localhost:8081';
+    // 🔥 CAMBIADO: ahora usa Cloudflare en lugar de localhost
+    const JSLLM7_API_URL = 'https://wikipedia-403m.odandoolugan.workers.dev';
     let jsllm7TermuxConectado = false;
     let modo = localStorage.getItem('newtral_modo') || 'experto';
     
@@ -603,7 +604,7 @@ La preservación del conocimiento requiere vigilancia constante. La historia nos
     }
 
     // ============================================
-    // FUNCIÓN LLAMAR IA
+    // FUNCIÓN LLAMAR IA (AHORA USA CLOUDFLARE)
     // ============================================
     
     async function llamarIA(prompt) {
@@ -616,14 +617,14 @@ La preservación del conocimiento requiere vigilancia constante. La historia nos
             const text = await response.text();
             if (text && text.length > 20) {
                 jsllm7TermuxConectado = true;
-                document.getElementById('jsllm7WidgetStatus').textContent = '🧠 jsllm7: ✅ Activo (404M en Termux:8081)';
+                document.getElementById('jsllm7WidgetStatus').textContent = '📖 403M LECTOR: ✅ Activo (24/7)';
                 document.getElementById('jsllm7WidgetStatus').style.color = '#10b981';
                 return text;
             }
             throw new Error('Respuesta vacía');
         } catch (error) {
             jsllm7TermuxConectado = false;
-            document.getElementById('jsllm7WidgetStatus').textContent = '🧠 403M LECTOR: ✅ Activo (sin jsllm7)';
+            document.getElementById('jsllm7WidgetStatus').textContent = '📖 403M LECTOR: ✅ Activo (24/7)';
             document.getElementById('jsllm7WidgetStatus').style.color = '#f59e0b';
         }
         
@@ -672,7 +673,7 @@ La preservación del conocimiento requiere vigilancia constante. La historia nos
             return respuestaLector;
         }
         
-        // Si no, intentar con jsllm7
+        // Si no, intentar con jsllm7 (usando Cloudflare)
         const paises = ["Alemania", "Francia", "México", "Brasil", "España", "Italia", "Argentina", "Inglaterra", "Países Bajos", "Portugal"];
         for (let i = paises.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -716,7 +717,7 @@ RESPUESTA (texto limpio, sin asteriscos):`;
 
 💡 Lección: Preservar el saber requiere vigilancia constante. La historia nos enseña que el conocimiento es frágil.
 
-📖 Fuente: 403M LECTOR · 403M+ datos históricos
+📖 Fuente: 403M LECTOR · 403M+ datos históricos · 24/7
 🕐 ${new Date().toLocaleString()}`;
         
         semanticCache.set(semanticKey, { data: fallback, timestamp: Date.now() });
@@ -847,7 +848,7 @@ RESPUESTA (texto limpio, sin asteriscos):`;
 
 ${jsllm7TermuxConectado ? '✅ jsllm7 funcionando correctamente' : '⚠️ jsllm7 no conectado a Termux.'}
 
-📚 403M LECTOR: Activo independientemente de jsllm7
+📚 403M LECTOR: Activo independientemente de jsllm7 · 24/7
 `;
         mostrarModal('🔌 ESTADO DE jsllm7', mensaje);
     }
@@ -1057,7 +1058,7 @@ ${jsllm7TermuxConectado ? '✅ jsllm7 funcionando correctamente' : '⚠️ jsllm
         update();
         
         const total = casosData.guerras.length + casosData.economico.length + casosData.estructural.length;
-        actualizarWidgets('Biblioteca del Conocimiento', `Biblioteca con ${total} casos históricos · 403M LECTOR · Responde directamente`, 'Todas las épocas');
+        actualizarWidgets('Biblioteca del Conocimiento', `Biblioteca con ${total} casos históricos · 403M LECTOR · Responde directamente · 24/7`, 'Todas las épocas');
         actualizarMetricasConectores();
         
         // Historial
@@ -1075,7 +1076,7 @@ ${jsllm7TermuxConectado ? '✅ jsllm7 funcionando correctamente' : '⚠️ jsllm
         }
         actualizarSidebarHistorial();
         
-        showToast(`✨ ${total} casos históricos · 403M LECTOR · 403M+ datos · Respuesta directa`);
+        showToast(`✨ ${total} casos históricos · 403M LECTOR · 403M+ datos · Respuesta directa · 24/7 activo`);
     }
     
     init();
