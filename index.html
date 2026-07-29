@@ -462,10 +462,37 @@ async function obtenerExplicacion(titulo, era, hook) {
     
     if (semanticCache.has(key)) { const c = semanticCache.get(key); if (Date.now() - c.timestamp < 86400000) return c.data; }
     
-    // ===== CAMBIO AQUÍ: Usar Cloudflare AI para la explicación histórica =====
+    // ===== FASE 2 y 3: Búsqueda en 12 fuentes + Envío de contexto a la IA =====
+    const resultados12 = await fuentes12.buscarTodasLasFuentes(titulo + ' history');
+    
+    let contextoAcademico = "";
+    if (resultados12.resumen.total_resultados > 0) {
+        contextoAcademico = `\n\n--- INICIO DE INVESTIGACIÓN HISTÓRICA ACADÉMICA ---\n`;
+        contextoAcademico += `Se encontraron ${resultados12.resumen.total_resultados} resultados académicos sobre este evento.\n\n`;
+        
+        const fuentesPrioritarias = ['semanticScholar', 'core', 'arxiv', 'wikipedia'];
+        fuentesPrioritarias.forEach(key => {
+            const f = resultados12.fuentes[key];
+            if (f && f.exito && f.count > 0) {
+                contextoAcademico += `\n[${key.toUpperCase()} - ${f.count} resultados]:\n`;
+                f.data.slice(0, 2).forEach(r => {
+                    contextoAcademico += `• Título: ${r.titulo || 'Sin título'}\n`;
+                    contextoAcademico += `  Autor: ${r.autor || 'Desconocido'} (${r.year || 's.f.'})\n`;
+                    contextoAcademico += `  Resumen: ${(r.abstract || r.descripcion || r.snippet || 'Sin resumen disponible.').substring(0, 200)}...\n`;
+                });
+            }
+        });
+        contextoAcademico += `\n--- FIN DE INVESTIGACIÓN HISTÓRICA ACADÉMICA ---\n\n`;
+    } else {
+        contextoAcademico = `\n[No se encontraron fuentes académicas específicas para este evento histórico en la búsqueda local.]\n\n`;
+    }
+
+    // ===== CAMBIO AQUÍ: Usar Cloudflare AI con contexto académico =====
     let respuesta = "";
     try {
-        const prompt = `Genera un análisis histórico detallado sobre "${titulo}" (${era}). Contexto: ${hook}. Incluye contexto, hechos clave y lecciones aprendidas.`;
+        const prompt = `Contexto académico:\n${contextoAcademico}\n\nGenera un análisis histórico detallado sobre "${titulo}" (${era}). Contexto: ${hook}. 
+        Instrucción: Si hay información académica arriba, ÚSALA para redactar una respuesta detallada y basada en hechos. Incluye contexto, hechos clave y lecciones aprendidas. Si no hay información académica, complementa con tu conocimiento general.`;
+        
         const response = await fetch(CLOUDFLARE_AI_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -629,14 +656,14 @@ async function explicarConIA(caso, card){
     const ia=card.querySelector('.ia-explicacion'); const btn=card.querySelector('.ia-btn');
     if(!ia||!btn) return;
     btn.disabled=true; btn.innerHTML='<span class="loading-spinner"></span> Analizando...';
-    ia.innerHTML="🤔 Consultando a Cloudflare AI...";
+    ia.innerHTML="🤔 Consultando a Cloudflare AI y fuentes académicas...";
     try {
         const resultado=await obtenerExplicacion(caso.titulo,caso.era,caso.hook);
         ia.innerHTML=resultado.replace(/\n/g, '<br>');
         btn.disabled=false; btn.innerHTML='🤖 Explicar con IA';
         ultimoAnalisis = resultado;
         actualizarWidgets(caso.titulo, resultado, caso.era);
-        showToast("✅ Análisis generado por Cloudflare AI");
+        showToast("✅ Análisis generado por Cloudflare AI usando fuentes reales");
         
         const exportDiv = document.createElement('div'); exportDiv.className = 'export-buttons';
         exportDiv.innerHTML = `<button class="export-btn" data-format="latex">📄 LaTeX</button><button class="export-btn" data-format="markdown">📝 Markdown</button><button class="export-btn" data-format="bibtex">📚 BibTeX</button><button class="export-btn" data-format="apa">📋 APA</button>`;
