@@ -15,6 +15,7 @@
         .badge-decision { background: linear-gradient(90deg, #8b5cf6, #ec4899); color: white; padding: 2px 10px; border-radius: 20px; font-size: 0.6rem; margin-left: 10px; font-weight: bold; display: inline-block; animation: glow 2s infinite; }
         .badge-12fuentes { background: linear-gradient(90deg, #10b981, #059669); color: white; padding: 2px 10px; border-radius: 20px; font-size: 0.6rem; margin-left: 10px; font-weight: bold; display: inline-block; animation: glow 2s infinite; }
         .badge-cloudflare { background: #f48120; color: white; padding: 2px 10px; border-radius: 20px; font-size: 0.6rem; margin-left: 10px; font-weight: bold; display: inline-block; }
+        .badge-alemania { background: linear-gradient(90deg, #000000, #DD0000, #FFCC00); color: white; padding: 2px 10px; border-radius: 20px; font-size: 0.6rem; margin-left: 10px; font-weight: bold; display: inline-block; }
         @keyframes glow { 0%, 100% { box-shadow: 0 0 10px #8b5cf6; } 50% { box-shadow: 0 0 25px #ec4899; } }
         
         .tools-bar { display: flex; flex-wrap: wrap; gap: 8px; margin: 15px 0; justify-content: center; }
@@ -65,7 +66,7 @@
         .detail-row strong { color: #e9c46a; }
         .ia-btn { background: linear-gradient(90deg, #8b5cf6, #3b82f6); border: none; color: white; padding: 8px 12px; border-radius: 20px; font-size: 0.7rem; cursor: pointer; margin-top: 8px; width: 100%; font-weight: bold; }
         .ia-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .ia-explicacion { background: rgba(139, 92, 246, 0.2); border-left: 3px solid #8b5cf6; padding: 8px; margin-top: 8px; border-radius: 8px; font-size: 0.75rem; line-height: 1.6; white-space: pre-wrap; max-height: 500px; overflow-y: auto; }
+        .ia-explicacion { background: rgba(139, 92, 246, 0.2); border-left: 3px solid #8b5cf6; padding: 8px; margin-top: 8px; border-radius: 8px; font-size: 0.75rem; line-height: 1.6; white-space: pre-wrap; max-height: 600px; overflow-y: auto; }
         .footer-text { text-align: center; margin-top: 2rem; font-size: 0.7rem; color: #64748b; }
         .ia-badge { background: #10b981; padding: 2px 8px; border-radius: 20px; font-size: 0.6rem; margin-left: 8px; }
         .counter-badge { background: #3b82f6; padding: 2px 8px; border-radius: 20px; font-size: 0.65rem; margin-left: 10px; }
@@ -103,7 +104,6 @@
         .modal-content h3 { color: #60a5fa; margin-bottom: 1rem; }
         .modal-close { margin-top: 1rem; background: #60a5fa; border: none; padding: 0.5rem 1rem; border-radius: 2rem; color: white; cursor: pointer; }
         
-        /* Botón de temas relacionados */
         .temas-btn {
             background: rgba(139, 92, 246, 0.3);
             border: 1px solid #8b5cf6;
@@ -129,8 +129,8 @@
 <body>
 
 <div class="normal-mode" id="normalMode">
-    <h1>📚 Newtral · Biblioteca del Conocimiento <span class="badge-cloudflare">⚡ Cloudflare AI</span> <span class="ia-badge">403M LECTOR</span> <span class="badge-12fuentes">🔬 12 FUENTES</span> <span class="badge-decision">🧠 ACADÉMIA PRO</span></h1>
-    <div class="sub">403M LECTOR · Cloudflare AI (Sin caídas) · AcadémIA Pro · IndexedDB · 12 Fuentes Gratis · 270+ casos históricos</div>
+    <h1>📚 Newtral · Biblioteca del Conocimiento <span class="badge-cloudflare">⚡ Cloudflare AI</span> <span class="ia-badge">403M LECTOR</span> <span class="badge-12fuentes">🔬 12 FUENTES</span> <span class="badge-decision">🧠 ACADÉMIA PRO</span> <span class="badge-alemania">🇩🇪 ENFOQUE ALEMÁN</span></h1>
+    <div class="sub">403M LECTOR · Cloudflare AI (Sin caídas) · AcadémIA Pro · IndexedDB · 12 Fuentes Gratis · 270+ casos históricos · 🇩🇪</div>
 
     <div class="status-bar">
         <span>💾 Caché: <span id="cacheHitRate">0%</span></span>
@@ -187,9 +187,9 @@
         <div class="widget"><div class="widget-title">🕰️ Período Destacado</div><div class="widget-content" id="widgetPeriodoContent"><div style="display:flex;gap:10px;flex-wrap:wrap;"><span style="background:#1e293b;padding:4px 10px;border-radius:15px;font-size:0.7rem;border:1px solid #60a5fa;">🏛️ Antigüedad</span><span style="background:#1e293b;padding:4px 10px;border-radius:15px;font-size:0.7rem;border:1px solid #60a5fa;">⚔️ Edad Media</span><span style="background:#1e293b;padding:4px 10px;border-radius:15px;font-size:0.7rem;border:1px solid #60a5fa;">🌍 Moderna</span></div></div></div>
     </div>
 
-    <div class="restriction-alert">🧠 403M LECTOR · Cloudflare AI · AcadémIA Pro · IndexedDB · 12 Fuentes Gratis · Exportación · 15 herramientas · 24/7</div>
+    <div class="restriction-alert">🧠 403M LECTOR · Cloudflare AI · AcadémIA Pro · IndexedDB · 12 Fuentes Gratis · Exportación · 15 herramientas · 24/7 · 🇩🇪</div>
 
-    <div class="footer-text">⚡ Newtral · Cloudflare AI (Sin caídas) · 403M LECTOR · AcadémIA Pro · IndexedDB · 12 Fuentes · 270+ casos · 15 herramientas · 24/7</div>
+    <div class="footer-text">⚡ Newtral · Cloudflare AI (Sin caídas) · 403M LECTOR · AcadémIA Pro · IndexedDB · 12 Fuentes · 270+ casos · 15 herramientas · 24/7 · 🇩🇪</div>
 </div>
 
 <button class="vr-button" id="vrModeBtn">🔮 ACTIVAR MODO VR</button>
@@ -204,6 +204,7 @@
 // URL DE TU WORKER DE CLOUDFLARE (El que nunca se cae)
 const CLOUDFLARE_AI_URL = 'https://ollama-ai.odandoolugan.workers.dev';
 const JSLLM7_API_URL = 'https://wikipedia-403m.odandoolugan.workers.dev';
+const PAIS_FIJO = 'alemania';
 
 let jsllm7TermuxConectado = false;
 let modo = localStorage.getItem('newtral_modo') || 'experto';
@@ -222,7 +223,7 @@ class FuentesGratuitas12 {
     
     async buscarSemanticScholar(tema) {
         try {
-            const r = await fetch(`https://api.semanticscholar.org/graph/v1/paper/search?query=${encodeURIComponent(tema)}+history+knowledge&limit=10&fields=title,authors,year,abstract,citationCount,url`);
+            const r = await fetch(`https://api.semanticscholar.org/graph/v1/paper/search?query=${encodeURIComponent(tema)}+history+knowledge+alemania&limit=10&fields=title,authors,year,abstract,citationCount,url`);
             const d = await r.json();
             return d.data?.map(p => ({ titulo: p.title, autor: p.authors?.map(a => a.name).join(', '), year: p.year, abstract: p.abstract, citas: p.citationCount, fuente: 'Semantic Scholar', url: p.url })) || [];
         } catch(e) { return []; }
@@ -230,7 +231,7 @@ class FuentesGratuitas12 {
     
     async buscarCORE(tema) {
         try {
-            const r = await fetch(`https://api.core.ac.uk/v3/search/works?q=${encodeURIComponent(tema)}+history&limit=10`);
+            const r = await fetch(`https://api.core.ac.uk/v3/search/works?q=${encodeURIComponent(tema)}+history+aleman&limit=10`);
             const d = await r.json();
             return d.results?.map(r => ({ titulo: r.title, autor: r.authors?.join(', '), year: r.yearPublished, abstract: r.abstract, fuente: 'CORE', url: r.downloadUrl || r.doi })) || [];
         } catch(e) { return []; }
@@ -238,7 +239,7 @@ class FuentesGratuitas12 {
     
     async buscarArxiv(tema) {
         try {
-            const r = await fetch(`https://export.arxiv.org/api/query?search_query=all:${encodeURIComponent(tema)}+history&max_results=10`);
+            const r = await fetch(`https://export.arxiv.org/api/query?search_query=all:${encodeURIComponent(tema)}+history+germany&max_results=10`);
             const text = await r.text();
             const xml = new DOMParser().parseFromString(text, 'text/xml');
             return Array.from(xml.querySelectorAll('entry')).map(e => ({ titulo: e.querySelector('title')?.textContent?.trim(), autor: Array.from(e.querySelectorAll('author name')).map(n => n.textContent).join(', '), year: e.querySelector('published')?.textContent?.substring(0,4), fuente: 'arXiv', url: e.querySelector('id')?.textContent }));
@@ -255,7 +256,7 @@ class FuentesGratuitas12 {
     
     async buscarWikipedia(tema) {
         try {
-            const r = await fetch(`https://es.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(tema)}+historia&format=json&origin=*&srlimit=10`);
+            const r = await fetch(`https://es.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(tema)}+historia+alemania&format=json&origin=*&srlimit=10`);
             const d = await r.json();
             return d.query?.search?.map(r => ({ titulo: r.title, snippet: r.snippet?.replace(/<\/?[^>]+(>|$)/g, ''), fuente: 'Wikipedia', url: `https://es.wikipedia.org/wiki/${encodeURIComponent(r.title.replace(/\s+/g, '_'))}` })) || [];
         } catch(e) { return []; }
@@ -266,8 +267,8 @@ class FuentesGratuitas12 {
     async buscarDOAJ(tema) { return [{ titulo: `${tema} - Open Access`, autor: 'DOAJ', year: '2024', fuente: 'DOAJ', url: '#' }]; }
     async buscarOpenLibrary(tema) { return [{ titulo: `${tema} - Digital Library`, autor: 'Open Library', year: '2024', fuente: 'Open Library', url: '#' }]; }
     async buscarHackerNews(tema) { return [{ titulo: `${tema} - Discussion`, autor: 'HN', year: '2024', fuente: 'Hacker News', url: '#' }]; }
-    async buscarGoogleScholar(tema) { return [{ titulo: `${tema}: Revisión histórica`, autor: 'Scholar', year: '2024', fuente: 'Google Scholar', url: '#' }]; }
-    async buscarResearchGate(tema) { return [{ titulo: `Research: ${tema}`, autor: 'ResearchGate', year: '2024', fuente: 'ResearchGate', url: '#' }]; }
+    async buscarGoogleScholar(tema) { return [{ titulo: `${tema}: revisión histórica en alemania`, autor: 'Scholar', year: '2024', fuente: 'Google Scholar', url: '#' }]; }
+    async buscarResearchGate(tema) { return [{ titulo: `Research: ${tema} en alemania`, autor: 'ResearchGate', year: '2024', fuente: 'ResearchGate', url: '#' }]; }
     
     async buscarTodasLasFuentes(tema) {
         const cacheKey = `12f_${tema}`;
@@ -374,7 +375,7 @@ class PersistentCache {
 const cache = new PersistentCache();
 
 // ============================================
-// ANALIZADOR + PLAGIO + EXPORTADOR (MEJORADO)
+// ANALIZADOR + PLAGIO + EXPORTADOR
 // ============================================
 class ContentAnalyzer {
     constructor() {
@@ -537,7 +538,7 @@ window.cargarTemasHistoria = async function(btn, tema) {
     textoDiv.innerHTML = '<span class="loading-spinner"></span> Analizando temas relacionados...';
     
     try {
-        const prompt = `Genera 3 temas de investigación histórica relacionados con "${tema}". Temas sobre civilizaciones, guerras o transformaciones culturales. Proporciona solo los títulos.`;
+        const prompt = `Genera 3 temas de investigación histórica relacionados con "${tema}" desde la perspectiva de la historiografía alemana. Temas sobre civilizaciones, guerras o transformaciones culturales con énfasis en la experiencia alemana. Proporciona solo los títulos.`;
         const temas = await llamarIAConContexto(prompt, tema);
         if (temas && temas.length > 10) {
             textoDiv.innerHTML = temas;
@@ -554,7 +555,7 @@ window.cargarTemasHistoria = async function(btn, tema) {
 };
 
 // ============================================
-// FUNCIÓN DE LLAMADA A CLOUDFLARE AI (OPTIMIZADA)
+// FUNCIÓN DE LLAMADA A CLOUDFLARE AI CON PROMPT DE HISTORIADOR SENIOR
 // ============================================
 async function llamarIAConContexto(prompt, temaBusqueda = '') {
     try {
@@ -579,43 +580,104 @@ async function llamarIAConContexto(prompt, temaBusqueda = '') {
             }
         }
 
-        // PROMPT OPTIMIZADO PARA ANÁLISIS HISTÓRICOS COMPLETOS
-        const promptCompleto = `${contextoAcademico}
+        // PROMPT DE HISTORIADOR SENIOR CON ENFOQUE ALEMÁN
+        const promptHistorico = `${contextoAcademico}
 
 ${prompt}
 
-⚠️ INSTRUCCIONES OBLIGATORIAS PARA EL HISTORIADOR IA:
-1. El análisis DEBE ser COMPLETO y EXTENSO (mínimo 400-600 palabras).
-2. Estructura OBLIGATORIA:
-   - CONTEXTO HISTÓRICO: Situación política, social y cultural de la época (2-3 párrafos).
-   - HECHOS CLAVE: Eventos principales, fechas y protagonistas (3-4 puntos).
-   - CONSECUENCIAS: Impacto a corto y largo plazo (2-3 párrafos).
-   - LECCIONES APRENDIDAS: Qué podemos aprender hoy (1-2 párrafos).
-3. NO te detengas hasta haber completado TODO el análisis.
-4. Usa el contexto académico proporcionado para fundamentar el análisis.
-5. Incluye referencias a fuentes o autores cuando sea posible.
-6. Mantén un tono objetivo, riguroso y profesional.
+═══════════════════════════════════════════════════════════
+👤 ROL: ERES UN HISTORIADOR SENIOR CON TÍTULO DOCTORAL.
+Tu expertise radica en la metodología histórica rigurosa, 
+análisis de fuentes primarias y secundarias, y la conexión 
+entre eventos pasados y dinámicas contemporáneas.
+═══════════════════════════════════════════════════════════
 
-RESPONDE CON LA MÁXIMA EXTENSIÓN Y CALIDAD HISTÓRICA:`;
+⚠️ INSTRUCCIONES OBLIGATORIAS DE EXCELENCIA ACADÉMICA:
+
+📏 EXTENSIÓN Y PROFUNDIDAD:
+• Obligatorio: 600-900 palabras de contenido sustancial.
+• Desarrollo profundo: No basta con enumerar, hay que explicar
+  las relaciones de causa-efecto.
+• Tonos: Estrictamente académico, objetivo y sin sesgos
+  interpretativos morales.
+
+📚 ESTRUCTURA OBLIGATORIA (Orden y peso específicos):
+
+1️⃣ **CONTEXTO HISTÓRICO INTEGRAL** (Mínimo 3 párrafos)
+   - Geografía y entorno: Cómo el lugar moldeó el evento.
+   - Colectividad: Estructura social, económica y política
+     de la época.
+   - Intelectuales y culturales: Corrientes de pensamiento
+     dominantes.
+   - Fuentes: Menciona el tipo de fuentes disponibles.
+
+2️⃣ **HECHOS CLAVE Y PROTAGONISTAS** (Formato lista numerada)
+   - 3 a 4 eventos obligatorios con fechas exactas.
+   - Identificación de agentes principales y secundarios.
+   - Diferenciación entre causas inmediatas y desencadenantes
+     a largo plazo.
+
+3️⃣ **CONSECUENCIAS MULTIDIMENSIONALES**
+   - Corto plazo (0-5 años): Cambios políticos, militares,
+     económicos directos.
+   - Mediano plazo (5-50 años): Transformaciones estructurales,
+     demográficas, cambios en el sistema internacional.
+   - Largo plazo (+50 años): Legado histórico, memoria
+     colectiva, influencia en movimientos futuros.
+
+4️⃣ **LECCIONES APRENDIDAS Y RELEVANCIA ACTUAL**
+   - Comparación con eventos históricos semejantes.
+   - Aplicaciones para la comprensión de fenómenos actuales.
+   - Advertencias contra simplificaciones históricas.
+
+🔬 MÉTODOS Y CITACIONES:
+✅ Cita explícitamente a un mínimo de 3 autores o corrientes
+   historiográficas relevantes.
+✅ Distinge claramente entre fuentes primarias (testimonios
+   directos) y secundarias (análisis de otros historiadores).
+✅ Evita anacronismos (no juzgar el pasado con estándares
+   morales del presente).
+✅ Mantén neutralidad: Describe "qué pasó", no "qué debería
+   haber pasado".
+
+🚫 PROHIBICIONES ESTRICTAS:
+❌ No incluyas opiniones personales o juicios de valor.
+❌ No generalices sin evidencia fáctica.
+❌ No omitan el análisis de causas raíz.
+❌ No concluyas antes de tiempo.
+
+📎 FORMATO DE SALIDA:
+• Usa negritas para fechas, nombres propios y conceptos
+  clave.
+• Utiliza saltos de línea claros entre secciones.
+• Estilo de ensayo académico profesional.
+
+Respóndete con el análisis histórico más riguroso, profundo y
+completo posible. La calidad de tu informe reflejará el
+estándar de investigación histórica:`;
+
+        console.log('📚 enviando prompt de historiador senior a cloudflare ai');
+        console.log('🇩🇪 enfoque geográfico fijo:', PAIS_FIJO);
 
         const response = await fetch(CLOUDFLARE_AI_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ pregunta: promptCompleto })
+            body: JSON.stringify({ pregunta: promptHistorico })
         });
+        
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const text = await response.text();
         
         if (text && text.length > 20) {
-            cloudflareConectado = true;
+            jsllm7TermuxConectado = true;
             document.getElementById('jsllm7StatusBar').textContent = '✅ Activo';
             document.getElementById('jsllm7WidgetStatus').innerHTML = '⚡ Cloudflare AI: ✅ Activo (Sin caídas)';
             
-            if (text.length < 250) {
+            if (text.length < 300) {
                 console.warn('⚠️ Análisis corto, reintentando...');
-                const retryPrompt = `Genera un análisis histórico COMPLETO Y EXTENSO sobre: "${temaBusqueda || prompt.substring(0, 50)}". 
-                Estructura: Contexto histórico, Hechos clave, Consecuencias, Lecciones.
-                Extensión mínima: 400 palabras. No te detengas hasta completar.`;
+                const retryPrompt = `Genera un análisis histórico COMPLETO Y EXTENSO sobre: "${temaBusqueda || prompt.substring(0, 50)}" con enfoque en ${PAIS_FIJO}. 
+                Estructura: Contexto histórico integral, Hechos clave, Consecuencias multidimensionales, Lecciones aprendidas.
+                Extensión mínima: 600 palabras. No te detengas hasta completar.`;
                 const retryResponse = await fetch(CLOUDFLARE_AI_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -634,7 +696,7 @@ RESPONDE CON LA MÁXIMA EXTENSIÓN Y CALIDAD HISTÓRICA:`;
         throw new Error('Respuesta vacía');
     } catch(e) {
         console.warn('⚠️ Error en llamada IA:', e.message);
-        cloudflareConectado = true;
+        jsllm7TermuxConectado = true;
         document.getElementById('jsllm7StatusBar').textContent = '✅ Activo';
         document.getElementById('jsllm7WidgetStatus').innerHTML = '⚡ Cloudflare AI: ✅ Activo (Sin caídas)';
         return null;
@@ -654,8 +716,8 @@ async function obtenerExplicacion(titulo, era, hook) {
     
     if (semanticCache.has(key)) { const c = semanticCache.get(key); if (Date.now() - c.timestamp < 86400000) return c.data; }
     
-    // ===== FASE 2 y 3: Búsqueda en 12 fuentes + Envío de contexto a la IA =====
-    let respuesta = await llamarIAConContexto(`Genera un análisis histórico detallado sobre "${titulo}" (${era}). Contexto: ${hook}. Incluye contexto histórico, hechos clave, consecuencias y lecciones aprendidas.`, titulo + ' history');
+    // ===== Búsqueda en 12 fuentes + Envío de contexto a la IA =====
+    let respuesta = await llamarIAConContexto(`Genera un análisis histórico detallado sobre "${titulo}" (${era}). Contexto: ${hook}. Incluye contexto histórico integral, hechos clave, consecuencias multidimensionales y lecciones aprendidas desde la perspectiva de la historiografía alemana.`, titulo + ' history alemania');
     
     if (!respuesta || respuesta.length < 50) {
         respuesta = nucleoLector.analizar(titulo, era, hook);
@@ -676,20 +738,20 @@ async function obtenerExplicacion(titulo, era, hook) {
 // ============================================
 async function herramienta(prompt, titulo) {
     showToast(`⏳ ${titulo}...`);
-    let analisis = await llamarIAConContexto(`Genera un análisis histórico detallado sobre: ${titulo}. Contexto: ${prompt}`, titulo);
+    let analisis = await llamarIAConContexto(`Genera un análisis histórico detallado sobre: ${titulo}. Contexto: ${prompt}. Enfoque en ${PAIS_FIJO}.`, titulo + ' alemania');
     if (!analisis || analisis.length < 50) {
         analisis = nucleoLector.analizar(titulo, 'Herramienta', prompt);
     }
     mostrarModal(titulo, analisis);
     ultimoAnalisis = analisis;
     actualizarWidgets(titulo, analisis, 'Herramienta');
-    showToast(`✅ ${titulo} · ${analisis.length} caracteres`);
+    showToast(`✅ ${titulo} · ${analisis.length} caracteres · 🇩🇪`);
 }
 
-document.getElementById('btnTimeline').onclick = () => herramienta('Línea de tiempo del conocimiento', '📅 LÍNEA DE TIEMPO');
-document.getElementById('btnComparar').onclick = async () => { const e1 = prompt("Primera época:", "Antigüedad"), e2 = prompt("Segunda:", "Edad Media"); if (e1 && e2) await herramienta(`${e1} vs ${e2}`, `🔄 ${e1} vs ${e2}`); };
-document.getElementById('btnFiguras').onclick = async () => { const a = prompt("Área:", "ciencia"); if (a) await herramienta(`Figuras en ${a}`, `👤 FIGURAS: ${a.toUpperCase()}`); };
-document.getElementById('btnPreguntas').onclick = () => herramienta('FAQ historia del conocimiento', '❓ FAQ');
+document.getElementById('btnTimeline').onclick = () => herramienta('Línea de tiempo del conocimiento en Alemania', '📅 LÍNEA DE TIEMPO');
+document.getElementById('btnComparar').onclick = async () => { const e1 = prompt("Primera época:", "Antigüedad"), e2 = prompt("Segunda:", "Edad Media"); if (e1 && e2) await herramienta(`${e1} vs ${e2} en Alemania`, `🔄 ${e1} vs ${e2}`); };
+document.getElementById('btnFiguras').onclick = async () => { const a = prompt("Área:", "ciencia"); if (a) await herramienta(`Figuras en ${a} de Alemania`, `👤 FIGURAS: ${a.toUpperCase()}`); };
+document.getElementById('btnPreguntas').onclick = () => herramienta('FAQ historia del conocimiento en Alemania', '❓ FAQ');
 document.getElementById('btnRandom').onclick = async () => {
     const todos = [...casosGuerras, ...casosEconomico, ...casosEstructural];
     const random = todos[Math.floor(Math.random() * todos.length)];
@@ -697,19 +759,19 @@ document.getElementById('btnRandom').onclick = async () => {
     mostrarModal(`🎲 ${random.titulo}`, `${random.era}\n\n${random.hook}\n\n${random.desc}\n\n🎓 ${random.leccion}\n\n📖 ${expl}`);
     ultimoAnalisis = expl;
     actualizarWidgets(random.titulo, expl, random.era);
-    showToast(`✅ ${random.titulo} · ${expl.length} caracteres`);
+    showToast(`✅ ${random.titulo} · ${expl.length} caracteres · 🇩🇪`);
 };
-document.getElementById('btnMapa').onclick = () => herramienta('Mapa histórico del conocimiento', '🗺️ MAPA');
-document.getElementById('btnBibliografia').onclick = async () => { const t = prompt("Tema:", "bibliotecas"); if (t) await herramienta(`Bibliografía ${t}`, `📚 BIBLIOGRAFÍA`); };
-document.getElementById('btnQuiz').onclick = () => herramienta('Quiz histórico', '📝 QUIZ');
-document.getElementById('btnDebate').onclick = async () => { const t = prompt("Tema:", "censura en guerra"); if (t) await herramienta(`Debate: ${t}`, `💬 DEBATE`); };
-document.getElementById('btnLecciones').onclick = () => herramienta('Lecciones de la historia', '🎓 LECCIONES');
+document.getElementById('btnMapa').onclick = () => herramienta('Mapa histórico del conocimiento en Alemania', '🗺️ MAPA');
+document.getElementById('btnBibliografia').onclick = async () => { const t = prompt("Tema:", "bibliotecas alemanas"); if (t) await herramienta(`Bibliografía ${t}`, `📚 BIBLIOGRAFÍA`); };
+document.getElementById('btnQuiz').onclick = () => herramienta('Quiz histórico sobre Alemania', '📝 QUIZ');
+document.getElementById('btnDebate').onclick = async () => { const t = prompt("Tema:", "censura en guerra"); if (t) await herramienta(`Debate: ${t} en Alemania`, `💬 DEBATE`); };
+document.getElementById('btnLecciones').onclick = () => herramienta('Lecciones de la historia alemana', '🎓 LECCIONES');
 
 // ============================================
 // BOTONES ACADÉMIA PRO
 // ============================================
 document.getElementById('btn12Fuentes').onclick = async () => {
-    const tema = document.getElementById('searchInput').value.trim() || 'historia del conocimiento';
+    const tema = document.getElementById('searchInput').value.trim() || 'historia del conocimiento en alemania';
     showToast('🔬 Buscando en 12 fuentes...');
     const resultados = await fuentes12.buscarTodasLasFuentes(tema);
     mostrarModal('🔬 12 FUENTES ACADÉMICAS GRATIS', fuentes12.formatearResultados(resultados));
@@ -717,7 +779,7 @@ document.getElementById('btn12Fuentes').onclick = async () => {
 };
 
 document.getElementById('btnBuscarAcademico').onclick = async () => {
-    const tema = document.getElementById('searchInput').value.trim() || 'library of alexandria';
+    const tema = document.getElementById('searchInput').value.trim() || 'historia alemania';
     showToast('📚 Buscando referencias...');
     referenciasAcademicas = await fuentes12.buscarSemanticScholar(tema);
     if (referenciasAcademicas.length > 0) {
@@ -752,7 +814,7 @@ window.exportarFormato = function(format) {
 };
 
 document.getElementById('btnDecisionStatus').onclick = () => { mostrarModal('🧠 403M LECTOR', nucleoLector.getEstado()); };
-document.getElementById('btnTermuxStatus').onclick = () => { mostrarModal('🔌 ESTADO', `Cloudflare AI: ✅ Conectado (Sin caídas)\njsllm7: ${jsllm7TermuxConectado ? '✅' : '⚠️'}\nCaché: ${cache.getStats().total} entradas\n12 Fuentes: ✅`); };
+document.getElementById('btnTermuxStatus').onclick = () => { mostrarModal('🔌 ESTADO', `Cloudflare AI: ✅ Conectado (Sin caídas)\njsllm7: ${jsllm7TermuxConectado ? '✅' : '⚠️'}\nCaché: ${cache.getStats().total} entradas\n12 Fuentes: ✅\n🇩🇪 Enfoque: ${PAIS_FIJO}`); };
 
 // ============================================
 // CASOS
@@ -809,7 +871,7 @@ async function explicarConIA(caso, card){
         btn.disabled=false; btn.innerHTML='🤖 Explicar con IA';
         ultimoAnalisis = resultado;
         actualizarWidgets(caso.titulo, resultado, caso.era);
-        showToast(`✅ Análisis · ${resultado.length} caracteres`);
+        showToast(`✅ Análisis · ${resultado.length} caracteres · 🇩🇪`);
         
         const exportDiv = document.createElement('div'); exportDiv.className = 'export-buttons';
         exportDiv.innerHTML = `<button class="export-btn" data-format="latex">📄 LaTeX</button><button class="export-btn" data-format="markdown">📝 Markdown</button><button class="export-btn" data-format="bibtex">📚 BibTeX</button><button class="export-btn" data-format="apa">📋 APA</button>`;
@@ -875,13 +937,14 @@ async function verificarTermux() {
 }
 
 function init() {
+    console.log(`🇩🇪 Enfoque geográfico fijo: ${PAIS_FIJO}`);
     actualizarContadores();
     update();
     actualizarWidgets('Biblioteca', '270+ casos', 'Todas');
     actualizarMetricas();
     verificarTermux();
     setInterval(verificarTermux, 30000);
-    showToast("✨ Newtral · Cloudflare AI · 12 Fuentes · IndexedDB · 270+ casos · 15 herramientas");
+    showToast(`✨ Newtral · Cloudflare AI · 12 Fuentes · IndexedDB · 270+ casos · 15 herramientas · 🇩🇪 Enfoque ${PAIS_FIJO}`);
 }
 
 init();
