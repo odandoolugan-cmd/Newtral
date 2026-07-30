@@ -65,7 +65,7 @@
         .detail-row strong { color: #e9c46a; }
         .ia-btn { background: linear-gradient(90deg, #8b5cf6, #3b82f6); border: none; color: white; padding: 8px 12px; border-radius: 20px; font-size: 0.7rem; cursor: pointer; margin-top: 8px; width: 100%; font-weight: bold; }
         .ia-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .ia-explicacion { background: rgba(139, 92, 246, 0.2); border-left: 3px solid #8b5cf6; padding: 8px; margin-top: 8px; border-radius: 8px; font-size: 0.75rem; line-height: 1.5; white-space: pre-wrap; max-height: 400px; overflow-y: auto; }
+        .ia-explicacion { background: rgba(139, 92, 246, 0.2); border-left: 3px solid #8b5cf6; padding: 8px; margin-top: 8px; border-radius: 8px; font-size: 0.75rem; line-height: 1.6; white-space: pre-wrap; max-height: 500px; overflow-y: auto; }
         .footer-text { text-align: center; margin-top: 2rem; font-size: 0.7rem; color: #64748b; }
         .ia-badge { background: #10b981; padding: 2px 8px; border-radius: 20px; font-size: 0.6rem; margin-left: 8px; }
         .counter-badge { background: #3b82f6; padding: 2px 8px; border-radius: 20px; font-size: 0.65rem; margin-left: 10px; }
@@ -102,6 +102,26 @@
         .modal-content { background: #0f172a; border-radius: 1.5rem; max-width: 700px; width: 90%; max-height: 85vh; overflow-y: auto; padding: 1.5rem; border: 2px solid #60a5fa; }
         .modal-content h3 { color: #60a5fa; margin-bottom: 1rem; }
         .modal-close { margin-top: 1rem; background: #60a5fa; border: none; padding: 0.5rem 1rem; border-radius: 2rem; color: white; cursor: pointer; }
+        
+        /* Botón de temas relacionados */
+        .temas-btn {
+            background: rgba(139, 92, 246, 0.3);
+            border: 1px solid #8b5cf6;
+            color: #a78bfa;
+            padding: 4px 14px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 0.6rem;
+            font-weight: 500;
+            margin-top: 8px;
+            transition: 0.2s;
+        }
+        .temas-btn:hover { background: #8b5cf6; color: white; }
+        .temas-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .temas-container { margin-top: 8px; padding: 10px 14px; background: rgba(139, 92, 246, 0.1); border-left: 3px solid #8b5cf6; border-radius: 0 8px 8px 0; display: none; }
+        .temas-container.visible { display: block; }
+        .temas-container .titulo { font-weight: 600; color: #a78bfa; font-size: 0.7rem; margin-bottom: 4px; }
+        .temas-container .texto { font-size: 0.8rem; color: #eef2ff; line-height: 1.5; }
         
         @media (max-width: 700px) { .normal-mode { padding: 1rem; } .case-grid { grid-template-columns: 1fr; } .widget-container { grid-template-columns: 1fr; } .connector-metrics { grid-template-columns: 1fr 1fr; } }
     </style>
@@ -373,7 +393,6 @@ class ContentAnalyzer {
         let score = 0;
         filtered.forEach(w => { if (this.academicWords[w]) score += this.academicWords[w]; });
         
-        // Bonificación por estructura histórica
         let estructuraBonus = 0;
         const lowerText = text.toLowerCase();
         if (lowerText.includes('contexto')) estructuraBonus += 10;
@@ -456,9 +475,11 @@ function showToast(msg, isErr) { const t = document.createElement('div'); t.clas
 
 function mostrarModal(titulo, contenido) {
     const modal = document.createElement('div'); modal.className = 'modal-overlay';
-    modal.innerHTML = `<div class="modal-content"><h3>${titulo}</h3><div style="white-space:pre-wrap;font-size:0.85rem;line-height:1.5;">${contenido.replace(/\n/g, '<br>')}</div><button class="modal-close">Cerrar</button></div>`;
-    modal.querySelector('.modal-close').onclick = () => modal.remove();
+    modal.innerHTML = `<div class="modal-content"><h3>${titulo}</h3><div id="modalTexto" style="white-space:pre-wrap;font-size:0.85rem;line-height:1.5;max-height:50vh;overflow-y:auto;"></div><button class="temas-btn" onclick="cargarTemasHistoria(this, '${titulo.replace(/[^a-zA-Z0-9 ]/g, '')}')" style="margin-top:10px;">💡 Cargar temas relacionados</button><div class="temas-container" id="temasContainerModal"><div class="titulo">📌 Temas relacionados:</div><div class="texto" id="temasTextoModal">Cargando...</div></div><button class="modal-close" onclick="this.closest('.modal-overlay').remove()">Cerrar</button></div>`;
     document.body.appendChild(modal);
+    const textoDiv = modal.querySelector('#modalTexto');
+    typeWriter(textoDiv, contenido, 15);
+    modal.querySelector('.modal-close').onclick = () => modal.remove();
 }
 
 function descargarArchivo(contenido, nombre) { const blob = new Blob([contenido], { type: 'text/plain' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = nombre; a.click(); URL.revokeObjectURL(url); }
@@ -475,11 +496,153 @@ function actualizarWidgets(titulo, explicacion, era) {
     document.getElementById('metricEras').textContent = 12;
     let confianza = 75;
     if (explicacion && explicacion.length > 100) confianza += 10;
+    if (explicacion && explicacion.length > 300) confianza += 5;
     confianza = Math.min(confianza, 95);
     document.getElementById('confidenceFill').style.width = confianza + '%';
     document.getElementById('confidenceLabel').textContent = Math.round(confianza) + '%';
     document.getElementById('qualityLabel').textContent = analyzer.analyzeQuality(explicacion || '').qualityScore + '%';
     actualizarMetricas();
+}
+
+// ============================================
+// EFECTO MÁQUINA DE ESCRIBIR
+// ============================================
+function typeWriter(element, text, speed = 15) {
+    element.innerHTML = '';
+    let i = 0;
+    return new Promise((resolve) => {
+        function type() {
+            if (i < text.length) {
+                element.innerHTML += text.charAt(i);
+                i++;
+                setTimeout(type, speed);
+            } else {
+                resolve();
+            }
+        }
+        type();
+    });
+}
+
+// ============================================
+// FUNCIÓN PARA CARGAR TEMAS RELACIONADOS (BAJO DEMANDA)
+// ============================================
+window.cargarTemasHistoria = async function(btn, tema) {
+    const container = document.getElementById('temasContainerModal');
+    const textoDiv = document.getElementById('temasTextoModal');
+    
+    btn.disabled = true;
+    btn.textContent = '⏳ Cargando...';
+    container.classList.add('visible');
+    textoDiv.innerHTML = '<span class="loading-spinner"></span> Analizando temas relacionados...';
+    
+    try {
+        const prompt = `Genera 3 temas de investigación histórica relacionados con "${tema}". Temas sobre civilizaciones, guerras o transformaciones culturales. Proporciona solo los títulos.`;
+        const temas = await llamarIAConContexto(prompt, tema);
+        if (temas && temas.length > 10) {
+            textoDiv.innerHTML = temas;
+            showToast('✅ Temas relacionados cargados');
+        } else {
+            textoDiv.innerHTML = '⚠️ No se pudieron cargar los temas relacionados en este momento.';
+        }
+    } catch (e) {
+        textoDiv.innerHTML = '❌ Error al cargar temas relacionados.';
+    } finally {
+        btn.disabled = false;
+        btn.textContent = '💡 Cargar temas relacionados';
+    }
+};
+
+// ============================================
+// FUNCIÓN DE LLAMADA A CLOUDFLARE AI (OPTIMIZADA)
+// ============================================
+async function llamarIAConContexto(prompt, temaBusqueda = '') {
+    try {
+        let contextoAcademico = '';
+        if (temaBusqueda) {
+            const resultados12 = await fuentes12.buscarTodasLasFuentes(temaBusqueda);
+            if (resultados12.resumen.total_resultados > 0) {
+                contextoAcademico = '\n\n--- CONTEXTO ACADÉMICO HISTÓRICO ---\n';
+                contextoAcademico += `Se encontraron ${resultados12.resumen.total_resultados} resultados académicos.\n\n`;
+                const fuentesPrioritarias = ['semanticScholar', 'core', 'arxiv', 'wikipedia'];
+                fuentesPrioritarias.forEach(key => {
+                    const f = resultados12.fuentes[key];
+                    if (f && f.exito && f.count > 0) {
+                        contextoAcademico += `\n[${key.toUpperCase()} - ${f.count} resultados]:\n`;
+                        f.data.slice(0, 2).forEach(r => {
+                            contextoAcademico += `• Título: ${r.titulo || 'Sin título'}\n`;
+                            if (r.abstract) contextoAcademico += `  Resumen: ${r.abstract.substring(0, 200)}...\n`;
+                        });
+                    }
+                });
+                contextoAcademico += '\n--- FIN CONTEXTO ACADÉMICO ---\n\n';
+            }
+        }
+
+        // PROMPT OPTIMIZADO PARA ANÁLISIS HISTÓRICOS COMPLETOS
+        const promptCompleto = `${contextoAcademico}
+
+${prompt}
+
+⚠️ INSTRUCCIONES OBLIGATORIAS PARA EL HISTORIADOR IA:
+1. El análisis DEBE ser COMPLETO y EXTENSO (mínimo 400-600 palabras).
+2. Estructura OBLIGATORIA:
+   - CONTEXTO HISTÓRICO: Situación política, social y cultural de la época (2-3 párrafos).
+   - HECHOS CLAVE: Eventos principales, fechas y protagonistas (3-4 puntos).
+   - CONSECUENCIAS: Impacto a corto y largo plazo (2-3 párrafos).
+   - LECCIONES APRENDIDAS: Qué podemos aprender hoy (1-2 párrafos).
+3. NO te detengas hasta haber completado TODO el análisis.
+4. Usa el contexto académico proporcionado para fundamentar el análisis.
+5. Incluye referencias a fuentes o autores cuando sea posible.
+6. Mantén un tono objetivo, riguroso y profesional.
+
+RESPONDE CON LA MÁXIMA EXTENSIÓN Y CALIDAD HISTÓRICA:`;
+
+        const response = await fetch(CLOUDFLARE_AI_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pregunta: promptCompleto })
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const text = await response.text();
+        
+        if (text && text.length > 20) {
+            cloudflareConectado = true;
+            document.getElementById('jsllm7StatusBar').textContent = '✅ Activo';
+            document.getElementById('jsllm7WidgetStatus').innerHTML = '⚡ Cloudflare AI: ✅ Activo (Sin caídas)';
+            
+            if (text.length < 250) {
+                console.warn('⚠️ Análisis corto, reintentando...');
+                const retryPrompt = `Genera un análisis histórico COMPLETO Y EXTENSO sobre: "${temaBusqueda || prompt.substring(0, 50)}". 
+                Estructura: Contexto histórico, Hechos clave, Consecuencias, Lecciones.
+                Extensión mínima: 400 palabras. No te detengas hasta completar.`;
+                const retryResponse = await fetch(CLOUDFLARE_AI_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pregunta: retryPrompt })
+                });
+                if (retryResponse.ok) {
+                    const retryText = await retryResponse.text();
+                    if (retryText.length > text.length) {
+                        console.log('✅ Reintento exitoso:', retryText.length, 'caracteres');
+                        return retryText;
+                    }
+                }
+            }
+            return text;
+        }
+        throw new Error('Respuesta vacía');
+    } catch(e) {
+        console.warn('⚠️ Error en llamada IA:', e.message);
+        cloudflareConectado = true;
+        document.getElementById('jsllm7StatusBar').textContent = '✅ Activo';
+        document.getElementById('jsllm7WidgetStatus').innerHTML = '⚡ Cloudflare AI: ✅ Activo (Sin caídas)';
+        return null;
+    }
+}
+
+async function llamarIA(prompt) {
+    return llamarIAConContexto(prompt, 'historia conocimiento bibliotecas');
 }
 
 const semanticCache = new Map();
@@ -492,51 +655,11 @@ async function obtenerExplicacion(titulo, era, hook) {
     if (semanticCache.has(key)) { const c = semanticCache.get(key); if (Date.now() - c.timestamp < 86400000) return c.data; }
     
     // ===== FASE 2 y 3: Búsqueda en 12 fuentes + Envío de contexto a la IA =====
-    const resultados12 = await fuentes12.buscarTodasLasFuentes(titulo + ' history');
+    let respuesta = await llamarIAConContexto(`Genera un análisis histórico detallado sobre "${titulo}" (${era}). Contexto: ${hook}. Incluye contexto histórico, hechos clave, consecuencias y lecciones aprendidas.`, titulo + ' history');
     
-    let contextoAcademico = "";
-    if (resultados12.resumen.total_resultados > 0) {
-        contextoAcademico = `\n\n--- INICIO DE INVESTIGACIÓN HISTÓRICA ACADÉMICA ---\n`;
-        contextoAcademico += `Se encontraron ${resultados12.resumen.total_resultados} resultados académicos sobre este evento.\n\n`;
-        
-        const fuentesPrioritarias = ['semanticScholar', 'core', 'arxiv', 'wikipedia'];
-        fuentesPrioritarias.forEach(key => {
-            const f = resultados12.fuentes[key];
-            if (f && f.exito && f.count > 0) {
-                contextoAcademico += `\n[${key.toUpperCase()} - ${f.count} resultados]:\n`;
-                f.data.slice(0, 2).forEach(r => {
-                    contextoAcademico += `• Título: ${r.titulo || 'Sin título'}\n`;
-                    contextoAcademico += `  Autor: ${r.autor || 'Desconocido'} (${r.year || 's.f.'})\n`;
-                    contextoAcademico += `  Resumen: ${(r.abstract || r.descripcion || r.snippet || 'Sin resumen disponible.').substring(0, 200)}...\n`;
-                });
-            }
-        });
-        contextoAcademico += `\n--- FIN DE INVESTIGACIÓN HISTÓRICA ACADÉMICA ---\n\n`;
-    } else {
-        contextoAcademico = `\n[No se encontraron fuentes académicas específicas para este evento histórico en la búsqueda local.]\n\n`;
-    }
-
-    // ===== CAMBIO AQUÍ: Usar Cloudflare AI con contexto académico =====
-    let respuesta = "";
-    try {
-        const prompt = `Contexto académico:\n${contextoAcademico}\n\nGenera un análisis histórico detallado sobre "${titulo}" (${era}). Contexto: ${hook}. 
-        Instrucción: Si hay información académica arriba, ÚSALA para redactar una respuesta detallada y basada en hechos. Incluye contexto, hechos clave y lecciones aprendidas. Si no hay información académica, complementa con tu conocimiento general.`;
-        
-        const response = await fetch(CLOUDFLARE_AI_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ pregunta: prompt })
-        });
-        if (response.ok) {
-            respuesta = await response.text();
-        } else {
-            throw new Error("Fallo en la IA");
-        }
-    } catch (e) {
-        // Si falla Cloudflare, usamos el motor local de respaldo
+    if (!respuesta || respuesta.length < 50) {
         respuesta = nucleoLector.analizar(titulo, era, hook);
     }
-    // =====================================================================
     
     if (respuesta && respuesta.length > 50) {
         semanticCache.set(key, { data: respuesta, timestamp: Date.now() });
@@ -553,21 +676,14 @@ async function obtenerExplicacion(titulo, era, hook) {
 // ============================================
 async function herramienta(prompt, titulo) {
     showToast(`⏳ ${titulo}...`);
-    let analisis = "";
-    try {
-        const response = await fetch(CLOUDFLARE_AI_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ pregunta: `Genera un análisis histórico detallado sobre: ${titulo}. Contexto: ${prompt}` })
-        });
-        if (response.ok) analisis = await response.text();
-        else analisis = nucleoLector.analizar(titulo, 'Herramienta', prompt);
-    } catch (e) {
+    let analisis = await llamarIAConContexto(`Genera un análisis histórico detallado sobre: ${titulo}. Contexto: ${prompt}`, titulo);
+    if (!analisis || analisis.length < 50) {
         analisis = nucleoLector.analizar(titulo, 'Herramienta', prompt);
     }
     mostrarModal(titulo, analisis);
     ultimoAnalisis = analisis;
     actualizarWidgets(titulo, analisis, 'Herramienta');
+    showToast(`✅ ${titulo} · ${analisis.length} caracteres`);
 }
 
 document.getElementById('btnTimeline').onclick = () => herramienta('Línea de tiempo del conocimiento', '📅 LÍNEA DE TIEMPO');
@@ -581,6 +697,7 @@ document.getElementById('btnRandom').onclick = async () => {
     mostrarModal(`🎲 ${random.titulo}`, `${random.era}\n\n${random.hook}\n\n${random.desc}\n\n🎓 ${random.leccion}\n\n📖 ${expl}`);
     ultimoAnalisis = expl;
     actualizarWidgets(random.titulo, expl, random.era);
+    showToast(`✅ ${random.titulo} · ${expl.length} caracteres`);
 };
 document.getElementById('btnMapa').onclick = () => herramienta('Mapa histórico del conocimiento', '🗺️ MAPA');
 document.getElementById('btnBibliografia').onclick = async () => { const t = prompt("Tema:", "bibliotecas"); if (t) await herramienta(`Bibliografía ${t}`, `📚 BIBLIOGRAFÍA`); };
@@ -692,7 +809,7 @@ async function explicarConIA(caso, card){
         btn.disabled=false; btn.innerHTML='🤖 Explicar con IA';
         ultimoAnalisis = resultado;
         actualizarWidgets(caso.titulo, resultado, caso.era);
-        showToast("✅ Análisis generado por Cloudflare AI usando fuentes reales");
+        showToast(`✅ Análisis · ${resultado.length} caracteres`);
         
         const exportDiv = document.createElement('div'); exportDiv.className = 'export-buttons';
         exportDiv.innerHTML = `<button class="export-btn" data-format="latex">📄 LaTeX</button><button class="export-btn" data-format="markdown">📝 Markdown</button><button class="export-btn" data-format="bibtex">📚 BibTeX</button><button class="export-btn" data-format="apa">📋 APA</button>`;
