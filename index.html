@@ -119,18 +119,7 @@
         .modal-content h3 { color: #60a5fa; margin-bottom: 0.8rem; }
         .modal-close { margin-top: 0.8rem; background: #60a5fa; border: none; padding: 0.4rem 1rem; border-radius: 2rem; color: white; cursor: pointer; }
         
-        .temas-btn {
-            background: rgba(139, 92, 246, 0.3);
-            border: 1px solid #8b5cf6;
-            color: #a78bfa;
-            padding: 3px 12px;
-            border-radius: 16px;
-            cursor: pointer;
-            font-size: 0.55rem;
-            font-weight: 500;
-            margin-top: 6px;
-            transition: 0.2s;
-        }
+        .temas-btn { background: rgba(139, 92, 246, 0.3); border: 1px solid #8b5cf6; color: #a78bfa; padding: 3px 12px; border-radius: 16px; cursor: pointer; font-size: 0.55rem; font-weight: 500; margin-top: 6px; transition: 0.2s; }
         .temas-btn:hover { background: #8b5cf6; color: white; }
         .temas-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .temas-container { margin-top: 6px; padding: 8px 12px; background: rgba(139, 92, 246, 0.1); border-left: 3px solid #8b5cf6; border-radius: 0 8px 8px 0; display: none; }
@@ -279,6 +268,7 @@ class WASMUltra {
     async init() {
         try {
             console.log('⚡ Inicializando WASM Ultra con 100+ funciones...');
+            // WASM base
             const wasmCode = new Uint8Array([
                 0x00, 0x61, 0x73, 0x6d,
                 0x01, 0x00, 0x00, 0x00,
@@ -313,7 +303,7 @@ class WASMUltra {
         }
     }
 
-    // 1. LIMPIEZA DE TEXTO
+    // ✅ 1. LIMPIEZA DE TEXTO
     cleanText(text) {
         const inicio = performance.now();
         if (!text) return text;
@@ -333,7 +323,7 @@ class WASMUltra {
         return result;
     }
 
-    // 2. DETECCIÓN DE IDIOMA
+    // ✅ 2. DETECCIÓN DE IDIOMA (CORREGIDO: detectarIdioma con I mayúscula)
     detectarIdioma(texto) {
         const inicio = performance.now();
         if (!texto || texto.length < 5) return 'es';
@@ -1256,6 +1246,7 @@ async function explicarConIA(caso, card) {
         btn.disabled = false;
         btn.innerHTML = '🤖 Explicar con IA';
         ultimoAnalisis = resultado;
+        // ✅ Usar detectarIdioma con I mayúscula
         actualizarAnalisisAutomatico(resultado, wasmUltra.detectarIdioma(resultado));
         // Registrar en memoria
         wasmUltra.memoria.registrarConsulta(caso.titulo, resultado);
@@ -1355,6 +1346,7 @@ async function herramienta(prompt, titulo) {
     const stats = wasmUltra.getStats();
     mostrarModal(titulo, analisis);
     ultimoAnalisis = analisis;
+    // ✅ Usar detectarIdioma con I mayúscula
     actualizarAnalisisAutomatico(analisis, wasmUltra.detectarIdioma(analisis));
     // Registrar en memoria
     wasmUltra.memoria.registrarConsulta(titulo, analisis);
@@ -1377,6 +1369,7 @@ document.getElementById('btnRandom').onclick = async () => {
     const stats = wasmUltra.getStats();
     mostrarModal(`🎲 ${random.titulo}`, `${random.era}\n\n${random.hook}\n\n${random.desc}\n\n🎓 ${random.leccion}\n\n📖 ${expl}`);
     ultimoAnalisis = expl;
+    // ✅ Usar detectarIdioma con I mayúscula
     actualizarAnalisisAutomatico(expl, wasmUltra.detectarIdioma(expl));
     wasmUltra.memoria.registrarConsulta('random ' + random.titulo, expl);
     showToast(`✅ ${random.titulo} · ${expl.length} caracteres · WASM ULTRA (${stats.optimizaciones} optimizaciones) · 🇩🇪 · 🧠 Memoria`);
@@ -1561,6 +1554,22 @@ async function init() {
         document.getElementById('ultraTiempo').textContent = Math.round(stats.tiempoTotal) + 'ms';
         document.getElementById('ultraIdiomas').textContent = stats.idiomasDetectados;
         document.getElementById('ultraFunciones').textContent = stats.funcionesEjecutadas;
+        
+        // ✅ Prueba de diagnóstico - verificar que la función está disponible
+        console.log('🔍 Funciones disponibles en wasmUltra:');
+        console.log(Object.keys(wasmUltra));
+        
+        if (typeof wasmUltra.detectarIdioma === 'function') {
+            console.log('✅ detectarIdioma está disponible');
+        } else {
+            console.log('❌ detectarIdioma NO está disponible');
+            console.log('🔍 Buscando funciones similares:');
+            Object.keys(wasmUltra).forEach(key => {
+                if (key.includes('detectar') || key.includes('idioma')) {
+                    console.log(`  - ${key}`);
+                }
+            });
+        }
     }
     
     actualizarContadores();
