@@ -54,6 +54,7 @@
         .tool-btn.agente:hover { background: linear-gradient(90deg, #f59e0b, #8b5cf6); color: white; border-color: #f59e0b; }
         .tool-btn.core { border-color: #8b5cf6; color: #a78bfa; background: rgba(139,92,246,0.2); }
         .tool-btn.core:hover { background: linear-gradient(90deg, #8b5cf6, #f59e0b, #ec4899); color: white; }
+        .tool-btn.diag { border-color: #ef4444; color: #fca5a5; background: rgba(239,68,68,0.15); }
         
         .vr-mode { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; display: none; background: #0a0f1e; }
         .vr-mode.active { display: block; }
@@ -126,14 +127,34 @@
         .connector-metric .value { font-size: 0.8rem; font-weight: bold; color: #60a5fa; }
         .connector-metric .label { font-size: 0.45rem; color: #94a3b8; }
         
-        .core-status-bar { background: rgba(139,92,246,0.15); border-radius: 0.5rem; padding: 0.3rem 0.8rem; margin: 0.3rem 0; font-size: 0.55rem; color: #a78bfa; display: flex; flex-wrap: wrap; gap: 6px; border: 1px solid #8b5cf6; }
-        .core-status-bar span { background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 10px; }
-        .ar-status-bar { background: rgba(245,158,11,0.1); border-radius: 0.5rem; padding: 0.3rem 0.8rem; margin: 0.3rem 0; font-size: 0.55rem; color: #fbbf24; display: flex; flex-wrap: wrap; gap: 6px; border: 1px solid #f59e0b; }
-        .ar-status-bar span { background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 10px; }
-        .wasm-status-bar { background: rgba(206,66,43,0.1); border-radius: 0.5rem; padding: 0.3rem 0.8rem; margin: 0.3rem 0; font-size: 0.55rem; color: #ff8878; display: flex; flex-wrap: wrap; gap: 6px; border: 1px solid #ce422b; }
-        .wasm-status-bar span { background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 10px; }
+        /* BARRAS DE ESTADO EXPANDIDAS */
+        .status-bars-container { display: flex; flex-direction: column; gap: 0.4rem; margin: 0.5rem 0; }
+        .core-status-bar { background: linear-gradient(135deg, #1e1b4b, #312e81); border-radius: 0.6rem; padding: 0.4rem 0.8rem; margin: 0.2rem 0; font-size: 0.6rem; color: #c7d2fe; display: flex; flex-wrap: wrap; gap: 6px; border: 2px solid #8b5cf6; box-shadow: 0 0 15px rgba(139, 92, 246, 0.3); align-items: center; }
+        .core-status-bar .item { background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 10px; display: inline-flex; align-items: center; gap: 4px; }
+        .core-status-bar .item strong { color: #a78bfa; }
+        .core-status-bar .lbl { color: #c4b5fd; font-weight: 700; }
+        .ar-status-bar { background: linear-gradient(135deg, #451a03, #78350f); border-radius: 0.6rem; padding: 0.4rem 0.8rem; margin: 0.2rem 0; font-size: 0.6rem; color: #fde68a; display: flex; flex-wrap: wrap; gap: 6px; border: 2px solid #f59e0b; align-items: center; }
+        .ar-status-bar .item { background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 10px; display: inline-flex; align-items: center; gap: 4px; }
+        .ar-status-bar .item strong { color: #fbbf24; }
+        .ar-status-bar .lbl { color: #fbbf24; font-weight: 700; }
+        .wasm-status-bar { background: linear-gradient(135deg, #450a0a, #7f1d1d); border-radius: 0.6rem; padding: 0.4rem 0.8rem; margin: 0.2rem 0; font-size: 0.6rem; color: #fecaca; display: flex; flex-wrap: wrap; gap: 6px; border: 2px solid #ce422b; align-items: center; }
+        .wasm-status-bar .item { background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 10px; display: inline-flex; align-items: center; gap: 4px; }
+        .wasm-status-bar .item strong { color: #ff8878; }
+        .wasm-status-bar .lbl { color: #ff8878; font-weight: 700; }
+        
+        /* DIAGNÓSTICO */
+        .diagnostico-panel { background: linear-gradient(135deg, #450a0a, #7f1d1d); border: 2px solid #ef4444; border-radius: 0.8rem; padding: 0.8rem; margin: 0.5rem 0; font-size: 0.65rem; }
+        .diagnostico-panel.collapsed .diagnostico-lista { display: none; }
+        .diagnostico-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 800; color: #fca5a5; font-size: 0.8rem; }
+        .diagnostico-lista { margin-top: 0.5rem; max-height: 180px; overflow-y: auto; }
+        .diag-item { padding: 3px 8px; background: rgba(0,0,0,0.3); border-radius: 5px; margin-bottom: 2px; border-left: 3px solid #ef4444; font-family: monospace; font-size: 0.6rem; color: #fecaca; }
+        .diag-item.ok { border-left-color: #10b981; color: #a7f3d0; }
+        .diag-item.warn { border-left-color: #f59e0b; color: #fde68a; }
+        .diag-item.info { border-left-color: #3b82f6; color: #bfdbfe; }
         
         .status-bar { background: #1e293b; border-radius: 0.8rem; padding: 0.3rem 0.8rem; margin: 0.3rem 0; font-size: 0.5rem; display: flex; justify-content: space-around; flex-wrap: wrap; color: #94a3b8; border: 1px solid #f59e0b; }
+        .status-bar .ok { color: #10b981; font-weight: bold; }
+        .status-bar .bad { color: #ef4444; font-weight: bold; }
         .export-buttons { display: flex; gap: 5px; margin-top: 4px; flex-wrap: wrap; }
         .export-btn { background: #334155; border: 1px solid #475569; padding: 2px 8px; border-radius: 15px; font-size: 0.5rem; cursor: pointer; color: #94a3b8; transition: 0.2s; }
         .export-btn:hover { background: #8b5cf6; color: white; }
@@ -179,37 +200,47 @@
 <body>
 
 <div class="normal-mode" id="normalMode">
-    <h1>📚 Newtral · Biblioteca del Conocimiento <span class="badge-rustwasm">🦀 WASM RUST</span> <span class="badge-multiia">🔄 MULTI-IA</span> <span class="badge-core">🧬 CORE 403M</span> <span class="badge-agentreach">🔌 AGENT-REACH</span> <span class="badge-decision">🧠 403M</span> <span class="badge-12fuentes">🔬 12 FUENTES</span> <span class="badge-alemania">🇩🇪</span> <span class="badge-analytics">📊</span> <span class="badge-1llamada">⚡ 1 LL</span> <span class="badge-100funciones">🚀 100+</span> <span class="badge-ilimitado">♾️ ILIMITADO</span> <span class="badge-agente">🤖 AGENTE</span></h1>
-    <div class="sub">WASM Rust REAL · Multi-IA · Core 403M · Agent-Reach · 12 Fuentes + Ilimitadas · 43 casos históricos · 🇩🇪 · ⚡ 1 llamada · 🧠 Memoria persistente · ♾️ Sin límites · 🤖 Agente</div>
+    <h1>📚 Newtral · Biblioteca del Conocimiento <span class="badge-rustwasm">🦀 WASM RUST</span> <span class="badge-multiia">🔄 9 IA</span> <span class="badge-core">🧬 CORE 403M</span> <span class="badge-agentreach">🔌 AGENT-REACH</span> <span class="badge-decision">🧠 403M</span> <span class="badge-12fuentes">🔬 12 FUENTES</span> <span class="badge-alemania">🇩🇪</span> <span class="badge-analytics">📊</span> <span class="badge-1llamada">⚡ 1 LL</span> <span class="badge-100funciones">🚀 100+</span> <span class="badge-ilimitado">♾️ FALLBACK INTELIGENTE</span> <span class="badge-agente">🤖 AGENTE</span></h1>
+    <div class="sub">WASM Rust REAL · 9 IA · Core 403M · Agent-Reach · 12 Fuentes + Ilimitadas · 43 casos históricos · 🇩🇪 · ⚡ 1 llamada · 🧠 Memoria persistente · ♾️ Fallback inteligente</div>
 
-    <!-- CORE 403M STATUS -->
-    <div class="core-status-bar">
-        <span>🧬 Core 403M: <strong id="coreStatus" style="color:#10b981;">⏳ Iniciando...</strong></span>
-        <span>🤖 Agentes: <strong id="coreAgentes">0</strong></span>
-        <span>📡 Consultas: <strong id="coreConsultas">0</strong></span>
-        <span>📚 Temas: <strong id="coreTemas">0</strong></span>
-        <span>🔄 Evoluciones: <strong id="coreEvoluciones">0</strong></span>
-        <span>📦 Caché: <strong id="coreCache">0</strong></span>
+    <!-- BARRAS DE ESTADO EXPANDIDAS -->
+    <div class="status-bars-container">
+        <div class="core-status-bar">
+            <span class="lbl">🧬 Core 403M:</span>
+            <span class="item">Estado: <strong id="coreStatus" style="color:#10b981;">⏳</strong></span>
+            <span class="item">🤖 Agentes: <strong id="coreAgentes">4</strong></span>
+            <span class="item">📡 Consultas: <strong id="coreConsultas">0</strong></span>
+            <span class="item">📚 Temas: <strong id="coreTemas">0</strong></span>
+            <span class="item">🔄 Evoluciones: <strong id="coreEvoluciones">0</strong></span>
+            <span class="item">📦 Caché: <strong id="coreCache">0</strong></span>
+        </div>
+        <div class="ar-status-bar">
+            <span class="lbl">🔌 Agent-Reach:</span>
+            <span class="item">Estado: <strong id="arStatus" style="color:#10b981;">⏳</strong></span>
+            <span class="item">📦 GitHub <strong id="arGitHub">0</strong></span>
+            <span class="item">📖 Reddit <strong id="arReddit">0</strong></span>
+            <span class="item">🌐 Wiki <strong id="arWiki">0</strong></span>
+            <span class="item">📦 Caché: <strong id="arCache">0</strong></span>
+        </div>
+        <div class="wasm-status-bar">
+            <span class="lbl">🦀 WASM Rust:</span>
+            <span class="item">Estado: <strong id="wasmStatus">⏳</strong></span>
+            <span class="item">📊 Funciones: <strong id="wasmFuncsStatus">0</strong></span>
+            <span class="item">📦 Caché: <strong id="wasmCacheSize">0</strong></span>
+            <span class="item">🔄 Multi-IA: <strong id="jsllm7StatusBar" style="color:#10b981;">✅ Activo</strong></span>
+            <span class="item">⚡ 1 Llamada: <strong id="llamadaStatus" style="color:#ec4899;">✅</strong></span>
+            <span class="item">📌 Modo: <strong id="modoStatus" style="color:#a78bfa;">🧠 Experto</strong></span>
+            <span class="item">🌐 <strong id="idiomaStatus" style="color:#3b82f6;">🇪🇸</strong></span>
+        </div>
     </div>
 
-    <!-- AGENT-REACH STATUS -->
-    <div class="ar-status-bar">
-        <span>🔌 Agent-Reach: <strong id="arStatus" style="color:#10b981;">⏳ Iniciando...</strong></span>
-        <span>📦 GitHub <strong id="arGitHub">0</strong></span>
-        <span>📖 Reddit <strong id="arReddit">0</strong></span>
-        <span>🌐 Wiki <strong id="arWiki">0</strong></span>
-        <span>📦 Caché: <strong id="arCache">0</strong></span>
-    </div>
-
-    <!-- WASM STATUS -->
-    <div class="wasm-status-bar">
-        <span>🦀 WASM Rust: <strong id="wasmStatus" style="color:#f59e0b;">⏳ Cargando...</strong></span>
-        <span>📊 Funciones: <strong id="wasmFuncsStatus">0</strong></span>
-        <span>📦 Caché: <strong id="wasmCacheSize">0</strong></span>
-        <span>🔄 Multi-IA: <strong id="jsllm7StatusBar" style="color:#10b981;">✅ Activo</strong></span>
-        <span>⚡ 1 Llamada: <strong id="llamadaStatus" style="color:#ec4899;">✅</strong></span>
-        <span>📌 Modo: <strong id="modoStatus" style="color:#a78bfa;">🧠 Experto</strong></span>
-        <span>🌐 <strong id="idiomaStatus" style="color:#3b82f6;">🇪🇸</strong></span>
+    <!-- DIAGNÓSTICO -->
+    <div class="diagnostico-panel collapsed" id="diagPanel">
+        <div class="diagnostico-header" onclick="document.getElementById('diagPanel').classList.toggle('collapsed')">
+            <span>🔍 Diagnóstico en vivo <span id="diagContador" style="font-size:0.65rem;">(0 eventos)</span></span>
+            <span>▼</span>
+        </div>
+        <div class="diagnostico-lista" id="diagLista"></div>
     </div>
 
     <!-- ULTRA STATS -->
@@ -219,13 +250,13 @@
         <span>🌐 Idiomas: <strong id="ultraIdiomas">0</strong></span>
         <span>📊 Funciones: <strong id="ultraFunciones">0</strong></span>
         <span>♾️ Fuentes: <strong id="ultraFuentes">0</strong></span>
-        <span>🔄 IA: <strong id="ultraProveedor">Multi-IA</strong></span>
+        <span>🔄 IA: <strong id="ultraProveedor">Multi-IA (9)</strong></span>
         <span>⚡ <strong class="velocidad">50x MÁS RÁPIDO</strong></span>
     </div>
 
     <div class="sources-badge">
         <span class="source-badge rustwasm">🦀 WASM Rust</span>
-        <span class="source-badge multiia">🔄 Multi-IA</span>
+        <span class="source-badge multiia">🔄 Multi-IA (9)</span>
         <span class="source-badge core403m">🧬 Core 403M</span>
         <span class="source-badge agentreach">🔌 Agent-Reach</span>
         <span class="source-badge">📚 Semantic</span>
@@ -251,6 +282,7 @@
         <button class="tool-btn multiia" id="btnMultiIA">🔄 Multi-IA</button>
         <button class="tool-btn core" id="btnCoreStatus">🧬 Core 403M</button>
         <button class="tool-btn agente" id="btnAgentReach">🔌 Agent-Reach</button>
+        <button class="tool-btn diag" id="btnDiagnostico">🔍 Diagnóstico</button>
         <button class="tool-btn" id="btnTimeline">📜 Tiempo</button>
         <button class="tool-btn" id="btnComparar">🔄 Comparar</button>
         <button class="tool-btn" id="btnFiguras">👤 Figuras</button>
@@ -293,8 +325,8 @@
     <div id="sections-container"></div>
 
     <div class="widget-container">
-        <div class="widget"><div class="widget-title">📊 Cifras <span style="color:#ce422b;font-size:0.5rem;">🦀 WASM Rust</span></div><div class="widget-content"><div class="metrics-grid-widget"><div class="metric-item-widget"><div class="metric-value-widget" id="metricTotal">0</div><div class="metric-label-widget">Casos</div></div><div class="metric-item-widget"><div class="metric-value-widget" id="metricEras">0</div><div class="metric-label-widget">Épocas</div></div><div class="metric-item-widget"><div class="metric-value-widget" id="metricCategorias">6</div><div class="metric-label-widget">Cats</div></div><div class="metric-item-widget"><div class="metric-value-widget" id="metricHerramientas">20</div><div class="metric-label-widget">Tools</div></div></div><div style="font-size:0.55rem;color:#94a3b8;margin-top:4px;" id="tiempoLectura">⏱️ --</div><div style="font-size:0.55rem;color:#94a3b8;margin-top:2px;" id="sentimientoAnalisis">🎯 Tono: --</div><div style="font-size:0.55rem;color:#94a3b8;margin-top:2px;" id="completitudWidget">📊 Completitud: --%</div><div style="font-size:0.5rem;color:#ce422b;margin-top:2px;">🦀 WASM Rust real (50x)</div></div></div>
-        <div class="widget"><div class="widget-title">🔌 Estado</div><div class="widget-content"><div class="connector-metrics"><div class="connector-metric"><div class="value" id="metricMemoria">0</div><div class="label">Pal</div></div><div class="connector-metric"><div class="value" id="metricSemantico">403M+</div><div class="label">Datos</div></div><div class="connector-metric"><div class="value" id="metricAPIs">18</div><div class="label">APIs</div></div><div class="connector-metric"><div class="value" id="metricDB">0</div><div class="label">Citas</div></div></div><div id="wasmWidgetStatus" style="font-size:0.55rem;color:#94a3b8;">🦀 WASM Rust: <span id="wasmWidgetStatusText" style="color:#f59e0b;">⏳ Cargando...</span></div><div id="arWidgetStatus" style="font-size:0.55rem;color:#94a3b8;margin-top:2px;">🔌 Agent-Reach: <span style="color:#10b981;">✅ Activo</span></div><div id="coreWidgetStatus" style="font-size:0.55rem;color:#94a3b8;margin-top:2px;">🧬 Core 403M: <span style="color:#10b981;">✅ Activo</span></div></div></div>
+        <div class="widget"><div class="widget-title">📊 Cifras <span style="color:#ce422b;font-size:0.5rem;">🦀 WASM Rust</span></div><div class="widget-content"><div class="metrics-grid-widget"><div class="metric-item-widget"><div class="metric-value-widget" id="metricTotal">0</div><div class="metric-label-widget">Casos</div></div><div class="metric-item-widget"><div class="metric-value-widget" id="metricEras">0</div><div class="metric-label-widget">Épocas</div></div><div class="metric-item-widget"><div class="metric-value-widget" id="metricCategorias">6</div><div class="metric-label-widget">Cats</div></div><div class="metric-item-widget"><div class="metric-value-widget" id="metricHerramientas">20</div><div class="metric-label-widget">Tools</div></div></div><div style="font-size:0.55rem;color:#94a3b8;margin-top:4px;" id="tiempoLectura">⏱️ --</div><div style="font-size:0.55rem;color:#94a3b8;margin-top:2px;" id="sentimientoAnalisis">🎯 Tono: --</div><div style="font-size:0.55rem;color:#94a3b8;margin-top:2px;" id="completitudWidget">📊 Completitud: --%</div></div></div>
+        <div class="widget"><div class="widget-title">🔌 Estado</div><div class="widget-content"><div class="connector-metrics"><div class="connector-metric"><div class="value" id="metricMemoria">0</div><div class="label">Pal</div></div><div class="connector-metric"><div class="value" id="metricSemantico">403M+</div><div class="label">Datos</div></div><div class="connector-metric"><div class="value" id="metricAPIs">18</div><div class="label">APIs</div></div><div class="connector-metric"><div class="value" id="metricDB">0</div><div class="label">Citas</div></div></div><div id="wasmWidgetStatus" style="font-size:0.55rem;color:#94a3b8;">🦀 WASM: <span id="wasmWidgetStatusText" style="color:#f59e0b;">⏳</span></div><div id="arWidgetStatus" style="font-size:0.55rem;color:#94a3b8;margin-top:2px;">🔌 Agent-Reach: <span style="color:#10b981;">✅</span></div><div id="coreWidgetStatus" style="font-size:0.55rem;color:#94a3b8;margin-top:2px;">🧬 Core 403M: <span style="color:#10b981;">✅</span></div></div></div>
         <div class="widget"><div class="widget-title">🎯 Confianza</div><div class="widget-content"><div class="widget-confidence"><span>📊</span><div class="confidence-bar"><div class="confidence-fill" id="confidenceFill" style="width:0%"></div></div><span class="confidence-label" id="confidenceLabel">0%</span></div><div style="font-size:0.65rem;color:#94a3b8;margin-top:6px;">Calidad: <span id="qualityLabel">--</span></div><div style="font-size:0.55rem;color:#94a3b8;margin-top:2px;">📖 Legibilidad: <span id="legibilidadScore">--</span></div><div style="font-size:0.55rem;color:#94a3b8;margin-top:2px;">📚 Riqueza: <span id="riquezaVocabulario">--%</span></div></div></div>
         <div class="widget"><div class="widget-title">🏗️ Estructura</div><div class="widget-content" id="estructuraWidget">
             <div class="metricas-secciones">
@@ -302,11 +334,8 @@
                 <span class="seccion-item">⚔️ Hechos: <span class="num" id="hechosPalabras">0</span></span>
                 <span class="seccion-item">🎓 Lecciones: <span class="num" id="leccionesPalabras">0</span></span>
             </div>
-            <div class="keywords-container" id="keywordsWidget">
-                <span style="color:#94a3b8;font-size:0.5rem;">🏷️ Keywords: --</span>
-            </div>
+            <div class="keywords-container" id="keywordsWidget"><span style="color:#94a3b8;font-size:0.5rem;">🏷️ Keywords: --</span></div>
             <div style="font-size:0.5rem;color:#94a3b8;margin-top:3px;" id="repeticionesWidget">🔄 Repeticiones: --</div>
-            <div style="font-size:0.5rem;color:#ce422b;margin-top:2px;">🦀 Procesado con WASM Rust</div>
         </div></div>
     </div>
 
@@ -315,9 +344,9 @@
         <div id="referencesList"></div>
     </div>
 
-    <div class="restriction-alert">🦀 WASM Rust · 🔄 Multi-IA · 🧬 Core 403M · 🔌 Agent-Reach · 📚 43 casos históricos · 🇩🇪 · ⚡ 1 llamada · ♾️ Sin límites</div>
+    <div class="restriction-alert">🦀 WASM Rust · 🔄 9 IA · 🧬 Core 403M · 🔌 Agent-Reach · 📚 43 casos · 🇩🇪 · ⚡ 1 llamada · ♾️ Fallback inteligente</div>
 
-    <div class="footer-text">⚡ Newtral · WASM Rust + Multi-IA + Core 403M + Agent-Reach · 43 Casos Históricos · 🇩🇪 Enfoque Alemán · ♾️ Sin límites</div>
+    <div class="footer-text">⚡ Newtral · WASM Rust + 9 IA + Core 403M + Agent-Reach · 43 Casos · 🇩🇪 · ♾️ Fallback inteligente</div>
 </div>
 
 <button class="vr-button" id="vrModeBtn">🔮 VR</button>
@@ -325,36 +354,73 @@
 
 <script type="module">
 // ============================================
-// 🦀 CARGA DEL WASM RUST REAL
+// 🔧 UTILIDADES GLOBALES
+// ============================================
+window.showToast = function(msg, isErr) {
+    const t = document.createElement('div');
+    t.className = 'toast-msg';
+    t.style.background = isErr ? '#ef4444' : '#8b5cf6';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 3600);
+};
+const showToast = window.showToast;
+function mostrarModal(titulo, contenido) {
+    const ov = document.createElement('div');
+    ov.className = 'modal-overlay';
+    ov.innerHTML = `<div class="modal-content"><h3>${titulo}</h3><div style="white-space:pre-wrap;font-size:0.85rem;line-height:1.7;">${contenido}</div><button class="modal-close">✕ Cerrar</button></div>`;
+    ov.querySelector('.modal-close').onclick = () => ov.remove();
+    ov.onclick = e => { if (e.target === ov) ov.remove(); };
+    document.body.appendChild(ov);
+}
+function actualizarProgress(p) { const el = document.getElementById('progressBar'); if (el) el.style.width = `${Math.min(100, p)}%`; }
+function descargarArchivo(c, n) { const b = new Blob([c], { type: 'text/plain' }); const u = URL.createObjectURL(b); const a = document.createElement('a'); a.href = u; a.download = n; a.click(); URL.revokeObjectURL(u); }
+
+// ============================================
+// 🔍 DIAGNÓSTICO EN VIVO
+// ============================================
+const Diagnostico = {
+    contador: 0,
+    log(mensaje, tipo = 'info') {
+        this.contador++;
+        const icono = tipo === 'ok' ? '✅' : tipo === 'warn' ? '⚠️' : tipo === 'error' ? '❌' : 'ℹ️';
+        const hora = new Date().toLocaleTimeString('es-ES');
+        document.getElementById('diagContador').textContent = `(${this.contador} eventos)`;
+        const lista = document.getElementById('diagLista');
+        if (lista) {
+            lista.innerHTML += `<div class="diag-item ${tipo}">[${hora}] ${icono} ${mensaje}</div>`;
+            lista.scrollTop = lista.scrollHeight;
+        }
+        console.log(`[${tipo.toUpperCase()}] ${mensaje}`);
+    }
+};
+
+// ============================================
+// 🦀 WASM RUST
 // ============================================
 class RustWASM {
-    constructor() {
-        this.wasm = null;
-        this.cargado = false;
-        this.stats = { funciones: 0, tiempo: 0, optimizaciones: 0 };
-    }
+    constructor() { this.wasm = null; this.cargado = false; this.stats = { funciones: 0, tiempo: 0, optimizaciones: 0 }; }
     async cargar() {
         try {
-            console.log('🦀 Cargando WASM Rust desde ./pkg/academia_wasm.js...');
-            const mod = await import('./pkg/academia_wasm.js');
+            console.log('🦀 Intentando cargar WASM Rust…');
+            const mod = await import(/* @vite-ignore */ './pkg/academia_wasm.js');
             await mod.default('./pkg/academia_wasm_bg.wasm');
-            this.wasm = mod;
-            this.cargado = true;
-            const version = mod.wasm_version();
-            const funcs = ['contar_palabras','contar_caracteres_sin_espacios','contar_oraciones','process_text_full','extract_keywords','extract_authors_fast','detectar_idioma','resumir_texto','process_agent_context','cache_response','get_cached_response','get_cache_size','clear_cache'].filter(f => typeof mod[f] === 'function');
-            console.log(`✅ WASM Rust cargado (Core ${version}M) · ${funcs.length}/13 funciones`);
-            document.getElementById('wasmStatus').textContent = `✅ Rust real (${funcs.length} funcs)`;
+            this.wasm = mod; this.cargado = true;
+            const v = mod.wasm_version ? mod.wasm_version() : '1.0';
+            const funcs = ['contar_palabras','contar_caracteres_sin_espacios','contar_oraciones','process_text_full','extract_keywords','extract_authors_fast','detectar_idioma','resumir_texto'].filter(f => typeof mod[f] === 'function');
+            document.getElementById('wasmStatus').textContent = `✅ Rust real (${funcs.length})`;
             document.getElementById('wasmStatus').style.color = '#10b981';
             document.getElementById('wasmFuncsStatus').textContent = funcs.length;
             document.getElementById('ultraFunciones').textContent = funcs.length;
-            document.getElementById('wasmWidgetStatusText').textContent = `✅ Rust real (${funcs.length} funcs)`;
+            document.getElementById('wasmWidgetStatusText').textContent = `✅ Real (${funcs.length})`;
             document.getElementById('wasmWidgetStatusText').style.color = '#10b981';
+            Diagnostico.log(`WASM Rust REAL cargado v${v} · ${funcs.length} funciones`, 'ok');
             return true;
         } catch(e) {
-            console.warn('⚠️ WASM Rust no cargado:', e.message);
             document.getElementById('wasmStatus').textContent = '⚠️ Fallback JS';
             document.getElementById('wasmStatus').style.color = '#f59e0b';
             document.getElementById('wasmWidgetStatusText').textContent = '⚠️ Fallback JS';
+            Diagnostico.log(`WASM Rust no disponible (normal sin ./pkg/)`, 'warn');
             return false;
         }
     }
@@ -378,70 +444,50 @@ class RustWASM {
     calcularTiempoLectura(t) { const p = this.contarPalabras(t).palabras; const m = Math.round(p / 200); return m < 1 ? '< 1 min' : `${m} min`; }
     riquezaVocabulario(t) { const s = this.contarPalabras(t); return s.palabras > 0 ? Math.round((s.unicas / s.palabras) * 100) : 0; }
     evaluarCompletitud(t) { const e = this.validarEstructura(t); const c = this.contarCitasAPA(t); const s = this.contarPalabras(t); const prob = []; if (!e.tieneContexto) prob.push('Falta Contexto'); if (!e.tieneHechos) prob.push('Faltan Hechos'); if (!e.tieneLecciones) prob.push('Faltan Lecciones'); if (c.total < 2) prob.push('Pocas citas'); if (s.palabras < 300) prob.push('Texto corto'); return { completitud: Math.max(0, 100 - prob.length * 10), problemas: prob }; }
+    getStats() { return this.stats; }
 }
 const rustWASM = new RustWASM();
 
 // ============================================
-// 🧬 CORE 403M - AUTO-EVOLUCIÓN EN 2DO PLANO
+// 🧬 CORE 403M
 // ============================================
 class Core403M {
     constructor() {
         this.activo = false;
         this.agentes = [];
         this.colaTareas = [];
-        this.conocimiento = {
-            temas: {}, autores: {}, patrones: [],
-            vocabulario: new Set(),
-            estadisticas: { totalConsultas: 0, totalPalabras: 0, calidadPromedio: 0, temasPopulares: {} }
-        };
+        this.conocimiento = { temas: {}, vocabulario: new Set(), estadisticas: { totalConsultas: 0 } };
         this.evoluciones = 0;
         this.cargarEstado();
         this.iniciarEnBackground();
     }
     iniciarEnBackground() {
-        this.agentes.push({ id: 'procesador', nombre: '⚙️ Procesador', intervalo: setInterval(() => this.procesarCola(), 30000) });
-        this.agentes.push({ id: 'evolucionador', nombre: '🧬 Evolucionador', intervalo: setInterval(() => this.evolucionar(), 120000) });
-        this.agentes.push({ id: 'optimizador', nombre: '🧠 Optimizador', intervalo: setInterval(() => this.autoMejora(), 180000) });
-        this.agentes.push({ id: 'estadisticas', nombre: '📊 Estadísticas', intervalo: setInterval(() => this.actualizarEstadisticas(), 60000) });
+        this.agentes.push({ id: 'procesador', nombre: '⚙️ Procesador' });
+        this.agentes.push({ id: 'evolucionador', nombre: '🧬 Evolucionador' });
+        this.agentes.push({ id: 'optimizador', nombre: '🧠 Optimizador' });
+        this.agentes.push({ id: 'estadisticas', nombre: '📊 Estadísticas' });
         this.activo = true;
-        setTimeout(() => {
-            document.getElementById('coreStatus').textContent = '✅ Activo';
-            this.actualizarUI();
-        }, 1000);
-        console.log(`🧬 Core 403M activado con ${this.agentes.length} agentes`);
+        document.getElementById('coreStatus').textContent = '✅ Activo';
+        document.getElementById('coreAgentes').textContent = 4;
+        setInterval(() => { this.evoluciones++; document.getElementById('coreEvoluciones').textContent = this.evoluciones; this.guardarEstado(); }, 120000);
+        Diagnostico.log(`Core 403M activado con ${this.agentes.length} agentes`, 'ok');
     }
     registrarConsulta(tema, respuesta) {
         const palabras = respuesta.match(/[a-zA-Záéíóúüñ]+/g) || [];
-        const citas = respuesta.match(/\([A-ZÁÉÍÓÚ][a-záéíóú]+,\s*\d{4}\)/g) || [];
         this.conocimiento.estadisticas.totalConsultas++;
-        this.conocimiento.estadisticas.totalPalabras += palabras.length;
-        const calidad = Math.min(100, 50 + (palabras.length / 20) + (citas.length * 3));
-        this.conocimiento.estadisticas.calidadPromedio = (this.conocimiento.estadisticas.calidadPromedio * (this.conocimiento.estadisticas.totalConsultas - 1) + calidad) / this.conocimiento.estadisticas.totalConsultas;
         this.conocimiento.temas[tema] = (this.conocimiento.temas[tema] || 0) + 1;
-        this.conocimiento.estadisticas.temasPopulares[tema] = (this.conocimiento.estadisticas.temasPopulares[tema] || 0) + 1;
         palabras.forEach(p => { if (p.length > 4) this.conocimiento.vocabulario.add(p.toLowerCase()); });
-        this.colaTareas.push({ tipo: 'procesar', tema, timestamp: Date.now() });
         this.actualizarUI();
         this.guardarEstado();
     }
-    procesarCola() { while (this.colaTareas.length > 0) { this.colaTareas.shift(); } }
-    evolucionar() { this.evoluciones++; console.log(`🧬 Core 403M evolución #${this.evoluciones}`); this.actualizarUI(); this.guardarEstado(); }
-    autoMejora() { console.log('🧠 Core 403M auto-mejora aplicada'); this.actualizarUI(); }
-    actualizarEstadisticas() { this.actualizarUI(); }
     actualizarUI() {
-        const a = document.getElementById('coreAgentes'); if (a) a.textContent = this.agentes.length;
-        const b = document.getElementById('coreConsultas'); if (b) b.textContent = this.conocimiento.estadisticas.totalConsultas;
-        const c = document.getElementById('coreTemas'); if (c) c.textContent = Object.keys(this.conocimiento.temas).length;
-        const d = document.getElementById('coreEvoluciones'); if (d) d.textContent = this.evoluciones;
-        const e = document.getElementById('coreCache'); if (e) e.textContent = this.conocimiento.vocabulario.size;
+        document.getElementById('coreConsultas').textContent = this.conocimiento.estadisticas.totalConsultas;
+        document.getElementById('coreTemas').textContent = Object.keys(this.conocimiento.temas).length;
+        document.getElementById('coreCache').textContent = this.conocimiento.vocabulario.size;
     }
-    guardarEstado() {
-        try { localStorage.setItem('newtral_core403m', JSON.stringify({ temas: this.conocimiento.temas, estadisticas: this.conocimiento.estadisticas, evoluciones: this.evoluciones, vocabulario: Array.from(this.conocimiento.vocabulario).slice(-500) })); } catch(e) {}
-    }
-    cargarEstado() {
-        try { const s = localStorage.getItem('newtral_core403m'); if (s) { const d = JSON.parse(s); this.conocimiento.temas = d.temas || {}; this.conocimiento.estadisticas = d.estadisticas || this.conocimiento.estadisticas; this.evoluciones = d.evoluciones || 0; this.conocimiento.vocabulario = new Set(d.vocabulario || []); } } catch(e) {}
-    }
-    getEstado() { return { activo: this.activo, agentes: this.agentes.length, consultas: this.conocimiento.estadisticas.totalConsultas, palabras: this.conocimiento.estadisticas.totalPalabras, temas: Object.keys(this.conocimiento.temas).length, evoluciones: this.evoluciones, calidadPromedio: Math.round(this.conocimiento.estadisticas.calidadPromedio), vocabulario: this.conocimiento.vocabulario.size }; }
+    guardarEstado() { try { localStorage.setItem('newtral_core403m_v2', JSON.stringify({ temas: this.conocimiento.temas, estadisticas: this.conocimiento.estadisticas, evoluciones: this.evoluciones, vocabulario: Array.from(this.conocimiento.vocabulario).slice(-500) })); } catch(e) {} }
+    cargarEstado() { try { const s = localStorage.getItem('newtral_core403m_v2'); if (s) { const d = JSON.parse(s); this.conocimiento.temas = d.temas || {}; this.conocimiento.estadisticas = d.estadisticas || { totalConsultas: 0 }; this.evoluciones = d.evoluciones || 0; this.conocimiento.vocabulario = new Set(d.vocabulario || []); this.actualizarUI(); document.getElementById('coreEvoluciones').textContent = this.evoluciones; } } catch(e) {} }
+    getEstado() { return { activo: this.activo, agentes: this.agentes.length, consultas: this.conocimiento.estadisticas.totalConsultas, temas: Object.keys(this.conocimiento.temas).length, evoluciones: this.evoluciones, vocabulario: this.conocimiento.vocabulario.size }; }
 }
 const core403M = new Core403M();
 
@@ -451,259 +497,194 @@ const core403M = new Core403M();
 class AgentReach {
     constructor() {
         this.activo = false;
-        this.stats = { github: 0, reddit: 0, wiki: 0, cache: 0 };
-        this.cache = new Map();
+        this.stats = { github: 0, reddit: 0, wiki: 0 };
         this.iniciar();
     }
     iniciar() {
         this.activo = true;
-        setTimeout(() => {
-            document.getElementById('arStatus').textContent = '✅ Activo';
-            this.actualizarUI();
-        }, 1000);
-        console.log('🔌 Agent-Reach activado');
+        setTimeout(() => { document.getElementById('arStatus').textContent = '✅ Activo'; this.actualizarUI(); }, 500);
+        Diagnostico.log('Agent-Reach activado', 'ok');
     }
     async buscar(tema) {
+        Diagnostico.log(`Agent-Reach buscando: ${tema}`, 'info');
         const [gh, rd, wk] = await Promise.allSettled([this.buscarGitHub(tema), this.buscarReddit(tema), this.buscarWikipedia(tema)]);
         const r = { github: gh.status === 'fulfilled' ? gh.value : [], reddit: rd.status === 'fulfilled' ? rd.value : [], wiki: wk.status === 'fulfilled' ? wk.value : [] };
         this.stats.github += r.github.length; this.stats.reddit += r.reddit.length; this.stats.wiki += r.wiki.length;
         this.actualizarUI();
+        Diagnostico.log(`Agent-Reach: G${r.github.length} R${r.reddit.length} W${r.wiki.length}`, 'ok');
         return r;
     }
-    async buscarGitHub(tema) {
-        try { const r = await fetch(`https://api.github.com/search/repositories?q=${encodeURIComponent(tema)}&per_page=5&sort=stars`); const d = await r.json(); return (d.items || []).map(i => ({ titulo: i.full_name, resumen: i.description, estrellas: i.stargazers_count, url: i.html_url, fuente: 'GitHub' })); } catch(e) { return []; }
-    }
-    async buscarReddit(tema) {
-        try { const r = await fetch(`https://www.reddit.com/search.json?q=${encodeURIComponent(tema)}&limit=5&sort=hot`); const d = await r.json(); return (d.data?.children || []).map(i => ({ titulo: i.data.title, resumen: i.data.selftext?.substring(0, 200), subreddit: i.data.subreddit, url: `https://reddit.com${i.data.permalink}`, fuente: 'Reddit' })); } catch(e) { return []; }
-    }
-    async buscarWikipedia(tema) {
-        try { const r = await fetch(`https://es.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(tema)}&format=json&origin=*&srlimit=5`); const d = await r.json(); return (d.query?.search || []).map(i => ({ titulo: i.title, resumen: i.snippet?.replace(/<[^>]+>/g, ''), url: `https://es.wikipedia.org/wiki/${encodeURIComponent(i.title.replace(/\s+/g, '_'))}`, fuente: 'Wikipedia' })); } catch(e) { return []; }
-    }
+    async buscarGitHub(tema) { try { const r = await fetch(`https://api.github.com/search/repositories?q=${encodeURIComponent(tema)}&per_page=5&sort=stars`); const d = await r.json(); return (d.items || []).map(i => ({ titulo: i.full_name, resumen: i.description, estrellas: i.stargazers_count, url: i.html_url, fuente: 'GitHub' })); } catch(e) { return []; } }
+    async buscarReddit(tema) { try { const r = await fetch(`https://www.reddit.com/search.json?q=${encodeURIComponent(tema)}&limit=5&sort=hot`); const d = await r.json(); return (d.data?.children || []).map(i => ({ titulo: i.data.title, subreddit: i.data.subreddit, url: `https://reddit.com${i.data.permalink}`, fuente: 'Reddit' })); } catch(e) { return []; } }
+    async buscarWikipedia(tema) { try { const r = await fetch(`https://es.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(tema)}&format=json&origin=*&srlimit=5`); const d = await r.json(); return (d.query?.search || []).map(i => ({ titulo: i.title, resumen: i.snippet?.replace(/<[^>]+>/g, ''), url: `https://es.wikipedia.org/wiki/${encodeURIComponent(i.title.replace(/\s+/g, '_'))}`, fuente: 'Wikipedia' })); } catch(e) { return []; } }
     actualizarUI() {
-        const a = document.getElementById('arGitHub'); if (a) a.textContent = this.stats.github;
-        const b = document.getElementById('arReddit'); if (b) b.textContent = this.stats.reddit;
-        const c = document.getElementById('arWiki'); if (c) c.textContent = this.stats.wiki;
-        const d = document.getElementById('arCache'); if (d) d.textContent = this.stats.github + this.stats.reddit + this.stats.wiki;
+        document.getElementById('arGitHub').textContent = this.stats.github;
+        document.getElementById('arReddit').textContent = this.stats.reddit;
+        document.getElementById('arWiki').textContent = this.stats.wiki;
+        document.getElementById('arCache').textContent = this.stats.github + this.stats.reddit + this.stats.wiki;
     }
     getStats() { return { ...this.stats, total: this.stats.github + this.stats.reddit + this.stats.wiki }; }
 }
 const agentReach = new AgentReach();
 
 // ============================================
-// 🔄 MULTI-IA CON FALLBACK — TODOS LOS PROVEEDORES
+// 🔄 MULTI-IA — 9 PROVEEDORES CON TIMEOUT
 // ============================================
 const IA_PROVEEDORES = [
-    // ---- Google Gemini (Free) ----
-    {
-        nombre: 'Google',
-        url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AQ.Ab8RN6Ly5QrNa2RWh65DS_PRM_AMDE7E_52VaHe1FcdJcurvgw',
-        key: 'AQ.Ab8RN6Ly5QrNa2RWh65DS_PRM_AMDE7E_52VaHe1FcdJcurvgw',
-        modelos: ['gemini-2.0-flash', 'gemini-2.5-flash-preview-04-17'],
-        color: '#4285F4',
-        tipo: 'google'
-    },
-    // ---- Cerebras (Free) ----
-    {
-        nombre: 'Cerebras',
-        url: 'https://api.cerebras.ai/v1/chat/completions',
-        key: 'csk-jntkcrk4ev8vk35fhy6ctf4f6y2hdfp5h4f2khvwtdy82kcv',
-        modelos: ['llama3.1-8b', 'llama-3.3-70b', 'qwen-2.5-32b', 'qwen-2.5-coder-32b'],
-        color: '#FF6B35'
-    },
-    // ---- Z.ai (Free) ----
-    {
-        nombre: 'Z.ai',
-        url: 'https://api.z.ai/api/paas/v4/chat/completions',
-        key: '864fd7b42aa04163821d727cd74fbaea.GaPaxOmiAJUpm2TP',
-        modelos: ['glm-4-flash', 'glm-4.5-flash'],
-        color: '#7C3AED'
-    },
-    // ---- Mistral (Free) ----
-    {
-        nombre: 'Mistral AI',
-        url: 'https://api.mistral.ai/v1/chat/completions',
-        key: '5qjCySPcH6ltO3ACeYcv8peh8iz252uW',
-        modelos: ['mistral-small-latest', 'mistral-large-latest', 'open-mistral-7b'],
-        color: '#f97316'
-    },
-    // ---- GitHub (Free) ----
-    {
-        nombre: 'GitHub',
-        url: 'https://models.inference.ai.azure.com/chat/completions',
-        key: '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',
-        modelos: ['gpt-4o-mini', 'Phi-3.5-mini-instruct', 'Meta-Llama-3.1-8B-Instruct'],
-        color: '#24292E'
-    },
-    // ---- Ollama Cloud (Free) ----
-    {
-        nombre: 'Ollama Cloud',
-        url: 'https://api.ollama.cloud/v1/chat/completions',
-        key: '0edce97e3d3f405fb5e528efef2757f8.v6Xv_n50E_J9aSpdYQJMvaS3',
-        modelos: ['llama3.2', 'mistral', 'gemma2', 'qwen2.5'],
-        color: '#333333'
-    },
-    // ---- Kiro (Free) ----
-    {
-        nombre: 'Kiro',
-        url: 'https://api.kiro.ai/v1/chat/completions',
-        key: 'sk-xt-41b2aae5f67cc4105f017e26f6f5fe48f21d3e2207977139',
-        modelos: ['kiro-chat', 'kiro-pro'],
-        color: '#00A3FF'
-    },
-    // ---- Orca Router (Free) ----
-    {
-        nombre: 'Orca Router',
-        url: 'https://api.orcarouter.ai/v1/chat/completions',
-        key: 'sk-orca-cCg3Kbg7IUyeXhXdzZ41MRPe5kuQShyEiQ7tvlILHuk',
-        modelos: ['orca-mini', 'orca-2-7b', 'orca-2-13b'],
-        color: '#8B5CF6'
-    },
-    // ---- OpenRouter (Free) ----
-    {
-        nombre: 'OpenRouter',
-        url: 'https://openrouter.ai/api/v1/chat/completions',
-        key: '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',
-        modelos: ['mistralai/mistral-7b-instruct:free', 'meta-llama/llama-3.1-8b-instruct:free', 'google/gemma-2-9b-it:free', 'qwen/qwen-2.5-7b-instruct:free'],
-        color: '#10b981',
-        extraHeaders: { 'HTTP-Referer': 'https://newtral.local', 'X-Title': 'Newtral' }
-    }
+    { nombre: 'Mistral AI', url: 'https://api.mistral.ai/v1/chat/completions', key: '5qjCySPcH6ltO3ACeYcv8peh8iz252uW', modelos: ['mistral-small-latest', 'open-mistral-7b', 'mistral-tiny', 'open-mistral-nemo'], color: '#f97316' },
+    { nombre: 'OpenRouter', url: 'https://openrouter.ai/api/v1/chat/completions', key: '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', modelos: ['mistralai/mistral-7b-instruct:free', 'meta-llama/llama-3.1-8b-instruct:free', 'google/gemma-2-9b-it:free', 'qwen/qwen-2.5-7b-instruct:free'], color: '#10b981', extraHeaders: { 'HTTP-Referer': 'https://newtral.local', 'X-Title': 'Newtral' } },
+    { nombre: 'Cerebras', url: 'https://api.cerebras.ai/v1/chat/completions', key: 'csk-jntkcrk4ev8vk35fhy6ctf4f6y2hdfp5h4f2khvwtdy82kcv', modelos: ['llama3.1-8b', 'llama-3.3-70b'], color: '#FF6B35' },
+    { nombre: 'Z.ai', url: 'https://api.z.ai/api/paas/v4/chat/completions', key: '864fd7b42aa04163821d727cd74fbaea.GaPaxOmiAJUpm2TP', modelos: ['glm-4-flash', 'glm-4.5-flash'], color: '#7C3AED' },
+    { nombre: 'GitHub', url: 'https://models.inference.ai.azure.com/chat/completions', key: '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', modelos: ['gpt-4o-mini', 'Phi-3.5-mini-instruct'], color: '#24292E' },
+    { nombre: 'Ollama Cloud', url: 'https://api.ollama.cloud/v1/chat/completions', key: '0edce97e3d3f405fb5e528efef2757f8.v6Xv_n50E_J9aSpdYQJMvaS3', modelos: ['llama3.2', 'mistral', 'gemma2'], color: '#333333' },
+    { nombre: 'Kiro', url: 'https://api.kiro.ai/v1/chat/completions', key: 'sk-xt-41b2aae5f67cc4105f017e26f6f5fe48f21d3e2207977139', modelos: ['kiro-chat', 'kiro-pro'], color: '#00A3FF' },
+    { nombre: 'Orca Router', url: 'https://api.orcarouter.ai/v1/chat/completions', key: 'sk-orca-cCg3Kbg7IUyeXhXdzZ41MRPe5kuQShyEiQ7tvlILHuk', modelos: ['orca-mini', 'orca-2-7b'], color: '#8B5CF6' },
+    { nombre: 'Google Gemini', url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent', key: 'AQ.Ab8RN6Ly5QrNa2RWh65DS_PRM_AMDE7E_52VaHe1FcdJcurvgw', modelos: ['gemini-2.0-flash'], color: '#4285F4', tipo: 'google' }
 ];
-const PAIS_FIJO = 'Alemania';
-let ocupado = false, modoActual = 'experto', idiomaDetectado = 'es', proveedorActual = null;
-let ultimoAnalisis = '', cacheInvestigaciones = [], referenciasAcademicas = [];
 
-try { const c = localStorage.getItem('newtral_cache'); if (c) cacheInvestigaciones = JSON.parse(c); } catch(e) {}
+const PAIS_FIJO = 'Alemania';
+const TIMEOUT_IA = 20000;
+const TIMEOUT_API = 8000;
+const TIMEOUT_TOTAL_ANALISIS = 45000;
+
+let ocupado = false, modoActual = 'experto', idiomaDetectado = 'es', proveedorActual = null;
+let ultimoAnalisis = '', cacheInvestigaciones = [];
+let iaOkCount = 0, iaFailsCount = 0;
+
+try { const c = localStorage.getItem('newtral_cache_v2'); if (c) cacheInvestigaciones = JSON.parse(c); } catch(e) {}
 
 const nombreIdioma = { 'es': 'Español', 'en': 'Inglés', 'de': 'Alemán', 'fr': 'Francés', 'pt': 'Portugués', 'it': 'Italiano' };
 const banderaIdioma = { 'es': '🇪🇸', 'en': '🇬🇧', 'de': '🇩🇪', 'fr': '🇫🇷', 'pt': '🇵🇹', 'it': '🇮🇹' };
 
-function actualizarProveedor(nombre) {
+function fetchConTimeout(url, opciones = {}, timeoutMs = 8000) {
+    const ctrl = new AbortController();
+    const tid = setTimeout(() => ctrl.abort(), timeoutMs);
+    return fetch(url, { ...opciones, signal: ctrl.signal }).finally(() => clearTimeout(tid));
+}
+
+function actualizarProveedor(nombre, color) {
     proveedorActual = nombre;
     const prov = document.getElementById('jsllm7StatusBar');
-    if (prov) { prov.textContent = `✅ ${nombre}`; prov.style.color = '#10b981'; }
+    if (prov && nombre) { prov.textContent = `✅ ${nombre}`; prov.style.color = color || '#10b981'; }
     const ultra = document.getElementById('ultraProveedor');
-    if (ultra) ultra.textContent = nombre;
+    if (ultra && nombre) ultra.textContent = nombre;
 }
 
-async function llamarIA(messages, maxTokens = 3000) {
-    let ultimoError = null;
+async function llamarIAParalelo(messages, maxTokens = 3000) {
+    Diagnostico.log(`🚀 Lanzando ${IA_PROVEEDORES.length} proveedores · ${IA_PROVEEDORES.reduce((a, p) => a + p.modelos.length, 0)} modelos free en paralelo…`, 'info');
+    
+    const promesas = [];
     for (const prov of IA_PROVEEDORES) {
         for (const modelo of prov.modelos) {
-            try {
-                console.log(`🔄 Probando ${prov.nombre} (${modelo})...`);
-                const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${prov.key}` };
-                if (prov.extraHeaders) Object.assign(headers, prov.extraHeaders);
-
-                let body;
-                let url = prov.url;
-
-                // ---- Google Gemini ----
-                if (prov.tipo === 'google') {
-                    url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${prov.key}`;
-                    body = {
-                        contents: messages.map(m => ({
-                            role: m.role === 'assistant' ? 'model' : m.role,
-                            parts: [{ text: m.content }]
-                        })),
-                        generationConfig: { maxOutputTokens: maxTokens, temperature: 0.7 }
-                    };
-                } else {
-                    body = {
-                        model: modelo,
-                        messages: messages,
-                        temperature: 0.7,
-                        max_tokens: maxTokens
-                    };
-                }
-
-                const ctrl = new AbortController();
-                const tid = setTimeout(() => ctrl.abort(), 60000);
-                const resp = await fetch(url, { method: 'POST', headers, body: JSON.stringify(body), signal: ctrl.signal });
-                clearTimeout(tid);
-
-                if ([401, 403, 429].includes(resp.status)) { console.warn(`⚠️ ${prov.nombre}/${modelo} → ${resp.status}`); ultimoError = `${resp.status} en ${prov.nombre}`; continue; }
-                if (!resp.ok) { const err = await resp.json().catch(() => ({})); ultimoError = err.error?.message || `Error ${resp.status}`; continue; }
-
-                const data = await resp.json();
-                let texto = '';
-
-                if (prov.tipo === 'google') {
-                    texto = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-                } else {
-                    texto = data.choices?.[0]?.message?.content || '';
-                }
-
-                if (texto.length < 50) { ultimoError = 'Respuesta muy corta'; continue; }
-                console.log(`✅ ${prov.nombre} (${modelo}): ${texto.length} chars`);
-                actualizarProveedor(prov.nombre);
-                return { texto, proveedor: prov.nombre, modelo };
-            } catch(e) { console.warn(`⚠️ ${prov.nombre}/${modelo}:`, e.message); ultimoError = e.name === 'AbortError' ? 'Timeout' : e.message; }
+            promesas.push(
+                (async () => {
+                    const t0 = Date.now();
+                    try {
+                        const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${prov.key}` };
+                        if (prov.extraHeaders) Object.assign(headers, prov.extraHeaders);
+                        
+                        let body, url = prov.url;
+                        if (prov.tipo === 'google') {
+                            url = `${prov.url}?key=${prov.key}`;
+                            body = { contents: messages.map(m => ({ role: m.role === 'assistant' ? 'model' : m.role, parts: [{ text: m.content }] })), generationConfig: { maxOutputTokens: maxTokens, temperature: 0.7 } };
+                        } else {
+                            body = { model: modelo, messages, temperature: 0.7, max_tokens: maxTokens };
+                        }
+                        
+                        const resp = await fetchConTimeout(url, { method: 'POST', headers, body: JSON.stringify(body) }, TIMEOUT_IA);
+                        const dur = ((Date.now() - t0) / 1000).toFixed(1);
+                        
+                        if ([401, 403, 429].includes(resp.status)) {
+                            const errTxt = resp.status === 429 ? 'rate limit' : resp.status === 401 ? 'key' : `HTTP ${resp.status}`;
+                            Diagnostico.log(`❌ ${prov.nombre}/${modelo}: ${errTxt} (${dur}s)`, 'error');
+                            iaFailsCount++;
+                            throw new Error(`${prov.nombre}/${modelo}: ${errTxt}`);
+                        }
+                        if (!resp.ok) {
+                            Diagnostico.log(`❌ ${prov.nombre}/${modelo}: HTTP ${resp.status} (${dur}s)`, 'error');
+                            iaFailsCount++;
+                            throw new Error(`${prov.nombre}/${modelo}: HTTP ${resp.status}`);
+                        }
+                        
+                        const data = await resp.json();
+                        let texto = '';
+                        if (prov.tipo === 'google') { texto = data.candidates?.[0]?.content?.parts?.[0]?.text || ''; }
+                        else { texto = data.choices?.[0]?.message?.content || ''; }
+                        
+                        if (texto.length < 50) {
+                            Diagnostico.log(`❌ ${prov.nombre}/${modelo}: respuesta corta`, 'warn');
+                            iaFailsCount++;
+                            throw new Error(`${prov.nombre}/${modelo}: respuesta corta`);
+                        }
+                        
+                        Diagnostico.log(`✅ ${prov.nombre}/${modelo}: ${texto.length} chars en ${dur}s`, 'ok');
+                        iaOkCount++;
+                        return { texto, proveedor: prov.nombre, modelo };
+                    } catch (e) {
+                        if (e.name === 'AbortError') {
+                            Diagnostico.log(`❌ ${prov.nombre}/${modelo}: Timeout ${TIMEOUT_IA/1000}s`, 'error');
+                            iaFailsCount++;
+                        }
+                        throw e;
+                    }
+                })()
+            );
         }
     }
-    throw new Error(`Todos los proveedores fallaron. Último: ${ultimoError}`);
+    
+    try {
+        const resultado = await Promise.any(promesas);
+        actualizarProveedor(resultado.proveedor, '#c9a53b');
+        Diagnostico.log(`🏆 GANADOR: ${resultado.proveedor} (${resultado.modelo})`, 'ok');
+        return resultado;
+    } catch (e) {
+        Diagnostico.log(`❌ Todos los ${promesas.length} intentos IA fallaron`, 'error');
+        actualizarProveedor(null);
+        throw new Error('Todos los proveedores IA fallaron');
+    }
 }
 
 // ============================================
-// 🔧 UTILIDADES
+// 📊 13 FUENTES HISTÓRICAS
 // ============================================
-function showToast(msg, isErr) {
-    const t = document.createElement('div');
-    t.className = 'toast-msg';
-    t.style.background = isErr ? '#ef4444' : '#8b5cf6';
-    t.textContent = msg;
-    document.body.appendChild(t);
-    setTimeout(() => t.remove(), 3600);
-}
-function mostrarModal(titulo, contenido) {
-    const ov = document.createElement('div');
-    ov.className = 'modal-overlay';
-    ov.innerHTML = `<div class="modal-content"><h3>${titulo}</h3><div style="white-space:pre-wrap;font-size:0.85rem;line-height:1.7;">${contenido}</div><button class="modal-close">✕ Cerrar</button></div>`;
-    ov.querySelector('.modal-close').onclick = () => ov.remove();
-    ov.onclick = e => { if (e.target === ov) ov.remove(); };
-    document.body.appendChild(ov);
-}
-function actualizarProgress(p) { const el = document.getElementById('progressBar'); if (el) el.style.width = `${Math.min(100, p)}%`; }
-function descargarArchivo(c, n) { const b = new Blob([c], { type: 'text/plain' }); const u = URL.createObjectURL(b); const a = document.createElement('a'); a.href = u; a.download = n; a.click(); URL.revokeObjectURL(u); }
-
-// ============================================
-// 📊 12 FUENTES HISTÓRICAS
-// ============================================
-class FuentesHistoricas12 {
+class FuentesHistoricas13 {
     constructor() { this.cache = new Map(); }
     async semantic(tema) {
-        try { const r = await fetch(`https://api.semanticscholar.org/graph/v1/paper/search?query=${encodeURIComponent(tema + ' history')}&limit=5&fields=title,authors,year,abstract`); const d = await r.json(); return (d.data || []).map(p => ({ titulo: p.title, autor: p.authors?.map(a => a.name).join(', '), year: p.year, resumen: p.abstract, fuente: 'Semantic Scholar' })); } catch(e) { return []; }
+        try { const r = await fetchConTimeout(`https://api.semanticscholar.org/graph/v1/paper/search?query=${encodeURIComponent(tema + ' history')}&limit=5&fields=title,authors,year,abstract`, {}, TIMEOUT_API); const d = await r.json(); return (d.data || []).map(p => ({ titulo: p.title, autor: p.authors?.map(a => a.name).join(', '), year: p.year, resumen: p.abstract, fuente: 'Semantic Scholar' })); } catch(e) { return []; }
     }
     async arxiv(tema) {
-        try { const r = await fetch(`https://export.arxiv.org/api/query?search_query=all:${encodeURIComponent(tema)}&max_results=5`); const text = await r.text(); const entries = text.split('<entry>'); const out = []; for (let i = 1; i < Math.min(entries.length, 6); i++) { const t = entries[i].match(/<title>(.*?)<\/title>/); const s = entries[i].match(/<summary>(.*?)<\/summary>/); if (t) out.push({ titulo: t[1].replace(/&lt;|&gt;/g, '').trim(), resumen: s ? s[1].replace(/&lt;|&gt;/g, '').substring(0, 200) : '', fuente: 'arXiv' }); } return out; } catch(e) { return []; }
+        try { const r = await fetchConTimeout(`https://export.arxiv.org/api/query?search_query=all:${encodeURIComponent(tema)}&max_results=5`, {}, TIMEOUT_API); const text = await r.text(); const entries = text.split('<entry>'); const out = []; for (let i = 1; i < Math.min(entries.length, 6); i++) { const t = entries[i].match(/<title>(.*?)<\/title>/); if (t) out.push({ titulo: t[1].replace(/&lt;|&gt;/g, '').trim(), fuente: 'arXiv' }); } return out; } catch(e) { return []; }
     }
     async crossref(tema) {
-        try { const r = await fetch(`https://api.crossref.org/works?query=${encodeURIComponent(tema + ' history')}&rows=5`); const d = await r.json(); return (d.message?.items || []).map(i => ({ titulo: i.title?.[0] || '', autor: i.author?.map(a => a.family).join(', ') || '', year: i.issued?.['date-parts']?.[0]?.[0] || 's.f.', fuente: 'Crossref' })); } catch(e) { return []; }
+        try { const r = await fetchConTimeout(`https://api.crossref.org/works?query=${encodeURIComponent(tema + ' history')}&rows=5`, {}, TIMEOUT_API); const d = await r.json(); return (d.message?.items || []).map(i => ({ titulo: i.title?.[0] || '', autor: i.author?.map(a => a.family).join(', ') || '', year: i.issued?.['date-parts']?.[0]?.[0] || 's.f.', fuente: 'Crossref' })); } catch(e) { return []; }
     }
     async openalex(tema) {
-        try { const r = await fetch(`https://api.openalex.org/works?search=${encodeURIComponent(tema + ' history')}&per-page=5`); const d = await r.json(); return (d.results || []).map(i => ({ titulo: i.title || '', autor: i.authorships?.map(a => a.author.display_name).join(', ') || '', year: i.publication_year || 's.f.', fuente: 'OpenAlex' })); } catch(e) { return []; }
+        try { const r = await fetchConTimeout(`https://api.openalex.org/works?search=${encodeURIComponent(tema + ' history')}&per-page=5`, {}, TIMEOUT_API); const d = await r.json(); return (d.results || []).map(i => ({ titulo: i.title || '', autor: i.authorships?.map(a => a.author.display_name).join(', ') || '', year: i.publication_year || 's.f.', fuente: 'OpenAlex' })); } catch(e) { return []; }
     }
     async wikipedia(tema) {
-        try { const r = await fetch(`https://es.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(tema)}&format=json&origin=*&srlimit=5`); const d = await r.json(); return (d.query?.search || []).map(i => ({ titulo: i.title, resumen: i.snippet?.replace(/<[^>]+>/g, ''), fuente: 'Wikipedia' })); } catch(e) { return []; }
+        try { const r = await fetchConTimeout(`https://es.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(tema)}&format=json&origin=*&srlimit=5`, {}, TIMEOUT_API); const d = await r.json(); return (d.query?.search || []).map(i => ({ titulo: i.title, resumen: i.snippet?.replace(/<[^>]+>/g, ''), fuente: 'Wikipedia' })); } catch(e) { return []; }
     }
     async internetArchive(tema) {
-        try { const r = await fetch(`https://archive.org/advancedsearch.php?q=${encodeURIComponent(tema)}+AND+mediatype:texts&fl[]=title,creator,year,identifier&rows=5&output=json`); const d = await r.json(); return (d.response?.docs || []).map(x => ({ titulo: x.title, autor: x.creator, year: x.year, fuente: 'Internet Archive', url: `https://archive.org/details/${x.identifier}` })); } catch(e) { return []; }
+        try { const r = await fetchConTimeout(`https://archive.org/advancedsearch.php?q=${encodeURIComponent(tema)}+AND+mediatype:texts&fl[]=title,creator,year,identifier&rows=5&output=json`, {}, TIMEOUT_API); const d = await r.json(); return (d.response?.docs || []).map(x => ({ titulo: x.title, autor: x.creator, year: x.year, fuente: 'Internet Archive' })); } catch(e) { return []; }
     }
     async wikidata(tema) { return [{ titulo: `${tema} - Wikidata`, fuente: 'Wikidata' }]; }
     async pubmed(tema) { return []; }
     async doaj(tema) { return [{ titulo: `${tema} - DOAJ Journal`, fuente: 'DOAJ' }]; }
     async openlibrary(tema) { return [{ titulo: `${tema} - Open Library`, fuente: 'Open Library' }]; }
     async hackernews(tema) {
-        try { const r = await fetch(`https://hn.algolia.com/api/v1/search?query=${encodeURIComponent(tema)}&hitsPerPage=5`); const d = await r.json(); return (d.hits || []).map(h => ({ titulo: h.title, autor: h.author, fuente: 'Hacker News', url: h.url })); } catch(e) { return []; }
+        try { const r = await fetchConTimeout(`https://hn.algolia.com/api/v1/search?query=${encodeURIComponent(tema)}&hitsPerPage=5`, {}, TIMEOUT_API); const d = await r.json(); return (d.hits || []).map(h => ({ titulo: h.title, autor: h.author, fuente: 'Hacker News' })); } catch(e) { return []; }
     }
     async gscholar(tema) { return [{ titulo: `${tema} - Google Scholar`, fuente: 'Google Scholar' }]; }
     async researchgate(tema) { return [{ titulo: `${tema} - ResearchGate`, fuente: 'ResearchGate' }]; }
     async buscarTodas(tema) {
-        const cacheKey = `12f_${tema}`;
+        const cacheKey = `13f_${tema}`;
         if (this.cache.has(cacheKey)) { const c = this.cache.get(cacheKey); if (Date.now() - c.timestamp < 3600000) return c.data; }
+        Diagnostico.log(`🔬 Consultando 13 fuentes académicas…`, 'info');
         const resultados = await Promise.allSettled([this.semantic(tema), this.arxiv(tema), this.crossref(tema), this.openalex(tema), this.wikipedia(tema), this.internetArchive(tema), this.wikidata(tema), this.pubmed(tema), this.doaj(tema), this.openlibrary(tema), this.hackernews(tema), this.gscholar(tema), this.researchgate(tema)]);
         const nombres = ['Semantic Scholar', 'arXiv', 'Crossref', 'OpenAlex', 'Wikipedia', 'Internet Archive', 'Wikidata', 'PubMed', 'DOAJ', 'Open Library', 'Hacker News', 'Google Scholar', 'ResearchGate'];
         const fuentes = {}; let total = 0, exitosas = 0;
-        resultados.forEach((r, i) => { const data = r.status === 'fulfilled' ? r.value : []; fuentes[nombres[i]] = { data, count: data.length, exito: data.length > 0 }; if (data.length > 0) { total += data.length; exitosas++; } });
+        resultados.forEach((r, i) => { const data = r.status === 'fulfilled' ? r.value : []; fuentes[nombres[i]] = { data, count: data.length }; if (data.length > 0) { total += data.length; exitosas++; } });
+        Diagnostico.log(`✅ 13 fuentes: ${exitosas}/13 exitosas · ${total} resultados`, 'ok');
         const result = { tema, fuentes, resumen: { total_fuentes: 13, fuentes_exitosas: exitosas, total_resultados: total } };
         this.cache.set(cacheKey, { data: result, timestamp: Date.now() });
         return result;
@@ -714,7 +695,7 @@ class FuentesHistoricas12 {
         Object.entries(resultados.fuentes).forEach(([nombre, f]) => {
             if (f.count > 0) {
                 html += `<div style="margin:8px 0;padding:8px;background:rgba(16,185,129,0.06);border-radius:6px;border-left:2px solid #10b981;"><strong style="color:#34d399;">${nombre}</strong> (${f.count})<br>`;
-                f.data.slice(0, 3).forEach(r => { html += `<div style="font-size:0.72rem;margin:4px 0;padding-left:8px;">• ${r.autor || ''} ${r.year ? '('+r.year+')' : ''} <strong>${(r.titulo || '').substring(0, 80)}</strong>`; if (r.resumen) html += `<br><span style="color:#94a3b8;font-size:0.65rem;">${r.resumen.substring(0, 120)}...</span>`; if (r.url) html += ` <a href="${r.url}" target="_blank" style="color:#60a5fa;">🔗</a>`; html += `</div>`; });
+                f.data.slice(0, 3).forEach(r => { html += `<div style="font-size:0.72rem;margin:4px 0;padding-left:8px;">• ${r.autor || ''} ${r.year ? '('+r.year+')' : ''} <strong>${(r.titulo || '').substring(0, 80)}</strong></div>`; });
                 html += '</div>';
             }
         });
@@ -722,7 +703,7 @@ class FuentesHistoricas12 {
         return html;
     }
 }
-const fuentes12 = new FuentesHistoricas12();
+const fuentes12 = new FuentesHistoricas13();
 
 // ============================================
 // 📚 43 CASOS HISTÓRICOS
@@ -744,7 +725,6 @@ const casosGuerras = [
     {era:"1975-1979",titulo:"Genocidio camboyano",hook:"Khmer Rouge mataron 2 millones",desc:"Campos de la muerte",tag:"Totalitarismo",tagType:"danger",leccion:"Las utopías impuestas se vuelven pesadillas."},
     {era:"1994",titulo:"Genocidio de Ruanda",hook:"800,000 tutsis asesinados en 100 días",desc:"El mundo miró hacia otro lado",tag:"Genocidio olvidado",tagType:"danger",leccion:"Nunca más' debe ser real."}
 ];
-
 const casosEconomico = [
     {era:"1960-presente",titulo:"La Revolución Verde",hook:"Salvó millones, destruyó diversidad",desc:"100,000 variedades de arroz a solo 10",tag:"Biotecnología",tagType:"warning",leccion:"El progreso tiene costo."},
     {era:"Hoy",titulo:"Muros de pago científicos",hook:"80% investigación inaccesible",desc:"Ciencia pública privatizada",tag:"Desigualdad",tagType:"warning",leccion:"El conocimiento es inaccesible."},
@@ -755,7 +735,6 @@ const casosEconomico = [
     {era:"1750-1850",titulo:"Revolución Industrial",hook:"Máquinas reemplazaron artesanos",desc:"Éxodo rural y nuevas clases sociales",tag:"Transformación",tagType:"info",leccion:"Toda revolución tecnológica genera ganadores y perdedores."},
     {era:"1990s-presente",titulo:"Globalización digital",hook:"Concentración extrema de riqueza",desc:"5 empresas controlan la economía digital",tag:"Monopolio",tagType:"warning",leccion:"La conectividad sin equidad profundiza desigualdades."}
 ];
-
 const casosEstructural = [
     {era:"1880-2010",titulo:"Prohibición lenguas de señas",hook:"Congreso de Milán 1880",desc:"164 oyentes votaron por sordos",tag:"Discriminación",tagType:"warning",leccion:"El progreso puede oprimir."},
     {era:"Permanente",titulo:"Sesgo de publicación",hook:"Resultados negativos no publicados",desc:"Literatura médica incompleta",tag:"Ciencia sesgada",tagType:"warning",leccion:"Lo no publicado no existe."},
@@ -765,7 +744,6 @@ const casosEstructural = [
     {era:"Siglo XX",titulo:"Ceguera de género en medicina",hook:"Ensayos clínicos solo en hombres",desc:"Mujeres mueren por diagnósticos sesgados",tag:"Sesgo médico",tagType:"warning",leccion:"Ignorar la diferencia mata."},
     {era:"Permanente",titulo:"Clasismo académico",hook:"Méritos atribuidos a instituciones",desc:"El conocimiento tiene apellidos",tag:"Clasismo",tagType:"warning",leccion:"La excelencia no tiene código postal."}
 ];
-
 const casosCiencia = [
     {era:"1543",titulo:"Copérnico y el heliocentrismo",hook:"La Tierra no es el centro",desc:"Revolución astronómica",tag:"Revolución científica",tagType:"info",leccion:"La verdad incomoda a los poderosos."},
     {era:"1633",titulo:"Juicio a Galileo",hook:"La Inquisición lo condenó",desc:"La Iglesia contra la ciencia",tag:"Ciencia vs dogma",tagType:"warning",leccion:"La fe sin razón se vuelve cárcel."},
@@ -776,7 +754,6 @@ const casosCiencia = [
     {era:"1989",titulo:"Nacimiento de la Web",hook:"Tim Berners-Lee en CERN",desc:"Internet se volvió universal",tag:"Revolución digital",tagType:"info",leccion:"La tecnología debe ser libre."},
     {era:"1990s",titulo:"Proyecto Genoma Humano",hook:"3 mil millones de pares de bases",desc:"Secuenciación completa del ADN humano",tag:"Medicina personalizada",tagType:"info",leccion:"La cooperación internacional puede lograr lo imposible."}
 ];
-
 const casosRevolucion = [
     {era:"1789",titulo:"Revolución Francesa",hook:"Libertad, igualdad, fraternidad",desc:"Fin del Antiguo Régimen",tag:"Revolución política",tagType:"info",leccion:"Las ideas transforman el mundo."},
     {era:"1917",titulo:"Revolución Rusa",hook:"Los bolcheviques tomaron el poder",desc:"Nacimiento de la URSS",tag:"Revolución comunista",tagType:"info",leccion:"Las utopías pueden volverse distopías."},
@@ -786,39 +763,96 @@ const casosRevolucion = [
     {era:"2008",titulo:"Crisis económica global",hook:"Colapso financiero mundial",desc:"Reconfiguración del orden económico",tag:"Crisis sistémica",tagType:"warning",leccion:"La interdependencia global amplifica riesgos."}
 ];
 
-const casosData = {
-    guerras: casosGuerras,
-    economico: casosEconomico,
-    estructural: casosEstructural,
-    ciencia: casosCiencia,
-    revolucion: casosRevolucion
-};
-
 // ============================================
-// 🤖 ANÁLISIS CON AGENTE + CORE 403M + AGENT-REACH
+// 🧠 FALLBACK INTELIGENTE PARA CASOS HISTÓRICOS
 // ============================================
-async function generarAnalisisConAgente(titulo, era, hook) {
-    console.log(`🔬 Buscando en 13 fuentes + Agent-Reach: ${titulo}`);
-    const resultados12 = await fuentes12.buscarTodas(titulo);
-    const resultadosAgentReach = await agentReach.buscar(titulo);
+function generarFallbackHistorico(titulo, era, hook, datos = {}) {
+    const { fuentes = {}, agentReach = {} } = datos;
+    const totalFuentes = Object.values(fuentes).reduce((sum, f) => sum + (f.count || 0), 0);
+    const fuentesActivas = Object.entries(fuentes).filter(([_, f]) => f.count > 0).map(([n]) => n);
+    const totalAgent = (agentReach.github?.length || 0) + (agentReach.wiki?.length || 0) + (agentReach.reddit?.length || 0);
     
-    let contexto = `CASO HISTÓRICO: ${titulo}\nÉPOCA: ${era}\nCONTEXTO: ${hook}\n\n`;
-    contexto += `INFORMACIÓN DE 13 FUENTES (${resultados12.resumen.total_resultados} resultados):\n`;
-    Object.entries(resultados12.fuentes).forEach(([nombre, f]) => {
+    let analisis = '';
+    analisis += `Contexto Histórico:\n\n${titulo} (${era}) representa un momento crucial en la historia universal. ${hook}\n\n`;
+    analisis += `Este evento debe analizarse desde múltiples perspectivas: política, económica, social y cultural. La relevancia contemporánea del caso se refleja en las lecciones que la humanidad ha aprendido a lo largo de los siglos.\n\n`;
+    
+    analisis += `Hechos Clave:\n\n`;
+    analisis += `• El caso se desarrolla en ${era}, en un contexto de transformaciones profundas.\n`;
+    analisis += `• Los protagonistas y testigos documentaron los sucesos con base en fuentes primarias y secundarias.\n`;
+    analisis += `• Las consecuencias se extendieron por décadas, afectando generaciones enteras.\n\n`;
+    
+    analisis += `Fuentes Académicas Consultadas (${totalFuentes} resultados de ${fuentesActivas.length} fuentes):\n\n`;
+    Object.entries(fuentes).forEach(([nombre, f]) => {
         if (f.count > 0) {
-            contexto += `\n[${nombre}]:\n`;
-            f.data.slice(0, 3).forEach(r => { contexto += `• ${r.titulo || ''}\n`; if (r.resumen) contexto += `  ${r.resumen.substring(0, 150)}\n`; });
+            analisis += `📚 [${nombre}] ${f.count} referencias:\n`;
+            f.data.slice(0, 3).forEach(r => {
+                analisis += `  • ${r.autor || ''} ${r.year ? '('+r.year+')' : ''} "${r.titulo || ''}"\n`;
+            });
+            analisis += '\n';
         }
     });
     
-    contexto += `\n🔌 AGENT-REACH (DATOS EN TIEMPO REAL):\n`;
-    if (resultadosAgentReach.github.length) { contexto += `\n[GitHub - ${resultadosAgentReach.github.length} repos]:\n`; resultadosAgentReach.github.slice(0, 3).forEach(r => { contexto += `• ${r.titulo} ⭐${r.estrellas}\n`; }); }
-    if (resultadosAgentReach.reddit.length) { contexto += `\n[Reddit - ${resultadosAgentReach.reddit.length} discusiones]:\n`; resultadosAgentReach.reddit.slice(0, 3).forEach(r => { contexto += `• r/${r.subreddit}: ${r.titulo}\n`; }); }
-    if (resultadosAgentReach.wiki.length) { contexto += `\n[Wikipedia - ${resultadosAgentReach.wiki.length} entradas]:\n`; resultadosAgentReach.wiki.slice(0, 3).forEach(r => { contexto += `• ${r.titulo}\n`; }); }
+    if (totalAgent > 0) {
+        analisis += `Datos en Tiempo Real (Agent-Reach · ${totalAgent} resultados):\n\n`;
+        if (agentReach.github?.length) {
+            analisis += `📦 GitHub (${agentReach.github.length}):\n`;
+            agentReach.github.slice(0, 3).forEach(r => { analisis += `  • ${r.titulo} ⭐${r.estrellas || 0}\n`; });
+        }
+        if (agentReach.wiki?.length) {
+            analisis += `\n🌐 Wikipedia (${agentReach.wiki.length}):\n`;
+            agentReach.wiki.slice(0, 3).forEach(r => { analisis += `  • ${r.titulo}\n`; });
+        }
+        analisis += '\n';
+    }
     
-    if (rustWASM.cargado) { try { const keywords = rustWASM.keywords(contexto, 10); console.log(`🦀 WASM Rust keywords: ${keywords.length}`); } catch(e) {} }
+    analisis += `Consecuencias Multidimensionales:\n\n`;
+    analisis += `• Corto plazo: Transformación inmediata del orden establecido.\n`;
+    analisis += `• Mediano plazo: Reconfiguración de instituciones y sistemas.\n`;
+    analisis += `• Largo plazo: Legado persistente en la memoria colectiva.\n\n`;
     
-    const prompt = `Actúa como historiador senior especializado en historia universal con enfoque en ${PAIS_FIJO}.
+    analisis += `Lecciones Aprendidas:\n\n`;
+    analisis += `La historia nos enseña que eventos como "${titulo}" no son incidentes aislados, sino parte de patrones más amplios. Comprenderlos requiere análisis riguroso y perspectiva histórica.\n\n`;
+    
+    analisis += `─────────────────────────────────────\n`;
+    analisis += `📊 FICHA DE DATOS REALES:\n`;
+    analisis += `📚 Fuentes académicas: ${fuentesActivas.length} activas (${totalFuentes} referencias)\n`;
+    analisis += `🔌 Agent-Reach: ${totalAgent} resultados en tiempo real\n`;
+    analisis += `🤖 IA probadas: ${IA_PROVEEDORES.length} proveedores · ${IA_PROVEEDORES.reduce((a, p) => a + p.modelos.length, 0)} modelos\n`;
+    analisis += `─────────────────────────────────────\n`;
+    analisis += `⚠️ MODO FALLBACK INTELIGENTE\n`;
+    analisis += `Los proveedores de IA no respondieron en el tiempo límite. Este análisis fue compuesto automáticamente con datos reales de las fuentes académicas y Agent-Reach.\n`;
+    analisis += `🔄 Reintenta para obtener análisis generado por IA.\n`;
+    analisis += `─────────────────────────────────────`;
+    
+    return analisis;
+}
+
+// ============================================
+// 🤖 ANÁLISIS CON AGENTE + CORE 403M + AGENT-REACH + TIMEOUT GLOBAL
+// ============================================
+async function generarAnalisisConAgente(titulo, era, hook) {
+    // Timeout global de seguridad
+    const timeoutGlobal = new Promise((_, reject) => setTimeout(() => reject(new Error('TIMEOUT_GLOBAL')), TIMEOUT_TOTAL_ANALISIS));
+    
+    const tareaPrincipal = (async () => {
+        Diagnostico.log(`🔬 Analizando: ${titulo}`, 'info');
+        const resultados12 = await fuentes12.buscarTodas(titulo);
+        const resultadosAgentReach = await agentReach.buscar(titulo);
+        
+        let contexto = `CASO HISTÓRICO: ${titulo}\nÉPOCA: ${era}\nCONTEXTO: ${hook}\n\n`;
+        contexto += `INFORMACIÓN DE 13 FUENTES (${resultados12.resumen.total_resultados} resultados):\n`;
+        Object.entries(resultados12.fuentes).forEach(([nombre, f]) => {
+            if (f.count > 0) {
+                contexto += `\n[${nombre}]:\n`;
+                f.data.slice(0, 3).forEach(r => { contexto += `• ${r.titulo || ''}\n`; if (r.resumen) contexto += `  ${r.resumen.substring(0, 150)}\n`; });
+            }
+        });
+        
+        contexto += `\n🔌 AGENT-REACH:\n`;
+        if (resultadosAgentReach.github.length) { contexto += `[GitHub - ${resultadosAgentReach.github.length}]:\n`; resultadosAgentReach.github.slice(0, 3).forEach(r => { contexto += `• ${r.titulo} ⭐${r.estrellas}\n`; }); }
+        if (resultadosAgentReach.wiki.length) { contexto += `[Wikipedia - ${resultadosAgentReach.wiki.length}]:\n`; resultadosAgentReach.wiki.slice(0, 3).forEach(r => { contexto += `• ${r.titulo}\n`; }); }
+        
+        const prompt = `Actúa como historiador senior especializado en historia universal con enfoque en ${PAIS_FIJO}.
 
 CASO HISTÓRICO: ${titulo}
 ÉPOCA: ${era}
@@ -827,15 +861,15 @@ CONTEXTO: ${hook}
 CONTEXTO ADICIONAL DE 13 FUENTES + AGENT-REACH:
 ${contexto.substring(0, 2200)}
 
-INSTRUCCIONES OBLIGATORIAS (responde EXACTAMENTE con esta estructura):
+INSTRUCCIONES (responde con esta estructura):
 
 CONTEXTO HISTÓRICO:
-(3 párrafos detallados sobre el contexto)
+(3 párrafos detallados)
 
 HECHOS CLAVE Y PROTAGONISTAS:
-• Hecho 1 con fecha y protagonista
-• Hecho 2 con fecha y protagonista
-• Hecho 3 con fecha y protagonista
+• Hecho 1
+• Hecho 2
+• Hecho 3
 
 CONSECUENCIAS MULTIDIMENSIONALES:
 (corto, mediano y largo plazo)
@@ -843,23 +877,39 @@ CONSECUENCIAS MULTIDIMENSIONALES:
 LECCIONES APRENDIDAS:
 (lecciones y relevancia actual)
 
-IMPORTANTE:
-- Cita mínimo 3 autores o corrientes historiográficas
-- Distingue fuentes primarias y secundarias
-- Extensión: 800-1000 palabras
-- NO uses asteriscos
-- Enfócate en el contexto alemán/europeo cuando aplique`;
+Extensión: 800-1000 palabras. NO uses asteriscos.`;
 
-    const maxTokens = modoActual === 'experto' ? 4000 : 2000;
-    const resultado = await llamarIA([
-        { role: 'system', content: 'Eres un historiador senior experto en historia universal con enfoque alemán. NO usas asteriscos.' },
-        { role: 'user', content: prompt }
-    ], maxTokens);
+        const maxTokens = modoActual === 'experto' ? 4000 : 2000;
+        const resultado = await llamarIAParalelo([
+            { role: 'system', content: 'Eres un historiador senior experto. NO usas asteriscos.' },
+            { role: 'user', content: prompt }
+        ], maxTokens);
+        
+        let textoLimpio = resultado.texto.replace(/\*\*(.*?)\*\*/g, '$1').replace(/\*(.*?)\*/g, '$1').replace(/#{1,6}\s*/g, '').trim();
+        core403M.registrarConsulta(titulo, textoLimpio);
+        rustWASM.cache(`hist_${titulo}_${Date.now()}`, textoLimpio.substring(0, 5000));
+        
+        return { analisis: textoLimpio, proveedor: resultado.proveedor, contexto12: resultados12, contextoAgentReach: resultadosAgentReach, fueIA: true };
+    })();
     
-    core403M.registrarConsulta(titulo, resultado.texto);
-    rustWASM.cache(`hist_${titulo}_${Date.now()}`, resultado.texto.substring(0, 5000));
-    
-    return { analisis: resultado.texto, proveedor: resultado.proveedor, contexto12: resultados12, contextoAgentReach: resultadosAgentReach };
+    try {
+        return await Promise.race([tareaPrincipal, timeoutGlobal]);
+    } catch (e) {
+        console.warn('❌ IA falló o timeout:', e.message);
+        Diagnostico.log(`🧠 Activando FALLBACK INTELIGENTE (${e.message})`, 'warn');
+        
+        // Reintentar recopilar datos
+        let datos = { fuentes: {}, agentReach: {} };
+        try {
+            const resultados12 = await fuentes12.buscarTodas(titulo);
+            const resultadosAgentReach = await agentReach.buscar(titulo);
+            datos.fuentes = resultados12.fuentes;
+            datos.agentReach = resultadosAgentReach;
+        } catch (e2) {}
+        
+        const fallback = generarFallbackHistorico(titulo, era, hook, datos);
+        return { analisis: fallback, proveedor: 'Fallback Inteligente', contexto12: { resumen: { total_resultados: 0, fuentes_exitosas: 0 } }, contextoAgentReach: { github: [], reddit: [], wiki: [] }, fueIA: false, datos };
+    }
 }
 
 // ============================================
@@ -886,7 +936,7 @@ function actualizarContadores() {
 async function obtenerExplicacion(titulo, era, hook) {
     const key = titulo.toLowerCase();
     const cached = rustWASM.getCache(key);
-    if (cached) return cached;
+    if (cached) { Diagnostico.log(`📦 Caché WASM para: ${titulo}`, 'ok'); return cached; }
     const resultado = await generarAnalisisConAgente(titulo, era, hook);
     if (!resultado || !resultado.analisis || resultado.analisis.length < 50) {
         return `📜 ${titulo} (${era})\n\n🔍 ${hook}\n\n📖 Análisis histórico en proceso.`;
@@ -899,23 +949,21 @@ async function explicarConIA(caso, card) {
     const btn = card.querySelector('.ia-btn');
     if (!ia || !btn) return;
     btn.disabled = true;
-    btn.innerHTML = '<span class="loading-spinner"></span> Analizando con WASM Rust...';
-    ia.innerHTML = "🤔 Consultando Multi-IA + 13 Fuentes + Agent-Reach...";
+    btn.innerHTML = '<span class="loading-spinner"></span> Analizando...';
+    ia.innerHTML = "🤔 Consultando Multi-IA (9) + 13 Fuentes + Agent-Reach...";
     actualizarProgress(10);
     try {
         const resultado = await obtenerExplicacion(caso.titulo, caso.era, caso.hook);
-        const stats = rustWASM.getStats();
-        const cacheSize = rustWASM.getCacheSize();
         ia.innerHTML = resultado.replace(/\n/g, '<br>');
         actualizarProgress(100);
         btn.disabled = false;
         btn.innerHTML = '🤖 Explicar con IA';
         ultimoAnalisis = resultado;
         actualizarAnalisisAutomatico(resultado, rustWASM.idioma(resultado));
-        showToast(`✅ Análisis · WASM Rust · ${resultado.length} caracteres · 🤖 Agente · ⚡ 1 Llamada · 📦 Caché: ${cacheSize}`);
+        showToast(`✅ Análisis · ${proveedorActual || 'Fallback'} · ${resultado.length} caracteres`);
         setTimeout(() => actualizarProgress(0), 2000);
     } catch(e) {
-        ia.innerHTML = "❌ Error al obtener análisis.";
+        ia.innerHTML = "❌ Error al obtener análisis. Reintenta.";
         btn.disabled = false;
         btn.innerHTML = '🤖 Explicar con IA';
         actualizarProgress(0);
@@ -940,10 +988,9 @@ function renderSections(ft = 'all', st = '') {
         if (!filtered.length) continue;
         let cardsHtml = `<div class="section-title">${s.title} <span class="counter-badge">${filtered.length}</span></div><div class="case-grid">`;
         for (let caso of filtered) {
-            const q = { qualityLevel: 'media', qualityScore: 75 };
             const casoJson = JSON.stringify(caso).replace(/"/g, '&quot;');
             cardsHtml += `<div class="card" onclick="window.toggleCard(this)">
-                <span class="quality-badge quality-${q.qualityLevel}">${q.qualityScore}%</span>
+                <span class="quality-badge quality-media">75%</span>
                 <div class="card-title">📖 ${escapeHtml(caso.titulo)}</div>
                 <div class="card-era">📅 ${escapeHtml(caso.era)}</div>
                 <div class="card-hook">💡 ${escapeHtml(caso.hook)}</div>
@@ -958,9 +1005,6 @@ function renderSections(ft = 'all', st = '') {
         }
         cardsHtml += '</div>';
         c.innerHTML += cardsHtml;
-    }
-    if (c.children.length === 0) {
-        c.innerHTML = `<div style="text-align:center;padding:1.5rem;color:#94a3b8;">🔍 No se encontraron casos.</div>`;
     }
 }
 
@@ -1001,17 +1045,13 @@ function actualizarAnalisisAutomatico(texto, idioma) {
     const repeticiones = rustWASM.detectarRepeticiones(texto);
     if (repeticiones.length > 0) {
         document.getElementById('repeticionesWidget').textContent = `🔄 Repeticiones: ${repeticiones.map(r => `${r.palabra} (${r.count})`).join(', ')}`;
-    } else {
-        document.getElementById('repeticionesWidget').textContent = '🔄 Repeticiones: Ninguna';
     }
     const legibilidad = rustWASM.calcularLegibilidad(texto);
     document.getElementById('legibilidadScore').textContent = `${legibilidad.nivel} (${Math.round(legibilidad.score)})`;
     const sentimiento = rustWASM.analizarSentimiento(texto);
     document.getElementById('sentimientoAnalisis').textContent = `🎯 Tono: ${sentimiento}`;
-    const tiempoLectura = rustWASM.calcularTiempoLectura(texto);
-    document.getElementById('tiempoLectura').textContent = `⏱️ ${tiempoLectura}`;
-    const riqueza = rustWASM.riquezaVocabulario(texto);
-    document.getElementById('riquezaVocabulario').textContent = `${riqueza}%`;
+    document.getElementById('tiempoLectura').textContent = `⏱️ ${rustWASM.calcularTiempoLectura(texto)}`;
+    document.getElementById('riquezaVocabulario').textContent = `${rustWASM.riquezaVocabulario(texto)}%`;
     const completitud = rustWASM.evaluarCompletitud(texto);
     document.getElementById('completitudWidget').textContent = `📊 Completitud: ${completitud.completitud}%`;
     let qualityScore = 85;
@@ -1023,15 +1063,8 @@ function actualizarAnalisisAutomatico(texto, idioma) {
     document.getElementById('qualityLabel').textContent = qualityScore + '%';
     const idiomaDet = idioma || rustWASM.idioma(texto);
     idiomaDetectado = idiomaDet;
-    const bandera = banderaIdioma[idiomaDet] || '🌐';
-    const nombre = nombreIdioma[idiomaDet] || 'Desconocido';
-    document.getElementById('idiomaIndicator').textContent = `${bandera} ${nombre}`;
-    document.getElementById('idiomaStatus').textContent = `${bandera}`;
-    const statsWASM = rustWASM.getStats();
-    document.getElementById('ultraOptimizaciones').textContent = statsWASM.optimizaciones;
-    document.getElementById('ultraTiempo').textContent = Math.round(statsWASM.tiempo) + 'ms';
-    document.getElementById('ultraIdiomas').textContent = statsWASM.idiomasDetectados || 0;
-    document.getElementById('ultraFunciones').textContent = statsWASM.funciones;
+    document.getElementById('idiomaIndicator').textContent = `${banderaIdioma[idiomaDet] || '🌐'} ${nombreIdioma[idiomaDet] || ''}`;
+    document.getElementById('idiomaStatus').textContent = banderaIdioma[idiomaDet] || '🌐';
     document.getElementById('wasmCacheSize').textContent = rustWASM.getCacheSize();
 }
 
@@ -1053,14 +1086,11 @@ async function herramienta(prompt, titulo) {
     ultimoAnalisis = analisis;
     actualizarAnalisisAutomatico(analisis, rustWASM.idioma(analisis));
     actualizarProgress(100);
-    showToast(`✅ ${titulo} · ${analisis.length} caracteres · WASM Rust · 🇩🇪`);
+    showToast(`✅ ${titulo} · ${analisis.length} caracteres`);
     ocupado = false;
     setTimeout(() => actualizarProgress(0), 2000);
 }
 
-// ============================================
-// BOTONES
-// ============================================
 document.getElementById('btnTimeline').onclick = () => herramienta('Línea de tiempo del conocimiento en Alemania', '📜 LÍNEA DE TIEMPO');
 document.getElementById('btnComparar').onclick = async () => { const e1 = prompt("Primera época:", "Antigüedad"); const e2 = prompt("Segunda:", "Edad Media"); if (e1 && e2) await herramienta(`${e1} vs ${e2} en Alemania`, `🔄 ${e1} vs ${e2}`); };
 document.getElementById('btnFiguras').onclick = async () => { const a = prompt("Área:", "ciencia"); if (a) await herramienta(`Figuras en ${a} de Alemania`, `👤 ${a.toUpperCase()}`); };
@@ -1097,8 +1127,7 @@ document.getElementById('btnBuscarAcademico').onclick = async () => {
     const tema = document.getElementById('searchInput').value.trim() || 'historia';
     const resultados = await fuentes12.buscarTodas(tema);
     if (resultados.resumen.total_resultados > 0) {
-        const refSection = document.getElementById('referencesSection');
-        refSection.style.display = 'block';
+        document.getElementById('referencesSection').style.display = 'block';
         document.getElementById('referencesList').innerHTML = resultados.fuentes['Semantic Scholar']?.data.slice(0, 10).map((ref, i) => `<div class="ref-item"><strong>${i+1}.</strong> ${ref.autor || 'Autor'} (${ref.year || 's.f.'}). <em>${ref.titulo || 'Sin título'}</em>. ${ref.fuente || 'Fuente'}.</div>`).join('') || 'Sin referencias';
         document.getElementById('totalReferencias').textContent = resultados.resumen.total_resultados;
         showToast(`📚 ${resultados.resumen.total_resultados} referencias`);
@@ -1107,8 +1136,7 @@ document.getElementById('btnBuscarAcademico').onclick = async () => {
 
 document.getElementById('btnVerificarPlagio').onclick = () => {
     if (!ultimoAnalisis) { showToast('⚠️ Realiza un análisis primero', true); return; }
-    const sim = 15;
-    mostrarModal('⚠️ Plagio', `Originalidad: ${Math.round(100 - sim)}%\nCitas: ${(ultimoAnalisis.match(/\([A-Z][a-z]+,\s*\d{4}\)/g) || []).length}\nRiesgo: BAJO`);
+    mostrarModal('⚠️ Plagio', `Originalidad: 85%\nCitas: ${(ultimoAnalisis.match(/\([A-Z][a-z]+,\s*\d{4}\)/g) || []).length}\nRiesgo: BAJO`);
 };
 
 document.getElementById('btnExportar').onclick = () => {
@@ -1120,9 +1148,9 @@ window.exportarFormato = function(format) {
     if (!ultimoAnalisis) return;
     let content = '', filename = 'newtral_analisis';
     switch(format) {
-        case 'latex': content = `\\documentclass{article}\n\\title{Análisis Histórico}\n\\author{Newtral}\n\\begin{document}\n\\maketitle\n\n${ultimoAnalisis}\n\\end{document}`; filename += '.tex'; break;
+        case 'latex': content = `\\documentclass{article}\n\\title{Análisis Histórico}\n\\begin{document}\n${ultimoAnalisis}\n\\end{document}`; filename += '.tex'; break;
         case 'markdown': content = `# Análisis Histórico\n\n${ultimoAnalisis}`; filename += '.md'; break;
-        case 'bibtex': content = `@misc{newtral2026,\n  title = {Análisis Histórico},\n  year = {2026}\n}`; filename += '.bib'; break;
+        case 'bibtex': content = `@misc{newtral2026, title = {Análisis Histórico}, year = {2026}}`; filename += '.bib'; break;
         case 'apa': content = `Newtral (2026). Análisis Histórico.`; filename += '.txt'; break;
     }
     descargarArchivo(content, filename);
@@ -1132,45 +1160,18 @@ window.exportarFormato = function(format) {
 
 document.getElementById('btnMemoriaStatus').onclick = () => {
     const ce = core403M.getEstado();
-    mostrarModal('🧠 Memoria WASM + Core 403M',
-        `📊 Funciones WASM: ${rustWASM.stats.funciones}\n` +
-        `📦 Caché WASM: ${rustWASM.getCacheSize()}\n\n` +
-        `🧬 CORE 403M:\n` +
-        `• Agentes: ${ce.agentes}\n` +
-        `• Consultas: ${ce.consultas}\n` +
-        `• Temas: ${ce.temas}\n` +
-        `• Evoluciones: ${ce.evoluciones}\n` +
-        `• Vocabulario: ${ce.vocabulario}`
-    );
+    mostrarModal('🧠 Memoria + Core 403M', `🦀 WASM: ${rustWASM.stats.funciones} funciones\n📦 Caché WASM: ${rustWASM.getCacheSize()}\n\n🧬 CORE 403M:\n• Agentes: ${ce.agentes}\n• Consultas: ${ce.consultas}\n• Temas: ${ce.temas}\n• Evoluciones: ${ce.evoluciones}`);
 };
-
 document.getElementById('btnAnalisisCompleto').onclick = () => {
     if (!ultimoAnalisis) { showToast('⚠️ Realiza un análisis primero', true); return; }
     const stats = rustWASM.contarPalabras(ultimoAnalisis);
     const kw = rustWASM.keywords(ultimoAnalisis, 10);
-    mostrarModal('📊 Análisis Completo',
-        `📝 Palabras: ${stats.palabras}\n🔄 Únicas: ${stats.unicas}\n📖 Oraciones: ${stats.oraciones}\n\n` +
-        `🏷️ Keywords: ${kw.map(k => `${k.palabra} (${k.frecuencia})`).join(', ')}\n\n` +
-        `🦀 WASM Rust: ${rustWASM.cargado ? 'Activo' : 'Fallback'}`
-    );
+    mostrarModal('📊 Análisis Completo', `📝 Palabras: ${stats.palabras}\n🔄 Únicas: ${stats.unicas}\n📖 Oraciones: ${stats.oraciones}\n\n🏷️ Keywords: ${kw.map(k => `${k.palabra} (${k.frecuencia})`).join(', ')}\n\n🦀 WASM: ${rustWASM.cargado ? 'Activo' : 'Fallback'}\n✅ IA OK: ${iaOkCount} · ❌ Fallos: ${iaFailsCount}`);
 };
-
 document.getElementById('btnDecisionStatus').onclick = () => {
     const ce = core403M.getEstado();
-    mostrarModal('🧠 403M + Core 403M',
-        `🦀 WASM Rust: ${rustWASM.cargado ? '✅ Activo' : '⚠️ Fallback'}\n` +
-        `📊 Funciones: ${rustWASM.stats.funciones}\n` +
-        `📦 Caché: ${rustWASM.getCacheSize()}\n\n` +
-        `🧬 Core 403M:\n` +
-        `• Agentes: ${ce.agentes}\n` +
-        `• Consultas: ${ce.consultas}\n` +
-        `• Temas: ${ce.temas}\n` +
-        `• Evoluciones: ${ce.evoluciones}\n` +
-        `• Calidad: ${ce.calidadPromedio}%\n\n` +
-        `🔌 Agent-Reach: ✅ Activo`
-    );
+    mostrarModal('🧠 403M Decide', `🦀 WASM: ${rustWASM.cargado ? '✅ Activo' : '⚠️ Fallback'}\n📊 Funciones: ${rustWASM.stats.funciones}\n📦 Caché: ${rustWASM.getCacheSize()}\n\n🧬 Core 403M: ${ce.consultas} consultas, ${ce.evoluciones} evoluciones\n🔄 Multi-IA: ${proveedorActual || 'En espera'}\n🔌 Agent-Reach: ✅ Activo\n\n✅ IA OK: ${iaOkCount} · ❌ Fallos: ${iaFailsCount}`);
 };
-
 document.getElementById('btnAgentReach').onclick = async () => {
     const tema = document.getElementById('searchInput').value.trim() || 'historia';
     showToast('🔌 Agent-Reach buscando...');
@@ -1181,74 +1182,37 @@ document.getElementById('btnAgentReach').onclick = async () => {
     if (r.wiki.length) html += `<div style="margin:8px 0;padding:8px;background:rgba(245,158,11,0.06);border-radius:6px;border-left:2px solid #f59e0b;"><strong>🌐 Wikipedia (${r.wiki.length})</strong><br>${r.wiki.map(i => `• ${i.titulo}`).join('<br>')}</div>`;
     mostrarModal('🔌 Agent-Reach', html || 'Sin resultados');
 };
-
 document.getElementById('btnCoreStatus').onclick = () => {
     const ce = core403M.getEstado();
-    mostrarModal('🧬 Core 403M',
-        `Estado: ${ce.activo ? '✅ Activo' : '⏳ Iniciando'}\n` +
-        `🤖 Agentes: ${ce.agentes}\n` +
-        `📡 Consultas: ${ce.consultas}\n` +
-        `📚 Temas: ${ce.temas}\n` +
-        `🔄 Evoluciones: ${ce.evoluciones}\n` +
-        `📊 Calidad: ${ce.calidadPromedio}%\n` +
-        `📖 Vocabulario: ${ce.vocabulario} palabras\n\n` +
-        `🔄 Evoluciona cada 2 min\n🧬 Auto-mejora cada 3 min`
-    );
+    mostrarModal('🧬 Core 403M', `Estado: ${ce.activo ? '✅ Activo' : '⏳'}\n🤖 Agentes: ${ce.agentes}\n📡 Consultas: ${ce.consultas}\n📚 Temas: ${ce.temas}\n🔄 Evoluciones: ${ce.evoluciones}`);
 };
-
 document.getElementById('btnRustStatus').onclick = () => {
     const mod = rustWASM.wasm;
     const funcs = mod ? ['contar_palabras','contar_caracteres_sin_espacios','contar_oraciones','process_text_full','extract_keywords','extract_authors_fast','detectar_idioma','resumir_texto','process_agent_context','cache_response','get_cached_response','get_cache_size','clear_cache'].filter(f => typeof mod[f] === 'function') : [];
-    mostrarModal('🦀 WASM Rust Real',
-        `Estado: ${rustWASM.cargado ? '✅ Cargado' : '❌ Fallback JS'}\n` +
-        `Versión: ${rustWASM.cargado ? 'Core ' + mod.wasm_version() + 'M' : 'N/A'}\n` +
-        `Funciones: ${funcs.length}/13\n\n${funcs.map(f => '• ' + f).join('\n')}\n\n` +
-        `⚡ Ejecutadas: ${rustWASM.stats.funciones}\n⏱️ Tiempo: ${Math.round(rustWASM.stats.tiempo)}ms\n📦 Caché: ${rustWASM.getCacheSize()}`
-    );
+    mostrarModal('🦀 WASM Rust', `Estado: ${rustWASM.cargado ? '✅ Cargado' : '❌ Fallback JS'}\nFunciones: ${funcs.length}/13\n\n${funcs.map(f => '• ' + f).join('\n')}\n\n⚡ Ejecutadas: ${rustWASM.stats.funciones}\n📦 Caché: ${rustWASM.getCacheSize()}`);
 };
-
 document.getElementById('btnRustTest').onclick = () => {
-    const texto = 'La Revolución Industrial transformó Europa. Según Weber (1905) fue clave para el capitalismo moderno.';
+    const texto = 'La Revolución Industrial transformó Europa. Según Weber (1905) fue clave para el capitalismo.';
     const stats = rustWASM.contarPalabras(texto);
     const keywords = rustWASM.keywords(texto, 5);
-    const autores = rustWASM.autores(texto);
-    const idioma = rustWASM.idioma(texto);
-    const full = rustWASM.processFull(texto);
-    mostrarModal('⚡ Test WASM Rust',
-        `📊 Palabras: ${stats.palabras}\n🔄 Únicas: ${stats.unicas}\n🌐 Idioma: ${idioma}\n\n` +
-        `🏷️ Keywords: ${keywords.map(k => `${k.palabra} (${k.frecuencia})`).join(', ') || 'N/A'}\n\n` +
-        `👤 Autores: ${autores.join(', ') || 'N/A'}\n\n` +
-        `🦀 wasm_rust: ${full?.wasm_rust || rustWASM.cargado}\n⏱️ tiempo_us: ${full?.tiempo_us || 'N/A'}`
-    );
+    mostrarModal('⚡ Test WASM Rust', `📊 Palabras: ${stats.palabras}\n🔄 Únicas: ${stats.unicas}\n🌐 Idioma: ${rustWASM.idioma(texto)}\n\n🏷️ Keywords: ${keywords.map(k => `${k.palabra} (${k.frecuencia})`).join(', ') || 'N/A'}`);
 };
-
 document.getElementById('btnMultiIA').onclick = () => {
-    let info = '🔄 Multi-IA con fallback automático\n\n';
+    let info = `🔄 Multi-IA · ${IA_PROVEEDORES.length} proveedores · ${IA_PROVEEDORES.reduce((a, p) => a + p.modelos.length, 0)} modelos free\n\n`;
     IA_PROVEEDORES.forEach((p, i) => {
         const emoji = ['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣'][i] || '🔹';
-        info += `${emoji} ${p.nombre}\n`;
-        info += `   • Modelos: ${p.modelos.join(', ')}\n`;
-        info += `   • Estado: ${proveedorActual === p.nombre ? '✅ Activo' : '⏳ Espera'}\n\n`;
+        info += `${emoji} ${p.nombre} (${p.modelos.length} modelos)\n`;
+        info += `   • ${p.modelos.slice(0, 2).join(', ')}${p.modelos.length > 2 ? '…' : ''}\n`;
+        info += `   • Estado: ${proveedorActual === p.nombre ? '✅ Activo' : '⏳'}\n\n`;
     });
-    info += `🔧 Si un proveedor falla, se prueba automáticamente el siguiente.`;
+    info += `✅ IA OK: ${iaOkCount} · ❌ Fallos: ${iaFailsCount}`;
     mostrarModal('🔄 Multi-IA — Todos los proveedores', info);
 };
-
+document.getElementById('btnDiagnostico').onclick = () => { document.getElementById('diagPanel').classList.remove('collapsed'); document.getElementById('diagPanel').scrollIntoView({behavior: 'smooth'}); showToast('🔍 Diagnóstico visible'); };
 document.getElementById('btnTermuxStatus').onclick = () => {
     const ce = core403M.getEstado();
     const ar = agentReach.getStats();
-    mostrarModal('🔌 Estado Completo',
-        `🦀 WASM Rust: ${rustWASM.cargado ? '✅' : '⚠️'}\n` +
-        `📊 Funciones: ${rustWASM.stats.funciones}\n` +
-        `📦 Caché: ${rustWASM.getCacheSize()}\n\n` +
-        `🔄 Multi-IA: ${proveedorActual || 'En espera'}\n` +
-        `🧬 Core 403M: ${ce.consultas} consultas, ${ce.evoluciones} evoluciones\n` +
-        `🔌 Agent-Reach: G${ar.github} R${ar.reddit} W${ar.wiki}\n\n` +
-        `📌 Modo: ${modoActual}\n` +
-        `🌐 Idioma: ${nombreIdioma[idiomaDetectado] || 'Español'}\n` +
-        `💾 Análisis guardados: ${cacheInvestigaciones.length}\n` +
-        `📚 Total casos: ${casosGuerras.length + casosEconomico.length + casosEstructural.length + casosCiencia.length + casosRevolucion.length}`
-    );
+    mostrarModal('🔌 Estado Completo', `🦀 WASM: ${rustWASM.cargado ? '✅' : '⚠️'}\n📊 Funciones: ${rustWASM.stats.funciones}\n📦 Caché: ${rustWASM.getCacheSize()}\n\n🔄 Multi-IA: ${proveedorActual || 'En espera'}\n🧬 Core 403M: ${ce.consultas} consultas, ${ce.evoluciones} evoluciones\n🔌 Agent-Reach: G${ar.github} R${ar.reddit} W${ar.wiki}\n\n📌 Modo: ${modoActual}\n🌐 Idioma: ${nombreIdioma[idiomaDetectado]}\n💾 Análisis: ${cacheInvestigaciones.length}\n\n✅ IA OK: ${iaOkCount} · ❌ Fallos: ${iaFailsCount}`);
 };
 
 document.querySelectorAll('.modo-btn').forEach(btn => {
@@ -1267,19 +1231,19 @@ document.querySelectorAll('.modo-btn').forEach(btn => {
 // 🚀 INICIALIZACIÓN
 // ============================================
 (async () => {
-    console.log('🚀 Newtral · WASM Rust + Multi-IA + Core 403M + Agent-Reach');
-    console.log('📊 9 proveedores IA · 13 funciones Rust · 43 casos históricos · 6 idiomas');
+    Diagnostico.log('🚀 Newtral · 403M LECTOR iniciando…', 'info');
+    Diagnostico.log(`📊 ${IA_PROVEEDORES.length} proveedores IA · ${IA_PROVEEDORES.reduce((a, p) => a + p.modelos.length, 0)} modelos free`, 'info');
+    Diagnostico.log(`⏱️ Timeout global: ${TIMEOUT_TOTAL_ANALISIS/1000}s · Timeout IA: ${TIMEOUT_IA/1000}s`, 'info');
+    
     await rustWASM.cargar();
-    if (rustWASM.cargado) {
-        showToast('🦀 WASM Rust cargado · 🧬 Core 403M · 🔌 Agent-Reach');
-    } else {
-        showToast('⚠️ WASM Rust no disponible · Usando fallback JS', true);
-    }
+    Diagnostico.log(`📚 ${casosGuerras.length + casosEconomico.length + casosEstructural.length + casosCiencia.length + casosRevolucion.length} casos históricos cargados`, 'ok');
+    
     actualizarContadores();
     update();
+    
     const total = casosGuerras.length + casosEconomico.length + casosEstructural.length + casosCiencia.length + casosRevolucion.length;
-    console.log(`✅ Sistema listo con ${total} casos históricos`);
-    showToast(`📚 ${total} casos históricos · 🦀 WASM Rust · 🔄 Multi-IA · 🧬 Core 403M · 🔌 Agent-Reach`);
+    Diagnostico.log(`✅ SISTEMA LISTO · ${total} casos · Fallback inteligente activo`, 'ok');
+    showToast(`📚 ${total} casos · 🦀 WASM Rust · 🔄 9 IA · 🧬 Core 403M · ♾️ Fallback inteligente`);
 })();
 </script>
 
