@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <meta name="referrer" content="no-referrer-when-downgrade">
-    <title>Newtral · 403M LECTOR · Biblioteca del Conocimiento · WASM Rust · Multi-IA · Fallback Inteligente</title>
+    <title>Newtral · 403M LECTOR · Biblioteca del Conocimiento · 20 Fuentes · WASM Rust · Multi-IA · Fallback Inteligente</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0f1e; color: #eef2ff; overflow-x: hidden; }
@@ -200,8 +200,8 @@
 <body>
 
 <div class="normal-mode" id="normalMode">
-    <h1>📚 Newtral · Biblioteca del Conocimiento <span class="badge-rustwasm">🦀 WASM RUST</span> <span class="badge-multiia">🔄 9 IA</span> <span class="badge-core">🧬 CORE 403M</span> <span class="badge-agentreach">🔌 AGENT-REACH</span> <span class="badge-decision">🧠 403M</span> <span class="badge-12fuentes">🔬 17 FUENTES</span> <span class="badge-alemania">🇩🇪</span> <span class="badge-analytics">📊</span> <span class="badge-1llamada">⚡ PARALELO</span> <span class="badge-100funciones">🚀 100+</span> <span class="badge-fallback">🧠 FALLBACK INTELIGENTE</span> <span class="badge-agente">🤖 AGENTE</span></h1>
-    <div class="sub">WASM Rust REAL (40 func) · 9 IA · Core 403M · Agent-Reach · 17 Fuentes + Ilimitadas · 43 casos históricos · 🇩🇪 · ⚡ Paralelo · 🧠 Fallback inteligente con Wikidata/Europeana/LOC</div>
+    <h1>📚 Newtral · Biblioteca del Conocimiento <span class="badge-rustwasm">🦀 WASM RUST</span> <span class="badge-multiia">🔄 9 IA</span> <span class="badge-core">🧬 CORE 403M</span> <span class="badge-agentreach">🔌 AGENT-REACH</span> <span class="badge-decision">🧠 403M</span> <span class="badge-12fuentes">🔬 20 FUENTES</span> <span class="badge-alemania">🇩🇪</span> <span class="badge-analytics">📊</span> <span class="badge-1llamada">⚡ PARALELO</span> <span class="badge-100funciones">🚀 100+</span> <span class="badge-fallback">🧠 FALLBACK 20 FUENTES</span> <span class="badge-agente">🤖 AGENTE</span></h1>
+    <div class="sub">WASM Rust REAL (40 func) · 9 IA · Core 403M · Agent-Reach · 20 Fuentes + Ilimitadas · 43 casos históricos · 🇩🇪 · ⚡ Paralelo · 🧠 Fallback 20 fuentes con cronología real</div>
 
     <div class="status-bars-container">
         <div class="core-status-bar">
@@ -262,10 +262,15 @@
         <span class="source-badge">🔓 OpenAlex</span>
         <span class="source-badge">🌐 Wikipedia</span>
         <span class="source-badge">🏛️ Internet Archive</span>
-        <span class="source-badge nuevo">📊 Wikidata (SPARQL)</span>
-        <span class="source-badge nuevo">📚 Open Library</span>
+        <span class="source-badge nuevo">📊 Wikidata SPARQL</span>
+        <span class="source-badge nuevo">📅 Wikidata Timeline</span>
+        <span class="source-badge nuevo">🌐 Wikipedia REST</span>
         <span class="source-badge nuevo">📰 LOC Chronicling</span>
         <span class="source-badge nuevo">🏛️ Europeana</span>
+        <span class="source-badge nuevo">📖 Open Library</span>
+        <span class="source-badge nuevo">📚 DBpedia</span>
+        <span class="source-badge nuevo">💭 Wikiquote</span>
+        <span class="source-badge nuevo">📖 Gutenberg</span>
         <span class="source-badge">💻 Hacker News</span>
         <span class="source-badge ilimitado">♾️ + Ilimitadas</span>
         <span class="source-badge 50x">⚡ 50x MÁS RÁPIDO</span>
@@ -291,7 +296,7 @@
         <button class="tool-btn" id="btnRandom">🎲 Aleatorio</button>
         <button class="tool-btn" id="btnBibliografia">📚 Biblio</button>
         <button class="tool-btn" id="btnLecciones">🎓 Lecciones</button>
-        <button class="tool-btn fuentes12" id="btn12Fuentes">🔬 17 F</button>
+        <button class="tool-btn fuentes12" id="btn12Fuentes">🔬 20 F</button>
         <button class="tool-btn ilimitado" id="btnFuentesIlimitadas">♾️ ILIMITADO</button>
         <button class="tool-btn academia" id="btnBuscarAcademico">📚 Académico</button>
         <button class="tool-btn academia" id="btnVerificarPlagio">⚠️ Plagio</button>
@@ -328,7 +333,7 @@
 
     <div class="widget-container">
         <div class="widget"><div class="widget-title">📊 Cifras <span style="color:#ce422b;font-size:0.5rem;">🦀 WASM Rust</span></div><div class="widget-content"><div class="metrics-grid-widget"><div class="metric-item-widget"><div class="metric-value-widget" id="metricTotal">0</div><div class="metric-label-widget">Casos</div></div><div class="metric-item-widget"><div class="metric-value-widget" id="metricEras">0</div><div class="metric-label-widget">Épocas</div></div><div class="metric-item-widget"><div class="metric-value-widget" id="metricCategorias">6</div><div class="metric-label-widget">Cats</div></div><div class="metric-item-widget"><div class="metric-value-widget" id="metricHerramientas">20</div><div class="metric-label-widget">Tools</div></div></div><div style="font-size:0.55rem;color:#94a3b8;margin-top:4px;" id="tiempoLectura">⏱️ --</div><div style="font-size:0.55rem;color:#94a3b8;margin-top:2px;" id="sentimientoAnalisis">🎯 Tono: --</div><div style="font-size:0.55rem;color:#94a3b8;margin-top:2px;" id="completitudWidget">📊 Completitud: --%</div></div></div>
-        <div class="widget"><div class="widget-title">🔌 Estado</div><div class="widget-content"><div class="connector-metrics"><div class="connector-metric"><div class="value" id="metricMemoria">0</div><div class="label">Pal</div></div><div class="connector-metric"><div class="value" id="metricSemantico">403M+</div><div class="label">Datos</div></div><div class="connector-metric"><div class="value" id="metricAPIs">22</div><div class="label">APIs</div></div><div class="connector-metric"><div class="value" id="metricDB">0</div><div class="label">Citas</div></div></div><div id="wasmWidgetStatus" style="font-size:0.55rem;color:#94a3b8;">🦀 WASM: <span id="wasmWidgetStatusText" style="color:#f59e0b;">⏳</span></div><div id="arWidgetStatus" style="font-size:0.55rem;color:#94a3b8;margin-top:2px;">🔌 Agent-Reach: <span style="color:#10b981;">✅</span></div><div id="coreWidgetStatus" style="font-size:0.55rem;color:#94a3b8;margin-top:2px;">🧬 Core 403M: <span style="color:#10b981;">✅</span></div></div></div>
+        <div class="widget"><div class="widget-title">🔌 Estado</div><div class="widget-content"><div class="connector-metrics"><div class="connector-metric"><div class="value" id="metricMemoria">0</div><div class="label">Pal</div></div><div class="connector-metric"><div class="value" id="metricSemantico">403M+</div><div class="label">Datos</div></div><div class="connector-metric"><div class="value" id="metricAPIs">25</div><div class="label">APIs</div></div><div class="connector-metric"><div class="value" id="metricDB">0</div><div class="label">Citas</div></div></div><div id="wasmWidgetStatus" style="font-size:0.55rem;color:#94a3b8;">🦀 WASM: <span id="wasmWidgetStatusText" style="color:#f59e0b;">⏳</span></div><div id="arWidgetStatus" style="font-size:0.55rem;color:#94a3b8;margin-top:2px;">🔌 Agent-Reach: <span style="color:#10b981;">✅</span></div><div id="coreWidgetStatus" style="font-size:0.55rem;color:#94a3b8;margin-top:2px;">🧬 Core 403M: <span style="color:#10b981;">✅</span></div></div></div>
         <div class="widget"><div class="widget-title">🎯 Confianza</div><div class="widget-content"><div class="widget-confidence"><span>📊</span><div class="confidence-bar"><div class="confidence-fill" id="confidenceFill" style="width:0%"></div></div><span class="confidence-label" id="confidenceLabel">0%</span></div><div style="font-size:0.65rem;color:#94a3b8;margin-top:6px;">Calidad: <span id="qualityLabel">--</span></div><div style="font-size:0.55rem;color:#94a3b8;margin-top:2px;">📖 Legibilidad: <span id="legibilidadScore">--</span></div><div style="font-size:0.55rem;color:#94a3b8;margin-top:2px;">📚 Riqueza: <span id="riquezaVocabulario">--%</span></div></div></div>
         <div class="widget"><div class="widget-title">🏗️ Estructura</div><div class="widget-content" id="estructuraWidget">
             <div class="metricas-secciones">
@@ -346,9 +351,9 @@
         <div id="referencesList"></div>
     </div>
 
-    <div class="restriction-alert">🦀 WASM Rust (40 func) · 🔄 9 IA · 🧬 Core 403M · 🔌 Agent-Reach · 📚 43 casos · 🧠 Fallback 17 fuentes · ⚡ Paralelo · ♾️ Sin límites</div>
+    <div class="restriction-alert">🦀 WASM Rust (40 func) · 🔄 9 IA · 🧬 Core 403M · 🔌 Agent-Reach · 📚 43 casos · 🧠 Fallback 20 fuentes · ⚡ Paralelo · ♾️ Sin límites</div>
 
-    <div class="footer-text">⚡ Newtral · WASM Rust + 9 IA + Core 403M + Agent-Reach + Fallback Inteligente (Wikidata, Europeana, LOC) · ♾️</div>
+    <div class="footer-text">⚡ Newtral · WASM Rust + 9 IA + Core 403M + Agent-Reach + Fallback 20 Fuentes · ♾️</div>
 </div>
 
 <button class="vr-button" id="vrModeBtn">🔮 VR</button>
@@ -612,12 +617,12 @@ async function llamarIAParalelo(messages, maxTokens = 3000) {
 }
 
 // ============================================
-// 📚 17 FUENTES HISTÓRICAS (13 + 4 NUEVAS)
+// 📚 20 FUENTES HISTÓRICAS
 // ============================================
-class FuentesHistoricas17 {
+class FuentesHistoricas20 {
     constructor() { this.cache = new Map(); }
     
-    // === 13 fuentes anteriores ===
+    // ═══════ 13 FUENTES ACADÉMICAS BASE ═══════
     async semantic(tema) {
         try { const r = await fetchConTimeout(`https://api.semanticscholar.org/graph/v1/paper/search?query=${encodeURIComponent(tema + ' history')}&limit=5&fields=title,authors,year,abstract,url`, {}, TIMEOUT_API); const d = await r.json(); return (d.data || []).map(p => ({ titulo: p.title, autor: p.authors?.map(a => a.name).join(', '), year: p.year, resumen: p.abstract, url: p.url, fuente: 'Semantic Scholar' })); } catch(e) { return []; }
     }
@@ -658,9 +663,8 @@ class FuentesHistoricas17 {
     async gscholar(tema) { return [{ titulo: `${tema} - Google Scholar`, fuente: 'Google Scholar' }]; }
     async researchgate(tema) { return [{ titulo: `${tema} - ResearchGate`, fuente: 'ResearchGate' }]; }
     
-    // === 4 FUENTES NUEVAS (especializadas en historia) ===
+    // ═══════ 7 FUENTES HISTÓRICAS ESPECIALIZADAS ═══════
     async chroniclingAmerica(tema) {
-        // Library of Congress - Periódicos históricos (EEUU pero muchos eventos globales)
         try {
             const r = await fetchConTimeout(`https://chroniclingamerica.loc.gov/search/pages/results/?andtext=${encodeURIComponent(tema)}&format=json&rows=5`, {}, TIMEOUT_API);
             const d = await r.json();
@@ -668,9 +672,7 @@ class FuentesHistoricas17 {
         } catch(e) { return []; }
     }
     async europeana(tema) {
-        // Europeana - Patrimonio cultural europeo
         try {
-            // Sin API key requiere key, así que usamos el endpoint público de búsqueda básica
             const r = await fetchConTimeout(`https://www.europeana.eu/api/v2/search.json?query=${encodeURIComponent(tema)}&rows=5&wskey=api2demo`, {}, TIMEOUT_API);
             if (!r.ok) return [];
             const d = await r.json();
@@ -678,11 +680,10 @@ class FuentesHistoricas17 {
         } catch(e) { return []; }
     }
     async wikidataTimeline(tema) {
-        // Eventos históricos con fecha específica (timeline)
         try {
             const sparql = `SELECT ?event ?eventLabel ?date ?placeLabel WHERE {
                 SERVICE wikibase:mwapi { bd:serviceParam wikibase:api "EntitySearch". bd:serviceParam wikibase:endpoint "www.wikidata.org". bd:serviceParam mwapi:search "${tema}". bd:serviceParam mwapi:language "es". ?event wikibase:apiOutputItem mwapi:item. }
-                ?event wdt:P31/wdt:P279* wd:Q1656682.  # instancia de evento
+                ?event wdt:P31/wdt:P279* wd:Q1656682.
                 OPTIONAL { ?event wdt:P585 ?date. }
                 OPTIONAL { ?event wdt:P276 ?place. }
                 SERVICE wikibase:label { bd:serviceParam wikibase:language "es,en". }
@@ -693,7 +694,6 @@ class FuentesHistoricas17 {
         } catch(e) { return []; }
     }
     async wikipediaSection(tema) {
-        // Wikipedia REST API - Sección completa (más texto que search)
         try {
             const r = await fetchConTimeout(`https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(tema.replace(/\s+/g, '_'))}`, {}, TIMEOUT_API);
             if (!r.ok) return [];
@@ -702,28 +702,57 @@ class FuentesHistoricas17 {
         } catch(e) {}
         return [];
     }
+    async dbpedia(tema) {
+        try {
+            const sparql = `SELECT ?name ?abstract ?date ?placeLabel WHERE {
+                ?event foaf:name ?name.
+                OPTIONAL { ?event dbo:abstract ?abstract. FILTER(lang(?abstract) = 'es') }
+                OPTIONAL { ?event dbo:date ?date }
+                OPTIONAL { ?event dbo:place ?place }
+                FILTER(CONTAINS(LCASE(?name), LCASE("${tema}")))
+            } LIMIT 5`;
+            const r = await fetchConTimeout(`https://dbpedia.org/sparql?format=json&query=${encodeURIComponent(sparql)}`, {}, TIMEOUT_API);
+            const d = await r.json();
+            return (d.results?.bindings || []).map(b => ({ titulo: b.name?.value || '', autor: 'DBpedia', year: b.date?.value?.substring(0, 10) || 's.f.', resumen: b.abstract?.value?.substring(0, 400) || '', url: `https://dbpedia.org/page/${encodeURIComponent(b.name?.value || '')}`, fuente: 'DBpedia' }));
+        } catch(e) { return []; }
+    }
+    async wikiquote(tema) {
+        try {
+            const r = await fetchConTimeout(`https://es.wikiquote.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(tema)}&format=json&origin=*&srlimit=5`, {}, TIMEOUT_API);
+            const d = await r.json();
+            return (d.query?.search || []).map(i => ({ titulo: i.title, autor: 'Wikiquote', year: 's.f.', resumen: i.snippet?.replace(/<[^>]+>/g, ''), url: `https://es.wikiquote.org/wiki/${encodeURIComponent(i.title.replace(/\s+/g, '_'))}`, fuente: 'Wikiquote' }));
+        } catch(e) { return []; }
+    }
+    async gutenberg(tema) {
+        try {
+            const r = await fetchConTimeout(`https://gutendex.com/books?search=${encodeURIComponent(tema)}`, {}, TIMEOUT_API);
+            const d = await r.json();
+            return (d.results || []).slice(0, 5).map(b => ({ titulo: b.title, autor: b.authors?.map(a => a.name).join(', ') || 'Gutenberg', year: b.authors?.[0]?.birth_year?.toString() || 's.f.', resumen: b.subjects?.slice(0, 3).join(', ') || '', url: `https://www.gutenberg.org/ebooks/${b.id}`, fuente: 'Gutenberg' }));
+        } catch(e) { return []; }
+    }
     
     async buscarTodas(tema) {
-        const cacheKey = `17f_${tema}`;
+        const cacheKey = `20f_${tema}`;
         if (this.cache.has(cacheKey)) { const c = this.cache.get(cacheKey); if (Date.now() - c.timestamp < 3600000) return c.data; }
-        Diagnostico.log(`🔬 Consultando 17 fuentes (13 académicas + 4 históricas)…`, 'info');
+        Diagnostico.log(`🔬 Consultando 20 fuentes (13 académicas + 7 históricas especializadas)…`, 'info');
         const resultados = await Promise.allSettled([
             this.semantic(tema), this.arxiv(tema), this.crossref(tema), this.openalex(tema),
             this.wikipedia(tema), this.internetArchive(tema), this.wikidata(tema), this.pubmed(tema),
             this.doaj(tema), this.openlibrary(tema), this.hackernews(tema), this.gscholar(tema), this.researchgate(tema),
-            this.chroniclingAmerica(tema), this.europeana(tema), this.wikidataTimeline(tema), this.wikipediaSection(tema)
+            this.chroniclingAmerica(tema), this.europeana(tema), this.wikidataTimeline(tema), this.wikipediaSection(tema),
+            this.dbpedia(tema), this.wikiquote(tema), this.gutenberg(tema)
         ]);
-        const nombres = ['Semantic Scholar', 'arXiv', 'Crossref', 'OpenAlex', 'Wikipedia', 'Internet Archive', 'Wikidata', 'PubMed', 'DOAJ', 'Open Library', 'Hacker News', 'Google Scholar', 'ResearchGate', 'LOC Chronicling', 'Europeana', 'Wikidata Timeline', 'Wikipedia REST'];
+        const nombres = ['Semantic Scholar', 'arXiv', 'Crossref', 'OpenAlex', 'Wikipedia', 'Internet Archive', 'Wikidata', 'PubMed', 'DOAJ', 'Open Library', 'Hacker News', 'Google Scholar', 'ResearchGate', 'LOC Chronicling', 'Europeana', 'Wikidata Timeline', 'Wikipedia REST', 'DBpedia', 'Wikiquote', 'Gutenberg'];
         const fuentes = {}; let total = 0, exitosas = 0;
         resultados.forEach((r, i) => { const data = r.status === 'fulfilled' ? r.value : []; fuentes[nombres[i]] = { data, count: data.length }; if (data.length > 0) { total += data.length; exitosas++; } });
-        Diagnostico.log(`✅ 17 fuentes: ${exitosas}/17 exitosas · ${total} resultados`, 'ok');
-        const result = { tema, fuentes, resumen: { total_fuentes: 17, fuentes_exitosas: exitosas, total_resultados: total } };
+        Diagnostico.log(`✅ 20 fuentes: ${exitosas}/20 exitosas · ${total} resultados`, 'ok');
+        const result = { tema, fuentes, resumen: { total_fuentes: 20, fuentes_exitosas: exitosas, total_resultados: total } };
         this.cache.set(cacheKey, { data: result, timestamp: Date.now() });
         return result;
     }
     formatear(resultados) {
-        let html = `<div style="max-height:65vh;overflow-y:auto;"><h3 style="color:#10b981;">🔬 17 Fuentes - ${resultados.tema.toUpperCase()}</h3>`;
-        html += `<p style="color:#94a3b8;font-size:0.75rem;">Exitosas: <strong style="color:#10b981;">${resultados.resumen.fuentes_exitosas}/17</strong> | Resultados: <strong>${resultados.resumen.total_resultados}</strong></p>`;
+        let html = `<div style="max-height:65vh;overflow-y:auto;"><h3 style="color:#10b981;">🔬 20 Fuentes - ${resultados.tema.toUpperCase()}</h3>`;
+        html += `<p style="color:#94a3b8;font-size:0.75rem;">Exitosas: <strong style="color:#10b981;">${resultados.resumen.fuentes_exitosas}/20</strong> | Resultados: <strong>${resultados.resumen.total_resultados}</strong></p>`;
         Object.entries(resultados.fuentes).forEach(([nombre, f]) => {
             if (f.count > 0) {
                 html += `<div style="margin:8px 0;padding:8px;background:rgba(16,185,129,0.06);border-radius:6px;border-left:2px solid #10b981;"><strong style="color:#34d399;">${nombre}</strong> (${f.count})<br>`;
@@ -735,7 +764,7 @@ class FuentesHistoricas17 {
         return html;
     }
 }
-const fuentes12 = new FuentesHistoricas17();
+const fuentes12 = new FuentesHistoricas20();
 
 // ============================================
 // 📚 43 CASOS HISTÓRICOS
@@ -796,144 +825,166 @@ const casosRevolucion = [
 ];
 
 // ============================================
-// 🧠 FALLBACK INTELIGENTE MEJORADO (17 fuentes + análisis estructurado)
+// 🧠 FALLBACK INTELIGENTE MEJORADO (20 FUENTES + ROBUSTO)
 // ============================================
 function generarFallbackHistorico(titulo, era, hook, datos = {}) {
-    const { fuentes = {}, agentReach = {}, fechas = null, entidades = null } = datos;
-    const fuentesArr = Object.entries(fuentes).filter(([_, f]) => f && f.count > 0);
-    const totalFuentes = fuentesArr.reduce((sum, [_, f]) => sum + f.count, 0);
-    const totalAgent = (agentReach.github?.length || 0) + (agentReach.wiki?.length || 0) + (agentReach.reddit?.length || 0);
-    
-    // Extraer datos de fuentes clave
-    const wikidataItems = fuentes['Wikidata']?.data || [];
-    const timelineItems = fuentes['Wikidata Timeline']?.data || [];
-    const wikiRestItems = fuentes['Wikipedia REST']?.data || [];
-    const europeanaItems = fuentes['Europeana']?.data || [];
-    const locItems = fuentes['LOC Chronicling']?.data || [];
-    const archiveItems = fuentes['Internet Archive']?.data || [];
-    const openLibItems = fuentes['Open Library']?.data || [];
-    
-    // Extraer cronología real (fechas)
-    const cronologia = [];
-    [...timelineItems, ...wikidataItems, ...archiveItems].forEach(item => {
-        if (item.year && item.year !== 's.f.' && /^\d{3,4}/.test(item.year)) {
-            const year = item.year.substring(0, 4);
-            if (!cronologia.find(c => c.year === year)) {
-                cronologia.push({ year, titulo: item.titulo, fuente: item.fuente });
+    try {
+        const fuentes = datos?.fuentes || {};
+        const agentReach = datos?.agentReach || {};
+        const fechas = datos?.fechas || null;
+        const entidades = datos?.entidades || null;
+        
+        const arGithub = Array.isArray(agentReach.github) ? agentReach.github : [];
+        const arWiki = Array.isArray(agentReach.wiki) ? agentReach.wiki : [];
+        const arReddit = Array.isArray(agentReach.reddit) ? agentReach.reddit : [];
+        
+        const fuentesArr = Object.entries(fuentes).filter(([_, f]) => f && f.count > 0);
+        const totalFuentes = fuentesArr.reduce((sum, [_, f]) => sum + f.count, 0);
+        const totalAgent = arGithub.length + arWiki.length + arReddit.length;
+        
+        const wikidataItems = fuentes['Wikidata']?.data || [];
+        const timelineItems = fuentes['Wikidata Timeline']?.data || [];
+        const wikiRestItems = fuentes['Wikipedia REST']?.data || [];
+        const europeanaItems = fuentes['Europeana']?.data || [];
+        const locItems = fuentes['LOC Chronicling']?.data || [];
+        const archiveItems = fuentes['Internet Archive']?.data || [];
+        const dbpediaItems = fuentes['DBpedia']?.data || [];
+        const wikiquoteItems = fuentes['Wikiquote']?.data || [];
+        const gutenbergItems = fuentes['Gutenberg']?.data || [];
+        
+        const cronologia = [];
+        [...timelineItems, ...wikidataItems, ...archiveItems, ...dbpediaItems, ...gutenbergItems].forEach(item => {
+            if (item.year && item.year !== 's.f.') {
+                const match = String(item.year).match(/\d{3,4}/);
+                if (match) {
+                    const yearNum = parseInt(match[0]);
+                    if (yearNum > 0 && yearNum < 2100 && !cronologia.find(c => c.yearNum === yearNum && c.titulo === item.titulo)) {
+                        cronologia.push({ year: match[0], yearNum, titulo: item.titulo, fuente: item.fuente });
+                    }
+                }
             }
-        }
-    });
-    cronologia.sort((a, b) => parseInt(a.year) - parseInt(b.year));
-    
-    // Extraer figuras clave de las entidades (si las tenemos)
-    const figuras = entidades?.entidades?.slice(0, 8) || [];
-    
-    let analisis = '';
-    
-    // === CONTEXTO HISTÓRICO ===
-    analisis += `Contexto Histórico:\n\n`;
-    analisis += `${titulo} (${era}) representa un momento crucial en la historia universal. ${hook}\n\n`;
-    if (wikiRestItems.length > 0 && wikiRestItems[0].resumen) {
-        analisis += `${wikiRestItems[0].resumen.substring(0, 400)}\n\n`;
-    }
-    analisis += `El evento debe analizarse desde múltiples perspectivas: política, económica, social y cultural. `;
-    analisis += `La relevancia contemporánea se refleja en las lecciones que la humanidad ha aprendido.\n\n`;
-    
-    // === CRONOLOGÍA ===
-    if (cronologia.length > 0) {
-        analisis += `Cronología:\n\n`;
-        cronologia.slice(0, 8).forEach(c => {
-            analisis += `• ${c.year}: ${c.titulo}\n`;
         });
-        analisis += '\n';
-    }
-    
-    // === FIGURAS CLAVE ===
-    if (figuras.length > 0) {
-        analisis += `Figuras y Entidades Identificadas:\n\n`;
-        figuras.forEach(f => { analisis += `• ${f}\n`; });
-        analisis += '\n';
-    }
-    
-    // === HECHOS CLAVE ===
-    analisis += `Hechos Clave:\n\n`;
-    analisis += `• El caso se desarrolla en ${era}, en un contexto de transformaciones profundas.\n`;
-    analisis += `• Los protagonistas y testigos documentaron los sucesos con base en fuentes primarias y secundarias.\n`;
-    analisis += `• Las consecuencias se extendieron por décadas, afectando generaciones enteras.\n\n`;
-    
-    // === FUENTES ACADÉMICAS ===
-    analisis += `Fuentes Académicas (${totalFuentes} referencias de ${fuentesArr.length} repositorios):\n\n`;
-    fuentesArr.forEach(([nombre, f]) => {
-        analisis += `📚 [${nombre}] ${f.count} referencias:\n`;
-        f.data.slice(0, 3).forEach(r => {
-            analisis += `  • ${r.autor || ''} ${r.year ? '('+r.year+')' : ''} "${(r.titulo || '').substring(0, 80)}"`;
-            if (r.url) analisis += ` → ${r.url.substring(0, 60)}`;
+        cronologia.sort((a, b) => a.yearNum - b.yearNum);
+        
+        const figuras = entidades?.entidades?.slice(0, 8) || [];
+        const citas = wikiquoteItems.filter(w => w.resumen).slice(0, 3);
+        
+        let analisis = '';
+        
+        analisis += `Contexto Histórico:\n\n`;
+        analisis += `${titulo} (${era}) representa un momento crucial en la historia universal. ${hook}\n\n`;
+        if (wikiRestItems.length > 0 && wikiRestItems[0].resumen) {
+            analisis += `${wikiRestItems[0].resumen.substring(0, 500)}\n\n`;
+        }
+        if (dbpediaItems.length > 0 && dbpediaItems[0].resumen) {
+            analisis += `${dbpediaItems[0].resumen.substring(0, 400)}\n\n`;
+        }
+        analisis += `El evento debe analizarse desde múltiples perspectivas: política, económica, social y cultural. `;
+        analisis += `La relevancia contemporánea se refleja en las lecciones que la humanidad ha aprendido.\n\n`;
+        
+        if (cronologia.length > 0) {
+            analisis += `Cronología (${cronologia.length} eventos fechados):\n\n`;
+            cronologia.slice(0, 10).forEach(c => {
+                analisis += `• ${c.year}: ${c.titulo} [${c.fuente}]\n`;
+            });
+            analisis += '\n';
+        }
+        
+        if (figuras.length > 0) {
+            analisis += `Figuras y Entidades Identificadas:\n\n`;
+            figuras.forEach(f => { analisis += `• ${f}\n`; });
+            analisis += '\n';
+        }
+        
+        if (citas.length > 0) {
+            analisis += `Citas y Referencias Textuales:\n\n`;
+            citas.forEach(c => {
+                analisis += `💭 "${c.resumen.substring(0, 200)}" — ${c.titulo}\n\n`;
+            });
+        }
+        
+        analisis += `Hechos Clave:\n\n`;
+        analisis += `• El caso se desarrolla en ${era}, en un contexto de transformaciones profundas.\n`;
+        analisis += `• Los protagonistas y testigos documentaron los sucesos con base en fuentes primarias y secundarias.\n`;
+        analisis += `• Las consecuencias se extendieron por décadas, afectando generaciones enteras.\n\n`;
+        
+        analisis += `Fuentes Académicas (${totalFuentes} referencias de ${fuentesArr.length} repositorios):\n\n`;
+        fuentesArr.forEach(([nombre, f]) => {
+            analisis += `📚 [${nombre}] ${f.count} referencias:\n`;
+            f.data.slice(0, 3).forEach(r => {
+                analisis += `  • ${r.autor || ''} ${r.year ? '('+r.year+')' : ''} "${(r.titulo || '').substring(0, 80)}"`;
+                if (r.url) analisis += ` → ${r.url.substring(0, 70)}`;
+                analisis += '\n';
+            });
             analisis += '\n';
         });
-        analisis += '\n';
-    });
-    
-    // === RECURSOS HISTÓRICOS ESPECIALES ===
-    if (europeanaItems.length > 0 || locItems.length > 0 || archiveItems.length > 0) {
-        analisis += `Recursos Históricos Especiales:\n\n`;
-        if (europeanaItems.length > 0) {
-            analisis += `🏛️ Europeana (${europeanaItems.length}):\n`;
-            europeanaItems.slice(0, 2).forEach(r => { analisis += `  • ${r.titulo} (${r.year})\n`; });
+        
+        if (europeanaItems.length > 0 || locItems.length > 0 || archiveItems.length > 0 || gutenbergItems.length > 0) {
+            analisis += `Recursos Históricos Especiales:\n\n`;
+            if (europeanaItems.length > 0) {
+                analisis += `🏛️ Europeana (${europeanaItems.length}):\n`;
+                europeanaItems.slice(0, 2).forEach(r => { analisis += `  • ${r.titulo} (${r.year})\n`; });
+            }
+            if (locItems.length > 0) {
+                analisis += `📰 LOC Chronicling America (${locItems.length}):\n`;
+                locItems.slice(0, 2).forEach(r => { analisis += `  • ${r.titulo} (${r.year})\n`; });
+            }
+            if (archiveItems.length > 0) {
+                analisis += `🏛️ Internet Archive (${archiveItems.length}):\n`;
+                archiveItems.slice(0, 2).forEach(r => { analisis += `  • ${r.titulo} (${r.year}) — ${r.autor}\n`; });
+            }
+            if (gutenbergItems.length > 0) {
+                analisis += `📖 Project Gutenberg (${gutenbergItems.length}):\n`;
+                gutenbergItems.slice(0, 2).forEach(r => { analisis += `  • ${r.titulo} — ${r.autor}\n`; });
+            }
+            analisis += '\n';
         }
-        if (locItems.length > 0) {
-            analisis += `📰 LOC Chronicling America (${locItems.length}):\n`;
-            locItems.slice(0, 2).forEach(r => { analisis += `  • ${r.titulo} (${r.year})\n`; });
+        
+        if (totalAgent > 0) {
+            analisis += `Datos en Tiempo Real (Agent-Reach · ${totalAgent} resultados):\n\n`;
+            if (arGithub.length) {
+                analisis += `📦 GitHub (${arGithub.length}):\n`;
+                arGithub.slice(0, 3).forEach(r => { analisis += `  • ${r.titulo} ⭐${r.estrellas || 0}\n`; });
+            }
+            if (arWiki.length) {
+                analisis += `\n🌐 Wikipedia (${arWiki.length}):\n`;
+                arWiki.slice(0, 3).forEach(r => { analisis += `  • ${r.titulo}\n`; });
+            }
+            analisis += '\n';
         }
-        if (archiveItems.length > 0) {
-            analisis += `🏛️ Internet Archive (${archiveItems.length}):\n`;
-            archiveItems.slice(0, 2).forEach(r => { analisis += `  • ${r.titulo} (${r.year}) — ${r.autor}\n`; });
-        }
-        analisis += '\n';
+        
+        analisis += `Consecuencias Multidimensionales:\n\n`;
+        analisis += `• Corto plazo: Transformación inmediata del orden establecido.\n`;
+        analisis += `• Mediano plazo: Reconfiguración de instituciones y sistemas.\n`;
+        analisis += `• Largo plazo: Legado persistente en la memoria colectiva.\n\n`;
+        
+        analisis += `Lecciones Aprendidas:\n\n`;
+        analisis += `La historia nos enseña que eventos como "${titulo}" no son incidentes aislados, sino parte de patrones más amplios. `;
+        analisis += `Comprenderlos requiere análisis riguroso y perspectiva histórica. `;
+        analisis += `Las sociedades que olvidan su historia están condenadas a repetirla.\n\n`;
+        
+        analisis += `─────────────────────────────────────\n`;
+        analisis += `📊 FICHA DE DATOS REALES:\n`;
+        analisis += `📚 Fuentes: ${fuentesArr.length}/20 activas · ${totalFuentes} referencias\n`;
+        analisis += `   • ${fuentesArr.slice(0, 8).map(([n]) => n).join(', ')}\n`;
+        analisis += `📅 Cronología: ${cronologia.length} eventos fechados\n`;
+        analisis += `👥 Entidades: ${figuras.length} figuras/lugares identificados\n`;
+        analisis += `💭 Citas: ${citas.length} referencias textuales\n`;
+        analisis += `🔌 Agent-Reach: ${totalAgent} resultados\n`;
+        analisis += `🤖 IA probadas: ${IA_PROVEEDORES.length} proveedores · ${IA_PROVEEDORES.reduce((a, p) => a + p.modelos.length, 0)} modelos\n`;
+        analisis += `─────────────────────────────────────\n`;
+        analisis += `⚠️ MODO FALLBACK INTELIGENTE (20 FUENTES)\n`;
+        analisis += `Los proveedores de IA no respondieron en el tiempo límite.\n`;
+        analisis += `Este análisis fue compuesto automáticamente con datos REALES de ${fuentesArr.length} fuentes.\n`;
+        analisis += `🔄 Reintenta para obtener análisis generado por IA.\n`;
+        analisis += `─────────────────────────────────────`;
+        
+        return analisis;
+    } catch (error) {
+        console.error('❌ Error dentro del fallback:', error);
+        Diagnostico.log(`❌ Error fallback: ${error.message}`, 'error');
+        return `Contexto Histórico:\n\n${titulo} (${era}). ${hook}\n\nHechos Clave:\n\n• Evento documentado en la historia universal.\n• Consecuencias analizadas en múltiples fuentes.\n• Relevancia contemporánea persistente.\n\nConsecuencias Multidimensionales:\n\n• Corto plazo: Transformación del orden establecido.\n• Largo plazo: Legado en la memoria colectiva.\n\nLecciones Aprendidas:\n\nLa historia nos enseña que eventos como "${titulo}" no son incidentes aislados.\n\n─────────────────────────────────────\n⚠️ MODO FALLBACK BÁSICO\nLos proveedores de IA no respondieron. Este análisis fue generado con la información disponible.\n─────────────────────────────────────`;
     }
-    
-    // === AGENT-REACH ===
-    if (totalAgent > 0) {
-        analisis += `Datos en Tiempo Real (Agent-Reach · ${totalAgent} resultados):\n\n`;
-        if (agentReach.github?.length) {
-            analisis += `📦 GitHub (${agentReach.github.length}):\n`;
-            agentReach.github.slice(0, 3).forEach(r => { analisis += `  • ${r.titulo} ⭐${r.estrellas || 0}\n`; });
-        }
-        if (agentReach.wiki?.length) {
-            analisis += `\n🌐 Wikipedia (${agentReach.wiki.length}):\n`;
-            agentReach.wiki.slice(0, 3).forEach(r => { analisis += `  • ${r.titulo}\n`; });
-        }
-        analisis += '\n';
-    }
-    
-    // === CONSECUENCIAS ===
-    analisis += `Consecuencias Multidimensionales:\n\n`;
-    analisis += `• Corto plazo: Transformación inmediata del orden establecido.\n`;
-    analisis += `• Mediano plazo: Reconfiguración de instituciones y sistemas.\n`;
-    analisis += `• Largo plazo: Legado persistente en la memoria colectiva.\n\n`;
-    
-    // === LECCIONES ===
-    analisis += `Lecciones Aprendidas:\n\n`;
-    analisis += `La historia nos enseña que eventos como "${titulo}" no son incidentes aislados, sino parte de patrones más amplios. `;
-    analisis += `Comprenderlos requiere análisis riguroso y perspectiva histórica. `;
-    analisis += `Las sociedades que olvidan su historia están condenadas a repetirla.\n\n`;
-    
-    // === FICHA DE DATOS ===
-    analisis += `─────────────────────────────────────\n`;
-    analisis += `📊 FICHA DE DATOS REALES:\n`;
-    analisis += `📚 Fuentes: ${fuentesArr.length}/17 activas · ${totalFuentes} referencias\n`;
-    analisis += `   • ${fuentesArr.slice(0, 6).map(([n]) => n).join(', ')}\n`;
-    analisis += `📅 Cronología: ${cronologia.length} eventos fechados\n`;
-    analisis += `👥 Entidades: ${figuras.length} figuras/lugares identificados\n`;
-    analisis += `🔌 Agent-Reach: ${totalAgent} resultados\n`;
-    analisis += `🤖 IA probadas: ${IA_PROVEEDORES.length} proveedores · ${IA_PROVEEDORES.reduce((a, p) => a + p.modelos.length, 0)} modelos\n`;
-    analisis += `─────────────────────────────────────\n`;
-    analisis += `⚠️ MODO FALLBACK INTELIGENTE\n`;
-    analisis += `Los proveedores de IA no respondieron en el tiempo límite.\n`;
-    analisis += `Este análisis fue compuesto automáticamente con datos REALES de ${fuentesArr.length} fuentes.\n`;
-    analisis += `🔄 Reintenta para obtener análisis generado por IA.\n`;
-    analisis += `─────────────────────────────────────`;
-    
-    return analisis;
 }
 
 // ============================================
@@ -944,12 +995,12 @@ async function generarAnalisisConAgente(titulo, era, hook) {
     
     const tareaPrincipal = (async () => {
         Diagnostico.log(`🔬 Analizando: ${titulo}`, 'info');
-        const resultados17 = await fuentes12.buscarTodas(titulo);
+        const resultados20 = await fuentes12.buscarTodas(titulo);
         const resultadosAgentReach = await agentReach.buscar(titulo);
         
         let contexto = `CASO HISTÓRICO: ${titulo}\nÉPOCA: ${era}\nCONTEXTO: ${hook}\n\n`;
-        contexto += `INFORMACIÓN DE 17 FUENTES (${resultados17.resumen.total_resultados} resultados):\n`;
-        Object.entries(resultados17.fuentes).forEach(([nombre, f]) => {
+        contexto += `INFORMACIÓN DE 20 FUENTES (${resultados20.resumen.total_resultados} resultados):\n`;
+        Object.entries(resultados20.fuentes).forEach(([nombre, f]) => {
             if (f.count > 0) {
                 contexto += `\n[${nombre}]:\n`;
                 f.data.slice(0, 3).forEach(r => { contexto += `• ${r.titulo || ''}\n`; if (r.resumen) contexto += `  ${r.resumen.substring(0, 150)}\n`; });
@@ -966,8 +1017,8 @@ CASO HISTÓRICO: ${titulo}
 ÉPOCA: ${era}
 CONTEXTO: ${hook}
 
-CONTEXTO ADICIONAL DE 17 FUENTES + AGENT-REACH:
-${contexto.substring(0, 2800)}
+CONTEXTO ADICIONAL DE 20 FUENTES + AGENT-REACH:
+${contexto.substring(0, 3000)}
 
 INSTRUCCIONES (responde con esta estructura):
 
@@ -997,7 +1048,7 @@ Extensión: 800-1000 palabras. NO uses asteriscos.`;
         core403M.registrarConsulta(titulo, textoLimpio);
         rustWASM.cache(`hist_${titulo}_${Date.now()}`, textoLimpio.substring(0, 5000));
         
-        return { analisis: textoLimpio, proveedor: resultado.proveedor, contexto17: resultados17, contextoAgentReach: resultadosAgentReach, fueIA: true };
+        return { analisis: textoLimpio, proveedor: resultado.proveedor, contexto20: resultados20, contextoAgentReach: resultadosAgentReach, fueIA: true };
     })();
     
     try {
@@ -1006,23 +1057,46 @@ Extensión: 800-1000 palabras. NO uses asteriscos.`;
         console.warn('❌ IA falló o timeout:', e.message);
         Diagnostico.log(`🧠 Activando FALLBACK INTELIGENTE (${e.message})`, 'warn');
         
-        let datos = { fuentes: {}, agentReach: {}, fechas: null, entidades: null };
+        let datos = { fuentes: {}, agentReach: { github: [], reddit: [], wiki: [] }, fechas: null, entidades: null };
+        
         try {
-            const resultados17 = await fuentes12.buscarTodas(titulo);
+            const resultados20 = await fuentes12.buscarTodas(titulo);
             const resultadosAgentReach = await agentReach.buscar(titulo);
-            datos.fuentes = resultados17.fuentes;
-            datos.agentReach = resultadosAgentReach;
+            datos.fuentes = resultados20?.fuentes || {};
+            datos.agentReach = {
+                github: Array.isArray(resultadosAgentReach?.github) ? resultadosAgentReach.github : [],
+                reddit: Array.isArray(resultadosAgentReach?.reddit) ? resultadosAgentReach.reddit : [],
+                wiki: Array.isArray(resultadosAgentReach?.wiki) ? resultadosAgentReach.wiki : []
+            };
             
-            // Extraer entidades y fechas con WASM Rust para enriquecer el fallback
-            const textoContexto = Object.values(resultados17.fuentes).flatMap(f => f.data.map(d => d.titulo + ' ' + (d.resumen || ''))).join(' ');
-            if (rustWASM.cargado) {
-                datos.entidades = rustWASM.extraerEntidades(textoContexto);
-                datos.fechas = rustWASM.extraerFechas(textoContexto);
+            const textoContexto = Object.values(datos.fuentes)
+                .filter(f => f && Array.isArray(f.data))
+                .flatMap(f => f.data.map(d => (d.titulo || '') + ' ' + (d.resumen || '')))
+                .join(' ');
+            
+            if (rustWASM.cargado && textoContexto) {
+                try {
+                    datos.entidades = rustWASM.extraerEntidades(textoContexto);
+                    datos.fechas = rustWASM.extraerFechas(textoContexto);
+                } catch (e3) {
+                    Diagnostico.log(`Error extrayendo entidades: ${e3.message}`, 'warn');
+                }
             }
-        } catch (e2) {}
+        } catch (e2) {
+            Diagnostico.log(`Error re-obteniendo datos: ${e2.message}`, 'warn');
+        }
+        
+        Diagnostico.log(`🧠 Fallback con ${Object.keys(datos.fuentes).length} fuentes · Agent-Reach G${datos.agentReach.github.length} R${datos.agentReach.reddit.length} W${datos.agentReach.wiki.length}`, 'info');
         
         const fallback = generarFallbackHistorico(titulo, era, hook, datos);
-        return { analisis: fallback, proveedor: 'Fallback 17 fuentes', contexto17: { resumen: { total_resultados: 0, fuentes_exitosas: 0 } }, contextoAgentReach: { github: [], reddit: [], wiki: [] }, fueIA: false, datos };
+        return { 
+            analisis: fallback, 
+            proveedor: 'Fallback 20 fuentes', 
+            contexto20: { resumen: { total_resultados: 0, fuentes_exitosas: 0 } }, 
+            contextoAgentReach: datos.agentReach, 
+            fueIA: false, 
+            datos 
+        };
     }
 }
 
@@ -1064,7 +1138,7 @@ async function explicarConIA(caso, card) {
     if (!ia || !btn) return;
     btn.disabled = true;
     btn.innerHTML = '<span class="loading-spinner"></span> Analizando...';
-    ia.innerHTML = "🤔 Consultando Multi-IA (9) + 17 Fuentes + Agent-Reach...";
+    ia.innerHTML = "🤔 Consultando Multi-IA (9) + 20 Fuentes + Agent-Reach...";
     actualizarProgress(10);
     try {
         const resultado = await obtenerExplicacion(caso.titulo, caso.era, caso.hook);
@@ -1221,9 +1295,9 @@ document.getElementById('btnLecciones').onclick = () => herramienta('Lecciones d
 
 document.getElementById('btn12Fuentes').onclick = async () => {
     const tema = document.getElementById('searchInput').value.trim() || 'historia de alemania';
-    showToast('🔬 Buscando en 17 fuentes...');
+    showToast('🔬 Buscando en 20 fuentes...');
     const r = await fuentes12.buscarTodas(tema);
-    mostrarModal('🔬 17 Fuentes Históricas', fuentes12.formatear(r));
+    mostrarModal('🔬 20 Fuentes Históricas', fuentes12.formatear(r));
 };
 
 document.getElementById('btnFuentesIlimitadas').onclick = async () => {
@@ -1233,7 +1307,7 @@ document.getElementById('btnFuentesIlimitadas').onclick = async () => {
     const ar = await agentReach.buscar(tema);
     const total = r.resumen.total_resultados + ar.github.length + ar.reddit.length + ar.wiki.length;
     document.getElementById('ultraFuentes').textContent = total;
-    mostrarModal('♾️ Fuentes Ilimitadas', `Total: ${total} resultados\n\n📚 17 Fuentes: ${r.resumen.total_resultados}\n📦 GitHub: ${ar.github.length}\n📖 Reddit: ${ar.reddit.length}\n🌐 Wikipedia: ${ar.wiki.length}`);
+    mostrarModal('♾️ Fuentes Ilimitadas', `Total: ${total} resultados\n\n📚 20 Fuentes: ${r.resumen.total_resultados}\n📦 GitHub: ${ar.github.length}\n📖 Reddit: ${ar.reddit.length}\n🌐 Wikipedia: ${ar.wiki.length}`);
 };
 
 document.getElementById('btnBuscarAcademico').onclick = async () => {
@@ -1349,7 +1423,7 @@ document.querySelectorAll('.modo-btn').forEach(btn => {
     Diagnostico.log('🚀 Newtral · 403M LECTOR iniciando…', 'info');
     Diagnostico.log(`📊 ${IA_PROVEEDORES.length} proveedores IA · ${IA_PROVEEDORES.reduce((a, p) => a + p.modelos.length, 0)} modelos free`, 'info');
     Diagnostico.log(`⏱️ Timeout global: ${TIMEOUT_TOTAL_ANALISIS/1000}s · Timeout IA: ${TIMEOUT_IA/1000}s`, 'info');
-    Diagnostico.log(`🧠 Fallback inteligente: 17 fuentes (13 académicas + Wikidata Timeline, Europeana, LOC, Wikipedia REST)`, 'info');
+    Diagnostico.log(`🧠 Fallback: 20 fuentes (13 académicas + Wikidata/Europeana/LOC/DBpedia/Wikiquote/Gutenberg)`, 'info');
     
     await rustWASM.cargar();
     Diagnostico.log(`📚 ${casosGuerras.length + casosEconomico.length + casosEstructural.length + casosCiencia.length + casosRevolucion.length} casos históricos cargados`, 'ok');
@@ -1358,8 +1432,8 @@ document.querySelectorAll('.modo-btn').forEach(btn => {
     update();
     
     const total = casosGuerras.length + casosEconomico.length + casosEstructural.length + casosCiencia.length + casosRevolucion.length;
-    Diagnostico.log(`✅ SISTEMA LISTO · ${total} casos · Fallback 17 fuentes activo`, 'ok');
-    showToast(`📚 ${total} casos · 🦀 WASM Rust 40 func · 🧠 Fallback 17 fuentes`);
+    Diagnostico.log(`✅ SISTEMA LISTO · ${total} casos · Fallback 20 fuentes activo`, 'ok');
+    showToast(`📚 ${total} casos · 🦀 WASM 40 func · 🧠 Fallback 20 fuentes`);
 })();
 </script>
 
