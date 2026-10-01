@@ -827,6 +827,137 @@ const casosRevolucion = [
 // ============================================
 // 🧠 FALLBACK INTELIGENTE MEJORADO (20 FUENTES + ROBUSTO)
 // ============================================
+// ============================================
+// 🧹 FALLBACK INTELIGENTE — Filtro + Relevancia (Historia)
+// ============================================
+
+// Filtrar cronología basura
+function filtrarCronologiaBasura(cronologia) {
+    return cronologia.filter(c => {
+        // Año válido: 1 a 2100
+        if (c.yearNum < 1 || c.yearNum > 2100) return false;
+        // Título válido
+        if (!c.titulo || c.titulo.trim().length < 3) return false;
+        // Título no basura
+        const tituloLower = c.titulo.toLowerCase();
+        const basura = ['null', 'undefined', 'error', 'sin título'];
+        if (basura.includes(tituloLower)) return false;
+        return true;
+    });
+}
+
+// Deduplicar cronología
+function deduplicarCronologia(cronologia) {
+    const vistos = new Set();
+    return cronologia.filter(c => {
+        const clave = c.yearNum + '_' + c.titulo.toLowerCase().substring(0, 30);
+        if (vistos.has(clave)) return false;
+        vistos.add(clave);
+        return true;
+    });
+}
+
+// Filtrar entidades basura
+function filtrarEntidadesBasura(entidades) {
+    return entidades.filter(e => {
+        if (!e || typeof e !== 'string') return false;
+        if (e.trim().length < 3) return false;
+        const lower = e.toLowerCase();
+        const basura = ['null', 'undefined', 'error'];
+        if (basura.includes(lower)) return false;
+        return true;
+    });
+}
+
+// Calcular relevancia histórica
+function calcularRelevanciaHistorica(datos) {
+    let score = 0;
+    let maxScore = 0;
+    
+    // Fuentes activas (35 pts)
+    maxScore += 35;
+    const fuentesArr = Object.entries(datos.fuentes || {}).filter(([_, f]) => f && f.count > 0);
+    if (fuentesArr.length >= 10) score += 35;
+    else if (fuentesArr.length >= 5) score += 25;
+    else if (fuentesArr.length >= 2) score += 15;
+    else if (fuentesArr.length >= 1) score += 5;
+    
+    // Total referencias (25 pts)
+    maxScore += 25;
+    const totalRefs = fuentesArr.reduce((sum, [_, f]) => sum + f.count, 0);
+    if (totalRefs >= 30) score += 25;
+    else if (totalRefs >= 15) score += 18;
+    else if (totalRefs >= 5) score += 10;
+    
+    // Cronología (20 pts)
+    maxScore += 20;
+    const cronLen = (datos.cronologia || []).length;
+    if (cronLen >= 10) score += 20;
+    else if (cronLen >= 5) score += 15;
+    else if (cronLen >= 1) score += 8;
+    
+    // Entidades (10 pts)
+    maxScore += 10;
+    const entsLen = (datos.entidades?.entidades || []).length;
+    if (entsLen >= 5) score += 10;
+    else if (entsLen >= 1) score += 5;
+    
+    // Agent-Reach (10 pts)
+    maxScore += 10;
+    const arTotal = (datos.agentReach?.github?.length || 0) + (datos.agentReach?.wiki?.length || 0) + (datos.agentReach?.reddit?.length || 0);
+    if (arTotal >= 5) score += 10;
+    else if (arTotal >= 1) score += 5;
+    
+    return Math.round((score / maxScore) * 100);
+}
+
+// Resumen extendido histórico
+function generarResumenExtendidoHistorico(datos) {
+    let resumen = '';
+    const fuentesArr = Object.entries(datos.fuentes || {}).filter(([_, f]) => f && f.count > 0);
+    const totalRefs = fuentesArr.reduce((sum, [_, f]) => sum + f.count, 0);
+    
+    resumen += `📊 ANÁLISIS EXTENDIDO HISTÓRICO\n\n`;
+    
+    resumen += `FUENTES CONSULTADAS:\n`;
+    resumen += `  • Repositorios activos: ${fuentesArr.length}/20\n`;
+    resumen += `  • Total referencias: ${totalRefs}\n`;
+    resumen += `  • Top fuentes: ${fuentesArr.slice(0, 5).map(([n, f]) => `${n} (${f.count})`).join(', ')}\n\n`;
+    
+    resumen += `CRONOLOGÍA:\n`;
+    resumen += `  • Eventos fechados: ${(datos.cronologia || []).length}\n`;
+    if (datos.cronologia && datos.cronologia.length > 0) {
+        const años = datos.cronologia.map(c => c.yearNum).filter(y => y > 0);
+        if (años.length > 0) {
+            resumen += `  • Rango temporal: ${Math.min(...años)} - ${Math.max(...años)}\n`;
+        }
+    }
+    resumen += `\n`;
+    
+    resumen += `ENTIDADES Y FIGURAS:\n`;
+    resumen += `  • Total identificadas: ${(datos.entidades?.entidades || []).length}\n\n`;
+    
+    resumen += `AGENT-REACH:\n`;
+    const arTotal = (datos.agentReach?.github?.length || 0) + (datos.agentReach?.wiki?.length || 0) + (datos.agentReach?.reddit?.length || 0);
+    resumen += `  • Total resultados: ${arTotal}\n`;
+    if (datos.agentReach?.github) resumen += `    - GitHub: ${datos.agentReach.github.length}\n`;
+    if (datos.agentReach?.wiki) resumen += `    - Wikipedia: ${datos.agentReach.wiki.length}\n`;
+    resumen += `\n`;
+    
+    const relevancia = calcularRelevanciaHistorica(datos);
+    resumen += `📈 ÍNDICE DE RELEVANCIA: ${relevancia}%\n`;
+    if (relevancia > 70) resumen += `  ✅ Análisis profundo\n`;
+    else if (relevancia > 50) resumen += `  📈 Análisis moderado\n`;
+    else if (relevancia > 30) resumen += `  📊 Análisis básico\n`;
+    else resumen += `  ⚠️ Datos escasos\n`;
+    
+    return resumen;
+}
+
+// ============================================
+// 🔬 FALLBACK HISTÓRICO
+// ============================================
+
 function generarFallbackHistorico(titulo, era, hook, datos = {}) {
     try {
         const fuentes = datos?.fuentes || {};
@@ -866,6 +997,10 @@ function generarFallbackHistorico(titulo, era, hook, datos = {}) {
         });
         cronologia.sort((a, b) => a.yearNum - b.yearNum);
         
+        // 🔥 APLICAR FILTRO INTELIGENTE
+        const cronologiaLimpia = deduplicarCronologia(filtrarCronologiaBasura(cronologia));
+        console.log(`🧹 Cronología: ${cronologia.length} → ${cronologiaLimpia.length} tras filtro`);
+        
         const figuras = entidades?.entidades?.slice(0, 8) || [];
         const citas = wikiquoteItems.filter(w => w.resumen).slice(0, 3);
         
@@ -882,9 +1017,9 @@ function generarFallbackHistorico(titulo, era, hook, datos = {}) {
         analisis += `El evento debe analizarse desde múltiples perspectivas: política, económica, social y cultural. `;
         analisis += `La relevancia contemporánea se refleja en las lecciones que la humanidad ha aprendido.\n\n`;
         
-        if (cronologia.length > 0) {
-            analisis += `Cronología (${cronologia.length} eventos fechados):\n\n`;
-            cronologia.slice(0, 10).forEach(c => {
+        if (cronologiaLimpia.length > 0) {
+            analisis += `Cronología (${cronologiaLimpia.length} eventos fechados):\n\n`;
+            cronologiaLimpia.slice(0, 10).forEach(c => {
                 analisis += `• ${c.year}: ${c.titulo} [${c.fuente}]\n`;
             });
             analisis += '\n';
@@ -972,6 +1107,8 @@ function generarFallbackHistorico(titulo, era, hook, datos = {}) {
         analisis += `💭 Citas: ${citas.length} referencias textuales\n`;
         analisis += `🔌 Agent-Reach: ${totalAgent} resultados\n`;
         analisis += `🤖 IA probadas: ${IA_PROVEEDORES.length} proveedores · ${IA_PROVEEDORES.reduce((a, p) => a + p.modelos.length, 0)} modelos\n`;
+        analisis += `─────────────────────────────────────\n`;
+        analisis += generarResumenExtendidoHistorico({ fuentes, agentReach, cronologia: cronologiaLimpia, entidades });
         analisis += `─────────────────────────────────────\n`;
         analisis += `⚠️ MODO FALLBACK INTELIGENTE (20 FUENTES)\n`;
         analisis += `Los proveedores de IA no respondieron en el tiempo límite.\n`;
