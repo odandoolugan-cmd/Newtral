@@ -1260,7 +1260,77 @@ Extensión: 800-1000 palabras. NO uses asteriscos.`;
         let textoLimpio = resultado.texto.replace(/\*\*(.*?)\*\*/g, '$1').replace(/\*(.*?)\*/g, '$1').replace(/#{1,6}\s*/g, '').trim();
         core403M.registrarConsulta(titulo, textoLimpio);
         rustWASM.cache(`hist_${titulo}_${Date.now()}`, textoLimpio.substring(0, 5000));
-        
+      // 🧬 EVALUACIÓN CON NÚCLEO SETUN 1958 v2 (en flujo de IA exitoso)
+if (window.SetunCore) {
+    const fuentesArr = Object.entries(resultados20?.fuentes || {}).filter(([_, f]) => f && f.count > 0);
+    const totalFuentes = fuentesArr.reduce((sum, [_, f]) => sum + f.count, 0);
+    const figuras = rustWASM.cargado ? rustWASM.extraerEntidades(textoLimpio).entidades : [];
+    const citas = rustWASM.contarCitasAPA(textoLimpio).total;
+    const palabras = rustWASM.contarPalabras(textoLimpio).palabras;
+    const tono = rustWASM.analizarSentimiento(textoLimpio);
+    
+    // Calcular rango temporal y fuentes recientes
+    let rangoTemporal = 0;
+    let fuentesRecientes = 0;
+    const años = [];
+    Object.values(resultados20?.fuentes || {}).forEach(f => {
+        if (f && f.data) {
+            f.data.forEach(item => {
+                const yearMatch = String(item.year || '').match(/\d{3,4}/);
+                if (yearMatch) {
+                    const yearNum = parseInt(yearMatch[0]);
+                    if (yearNum > 0 && yearNum < 2100) años.push(yearNum);
+                    if (yearNum >= 1900) fuentesRecientes++;
+                }
+            });
+        }
+    });
+    if (años.length > 1) rangoTemporal = Math.max(...años) - Math.min(...años);
+    
+    const agentReachTotal = (resultadosAgentReach?.github?.length || 0) + (resultadosAgentReach?.reddit?.length || 0) + (resultadosAgentReach?.wiki?.length || 0);
+    
+    const evaluacionSetun = window.SetunCore.evaluarAnalisis({
+        fuentesActivas: fuentesArr.length,
+        fuentesExitosas: fuentesArr.length,
+        eventosCronologia: 0, // No hay cronología en flujo IA directo
+        entidades: figuras.length,
+        citas: citas,
+        rangoTemporal: rangoTemporal,
+        totalReferencias: totalFuentes,
+        palabras: palabras,
+        tono: tono,
+        agentReach: agentReachTotal,
+        fuentesRecientes: fuentesRecientes
+    });
+    
+    // Añadir bloque al texto
+    textoLimpio += "\n\n═══════════════════════════════════════\n";
+    textoLimpio += "🧬 NÚCLEO SETUN 1958 - LÓGICA TERNARIA\n";
+    textoLimpio += "═══════════════════════════════════════\n";
+    textoLimpio += `Estado: ${evaluacionSetun.estado}\n`;
+    textoLimpio += `${evaluacionSetun.mensaje}\n`;
+    textoLimpio += `Completitud: ${evaluacionSetun.completitud}% | Confianza: ${evaluacionSetun.nivelConfianza}\n`;
+    textoLimpio += `Positivos: ${evaluacionSetun.sumaPositiva} | Neutros: ${evaluacionSetun.sumaNeutra} | Negativos: ${evaluacionSetun.sumaNegativa}\n`;
+    textoLimpio += "───────────────────────────────────────\n";
+    textoLimpio += "Parámetros evaluados:\n";
+    evaluacionSetun.parametros.forEach(p => {
+        const flecha = p.ternario === 1 ? '▲' : (p.ternario === -1 ? '▼' : '●');
+        textoLimpio += `  ${flecha} ${p.nombre}: ${p.valor} → ${p.ternario}\n`;
+    });
+    textoLimpio += "═══════════════════════════════════════\n";
+    
+    // Actualizar UI
+    const setunStatus = document.getElementById('setunStatus');
+    const setunTernario = document.getElementById('setunTernario');
+    const setunCount = document.getElementById('setunCount');
+    if (setunStatus) { setunStatus.textContent = '✅ ' + evaluacionSetun.estado; setunStatus.style.color = evaluacionSetun.color; }
+    if (setunTernario) setunTernario.textContent = evaluacionSetun.valorTernario;
+    if (setunCount) setunCount.textContent = window.SetunCore.historial.length;
+    
+    window._ultimaEvaluacionSetun = evaluacionSetun;
+}
+
+return { analisis: textoLimpio, proveedor: resultado.proveedor, contexto20: resultados20, contextoAgentReach: resultadosAgentReach, fueIA: true };  
         return { analisis: textoLimpio, proveedor: resultado.proveedor, contexto20: resultados20, contextoAgentReach: resultadosAgentReach, fueIA: true };
     })();
     
