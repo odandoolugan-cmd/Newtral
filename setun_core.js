@@ -3,7 +3,7 @@
 
 window.SetunCore = {
     version: '2.0-historia',
-    historial: [],  // Registro de evaluaciones para estadísticas
+    historial: [],
 
     // ─────────────────────────────────────
     // 1. FUNCIÓN TERNARIA BASE
@@ -16,15 +16,12 @@ window.SetunCore = {
     },
 
     // ─────────────────────────────────────
-    // 2. FILTRO ANALÓGICO (condensador soviético)
-    //    Suaviza las señales para evitar ruido
+    // 2. FILTRO ANALÓGICO
     // ─────────────────────────────────────
     filtroAnalogico: function(señales) {
         if (!señales || señales.length === 0) return 0;
         const suma = señales.reduce((acc, v) => acc + v, 0);
         const promedio = suma / señales.length;
-        
-        // Histéresis ternaria: umbrales ajustables
         if (promedio > 0.30) return 1;
         if (promedio < -0.30) return -1;
         return 0;
@@ -36,7 +33,6 @@ window.SetunCore = {
     evaluarParametros: function(datos) {
         const params = {};
 
-        // ─── P1: Fuentes activas ───
         params.fuentesActivas = {
             valor: datos.fuentesActivas || 0,
             ternario: this.ternario(datos.fuentesActivas || 0, 2, 10),
@@ -44,7 +40,6 @@ window.SetunCore = {
             nombre: 'Fuentes activas'
         };
 
-        // ─── P2: Eventos en cronología ───
         params.eventosCronologia = {
             valor: datos.eventosCronologia || 0,
             ternario: this.ternario(datos.eventosCronologia || 0, 0, 5),
@@ -52,7 +47,6 @@ window.SetunCore = {
             nombre: 'Eventos cronología'
         };
 
-        // ─── P3: Entidades históricas ───
         params.entidades = {
             valor: datos.entidades || 0,
             ternario: this.ternario(datos.entidades || 0, 0, 3),
@@ -60,7 +54,6 @@ window.SetunCore = {
             nombre: 'Entidades históricas'
         };
 
-        // ─── P4: Citas textuales (Wikiquote/Gutenberg) ───
         params.citas = {
             valor: datos.citas || 0,
             ternario: this.ternario(datos.citas || 0, 0, 3),
@@ -68,7 +61,6 @@ window.SetunCore = {
             nombre: 'Citas textuales'
         };
 
-        // ─── P5: Rango temporal cubierto ───
         params.rangoTemporal = {
             valor: datos.rangoTemporal || 0,
             ternario: this.ternario(datos.rangoTemporal || 0, 50, 100),
@@ -76,8 +68,6 @@ window.SetunCore = {
             nombre: 'Rango temporal (años)'
         };
 
-        // ─── P6: Densidad de referencias ───
-        //      (referencias / palabras * 100)
         const densidad = (datos.totalReferencias || 0) / Math.max(1, datos.palabras || 1000) * 100;
         params.densidadRefs = {
             valor: densidad.toFixed(2),
@@ -86,7 +76,6 @@ window.SetunCore = {
             nombre: 'Densidad referencias (%)'
         };
 
-        // ─── P7: Tono histórico ───
         const tonoMap = { 'Optimista': 1, 'Equilibrado': 0, 'Crítico': -1 };
         params.tono = {
             valor: datos.tono || 'Equilibrado',
@@ -95,7 +84,6 @@ window.SetunCore = {
             nombre: 'Tono histórico'
         };
 
-        // ─── P8: Agent-Reach (datos vivos) ───
         params.agentReach = {
             valor: datos.agentReach || 0,
             ternario: this.ternario(datos.agentReach || 0, 0, 5),
@@ -103,8 +91,6 @@ window.SetunCore = {
             nombre: 'Agent-Reach (vivos)'
         };
 
-        // ─── P9: Consistencia de fuentes ───
-        //      (% de fuentes que respondieron OK)
         const consistencia = (datos.fuentesExitosas || 0) / Math.max(1, datos.fuentesActivas || 20) * 100;
         params.consistencia = {
             valor: consistencia.toFixed(0) + '%',
@@ -113,7 +99,6 @@ window.SetunCore = {
             nombre: 'Consistencia fuentes (%)'
         };
 
-        // ─── P10: Recencia (fuentes siglo XX-XXI) ───
         params.recencia = {
             valor: datos.fuentesRecientes || 0,
             ternario: this.ternario(datos.fuentesRecientes || 0, 0, 3),
@@ -126,15 +111,12 @@ window.SetunCore = {
 
     // ─────────────────────────────────────
     // 4. INFERENCIA TERNARIA COMPLETA
-    //    Aplica pesos + filtro analógico
     // ─────────────────────────────────────
     evaluarAnalisis: function(datos) {
         const parametros = this.evaluarParametros(datos);
-        
-        // Extraer señales ternarias y aplicar pesos
         const señalesPonderadas = [];
         const detalleParametros = [];
-        
+
         Object.entries(parametros).forEach(([key, p]) => {
             señalesPonderadas.push(p.ternario * p.peso);
             detalleParametros.push({
@@ -147,12 +129,10 @@ window.SetunCore = {
             });
         });
 
-        // Filtro analógico final
         const resultadoFiltrado = this.filtroAnalogico(señalesPonderadas);
-        
-        // Decisión ternaria final
+
         let estado, color, icono, mensaje, nivelConfianza;
-        
+
         if (resultadoFiltrado === 1) {
             estado = 'POSITIVO (+1)';
             color = '#10b981';
@@ -173,10 +153,9 @@ window.SetunCore = {
             nivelConfianza = 'MEDIA';
         }
 
-        // Calcular porcentaje de completitud (0-100)
         const sumaPositiva = detalleParametros.filter(p => p.ternario === 1).length;
         const sumaNegativa = detalleParametros.filter(p => p.ternario === -1).length;
-        const completitud: Math.min(100, Math.round((sumaPositiva / 10) * 100) + 30),
+        const completitud = Math.min(100, Math.round((sumaPositiva / 10) * 100) + 30);
 
         const evaluacion = {
             version: this.version,
@@ -194,107 +173,92 @@ window.SetunCore = {
             timestamp: new Date().toISOString()
         };
 
-        // Guardar en historial (últimos 50)
         this.historial.push(evaluacion);
         if (this.historial.length > 50) this.historial.shift();
+
+        try {
+            localStorage.setItem('setun_historial', JSON.stringify(this.historial));
+        } catch(e) {}
 
         return evaluacion;
     },
 
     // ─────────────────────────────────────
-    // 5. GENERAR BLOQUE HTML VISUAL
+    // 5. BLOQUE VISUAL HTML
     // ─────────────────────────────────────
     generarBloqueVisual: function(evaluacion) {
         let tablaParametros = '';
         evaluacion.parametros.forEach(p => {
             const color = p.ternario === 1 ? '#10b981' : (p.ternario === -1 ? '#ef4444' : '#f59e0b');
             const flecha = p.ternario === 1 ? '▲' : (p.ternario === -1 ? '▼' : '●');
-            tablaParametros += `
-                <tr style="font-size: 10px;">
-                    <td style="padding: 2px 4px; color: #aaa;">${p.nombre}</td>
-                    <td style="padding: 2px 4px; color: #ccc; text-align: center;">${p.valor}</td>
-                    <td style="padding: 2px 4px; color: ${color}; text-align: center; font-weight: bold;">${flecha} ${p.ternario}</td>
-                </tr>`;
+            tablaParametros += '<tr style="font-size: 10px;">' +
+                '<td style="padding: 2px 4px; color: #aaa;">' + p.nombre + '</td>' +
+                '<td style="padding: 2px 4px; color: #ccc; text-align: center;">' + p.valor + '</td>' +
+                '<td style="padding: 2px 4px; color: ' + color + '; text-align: center; font-weight: bold;">' + flecha + ' ' + p.ternario + '</td>' +
+                '</tr>';
         });
 
-        return `
-        <div style="margin: 15px 0; padding: 12px; border-radius: 10px; background: rgba(0,0,0,0.4); border: 2px solid ${evaluacion.color};">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <div>
-                    <span style="font-size: 11px; color: #8b5cf6; font-weight: bold;">🧬 NÚCLEO SETUN 1958 v${evaluacion.version}</span>
-                    <span style="font-size: 9px; color: #666; margin-left: 8px;">Lógica Ternaria Historiográfica</span>
-                </div>
-                <div style="font-size: 16px; font-weight: bold; color: ${evaluacion.color};">
-                    ${evaluacion.icono} ${evaluacion.estado}
-                </div>
-            </div>
-            
-            <div style="font-size: 11px; color: #ccc; margin-bottom: 8px;">${evaluacion.mensaje}</div>
-            
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 8px;">
-                <div style="text-align: center; padding: 4px; background: rgba(16,185,129,0.15); border-radius: 4px;">
-                    <div style="font-size: 14px; color: #10b981; font-weight: bold;">${evaluacion.sumaPositiva}</div>
-                    <div style="font-size: 8px; color: #888;">Positivos</div>
-                </div>
-                <div style="text-align: center; padding: 4px; background: rgba(245,158,11,0.15); border-radius: 4px;">
-                    <div style="font-size: 14px; color: #f59e0b; font-weight: bold;">${evaluacion.sumaNeutra}</div>
-                    <div style="font-size: 8px; color: #888;">Neutros</div>
-                </div>
-                <div style="text-align: center; padding: 4px; background: rgba(239,68,68,0.15); border-radius: 4px;">
-                    <div style="font-size: 14px; color: #ef4444; font-weight: bold;">${evaluacion.sumaNegativa}</div>
-                    <div style="font-size: 8px; color: #888;">Negativos</div>
-                </div>
-                <div style="text-align: center; padding: 4px; background: rgba(139,92,246,0.15); border-radius: 4px;">
-                    <div style="font-size: 14px; color: #8b5cf6; font-weight: bold;">${evaluacion.completitud}%</div>
-                    <div style="font-size: 8px; color: #888;">Completitud</div>
-                </div>
-            </div>
-            
-            <details style="margin-top: 6px;">
-                <summary style="font-size: 10px; color: #8b5cf6; cursor: pointer; font-weight: bold;">
-                    🔍 Ver los 10 parámetros ternarios
-                </summary>
-                <table style="width: 100%; margin-top: 6px; border-collapse: collapse;">
-                    <thead>
-                        <tr style="font-size: 9px; color: #666; border-bottom: 1px solid #333;">
-                            <th style="text-align: left; padding: 2px 4px;">Parámetro</th>
-                            <th style="text-align: center; padding: 2px 4px;">Valor</th>
-                            <th style="text-align: center; padding: 2px 4px;">Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody>${tablaParametros}</tbody>
-                </table>
-            </details>
-            
-            <div style="font-size: 8px; color: #555; margin-top: 6px; text-align: center;">
-                🕰️ ${new Date(evaluacion.timestamp).toLocaleString('es-ES')} · Filtro analógico aplicado
-            </div>
-        </div>`;
+        return '<div style="margin: 15px 0; padding: 12px; border-radius: 10px; background: rgba(0,0,0,0.4); border: 2px solid ' + evaluacion.color + ';">' +
+            '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">' +
+                '<div>' +
+                    '<span style="font-size: 11px; color: #8b5cf6; font-weight: bold;">🧬 NÚCLEO SETUN 1958 v' + evaluacion.version + '</span>' +
+                    '<span style="font-size: 9px; color: #666; margin-left: 8px;">Lógica Ternaria Historiográfica</span>' +
+                '</div>' +
+                '<div style="font-size: 16px; font-weight: bold; color: ' + evaluacion.color + ';">' +
+                    evaluacion.icono + ' ' + evaluacion.estado +
+                '</div>' +
+            '</div>' +
+            '<div style="font-size: 11px; color: #ccc; margin-bottom: 8px;">' + evaluacion.mensaje + '</div>' +
+            '<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 8px;">' +
+                '<div style="text-align: center; padding: 4px; background: rgba(16,185,129,0.15); border-radius: 4px;"><div style="font-size: 14px; color: #10b981; font-weight: bold;">' + evaluacion.sumaPositiva + '</div><div style="font-size: 8px; color: #888;">Positivos</div></div>' +
+                '<div style="text-align: center; padding: 4px; background: rgba(245,158,11,0.15); border-radius: 4px;"><div style="font-size: 14px; color: #f59e0b; font-weight: bold;">' + evaluacion.sumaNeutra + '</div><div style="font-size: 8px; color: #888;">Neutros</div></div>' +
+                '<div style="text-align: center; padding: 4px; background: rgba(239,68,68,0.15); border-radius: 4px;"><div style="font-size: 14px; color: #ef4444; font-weight: bold;">' + evaluacion.sumaNegativa + '</div><div style="font-size: 8px; color: #888;">Negativos</div></div>' +
+                '<div style="text-align: center; padding: 4px; background: rgba(139,92,246,0.15); border-radius: 4px;"><div style="font-size: 14px; color: #8b5cf6; font-weight: bold;">' + evaluacion.completitud + '%</div><div style="font-size: 8px; color: #888;">Completitud</div></div>' +
+            '</div>' +
+            '<details style="margin-top: 6px;"><summary style="font-size: 10px; color: #8b5cf6; cursor: pointer; font-weight: bold;">🔍 Ver los 10 parámetros ternarios</summary>' +
+            '<table style="width: 100%; margin-top: 6px; border-collapse: collapse;"><thead><tr style="font-size: 9px; color: #666; border-bottom: 1px solid #333;"><th style="text-align: left; padding: 2px 4px;">Parámetro</th><th style="text-align: center; padding: 2px 4px;">Valor</th><th style="text-align: center; padding: 2px 4px;">Estado</th></tr></thead>' +
+            '<tbody>' + tablaParametros + '</tbody></table></details>' +
+            '<div style="font-size: 8px; color: #555; margin-top: 6px; text-align: center;">🕰️ ' + new Date(evaluacion.timestamp).toLocaleString('es-ES') + ' · Filtro analógico aplicado</div>' +
+            '</div>';
     },
 
     // ─────────────────────────────────────
-    // 6. ESTADÍSTICAS DEL HISTORIAL
+    // 6. ESTADÍSTICAS
     // ─────────────────────────────────────
     getEstadisticas: function() {
-        if (this.historial.length === 0) return { total: 0 };
-        
+        if (this.historial.length === 0) return { total: 0, positivos: 0, negativos: 0, neutros: 0, porcentajePositivo: 0, porcentajeNeutro: 0, porcentajeNegativo: 0, completitudPromedio: 0 };
         const total = this.historial.length;
         const positivos = this.historial.filter(e => e.valorTernario === 1).length;
         const negativos = this.historial.filter(e => e.valorTernario === -1).length;
         const neutros = this.historial.filter(e => e.valorTernario === 0).length;
         const completitudPromedio = this.historial.reduce((a, e) => a + e.completitud, 0) / total;
-        
         return {
-            total,
-            positivos,
-            negativos,
-            neutros,
+            total: total,
+            positivos: positivos,
+            negativos: negativos,
+            neutros: neutros,
             porcentajePositivo: Math.round((positivos / total) * 100),
             porcentajeNeutro: Math.round((neutros / total) * 100),
             porcentajeNegativo: Math.round((negativos / total) * 100),
             completitudPromedio: Math.round(completitudPromedio)
         };
+    },
+
+    // ─────────────────────────────────────
+    // 7. CARGAR HISTORIAL DESDE LOCALSTORAGE
+    // ─────────────────────────────────────
+    cargarHistorial: function() {
+        try {
+            const saved = localStorage.getItem('setun_historial');
+            if (saved) {
+                this.historial = JSON.parse(saved);
+                console.log('🧬 Historial Setun cargado: ' + this.historial.length + ' análisis');
+            }
+        } catch(e) {
+            this.historial = [];
+        }
     }
 };
 
+window.SetunCore.cargarHistorial();
 console.log('🧬 Setun Core v2.0-historia cargado. 10 parámetros ternarios activos.');
