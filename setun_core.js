@@ -176,7 +176,7 @@ window.SetunCore = {
         // Calcular porcentaje de completitud (0-100)
         const sumaPositiva = detalleParametros.filter(p => p.ternario === 1).length;
         const sumaNegativa = detalleParametros.filter(p => p.ternario === -1).length;
-        const completitud = Math.round(((sumaPositiva + 5) / 10) * 100);
+        const completitud: Math.min(100, Math.round((sumaPositiva / 10) * 100) + 30),
 
         const evaluacion = {
             version: this.version,
