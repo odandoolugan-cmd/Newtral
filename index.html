@@ -313,7 +313,8 @@
         <button class="tool-btn memoria" id="btnMemoriaStatus">🧠 Memoria</button>
         <button class="tool-btn" id="btnAnalisisCompleto">📊 Completo</button>
         <button class="tool-btn" id="btnTermuxStatus">🔌 Estado</button>
-    </div>
+<button class="tool-btn" id="btnSetunPanel" style="border-color: #8b5cf6; color: #a78bfa; background: rgba(139,92,246,0.15);">🧬 Setun</button>   
+ </div>
 
     <div class="progress-bar-container">
         <div class="progress-bar-fill" id="progressBar"></div>
@@ -366,7 +367,90 @@
 
 <button class="vr-button" id="vrModeBtn">🔮 VR</button>
 <div class="vr-mode" id="vrMode"><button class="close-vr" id="closeVrBtn">✕</button><div id="vrContainer" style="width:100%;height:100%"></div></div>
+// ============================================
+// 🧬 PANEL SETUN — HISTORIAL TERNARIO
+// ============================================
+function mostrarPanelSetun() {
+    if (!window.SetunCore) {
+        showToast('⚠️ Setun Core no cargado', true);
+        return;
+    }
+    
+    const stats = window.SetunCore.getEstadisticas();
+    const historial = window.SetunCore.historial || [];
+    
+    let html = '';
+    
+    // ─── Resumen estadístico ───
+    html += `<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 15px;">`;
+    html += `<div style="text-align: center; padding: 8px; background: rgba(16,185,129,0.15); border-radius: 8px;">
+        <div style="font-size: 22px; color: #10b981; font-weight: bold;">${stats.positivos || 0}</div>
+        <div style="font-size: 9px; color: #888;">Positivos</div></div>`;
+    html += `<div style="text-align: center; padding: 8px; background: rgba(245,158,11,0.15); border-radius: 8px;">
+        <div style="font-size: 22px; color: #f59e0b; font-weight: bold;">${stats.neutros || 0}</div>
+        <div style="font-size: 9px; color: #888;">Neutros</div></div>`;
+    html += `<div style="text-align: center; padding: 8px; background: rgba(239,68,68,0.15); border-radius: 8px;">
+        <div style="font-size: 22px; color: #ef4444; font-weight: bold;">${stats.negativos || 0}</div>
+        <div style="font-size: 9px; color: #888;">Negativos</div></div>`;
+    html += `<div style="text-align: center; padding: 8px; background: rgba(139,92,246,0.15); border-radius: 8px;">
+        <div style="font-size: 22px; color: #8b5cf6; font-weight: bold;">${stats.completitudPromedio || 0}%</div>
+        <div style="font-size: 9px; color: #888;">Completitud</div></div>`;
+    html += `</div>`;
+    
+    // ─── Distribución ternaria ───
+    html += `<div style="font-size: 11px; color: #aaa; margin-bottom: 5px;">📊 Distribución (${stats.total} análisis)</div>`;
+    html += `<div style="display: flex; height: 20px; border-radius: 10px; overflow: hidden; margin-bottom: 15px;">`;
+    if (stats.porcentajePositivo > 0) html += `<div style="width: ${stats.porcentajePositivo}%; background: #10b981; text-align: center; font-size: 10px; color: white; line-height: 20px;">${stats.porcentajePositivo}%</div>`;
+    if (stats.porcentajeNeutro > 0) html += `<div style="width: ${stats.porcentajeNeutro}%; background: #f59e0b; text-align: center; font-size: 10px; color: white; line-height: 20px;">${stats.porcentajeNeutro}%</div>`;
+    if (stats.porcentajeNegativo > 0) html += `<div style="width: ${stats.porcentajeNegativo}%; background: #ef4444; text-align: center; font-size: 10px; color: white; line-height: 20px;">${stats.porcentajeNegativo}%</div>`;
+    html += `</div>`;
+    
+    // ─── Historial (últimos 10) ───
+    if (historial.length > 0) {
+        html += `<div style="font-size: 11px; color: #aaa; margin-bottom: 5px;">📜 Últimos ${Math.min(10, historial.length)} análisis</div>`;
+        html += `<div style="max-height: 300px; overflow-y: auto; border: 1px solid #333; border-radius: 6px;">`;
+        html += `<table style="width: 100%; border-collapse: collapse; font-size: 10px;">`;
+        html += `<thead style="position: sticky; top: 0; background: #0f172a;"><tr style="color: #666; border-bottom: 1px solid #333;">
+            <th style="padding: 4px; text-align: left;">Fecha</th>
+            <th style="padding: 4px; text-align: center;">Estado</th>
+            <th style="padding: 4px; text-align: center;">Compl.</th>
+            <th style="padding: 4px; text-align: center;">Conf.</th>
+        </tr></thead><tbody>`;
+        historial.slice().reverse().slice(0, 10).forEach(e => {
+            const fecha = new Date(e.timestamp).toLocaleString('es-ES', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+            html += `<tr style="border-bottom: 1px solid #222;">
+                <td style="padding: 3px 4px; color: #888;">${fecha}</td>
+                <td style="padding: 3px 4px; text-align: center; color: ${e.color}; font-weight: bold;">${e.icono} ${e.valorTernario}</td>
+                <td style="padding: 3px 4px; text-align: center; color: #8b5cf6;">${e.completitud}%</td>
+                <td style="padding: 3px 4px; text-align: center; color: #aaa;">${e.nivelConfianza}</td>
+            </tr>`;
+        });
+        html += `</tbody></table></div>`;
+    } else {
+        html += `<div style="text-align: center; padding: 20px; color: #666; font-size: 11px;">
+            🧬 No hay análisis aún.<br>Realiza un análisis con IA para empezar.
+        </div>`;
+    }
+    
+    // ─── Botón para limpiar historial ───
+    html += `<div style="margin-top: 10px; text-align: center;">
+        <button onclick="window.SetunCore.historial = []; localStorage.removeItem('setun_historial'); document.querySelectorAll('.modal-overlay').forEach(m => m.remove()); showToast('🧬 Historial Setun limpiado');" 
+            style="background: #ef4444; color: white; border: none; padding: 4px 12px; border-radius: 20px; font-size: 10px; cursor: pointer;">
+            🗑️ Limpiar Historial
+        </button>
+    </div>`;
+    
+    // ─── Info técnica ───
+    html += `<div style="margin-top: 10px; font-size: 9px; color: #555; text-align: center; border-top: 1px solid #333; padding-top: 8px;">
+        🧬 Setun Core v${window.SetunCore.version || '2.0'} · Lógica Ternaria Historiográfica<br>
+        10 parámetros · Filtro analógico · Estado 0 = Incertidumbre soviética
+    </div>`;
+    
+    mostrarModal('🧬 Núcleo Setun 1958 — Panel de Control', html);
+}
 
+// Conectar el botón
+document.getElementById('btnSetunPanel').onclick = mostrarPanelSetun;
 <script type="module">
 // ============================================
 // 🔧 UTILIDADES GLOBALES
@@ -1199,7 +1283,14 @@ if (window.SetunCore) {
         return `Contexto Histórico:\n\n${titulo} (${era}). ${hook}\n\nHechos Clave:\n\n• Evento documentado en la historia universal.\n• Consecuencias analizadas en múltiples fuentes.\n• Relevancia contemporánea persistente.\n\nConsecuencias Multidimensionales:\n\n• Corto plazo: Transformación del orden establecido.\n• Largo plazo: Legado en la memoria colectiva.\n\nLecciones Aprendidas:\n\nLa historia nos enseña que eventos como "${titulo}" no son incidentes aislados.\n\n─────────────────────────────────────\n⚠️ MODO FALLBACK BÁSICO\nLos proveedores de IA no respondieron. Este análisis fue generado con la información disponible.\n─────────────────────────────────────`;
     }
 }
-
+// Persistir en localStorage (últimos 50)
+try {
+    this.historial.push(evaluacion);
+    if (this.historial.length > 50) this.historial.shift();
+    localStorage.setItem('setun_historial', JSON.stringify(this.historial));
+} catch(e) {
+    console.warn('No se pudo guardar historial Setun:', e);
+}
 // ============================================
 // 🤖 ANÁLISIS CON AGENTE + FALLBACK MEJORADO
 // ============================================
@@ -1268,7 +1359,17 @@ if (window.SetunCore) {
     const citas = rustWASM.contarCitasAPA(textoLimpio).total;
     const palabras = rustWASM.contarPalabras(textoLimpio).palabras;
     const tono = rustWASM.analizarSentimiento(textoLimpio);
-    
+    cargarHistorial: function() {
+    try {
+        const saved = localStorage.getItem('setun_historial');
+        if (saved) {
+            this.historial = JSON.parse(saved);
+            console.log(`🧬 Historial Setun cargado: ${this.historial.length} análisis`);
+        }
+    } catch(e) {
+        this.historial = [];
+    }
+}
     // Calcular rango temporal y fuentes recientes
     let rangoTemporal = 0;
     let fuentesRecientes = 0;
