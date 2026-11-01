@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<script src="setun_core.js?v=2"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -222,7 +223,14 @@
             <span class="item">📦 Caché: <strong id="arCache">0</strong></span>
         </div>
         <div class="wasm-status-bar">
-            <span class="lbl">🦀 WASM Rust:</span>
+<div class="wasm-status-bar" style="border-color: #8b5cf6; background: linear-gradient(135deg, #1e1b4b, #312e81);">
+    <span class="lbl">🧬 Setun 1958:</span>
+    <span class="item">Estado: <strong id="setunStatus" style="color:#8b5cf6;">⏳</strong></span>
+    <span class="item">Ternario: <strong id="setunTernario">0</strong></span>
+    <span class="item">Análisis: <strong id="setunCount">0</strong></span>
+    <span class="item">v2.0-historia</span>
+</div>        
+    <span class="lbl">🦀 WASM Rust:</span>
             <span class="item">Estado: <strong id="wasmStatus">⏳</strong></span>
             <span class="item">📊 Funciones: <strong id="wasmFuncsStatus">0</strong></span>
             <span class="item">📦 Caché: <strong id="wasmCacheSize">0</strong></span>
@@ -1115,7 +1123,75 @@ function generarFallbackHistorico(titulo, era, hook, datos = {}) {
         analisis += `Este análisis fue compuesto automáticamente con datos REALES de ${fuentesArr.length} fuentes.\n`;
         analisis += `🔄 Reintenta para obtener análisis generado por IA.\n`;
         analisis += `─────────────────────────────────────`;
-        
+// 🧬 EVALUACIÓN CON NÚCLEO SETUN 1958 v2
+if (window.SetunCore) {
+    // Extraer métricas reales del análisis
+    const palabrasTotales = rustWASM.contarPalabras(analisis).palabras;
+    const citas = rustWASM.contarCitasAPA(analisis).total;
+    const tono = rustWASM.analizarSentimiento(analisis);
+    
+    // Calcular rango temporal de la cronología
+    let rangoTemporal = 0;
+    if (cronologiaLimpia.length > 1) {
+        const años = cronologiaLimpia.map(c => c.yearNum).filter(y => y > 0);
+        if (años.length > 1) {
+            rangoTemporal = Math.max(...años) - Math.min(...años);
+        }
+    }
+    
+    // Contar fuentes recientes (siglos XX-XXI)
+    let fuentesRecientes = 0;
+    Object.values(fuentes).forEach(f => {
+        if (f && f.data) {
+            f.data.forEach(item => {
+                const yearMatch = String(item.year || '').match(/\d{3,4}/);
+                if (yearMatch && parseInt(yearMatch[0]) >= 1900) fuentesRecientes++;
+            });
+        }
+    });
+    
+    const evaluacionSetun = window.SetunCore.evaluarAnalisis({
+        fuentesActivas: fuentesArr.length,
+        fuentesExitosas: fuentesArr.length,
+        eventosCronologia: cronologiaLimpia.length,
+        entidades: figuras.length,
+        citas: citas,
+        rangoTemporal: rangoTemporal,
+        totalReferencias: totalFuentes,
+        palabras: palabrasTotales,
+        tono: tono,
+        agentReach: totalAgent,
+        fuentesRecientes: fuentesRecientes
+    });
+    
+    // Añadir al texto del análisis (versión texto plano)
+    analisis += "\n\n═══════════════════════════════════════\n";
+    analisis += "🧬 NÚCLEO SETUN 1958 - LÓGICA TERNARIA\n";
+    analisis += "═══════════════════════════════════════\n";
+    analisis += `Estado: ${evaluacionSetun.estado}\n`;
+    analisis += `${evaluacionSetun.mensaje}\n`;
+    analisis += `Completitud: ${evaluacionSetun.completitud}%\n`;
+    analisis += `Confianza: ${evaluacionSetun.nivelConfianza}\n`;
+    analisis += `Positivos: ${evaluacionSetun.sumaPositiva} | Neutros: ${evaluacionSetun.sumaNeutra} | Negativos: ${evaluacionSetun.sumaNegativa}\n`;
+    analisis += "───────────────────────────────────────\n";
+    analisis += "Parámetros evaluados:\n";
+    evaluacionSetun.parametros.forEach(p => {
+        const flecha = p.ternario === 1 ? '▲' : (p.ternario === -1 ? '▼' : '●');
+        analisis += `  ${flecha} ${p.nombre}: ${p.valor} → ${p.ternario}\n`;
+    });
+    analisis += "═══════════════════════════════════════\n";
+    
+    // Actualizar UI
+    if (document.getElementById('setunStatus')) {
+        document.getElementById('setunStatus').textContent = '✅ ' + evaluacionSetun.estado;
+        document.getElementById('setunStatus').style.color = evaluacionSetun.color;
+        document.getElementById('setunTernario').textContent = evaluacionSetun.valorTernario;
+        document.getElementById('setunCount').textContent = window.SetunCore.historial.length;
+    }
+    
+    // Guardar para el bloque visual HTML
+    window._ultimaEvaluacionSetun = evaluacionSetun;
+}        
         return analisis;
     } catch (error) {
         console.error('❌ Error dentro del fallback:', error);
