@@ -108,34 +108,46 @@ window.SetunCore = {
     evaluarAnalisis: function(datos) {
         const parametros = this.evaluarParametros(datos);
         const claves = Object.keys(parametros);
+        const n = claves.length;
         
-        if (claves.length !== 30) {
-            console.error('🚨 Setun: esperados 30 parámetros, obtenidos ' + claves.length);
+        // ═══ OPTIMIZACIÓN: arrays tipados ═══
+        // Int8Array: 1 byte por ternario (-1, 0, 1)
+        // Float32Array: 4 bytes por peso
+        const ternarios = new Int8Array(n);
+        const pesos = new Float32Array(n);
+        
+        let sumaPesosPresentes = 0;
+        
+        for (let i = 0; i < n; i++) {
+            const p = parametros[claves[i]];
+            ternarios[i] = p.ternario;
+            pesos[i] = p.peso;
+            if (p.valor !== '—') sumaPesosPresentes += p.peso;
         }
         
-        const señales = [];
-        const detalle = [];
-        let sumaPesosPresentes = 0;
-
-        Object.entries(parametros).forEach(([key, p]) => {
-            señales.push(p.ternario * p.peso);
-            if (p.valor !== '—') sumaPesosPresentes += p.peso;
-            detalle.push({
-                clave: key,
-                nombre: p.nombre,
-                valor: p.valor,
-                ternario: p.ternario,
-                peso: p.peso,
-                contribucion: (p.ternario * p.peso).toFixed(4)
-            });
-        });
-
-        const resultado = this.filtroAnalogico(señales);
-
+        // Producto punto (suma de ternario × peso)
+        let suma = 0;
+        for (let i = 0; i < n; i++) {
+            suma += ternarios[i] * pesos[i];
+        }
+        
+        // Filtro analógico
+        const resultado = suma > 0.25 ? 1 : (suma < -0.25 ? -1 : 0);
+        
+        // Contadores (1 sola pasada)
+        let positivos = 0, negativos = 0, neutros = 0;
+        for (let i = 0; i < n; i++) {
+            const t = ternarios[i];
+            if (t === 1) positivos++;
+            else if (t === -1) negativos++;
+            else neutros++;
+        }
+        
+        // Estado y mensaje
         let estado, color, icono, mensaje, nivelConfianza;
         if (resultado === 1) {
             estado = 'POSITIVO (+1)'; color = '#10b981'; icono = '✅';
-            mensaje = 'Análisis robusto. 30 parámetros confirman calidad historiográfica.';
+            mensaje = 'Análisis robusto. ' + n + ' parámetros confirman calidad historiográfica.';
             nivelConfianza = 'ALTA';
         } else if (resultado === -1) {
             estado = 'NEGATIVO (-1)'; color = '#ef4444'; icono = '⚠️';
@@ -146,28 +158,43 @@ window.SetunCore = {
             mensaje = 'Análisis parcial. El estado soviético de incertidumbre: necesita más contexto.';
             nivelConfianza = 'MEDIA';
         }
-
-        const sumaPositiva = detalle.filter(d => d.ternario === 1).length;
-        const sumaNegativa = detalle.filter(d => d.ternario === -1).length;
-        const sumaNeutra = claves.length - sumaPositiva - sumaNegativa;
+        
         const completitud = Math.round(sumaPesosPresentes * 100);
-
+        
+        // Detalle (objeto, para compatibilidad con UI)
+        const detalle = new Array(n);
+        for (let i = 0; i < n; i++) {
+            const p = parametros[claves[i]];
+            detalle[i] = {
+                clave: claves[i],
+                nombre: p.nombre,
+                valor: p.valor,
+                ternario: p.ternario,
+                peso: p.peso,
+                contribucion: (p.ternario * p.peso).toFixed(4)
+            };
+        }
+        
         const evaluacion = {
             version: this.version,
             valorTernario: resultado,
             estado, color, icono, mensaje, nivelConfianza, completitud,
             parametros: detalle,
-            sumaPositiva, sumaNegativa, sumaNeutra,
-            totalParametros: claves.length,
+            sumaPositiva: positivos, sumaNegativa: negativos, sumaNeutra: neutros,
+            totalParametros: n,
             timestamp: new Date().toISOString()
         };
-
+        
         this.historial.push(evaluacion);
         if (this.historial.length > 50) this.historial.shift();
-        try { localStorage.setItem('setun_historial', JSON.stringify(this.historial)); } catch(e) {}
+        // Persistir historial completo solo cada 50 análisis (contador independiente)
+        this._contadorAnalisis = (this._contadorAnalisis || 0) + 1;
+        if (this._contadorAnalisis % 50 === 0) {
+            try { localStorage.setItem('setun_historial', JSON.stringify(this.historial)); } catch(e) {}
+        }
         return evaluacion;
     },
-
+    
     generarBloqueVisual: function(e) {
         let filas = '';
         e.parametros.forEach(p => {
