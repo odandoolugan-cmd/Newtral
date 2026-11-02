@@ -105,20 +105,201 @@ window.SetunCore = {
         return p;
     },
 
-    evaluarAnalisis: function(datos) {
-        const parametros = this.evaluarParametros(datos);
+    generarParametros: function(n) {
+        // Genera N parámetros desde 10 bloques temáticos
+        const bloques = [
+            'Fuentes', 'Cronología', 'Entidades', 'Contenido', 'Calidad',
+            'Meta', 'Geopolítica', 'Economía', 'Cultura', 'Sociedad'
+        ];
+        const params = {};
+        const pesoBase = 1 / n;
+        
+        for (let i = 0; i < n; i++) {
+            const bloque = bloques[i % bloques.length];
+            const nombre = bloque + '_param_' + i;
+            params[nombre] = {
+                valor: 0,
+                ternario: 0,
+                peso: pesoBase,
+                nombre: nombre,
+                bloque: bloque
+            };
+        }
+        
+        return params;
+    },
+
+
+    evaluarAnalisisMasivo: function(datos, n) {
+        // ═══ MODO MASIVO: N > 1000 params sin crear objetos ═══
+        // Usa Int8Array + Float32Array directamente (5 bytes por param)
+        // 1M params = 5MB (vs 100MB con objetos)
+        
+        const ternarios = new Int8Array(n);
+        const pesos = new Float32Array(n);
+        const pesoBase = 1 / n;
+        
+        // Rellenar datos (solo los primeros 30 relevantes)
+        const datosClaves = Object.keys(datos);
+        const maxDatos = Math.min(datosClaves.length, 30);
+        let datosPresentes = 0;
+        
+        for (let i = 0; i < maxDatos; i++) {
+            const clave = datosClaves[i];
+            const valor = datos[clave];
+            if (valor !== undefined && valor !== null) {
+                ternarios[i] = this.ternario(valor, 0, 1);
+                datosPresentes++;
+            }
+        }
+        
+        // Pesos (todos iguales en modo masivo)
+        for (let i = 0; i < n; i++) pesos[i] = pesoBase;
+        
+        // Suma (1 sola pasada)
+        let suma = 0;
+        for (let i = 0; i < n; i++) suma += ternarios[i] * pesos[i];
+        
+        // Contadores (1 sola pasada)
+        let pos = 0, neg = 0, neu = 0;
+        for (let i = 0; i < n; i++) {
+            const t = ternarios[i];
+            if (t === 1) pos++;
+            else if (t === -1) neg++;
+            else neu++;
+        }
+        
+        const resultado = suma > 0.25 ? 1 : (suma < -0.25 ? -1 : 0);
+        
+        let estado, color, icono, mensaje, nivelConfianza;
+        if (resultado === 1) {
+            estado = 'POSITIVO (+1)'; color = '#10b981'; icono = '✅';
+            mensaje = 'Análisis masivo con ' + n.toLocaleString() + ' parámetros. ' + pos + ' positivos detectados.';
+            nivelConfianza = 'ALTA';
+        } else if (resultado === -1) {
+            estado = 'NEGATIVO (-1)'; color = '#ef4444'; icono = '⚠️';
+            mensaje = 'Análisis masivo con ' + n.toLocaleString() + ' parámetros. ' + neg + ' negativos detectados.';
+            nivelConfianza = 'BAJA';
+        } else {
+            estado = 'NEUTRO (0)'; color = '#f59e0b'; icono = '⚖️';
+            mensaje = 'Análisis masivo con ' + n.toLocaleString() + ' parámetros. ' + neu + ' neutros (sin datos).';
+            nivelConfianza = 'MEDIA';
+        }
+        
+        return {
+            version: this.version,
+            valorTernario: resultado,
+            estado, color, icono, mensaje, nivelConfianza,
+            completitud: Math.round((datosPresentes / Math.min(maxDatos, n)) * 100),
+            parametros: [],  // sin detalle (muy grande)
+            sumaPositiva: pos,
+            sumaNegativa: neg,
+            sumaNeutra: neu,
+            totalParametros: n,
+            modo: 'masivo',
+            timestamp: new Date().toISOString()
+        };
+    },
+
+    evaluarAnalisisMasivo: function(datos, n) {
+        // Modo masivo: N > 1000 params sin crear objetos
+        const ternarios = new Int8Array(n);
+        const pesos = new Float32Array(n);
+        const pesoBase = 1 / n;
+        
+        const datosClaves = Object.keys(datos);
+        const maxDatos = Math.min(datosClaves.length, 30);
+        let datosPresentes = 0;
+        
+        for (let i = 0; i < maxDatos; i++) {
+            const clave = datosClaves[i];
+            const valor = datos[clave];
+            if (valor !== undefined && valor !== null) {
+                ternarios[i] = this.ternario(valor, 0, 1);
+                datosPresentes++;
+            }
+        }
+        
+        for (let i = 0; i < n; i++) pesos[i] = pesoBase;
+        
+        let suma = 0;
+        for (let i = 0; i < n; i++) suma += ternarios[i] * pesos[i];
+        
+        let pos = 0, neg = 0, neu = 0;
+        for (let i = 0; i < n; i++) {
+            const t = ternarios[i];
+            if (t === 1) pos++;
+            else if (t === -1) neg++;
+            else neu++;
+        }
+        
+        const resultado = suma > 0.25 ? 1 : (suma < -0.25 ? -1 : 0);
+        
+        let estado, color, icono, mensaje, nivelConfianza;
+        if (resultado === 1) {
+            estado = 'POSITIVO (+1)'; color = '#10b981'; icono = '✅';
+            mensaje = 'Análisis masivo con ' + n.toLocaleString() + ' parámetros. ' + pos + ' positivos detectados.';
+            nivelConfianza = 'ALTA';
+        } else if (resultado === -1) {
+            estado = 'NEGATIVO (-1)'; color = '#ef4444'; icono = '⚠️';
+            mensaje = 'Análisis masivo con ' + n.toLocaleString() + ' parámetros. ' + neg + ' negativos detectados.';
+            nivelConfianza = 'BAJA';
+        } else {
+            estado = 'NEUTRO (0)'; color = '#f59e0b'; icono = '⚖️';
+            mensaje = 'Análisis masivo con ' + n.toLocaleString() + ' parámetros. ' + neu + ' neutros (sin datos).';
+            nivelConfianza = 'MEDIA';
+        }
+        
+        return {
+            version: this.version,
+            valorTernario: resultado,
+            estado, color, icono, mensaje, nivelConfianza,
+            completitud: Math.round((datosPresentes / Math.min(maxDatos, n)) * 100),
+            parametros: [],
+            sumaPositiva: pos,
+            sumaNegativa: neg,
+            sumaNeutra: neu,
+            totalParametros: n,
+            modo: 'masivo',
+            timestamp: new Date().toISOString()
+        };
+    },
+
+    evaluarAnalisis: function(datos, n) {
+        // ═══ MODO MASIVO: N > 1000 usa arrays tipados sin objetos ═══
+        if (n && n > 1000) {
+            return this.evaluarAnalisisMasivo(datos, n);
+        }
+        
+        let parametros;
+        
+        // Modo extendido: N parámetros (generados)
+        if (n && n > 30) {
+            parametros = this.generarParametros(n);
+            Object.keys(parametros).forEach(key => {
+                const valor = datos[key];
+                if (valor !== undefined && valor !== null) {
+                    parametros[key].valor = valor;
+                    parametros[key].ternario = this.ternario(valor, 0, 1);
+                }
+            });
+        } else {
+            // Modo normal: 30 parámetros (fijos)
+            parametros = this.evaluarParametros(datos);
+        }
+        
         const claves = Object.keys(parametros);
-        const n = claves.length;
+        const nClaves = claves.length;
         
         // ═══ OPTIMIZACIÓN: arrays tipados ═══
         // Int8Array: 1 byte por ternario (-1, 0, 1)
         // Float32Array: 4 bytes por peso
-        const ternarios = new Int8Array(n);
-        const pesos = new Float32Array(n);
+        const ternarios = new Int8Array(nClaves);
+        const pesos = new Float32Array(nClaves);
         
         let sumaPesosPresentes = 0;
         
-        for (let i = 0; i < n; i++) {
+        for (let i = 0; i < nClaves; i++) {
             const p = parametros[claves[i]];
             ternarios[i] = p.ternario;
             pesos[i] = p.peso;
@@ -127,7 +308,7 @@ window.SetunCore = {
         
         // Producto punto (suma de ternario × peso)
         let suma = 0;
-        for (let i = 0; i < n; i++) {
+        for (let i = 0; i < nClaves; i++) {
             suma += ternarios[i] * pesos[i];
         }
         
@@ -136,7 +317,7 @@ window.SetunCore = {
         
         // Contadores (1 sola pasada)
         let positivos = 0, negativos = 0, neutros = 0;
-        for (let i = 0; i < n; i++) {
+        for (let i = 0; i < nClaves; i++) {
             const t = ternarios[i];
             if (t === 1) positivos++;
             else if (t === -1) negativos++;
@@ -147,7 +328,7 @@ window.SetunCore = {
         let estado, color, icono, mensaje, nivelConfianza;
         if (resultado === 1) {
             estado = 'POSITIVO (+1)'; color = '#10b981'; icono = '✅';
-            mensaje = 'Análisis robusto. ' + n + ' parámetros confirman calidad historiográfica.';
+            mensaje = 'Análisis robusto. ' + nClaves + ' parámetros confirman calidad historiográfica.';
             nivelConfianza = 'ALTA';
         } else if (resultado === -1) {
             estado = 'NEGATIVO (-1)'; color = '#ef4444'; icono = '⚠️';
@@ -162,8 +343,8 @@ window.SetunCore = {
         const completitud = Math.round(sumaPesosPresentes * 100);
         
         // Detalle (objeto, para compatibilidad con UI)
-        const detalle = new Array(n);
-        for (let i = 0; i < n; i++) {
+        const detalle = new Array(nClaves);
+        for (let i = 0; i < nClaves; i++) {
             const p = parametros[claves[i]];
             detalle[i] = {
                 clave: claves[i],
@@ -181,7 +362,7 @@ window.SetunCore = {
             estado, color, icono, mensaje, nivelConfianza, completitud,
             parametros: detalle,
             sumaPositiva: positivos, sumaNegativa: negativos, sumaNeutra: neutros,
-            totalParametros: n,
+            totalParametros: nClaves,
             timestamp: new Date().toISOString()
         };
         
