@@ -130,79 +130,8 @@ window.SetunCore = {
     },
 
 
-    evaluarAnalisisMasivo: function(datos, n) {
+        evaluarAnalisisMasivo: function(datos, n) {
         // ═══ MODO MASIVO: N > 1000 params sin crear objetos ═══
-        // Usa Int8Array + Float32Array directamente (5 bytes por param)
-        // 1M params = 5MB (vs 100MB con objetos)
-        
-        const ternarios = new Int8Array(n);
-        const pesos = new Float32Array(n);
-        const pesoBase = 1 / n;
-        
-        // Rellenar datos (solo los primeros 30 relevantes)
-        const datosClaves = Object.keys(datos);
-        const maxDatos = Math.min(datosClaves.length, 30);
-        let datosPresentes = 0;
-        
-        for (let i = 0; i < maxDatos; i++) {
-            const clave = datosClaves[i];
-            const valor = datos[clave];
-            if (valor !== undefined && valor !== null) {
-                ternarios[i] = this.ternario(valor, 0, 1);
-                datosPresentes++;
-            }
-        }
-        
-        // Pesos (todos iguales en modo masivo)
-        for (let i = 0; i < n; i++) pesos[i] = pesoBase;
-        
-        // Suma (1 sola pasada)
-        let suma = 0;
-        for (let i = 0; i < n; i++) suma += ternarios[i] * pesos[i];
-        
-        // Contadores (1 sola pasada)
-        let pos = 0, neg = 0, neu = 0;
-        for (let i = 0; i < n; i++) {
-            const t = ternarios[i];
-            if (t === 1) pos++;
-            else if (t === -1) neg++;
-            else neu++;
-        }
-        
-        const resultado = suma > 0.25 ? 1 : (suma < -0.25 ? -1 : 0);
-        
-        let estado, color, icono, mensaje, nivelConfianza;
-        if (resultado === 1) {
-            estado = 'POSITIVO (+1)'; color = '#10b981'; icono = '✅';
-            mensaje = 'Análisis masivo con ' + n.toLocaleString() + ' parámetros. ' + pos + ' positivos detectados.';
-            nivelConfianza = 'ALTA';
-        } else if (resultado === -1) {
-            estado = 'NEGATIVO (-1)'; color = '#ef4444'; icono = '⚠️';
-            mensaje = 'Análisis masivo con ' + n.toLocaleString() + ' parámetros. ' + neg + ' negativos detectados.';
-            nivelConfianza = 'BAJA';
-        } else {
-            estado = 'NEUTRO (0)'; color = '#f59e0b'; icono = '⚖️';
-            mensaje = 'Análisis masivo con ' + n.toLocaleString() + ' parámetros. ' + neu + ' neutros (sin datos).';
-            nivelConfianza = 'MEDIA';
-        }
-        
-        return {
-            version: this.version,
-            valorTernario: resultado,
-            estado, color, icono, mensaje, nivelConfianza,
-            completitud: Math.round((datosPresentes / Math.min(maxDatos, n)) * 100),
-            parametros: [],  // sin detalle (muy grande)
-            sumaPositiva: pos,
-            sumaNegativa: neg,
-            sumaNeutra: neu,
-            totalParametros: n,
-            modo: 'masivo',
-            timestamp: new Date().toISOString()
-        };
-    },
-
-    evaluarAnalisisMasivo: function(datos, n) {
-        // Modo masivo: N > 1000 params sin crear objetos
         const ternarios = new Int8Array(n);
         const pesos = new Float32Array(n);
         const pesoBase = 1 / n;
@@ -248,6 +177,19 @@ window.SetunCore = {
             estado = 'NEUTRO (0)'; color = '#f59e0b'; icono = '⚖️';
             mensaje = 'Análisis masivo con ' + n.toLocaleString() + ' parámetros. ' + neu + ' neutros (sin datos).';
             nivelConfianza = 'MEDIA';
+        }
+        
+        // Resumen por bloque
+        const resumenBloques = {};
+        const bloquesLista = ['Fuentes', 'Cronología', 'Entidades', 'Contenido', 'Calidad', 'Meta', 'Geopolítica', 'Economía', 'Cultura', 'Sociedad'];
+        bloquesLista.forEach(b => { resumenBloques[b] = { pos: 0, neu: 0, neg: 0, total: 0, peso: 0 }; });
+        for (let i = 0; i < n; i++) {
+            const bloque = bloquesLista[i % bloquesLista.length];
+            resumenBloques[bloque].total++;
+            resumenBloques[bloque].peso += pesos[i];
+            if (ternarios[i] === 1) resumenBloques[bloque].pos++;
+            else if (ternarios[i] === -1) resumenBloques[bloque].neg++;
+            else resumenBloques[bloque].neu++;
         }
         
         return {
@@ -261,6 +203,7 @@ window.SetunCore = {
             sumaNeutra: neu,
             totalParametros: n,
             modo: 'masivo',
+            resumenBloques: resumenBloques,
             timestamp: new Date().toISOString()
         };
     },
@@ -356,7 +299,21 @@ window.SetunCore = {
             };
         }
         
-        const evaluacion = {
+                // Resumen por bloque (para panel jerárquico)
+        const resumenBloques = {};
+        const bloquesLista = ['Fuentes', 'Cronología', 'Entidades', 'Contenido', 'Calidad', 'Meta', 'Geopolítica', 'Economía', 'Cultura', 'Sociedad'];
+        bloquesLista.forEach(b => { resumenBloques[b] = { pos: 0, neu: 0, neg: 0, total: 0, peso: 0 }; });
+        detalle.forEach((p, i) => {
+            const bloque = p.bloque || bloquesLista[i % bloquesLista.length];
+            resumenBloques[bloque].total++;
+            resumenBloques[bloque].peso += p.peso;
+            if (p.ternario === 1) resumenBloques[bloque].pos++;
+            else if (p.ternario === -1) resumenBloques[bloque].neg++;
+            else resumenBloques[bloque].neu++;
+        });
+        
+const evaluacion = {
+            resumenBloques: resumenBloques,
             version: this.version,
             valorTernario: resultado,
             estado, color, icono, mensaje, nivelConfianza, completitud,
@@ -396,6 +353,46 @@ window.SetunCore = {
             '<details><summary style="font-size:10px;color:#8b5cf6;cursor:pointer;font-weight:bold;">🔍 Ver los ' + e.totalParametros + ' parámetros ternarios</summary>' +
             '<table style="width:100%;margin-top:6px;border-collapse:collapse;"><thead><tr style="font-size:9px;color:#666;border-bottom:1px solid #333;"><th style="text-align:left;padding:2px 4px;">Parámetro</th><th style="text-align:center;">Valor</th><th style="text-align:center;">Estado</th><th style="text-align:center;">Peso</th></tr></thead><tbody>' + filas + '</tbody></table></details>' +
             '<div style="font-size:8px;color:#555;margin-top:6px;text-align:center;">🕰️ ' + new Date(e.timestamp).toLocaleString('es-ES') + '</div></div>';
+    },
+
+    generarPanelJerarquico: function(evaluacion) {
+        const bloques = evaluacion.resumenBloques || {};
+        const colores = {
+            'Fuentes': '#3b82f6',
+            'Cronología': '#8b5cf6',
+            'Entidades': '#ec4899',
+            'Contenido': '#f59e0b',
+            'Calidad': '#10b981',
+            'Meta': '#06b6d4',
+            'Geopolítica': '#ef4444',
+            'Economía': '#84cc16',
+            'Cultura': '#f97316',
+            'Sociedad': '#a855f7'
+        };
+        
+        let html = '<div style="display:grid;gap:6px;">';
+        
+        Object.entries(bloques).forEach(([nombre, b]) => {
+            if (b.total === 0) return;
+            const color = colores[nombre] || '#888';
+            const ratio = b.total > 0 ? (b.pos / b.total) : 0;
+            const estado = ratio > 0.6 ? '▲' : (ratio < 0.4 ? '▼' : '●');
+            const colorEstado = ratio > 0.6 ? '#10b981' : (ratio < 0.4 ? '#ef4444' : '#f59e0b');
+            
+            html += '<div style="display:grid;grid-template-columns:100px 1fr 90px 60px;gap:8px;align-items:center;padding:6px 8px;background:rgba(0,0,0,0.3);border-radius:6px;border-left:3px solid ' + color + ';">';
+            html += '<span style="font-size:11px;color:' + color + ';font-weight:bold;">' + nombre + '</span>';
+            html += '<div style="height:6px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;display:flex;">';
+            html += '<div style="width:' + ((b.pos/b.total)*100) + '%;background:#10b981;"></div>';
+            html += '<div style="width:' + ((b.neu/b.total)*100) + '%;background:#f59e0b;"></div>';
+            html += '<div style="width:' + ((b.neg/b.total)*100) + '%;background:#ef4444;"></div>';
+            html += '</div>';
+            html += '<span style="font-size:10px;color:#aaa;text-align:center;">' + b.pos + '▲ ' + b.neu + '● ' + b.neg + '▼</span>';
+            html += '<span style="font-size:11px;color:' + colorEstado + ';font-weight:bold;text-align:center;">' + estado + ' ' + b.total + '</span>';
+            html += '</div>';
+        });
+        
+        html += '</div>';
+        return html;
     },
 
     getEstadisticas: function() {
