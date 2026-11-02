@@ -427,7 +427,20 @@ function mostrarPanelSetun() {
         </div>`;
     }
 
+    // ─── Panel Jerárquico (10 bloques) ───
+    if (historial.length > 0) {
+        const ultima = historial[historial.length - 1];
+        if (ultima.resumenBloques) {
+            html += '<div style="margin-bottom:12px;">';
+            html += '<div style="font-size:11px;color:#aaa;margin-bottom:6px;font-weight:bold;">📊 Panel Jerárquico (10 bloques)</div>';
+            html += window.SetunCore.generarPanelJerarquico(ultima);
+            html += '</div>';
+        }
+    }
+    
     // ─── Historial (últimos 10) ───
+    
+// ─── Historial (últimos 10) ───
     if (historial.length > 0) {
         html += `<div style="margin-bottom:12px;">
             <div style="font-size:11px;color:#aaa;margin-bottom:6px;font-weight:bold;">📜 Últimos ${Math.min(10, historial.length)} análisis</div>
