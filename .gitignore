@@ -1,0 +1,21 @@
+# Backups locales
+*.backup
+*.backup[0-9]*
+backups_antiguos/
+
+# Archivos temporales
+tmp_*.js
+tmp_*.txt
+*.tmp
+*.log
+
+# Node
+node_modules/
+package-lock.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Termux
+.termux/

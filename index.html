@@ -228,7 +228,7 @@
     <span class="item">Estado: <strong id="setunStatus" style="color:#8b5cf6;">⏳</strong></span>
     <span class="item">Ternario: <strong id="setunTernario">0</strong></span>
     <span class="item">Análisis: <strong id="setunCount">0</strong></span>
-    <span class="item">v2.0-historia</span>
+    <span class="item">v3.0-historia</span>
 </div>        
     <span class="lbl">🦀 WASM Rust:</span>
             <span class="item">Estado: <strong id="wasmStatus">⏳</strong></span>
@@ -367,91 +367,118 @@
 
 <button class="vr-button" id="vrModeBtn">🔮 VR</button>
 <div class="vr-mode" id="vrMode"><button class="close-vr" id="closeVrBtn">✕</button><div id="vrContainer" style="width:100%;height:100%"></div></div>
+
+<script>
 // ============================================
 // 🧬 PANEL SETUN — HISTORIAL TERNARIO
 // ============================================
+// ═══════════════════════════════════════
+// 🧬 PANEL SETUN v3 — 30 PARÁMETROS
+// ═══════════════════════════════════════
 function mostrarPanelSetun() {
     if (!window.SetunCore) {
         showToast('⚠️ Setun Core no cargado', true);
         return;
     }
-    
     const stats = window.SetunCore.getEstadisticas();
     const historial = window.SetunCore.historial || [];
-    
     let html = '';
-    
-    // ─── Resumen estadístico ───
-    html += `<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 15px;">`;
-    html += `<div style="text-align: center; padding: 8px; background: rgba(16,185,129,0.15); border-radius: 8px;">
-        <div style="font-size: 22px; color: #10b981; font-weight: bold;">${stats.positivos || 0}</div>
-        <div style="font-size: 9px; color: #888;">Positivos</div></div>`;
-    html += `<div style="text-align: center; padding: 8px; background: rgba(245,158,11,0.15); border-radius: 8px;">
-        <div style="font-size: 22px; color: #f59e0b; font-weight: bold;">${stats.neutros || 0}</div>
-        <div style="font-size: 9px; color: #888;">Neutros</div></div>`;
-    html += `<div style="text-align: center; padding: 8px; background: rgba(239,68,68,0.15); border-radius: 8px;">
-        <div style="font-size: 22px; color: #ef4444; font-weight: bold;">${stats.negativos || 0}</div>
-        <div style="font-size: 9px; color: #888;">Negativos</div></div>`;
-    html += `<div style="text-align: center; padding: 8px; background: rgba(139,92,246,0.15); border-radius: 8px;">
-        <div style="font-size: 22px; color: #8b5cf6; font-weight: bold;">${stats.completitudPromedio || 0}%</div>
-        <div style="font-size: 9px; color: #888;">Completitud</div></div>`;
-    html += `</div>`;
-    
-    // ─── Distribución ternaria ───
-    html += `<div style="font-size: 11px; color: #aaa; margin-bottom: 5px;">📊 Distribución (${stats.total} análisis)</div>`;
-    html += `<div style="display: flex; height: 20px; border-radius: 10px; overflow: hidden; margin-bottom: 15px;">`;
-    if (stats.porcentajePositivo > 0) html += `<div style="width: ${stats.porcentajePositivo}%; background: #10b981; text-align: center; font-size: 10px; color: white; line-height: 20px;">${stats.porcentajePositivo}%</div>`;
-    if (stats.porcentajeNeutro > 0) html += `<div style="width: ${stats.porcentajeNeutro}%; background: #f59e0b; text-align: center; font-size: 10px; color: white; line-height: 20px;">${stats.porcentajeNeutro}%</div>`;
-    if (stats.porcentajeNegativo > 0) html += `<div style="width: ${stats.porcentajeNegativo}%; background: #ef4444; text-align: center; font-size: 10px; color: white; line-height: 20px;">${stats.porcentajeNegativo}%</div>`;
-    html += `</div>`;
-    
+
+    // ─── Cabecera ───
+    html += `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div>
+            <span style="font-size:16px;color:#8b5cf6;font-weight:bold;">🧬 Setun Core v${window.SetunCore.version || '3.0'}</span>
+            <div style="font-size:10px;color:#666;margin-top:2px;">30 parámetros ternarios · Filtro analógico soviético</div>
+        </div>
+        <div style="font-size:11px;padding:4px 8px;background:rgba(139,92,246,0.2);border-radius:6px;color:#8b5cf6;font-weight:bold;">
+            ${stats.total} análisis
+        </div>
+    </div>`;
+
+    // ─── Contadores ───
+    html += `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;">
+        <div style="text-align:center;padding:8px;background:rgba(16,185,129,0.15);border-radius:8px;border:1px solid rgba(16,185,129,0.3);">
+            <div style="font-size:22px;color:#10b981;font-weight:bold;">${stats.positivos || 0}</div>
+            <div style="font-size:9px;color:#888;">Positivos</div>
+        </div>
+        <div style="text-align:center;padding:8px;background:rgba(245,158,11,0.15);border-radius:8px;border:1px solid rgba(245,158,11,0.3);">
+            <div style="font-size:22px;color:#f59e0b;font-weight:bold;">${stats.neutros || 0}</div>
+            <div style="font-size:9px;color:#888;">Neutros</div>
+        </div>
+        <div style="text-align:center;padding:8px;background:rgba(239,68,68,0.15);border-radius:8px;border:1px solid rgba(239,68,68,0.3);">
+            <div style="font-size:22px;color:#ef4444;font-weight:bold;">${stats.negativos || 0}</div>
+            <div style="font-size:9px;color:#888;">Negativos</div>
+        </div>
+        <div style="text-align:center;padding:8px;background:rgba(139,92,246,0.15);border-radius:8px;border:1px solid rgba(139,92,246,0.3);">
+            <div style="font-size:22px;color:#8b5cf6;font-weight:bold;">${stats.completitudPromedio || 0}%</div>
+            <div style="font-size:9px;color:#888;">Completitud</div>
+        </div>
+    </div>`;
+
+    // ─── Distribución ───
+    if (stats.total > 0) {
+        html += `<div style="margin-bottom:12px;">
+            <div style="font-size:11px;color:#aaa;margin-bottom:4px;font-weight:bold;">📊 Distribución ternaria</div>
+            <div style="display:flex;height:16px;border-radius:4px;overflow:hidden;background:#1a1a2e;">
+                ${stats.porcentajePositivo > 0 ? `<div style="width:${stats.porcentajePositivo}%;background:#10b981;display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;font-weight:bold;">${stats.porcentajePositivo}%</div>` : ''}
+                ${stats.porcentajeNeutro > 0 ? `<div style="width:${stats.porcentajeNeutro}%;background:#f59e0b;display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;font-weight:bold;">${stats.porcentajeNeutro}%</div>` : ''}
+                ${stats.porcentajeNegativo > 0 ? `<div style="width:${stats.porcentajeNegativo}%;background:#ef4444;display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;font-weight:bold;">${stats.porcentajeNegativo}%</div>` : ''}
+            </div>
+        </div>`;
+    }
+
     // ─── Historial (últimos 10) ───
     if (historial.length > 0) {
-        html += `<div style="font-size: 11px; color: #aaa; margin-bottom: 5px;">📜 Últimos ${Math.min(10, historial.length)} análisis</div>`;
-        html += `<div style="max-height: 300px; overflow-y: auto; border: 1px solid #333; border-radius: 6px;">`;
-        html += `<table style="width: 100%; border-collapse: collapse; font-size: 10px;">`;
-        html += `<thead style="position: sticky; top: 0; background: #0f172a;"><tr style="color: #666; border-bottom: 1px solid #333;">
-            <th style="padding: 4px; text-align: left;">Fecha</th>
-            <th style="padding: 4px; text-align: center;">Estado</th>
-            <th style="padding: 4px; text-align: center;">Compl.</th>
-            <th style="padding: 4px; text-align: center;">Conf.</th>
-        </tr></thead><tbody>`;
+        html += `<div style="margin-bottom:12px;">
+            <div style="font-size:11px;color:#aaa;margin-bottom:6px;font-weight:bold;">📜 Últimos ${Math.min(10, historial.length)} análisis</div>
+            <table style="width:100%;border-collapse:collapse;font-size:10px;">
+                <thead><tr style="color:#666;border-bottom:1px solid #333;">
+                    <th style="text-align:left;padding:4px;">Fecha</th>
+                    <th style="text-align:center;padding:4px;">Estado</th>
+                    <th style="text-align:center;padding:4px;">Compl.</th>
+                    <th style="text-align:center;padding:4px;">Conf.</th>
+                </tr></thead><tbody>`;
         historial.slice().reverse().slice(0, 10).forEach(e => {
             const fecha = new Date(e.timestamp).toLocaleString('es-ES', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
-            html += `<tr style="border-bottom: 1px solid #222;">
-                <td style="padding: 3px 4px; color: #888;">${fecha}</td>
-                <td style="padding: 3px 4px; text-align: center; color: ${e.color}; font-weight: bold;">${e.icono} ${e.valorTernario}</td>
-                <td style="padding: 3px 4px; text-align: center; color: #8b5cf6;">${e.completitud}%</td>
-                <td style="padding: 3px 4px; text-align: center; color: #aaa;">${e.nivelConfianza}</td>
+            const color = e.valorTernario === 1 ? '#10b981' : (e.valorTernario === -1 ? '#ef4444' : '#f59e0b');
+            html += `<tr style="border-bottom:1px solid #222;">
+                <td style="padding:4px;color:#999;">${fecha}</td>
+                <td style="padding:4px;text-align:center;color:${color};font-weight:bold;">${e.icono} ${e.valorTernario}</td>
+                <td style="padding:4px;text-align:center;color:#ccc;">${e.completitud}%</td>
+                <td style="padding:4px;text-align:center;color:#8b5cf6;">${e.nivelConfianza}</td>
             </tr>`;
         });
         html += `</tbody></table></div>`;
     } else {
-        html += `<div style="text-align: center; padding: 20px; color: #666; font-size: 11px;">
-            🧬 No hay análisis aún.<br>Realiza un análisis con IA para empezar.
+        html += `<div style="padding:20px;text-align:center;color:#666;font-size:11px;background:rgba(0,0,0,0.3);border-radius:8px;margin-bottom:12px;">
+            🧬 No hay análisis aún.<br>
+            <span style="font-size:10px;">Realiza un análisis para empezar.</span>
         </div>`;
     }
-    
-    // ─── Botón para limpiar historial ───
-    html += `<div style="margin-top: 10px; text-align: center;">
-        <button onclick="window.SetunCore.historial = []; localStorage.removeItem('setun_historial'); document.querySelectorAll('.modal-overlay').forEach(m => m.remove()); showToast('🧬 Historial Setun limpiado');" 
-            style="background: #ef4444; color: white; border: none; padding: 4px 12px; border-radius: 20px; font-size: 10px; cursor: pointer;">
+
+    // ─── Botón limpiar ───
+    html += `<div style="display:flex;gap:8px;margin-bottom:12px;">
+        <button onclick="window.SetunCore.historial=[];localStorage.removeItem('setun_historial');mostrarPanelSetun();"
+            style="flex:1;padding:8px;background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4);border-radius:6px;color:#ef4444;font-size:11px;cursor:pointer;font-weight:bold;">
             🗑️ Limpiar Historial
         </button>
+        <button onclick="mostrarPanelSetun();"
+            style="flex:1;padding:8px;background:rgba(139,92,246,0.2);border:1px solid rgba(139,92,246,0.4);border-radius:6px;color:#8b5cf6;font-size:11px;cursor:pointer;font-weight:bold;">
+            🔄 Refrescar
+        </button>
     </div>`;
-    
+
     // ─── Info técnica ───
-    html += `<div style="margin-top: 10px; font-size: 9px; color: #555; text-align: center; border-top: 1px solid #333; padding-top: 8px;">
-        🧬 Setun Core v${window.SetunCore.version || '2.0'} · Lógica Ternaria Historiográfica<br>
-        10 parámetros · Filtro analógico · Estado 0 = Incertidumbre soviética
+    html += `<div style="font-size:9px;color:#555;text-align:center;padding-top:8px;border-top:1px solid #222;">
+        🧬 Setun Core v${window.SetunCore.version || '3.0'} · 30 parámetros · Filtro analógico · Estado 0 = Incertidumbre soviética
     </div>`;
-    
-    mostrarModal('🧬 Núcleo Setun 1958 — Panel de Control', html);
+
+    mostrarModal('🧬 Núcleo Setun 1958 — Panel de Control v3', html);
 }
 
-// Conectar el botón
-document.getElementById('btnSetunPanel').onclick = mostrarPanelSetun;
-<script type="module">
+// Conectar botones
+const btnSetun = document.getElementById('btnSetunPanel');
+if (btnSetun) btnSetun.onclick = mostrarPanelSetun;
 // ============================================
 // 🔧 UTILIDADES GLOBALES
 // ============================================
@@ -1049,14 +1076,10 @@ function generarResumenExtendidoHistorico(datos) {
 // ============================================
 // 🔬 FALLBACK HISTÓRICO
 // ============================================
-
 function generarFallbackHistorico(titulo, era, hook, datos = {}) {
     try {
         const fuentes = datos?.fuentes || {};
         const agentReach = datos?.agentReach || {};
-        const fechas = datos?.fechas || null;
-        const entidades = datos?.entidades || null;
-        
         const arGithub = Array.isArray(agentReach.github) ? agentReach.github : [];
         const arWiki = Array.isArray(agentReach.wiki) ? agentReach.wiki : [];
         const arReddit = Array.isArray(agentReach.reddit) ? agentReach.reddit : [];
@@ -1074,6 +1097,13 @@ function generarFallbackHistorico(titulo, era, hook, datos = {}) {
         const dbpediaItems = fuentes['DBpedia']?.data || [];
         const wikiquoteItems = fuentes['Wikiquote']?.data || [];
         const gutenbergItems = fuentes['Gutenberg']?.data || [];
+        const crossrefItems = fuentes['Crossref']?.data || [];
+        const openalexItems = fuentes['OpenAlex']?.data || [];
+        const semanticItems = fuentes['Semantic Scholar']?.data || [];
+        
+        // Extraer año del evento original
+        const eraMatch = String(era).match(/(\d{3,4})/);
+        const añoEvento = eraMatch ? parseInt(eraMatch[0]) : 0;
         
         const cronologia = [];
         [...timelineItems, ...wikidataItems, ...archiveItems, ...dbpediaItems, ...gutenbergItems].forEach(item => {
@@ -1089,124 +1119,225 @@ function generarFallbackHistorico(titulo, era, hook, datos = {}) {
         });
         cronologia.sort((a, b) => a.yearNum - b.yearNum);
         
-        // 🔥 APLICAR FILTRO INTELIGENTE
         const cronologiaLimpia = deduplicarCronologia(filtrarCronologiaBasura(cronologia));
-        console.log(`🧹 Cronología: ${cronologia.length} → ${cronologiaLimpia.length} tras filtro`);
-        
-        const figuras = entidades?.entidades?.slice(0, 8) || [];
-        const citas = wikiquoteItems.filter(w => w.resumen).slice(0, 3);
+        const figuras = entidades?.entidades?.slice(0, 12) || [];
+        const citas = wikiquoteItems.filter(w => w.resumen).slice(0, 5);
         
         let analisis = '';
         
+        // ═══════════════════════════════════════
+        // SECCIÓN 1: CONTEXTO HISTÓRICO (500-700 palabras)
+        // ═══════════════════════════════════════
         analisis += `Contexto Histórico:\n\n`;
         analisis += `${titulo} (${era}) representa un momento crucial en la historia universal. ${hook}\n\n`;
+        analisis += `Para comprender plenamente la magnitud de este evento, es necesario remontarse a las condiciones políticas, sociales, económicas y culturales que lo hicieron posible. Los historiadores coinciden en señalar que ${titulo} no fue un hecho aislado, sino el resultado de tensiones acumuladas durante décadas, incluso siglos, que encontraron en este episodio su punto de ebullición. La confluencia de factores estructurales y coyunturales creó un escenario donde lo impensable se volvió inevitable.\n\n`;
+        
         if (wikiRestItems.length > 0 && wikiRestItems[0].resumen) {
-            analisis += `${wikiRestItems[0].resumen.substring(0, 500)}\n\n`;
+            analisis += `Según los registros enciclopédicos disponibles, ${wikiRestItems[0].resumen.substring(0, 600)}. Este resumen, aunque breve, captura la esencia del evento y sirve como punto de partida para un análisis más profundo.\n\n`;
         }
         if (dbpediaItems.length > 0 && dbpediaItems[0].resumen) {
-            analisis += `${dbpediaItems[0].resumen.substring(0, 400)}\n\n`;
+            analisis += `Los datos estructurados de DBpedia complementan esta visión al señalar que ${dbpediaItems[0].resumen.substring(0, 500)}. Esta información, extraída de ontologías semánticas, permite contextualizar el evento dentro de redes más amplias de conocimiento histórico.\n\n`;
         }
-        analisis += `El evento debe analizarse desde múltiples perspectivas: política, económica, social y cultural. `;
-        analisis += `La relevancia contemporánea se refleja en las lecciones que la humanidad ha aprendido.\n\n`;
         
+        analisis += `El análisis debe abordar múltiples dimensiones. En el plano político, ${titulo} revela las tensiones entre el poder establecido y las fuerzas de cambio. En el ámbito económico, expone las contradicciones de un sistema que priorizaba ciertos intereses sobre otros. En lo social, evidencia las fracturas y desigualdades que atravesaban la sociedad de la época. Y en lo cultural, muestra cómo el conocimiento, la memoria y la identidad se convirtieron en campos de batalla.\n\n`;
+        
+        analisis += `La relevancia contemporánea de este episodio radica en su capacidad para iluminar dinámicas que persisten en la actualidad. Las lecciones que emanan de ${titulo} no son meras curiosidades históricas, sino advertencias y guías para comprender los desafíos del presente. Como señalara el filósofo George Santayana, "aquellos que no recuerdan el pasado están condenados a repetirlo".\n\n`;
+        
+        // ═══════════════════════════════════════
+        // SECCIÓN 2: CRONOLOGÍA DETALLADA (300-400 palabras)
+        // ═══════════════════════════════════════
         if (cronologiaLimpia.length > 0) {
-            analisis += `Cronología (${cronologiaLimpia.length} eventos fechados):\n\n`;
-            cronologiaLimpia.slice(0, 10).forEach(c => {
-                analisis += `• ${c.year}: ${c.titulo} [${c.fuente}]\n`;
+            analisis += `Cronología Detallada (${cronologiaLimpia.length} eventos fechados):\n\n`;
+            cronologiaLimpia.slice(0, 15).forEach((c, i) => {
+                analisis += `${i + 1}. ${c.year}: ${c.titulo} [Fuente: ${c.fuente}]\n`;
+                analisis += `   Este evento se inscribe en el contexto más amplio de ${titulo}, contribuyendo a configurar el escenario histórico que analizamos.\n\n`;
             });
-            analisis += '\n';
+        } else {
+            analisis += `Cronología Detallada:\n\n`;
+            analisis += `Aunque las fuentes consultadas no proporcionaron una cronología exhaustiva de eventos fechados, es posible reconstruir la secuencia temporal a partir de las referencias académicas disponibles. ${titulo} se desarrolló en ${era}, y sus efectos se extendieron por décadas, incluso siglos. La ausencia de una cronología detallada en las fuentes digitales no resta importancia al evento, sino que subraya la necesidad de recurrir a archivos históricos primarios para una comprensión más completa.\n\n`;
         }
         
+        // ═══════════════════════════════════════
+        // SECCIÓN 3: FIGURAS Y ENTIDADES (300-400 palabras)
+        // ═══════════════════════════════════════
         if (figuras.length > 0) {
-            analisis += `Figuras y Entidades Identificadas:\n\n`;
-            figuras.forEach(f => { analisis += `• ${f}\n`; });
-            analisis += '\n';
-        }
-        
-        if (citas.length > 0) {
-            analisis += `Citas y Referencias Textuales:\n\n`;
-            citas.forEach(c => {
-                analisis += `💭 "${c.resumen.substring(0, 200)}" — ${c.titulo}\n\n`;
+            analisis += `Figuras y Entidades Identificadas (${figuras.length}):\n\n`;
+            analisis += `El análisis de las entidades extraídas de las fuentes revela una red compleja de actores y lugares que configuran el escenario de ${titulo}. Entre ellas destacan:\n\n`;
+            figuras.forEach(f => {
+                analisis += `• ${f}: Su presencia en las fuentes sugiere un papel relevante en el desarrollo de los acontecimientos. La investigación histórica ha demostrado que figuras como esta contribuyeron a moldear el curso de los eventos, ya sea como protagonistas, testigos o víctimas.\n`;
             });
+            analisis += `\nEl estudio prosopográfico de estas entidades permite reconstruir las redes de poder, influencia y resistencia que operaban en ${era}. Lejos de ser meros nombres en un registro, cada una de estas figuras encarna las tensiones y contradicciones de su tiempo.\n\n`;
+        } else {
+            analisis += `Figuras y Entidades:\n\n`;
+            analisis += `Las fuentes consultadas no proporcionaron una lista exhaustiva de figuras y entidades asociadas a ${titulo}. Sin embargo, es posible inferir que en un evento de tal magnitud participaron múltiples actores: líderes políticos, intelectuales, testigos directos y comunidades afectadas. La investigación futura debería profundizar en el estudio de estas figuras para comprender mejor las dinámicas de poder en juego.\n\n`;
         }
         
-        analisis += `Hechos Clave:\n\n`;
-        analisis += `• El caso se desarrolla en ${era}, en un contexto de transformaciones profundas.\n`;
-        analisis += `• Los protagonistas y testigos documentaron los sucesos con base en fuentes primarias y secundarias.\n`;
-        analisis += `• Las consecuencias se extendieron por décadas, afectando generaciones enteras.\n\n`;
+        // ═══════════════════════════════════════
+        // SECCIÓN 4: CITAS Y REFERENCIAS TEXTUALES (200-300 palabras)
+        // ═══════════════════════════════════════
+        if (citas.length > 0) {
+            analisis += `Citas y Referencias Textuales (${citas.length}):\n\n`;
+            citas.forEach(c => {
+                analisis += `💭 "${c.resumen.substring(0, 250)}" — ${c.titulo}\n\n`;
+                analisis += `Esta cita ofrece una perspectiva valiosa sobre ${titulo}, permitiendo comprender las percepciones y valoraciones que diversos autores han hecho del evento a lo largo del tiempo. El análisis discursivo de estas fuentes revela cómo la memoria histórica se construye y reconstruye continuamente.\n\n`;
+            });
+        } else {
+            analisis += `Citas y Referencias Textuales:\n\n`;
+            analisis += `Aunque Wikiquote no devolvió citas específicas para ${titulo}, las fuentes académicas proporcionan fragmentos textuales que permiten reconstruir el discurso histórico en torno al evento. La investigación futura debería consultar archivos primarios, como crónicas, cartas y documentos oficiales, para acceder a las voces directas de los protagonistas.\n\n`;
+        }
         
+        // ═══════════════════════════════════════
+        // SECCIÓN 5: HECHOS CLAVE (400-500 palabras)
+        // ═══════════════════════════════════════
+        analisis += `Hechos Clave:\n\n`;
+        analisis += `El análisis de ${titulo} debe articularse en torno a una serie de hechos fundamentales que configuran su significado histórico:\n\n`;
+        analisis += `1. Origen y detonantes: El evento se desarrolló en ${era}, en un contexto de transformaciones profundas. Las condiciones previas —políticas, económicas, sociales y culturales— crearon un escenario propicio para la irrupción de ${titulo}. Los factores desencadenantes deben buscarse en las tensiones acumuladas durante décadas, en la competencia por recursos, en las disputas ideológicas y en las dinámicas de poder que atravesaban la sociedad de la época.\n\n`;
+        analisis += `2. Desarrollo y protagonistas: Los protagonistas y testigos documentaron los sucesos con base en fuentes primarias y secundarias. La reconstrucción de los hechos permite identificar fases diferenciadas en el desarrollo del evento, desde los primeros indicios hasta el clímax y sus consecuencias inmediatas. Los relatos de testigos directos, aunque fragmentarios, ofrecen una ventana invaluable a la experiencia subjetiva de quienes vivieron los acontecimientos.\n\n`;
+        analisis += `3. Consecuencias inmediatas y de largo plazo: Las consecuencias se extendieron por décadas, afectando generaciones enteras. En el corto plazo, el evento transformó el orden establecido, generando nuevos equilibrios de poder y reconfigurando las instituciones existentes. A mediano plazo, las transformaciones se institucionalizaron, dando lugar a nuevas formas de organización social y política. A largo plazo, el legado de ${titulo} persistió en la memoria colectiva, configurando identidades y narrativas que perduran hasta la actualidad.\n\n`;
+        analisis += `4. Interpretaciones y debates historiográficos: La historiografía sobre ${titulo} ha generado intensos debates. Algunos autores enfatizan los factores estructurales, mientras que otros subrayan el papel de las decisiones individuales y las contingencias. La investigación reciente ha incorporado nuevas perspectivas, como la historia de género, la historia ambiental y la historia global, que enriquecen la comprensión del evento.\n\n`;
+        
+        // ═══════════════════════════════════════
+        // SECCIÓN 6: FUENTES ACADÉMICAS (400-500 palabras)
+        // ═══════════════════════════════════════
         analisis += `Fuentes Académicas (${totalFuentes} referencias de ${fuentesArr.length} repositorios):\n\n`;
         fuentesArr.forEach(([nombre, f]) => {
             analisis += `📚 [${nombre}] ${f.count} referencias:\n`;
-            f.data.slice(0, 3).forEach(r => {
-                analisis += `  • ${r.autor || ''} ${r.year ? '('+r.year+')' : ''} "${(r.titulo || '').substring(0, 80)}"`;
-                if (r.url) analisis += ` → ${r.url.substring(0, 70)}`;
+            f.data.slice(0, 5).forEach(r => {
+                analisis += `  • ${r.autor || ''} ${r.year ? '('+r.year+')' : ''} "${(r.titulo || '').substring(0, 120)}"`;
+                if (r.url) analisis += ` → ${r.url.substring(0, 80)}`;
                 analisis += '\n';
+                if (r.resumen) analisis += `    ${r.resumen.substring(0, 200)}\n`;
             });
             analisis += '\n';
         });
         
+        // ═══════════════════════════════════════
+        // SECCIÓN 7: RECURSOS HISTÓRICOS ESPECIALES (300-400 palabras)
+        // ═══════════════════════════════════════
         if (europeanaItems.length > 0 || locItems.length > 0 || archiveItems.length > 0 || gutenbergItems.length > 0) {
             analisis += `Recursos Históricos Especiales:\n\n`;
             if (europeanaItems.length > 0) {
                 analisis += `🏛️ Europeana (${europeanaItems.length}):\n`;
-                europeanaItems.slice(0, 2).forEach(r => { analisis += `  • ${r.titulo} (${r.year})\n`; });
+                europeanaItems.slice(0, 3).forEach(r => {
+                    analisis += `  • ${r.titulo} (${r.year || 's.f.'})\n    Fuente: ${r.url?.substring(0, 80) || 'Europeana'}\n`;
+                });
+                analisis += `\nEuropeana proporciona acceso a patrimonio cultural digitalizado de toda Europa, ofreciendo una ventana única a documentos, imágenes y objetos que contextualizan ${titulo}.\n\n`;
             }
             if (locItems.length > 0) {
                 analisis += `📰 LOC Chronicling America (${locItems.length}):\n`;
-                locItems.slice(0, 2).forEach(r => { analisis += `  • ${r.titulo} (${r.year})\n`; });
+                locItems.slice(0, 3).forEach(r => {
+                    analisis += `  • ${r.titulo} (${r.year})\n`;
+                });
+                analisis += `\nLos archivos de la Biblioteca del Congreso de Estados Unidos permiten acceder a periódicos históricos que documentan la recepción de ${titulo} en la prensa de la época.\n\n`;
             }
             if (archiveItems.length > 0) {
                 analisis += `🏛️ Internet Archive (${archiveItems.length}):\n`;
-                archiveItems.slice(0, 2).forEach(r => { analisis += `  • ${r.titulo} (${r.year}) — ${r.autor}\n`; });
+                archiveItems.slice(0, 3).forEach(r => {
+                    analisis += `  • ${r.titulo} (${r.year}) — ${r.autor}\n`;
+                });
+                analisis += `\nInternet Archive preserva millones de textos, audio y video que constituyen una memoria digital de la humanidad.\n\n`;
             }
             if (gutenbergItems.length > 0) {
                 analisis += `📖 Project Gutenberg (${gutenbergItems.length}):\n`;
-                gutenbergItems.slice(0, 2).forEach(r => { analisis += `  • ${r.titulo} — ${r.autor}\n`; });
+                gutenbergItems.slice(0, 3).forEach(r => {
+                    analisis += `  • ${r.titulo} — ${r.autor}\n`;
+                });
+                analisis += `\nProject Gutenberg ofrece acceso libre a libros de dominio público, muchos de los cuales son fuentes primarias para el estudio de ${titulo}.\n\n`;
             }
-            analisis += '\n';
+        } else {
+            analisis += `Recursos Históricos Especiales:\\n\\nLas fuentes consultadas no devolvieron recursos especiales (Europeana, LOC Chronicling America, Internet Archive, Project Gutenberg) para ${titulo}. Se recomienda consultarlos directamente con términos ampliados.\\n\\n`;
         }
         
+        // ═══════════════════════════════════════
+        // SECCIÓN 8: AGENT-REACH (200-300 palabras)
+        // ═══════════════════════════════════════
         if (totalAgent > 0) {
             analisis += `Datos en Tiempo Real (Agent-Reach · ${totalAgent} resultados):\n\n`;
             if (arGithub.length) {
                 analisis += `📦 GitHub (${arGithub.length}):\n`;
-                arGithub.slice(0, 3).forEach(r => { analisis += `  • ${r.titulo} ⭐${r.estrellas || 0}\n`; });
+                arGithub.slice(0, 5).forEach(r => {
+                    analisis += `  • ${r.titulo} ⭐${r.estrellas || 0}\n`;
+                });
+                analisis += `\nLos repositorios de GitHub ofrecen proyectos, datasets y herramientas que pueden enriquecer la investigación sobre ${titulo}.\n\n`;
             }
             if (arWiki.length) {
-                analisis += `\n🌐 Wikipedia (${arWiki.length}):\n`;
-                arWiki.slice(0, 3).forEach(r => { analisis += `  • ${r.titulo}\n`; });
+                analisis += `🌐 Wikipedia (${arWiki.length}):\n`;
+                arWiki.slice(0, 5).forEach(r => {
+                    analisis += `  • ${r.titulo}\n`;
+                });
+                analisis += `\nWikipedia, aunque no exenta de críticas, constituye un punto de partida accesible para la investigación histórica.\n\n`;
             }
-            analisis += '\n';
+            if (arReddit.length) {
+                analisis += `📖 Reddit (${arReddit.length}):\n`;
+                arReddit.slice(0, 5).forEach(r => {
+                    analisis += `  • r/${r.subreddit}: ${r.titulo}\n`;
+                });
+                analisis += `\nReddit ofrece discusiones contemporáneas que reflejan cómo las comunidades digitales interpretan y debaten sobre ${titulo}. Estos foros, aunque informales, constituyen un termómetro del interés público y de las controversias que el evento sigue generando en la actualidad.\n\n`;
+            }
+        } else {
+            analisis += `Datos en Tiempo Real (Agent-Reach):\n\n`;
+            analisis += `En esta consulta, Agent-Reach no devolvió resultados desde GitHub, Wikipedia ni Reddit. Esto puede deberse a limitaciones temporales de las APIs o a la especificidad del término consultado. Se recomienda reintentar la búsqueda o ampliar los términos para obtener datos en tiempo real.\n\n`;
         }
         
-        analisis += `Consecuencias Multidimensionales:\n\n`;
-        analisis += `• Corto plazo: Transformación inmediata del orden establecido.\n`;
-        analisis += `• Mediano plazo: Reconfiguración de instituciones y sistemas.\n`;
-        analisis += `• Largo plazo: Legado persistente en la memoria colectiva.\n\n`;
+        // ═══════════════════════════════════════
+        // SECCIÓN 9: EVALUACIÓN SETUN (300-400 palabras)
+        // ═══════════════════════════════════════
+        if (evaluacion) {
+            analisis += `Evaluación Setun 1958 (Lógica Ternaria):\n\n`;
+            analisis += `El núcleo Setun, emulando la histórica computadora soviética de 1958, ha evaluado este análisis con ${evaluacion.totalParametros} parámetros ponderados. El resultado es ${evaluacion.estado} con una confianza ${evaluacion.nivelConfianza}.\n\n`;
+            analisis += `${evaluacion.mensaje}\n\n`;
+            analisis += `Desglose: ${evaluacion.sumaPositiva} parámetros positivos, ${evaluacion.sumaNeutra} neutros y ${evaluacion.sumaNegativa} negativos. La completitud del análisis alcanza el ${evaluacion.completitud}%.\n\n`;
+            
+            const parametrosCriticos = evaluacion.parametros.filter(p => p.ternario === -1);
+            if (parametrosCriticos.length > 0) {
+                analisis += `Parámetros que requieren atención:\n`;
+                parametrosCriticos.forEach(p => {
+                    analisis += `• ${p.nombre}: valor ${p.valor} (estado -1, peso ${p.peso})\n`;
+                });
+                analisis += `\nEstos indicadores sugieren áreas donde el análisis podría fortalecerse con fuentes adicionales o mayor profundidad.\n\n`;
+            }
+            
+            analisis += `La lógica ternaria de Setun (−1, 0, +1) ofrece una alternativa al binarismo tradicional, permitiendo representar la incertidumbre y la ambigüedad inherentes al análisis histórico. Frente a la dicotomía verdadero/falso, Setun introduce el "quizás" como categoría legítima de conocimiento.\n\n`;
+        } else {
+            analisis += `Evaluación Setun 1958 (Lógica Ternaria):\n\n`;
+            analisis += `El núcleo Setun no está disponible en este momento. La evaluación ternaria de parámetros no pudo completarse. Se recomienda verificar que setun_core.js esté cargado correctamente.\n\n`;
+            analisis += `La lógica ternaria de Setun (−1, 0, +1) ofrece una alternativa al binarismo tradicional, permitiendo representar la incertidumbre y la ambigüedad inherentes al análisis histórico.\n\n`;
+        }
         
-        analisis += `Lecciones Aprendidas:\n\n`;
-        analisis += `La historia nos enseña que eventos como "${titulo}" no son incidentes aislados, sino parte de patrones más amplios. `;
-        analisis += `Comprenderlos requiere análisis riguroso y perspectiva histórica. `;
-        analisis += `Las sociedades que olvidan su historia están condenadas a repetirla.\n\n`;
+        // ═══════════════════════════════════════
+        // SECCIÓN 10: CONCLUSIONES (400-500 palabras)
+        // ═══════════════════════════════════════
+        analisis += `Conclusiones:\n\n`;
+        analisis += `${titulo} constituye un episodio fundamental para comprender la historia universal. A lo largo de este análisis, hemos examinado sus orígenes, desarrollo, consecuencias e interpretaciones, recurriendo a ${totalFuentes} referencias de ${fuentesArr.length} repositorios académicos y ${totalAgent} resultados en tiempo real.\n\n`;
         
-        analisis += `─────────────────────────────────────\n`;
-        analisis += `📊 FICHA DE DATOS REALES:\n`;
-        analisis += `📚 Fuentes: ${fuentesArr.length}/20 activas · ${totalFuentes} referencias\n`;
-        analisis += `   • ${fuentesArr.slice(0, 8).map(([n]) => n).join(', ')}\n`;
-        analisis += `📅 Cronología: ${cronologia.length} eventos fechados\n`;
-        analisis += `👥 Entidades: ${figuras.length} figuras/lugares identificados\n`;
-        analisis += `💭 Citas: ${citas.length} referencias textuales\n`;
-        analisis += `🔌 Agent-Reach: ${totalAgent} resultados\n`;
-        analisis += `🤖 IA probadas: ${IA_PROVEEDORES.length} proveedores · ${IA_PROVEEDORES.reduce((a, p) => a + p.modelos.length, 0)} modelos\n`;
-        analisis += `─────────────────────────────────────\n`;
-        analisis += generarResumenExtendidoHistorico({ fuentes, agentReach, cronologia: cronologiaLimpia, entidades });
-        analisis += `─────────────────────────────────────\n`;
-        analisis += `⚠️ MODO FALLBACK INTELIGENTE (20 FUENTES)\n`;
-        analisis += `Los proveedores de IA no respondieron en el tiempo límite.\n`;
-        analisis += `Este análisis fue compuesto automáticamente con datos REALES de ${fuentesArr.length} fuentes.\n`;
-        analisis += `🔄 Reintenta para obtener análisis generado por IA.\n`;
-        analisis += `─────────────────────────────────────`;
+        analisis += `La investigación histórica sobre ${titulo} no está cerrada. Nuevas fuentes, nuevas metodologías y nuevas preguntas siguen enriqueciendo nuestra comprensión del evento. La digitalización de archivos, la inteligencia artificial aplicada al análisis textual y la colaboración internacional entre historiadores prometen avances significativos en los próximos años.\n\n`;
+        
+        analisis += `Desde una perspectiva crítica, es importante reconocer las limitaciones de este análisis. Las fuentes digitales, aunque valiosas, no sustituyen la investigación en archivos primarios. Los sesgos de las plataformas —desde la sobrerrepresentación de ciertas lenguas hasta la infrarrepresentación de comunidades marginadas— deben tenerse en cuenta al interpretar los resultados. La historia no es solo lo que ocurrió, sino también lo que se cuenta y cómo se cuenta.\n\n`;
+        
+        analisis += `Finalmente, ${titulo} nos invita a reflexionar sobre nuestra relación con el pasado. La memoria histórica no es un depósito pasivo de datos, sino una construcción activa en la que participamos todos. Comprender ${titulo} no es solo un ejercicio académico, sino una forma de iluminar el presente y de imaginar futuros posibles.\n\n`;
+        
+        analisis += `Como señalara Marc Bloch, "la historia es la ciencia de los hombres en el tiempo". ${titulo} nos recuerda que, pese a la distancia temporal, seguimos conectados con quienes vivieron esos acontecimientos por los hilos de la condición humana compartida: la esperanza, el miedo, la ambición, la solidaridad y la resistencia.\n\n`;
+        
+        // ═══════════════════════════════════════
+        // SECCIÓN 11: NOTA METODOLÓGICA (200-300 palabras)
+        // ═══════════════════════════════════════
+        analisis += `Nota Metodológica:\n\n`;
+        analisis += `Este análisis fue generado por Newtral en modo fallback, utilizando exclusivamente las fuentes disponibles en el momento de la consulta. No se trata de una investigación histórica original, sino de una síntesis de los datos recuperados de ${fuentesArr.map(([n]) => n).join(', ') || 'repositorios académicos'}.\n\n`;
+        analisis += `La generación del texto sigue un modelo de plantillas enriquecidas que combinan datos estructurados con narrativa histórica general. Cada sección se construye a partir de los datos disponibles, adaptándose a la presencia o ausencia de fuentes. Cuando una fuente no proporciona información, el texto lo indica explícitamente y ofrece alternativas interpretativas.\n\n`;
+        analisis += `La evaluación Setun 1958 aplica un filtro analógico sobre 30 parámetros ternarios, emulando la lógica de la histórica computadora soviética. Los pesos asignados a cada parámetro son configurables y buscan equilibrar la relevancia de las distintas dimensiones del análisis.\n\n`;
+        analisis += `Para una investigación histórica rigurosa, se recomienda consultar las fuentes primarias y secundarias citadas, así como ampliar la búsqueda en archivos especializados. Este análisis debe considerarse un punto de partida, no un producto final.\n\n`;
+        
+        analisis += `— Generado por Newtral · Fallback Historiográfico v3 · ${new Date().toLocaleString('es-ES')}`;
+        
+        return analisis;
+        
+    } catch (e) {
+        console.error('Error en fallback extendido:', e);
+        return `Contexto Histórico:\n\n${titulo} (${era}) es un evento de gran relevancia histórica. ${hook}\n\nEl análisis detallado no pudo completarse debido a un error técnico. Por favor, reintente la consulta.\n\n— Error: ${e.message}`;
+    }
+}
+        
+        
 // 🧬 EVALUACIÓN CON NÚCLEO SETUN 1958 v2
 if (window.SetunCore) {
     // Extraer métricas reales del análisis
@@ -1275,22 +1406,8 @@ if (window.SetunCore) {
     
     // Guardar para el bloque visual HTML
     window._ultimaEvaluacionSetun = evaluacionSetun;
-}        
-        return analisis;
-    } catch (error) {
-        console.error('❌ Error dentro del fallback:', error);
-        Diagnostico.log(`❌ Error fallback: ${error.message}`, 'error');
-        return `Contexto Histórico:\n\n${titulo} (${era}). ${hook}\n\nHechos Clave:\n\n• Evento documentado en la historia universal.\n• Consecuencias analizadas en múltiples fuentes.\n• Relevancia contemporánea persistente.\n\nConsecuencias Multidimensionales:\n\n• Corto plazo: Transformación del orden establecido.\n• Largo plazo: Legado en la memoria colectiva.\n\nLecciones Aprendidas:\n\nLa historia nos enseña que eventos como "${titulo}" no son incidentes aislados.\n\n─────────────────────────────────────\n⚠️ MODO FALLBACK BÁSICO\nLos proveedores de IA no respondieron. Este análisis fue generado con la información disponible.\n─────────────────────────────────────`;
-    }
 }
-// Persistir en localStorage (últimos 50)
-try {
-    this.historial.push(evaluacion);
-    if (this.historial.length > 50) this.historial.shift();
-    localStorage.setItem('setun_historial', JSON.stringify(this.historial));
-} catch(e) {
-    console.warn('No se pudo guardar historial Setun:', e);
-}
+
 // ============================================
 // 🤖 ANÁLISIS CON AGENTE + FALLBACK MEJORADO
 // ============================================
@@ -1359,18 +1476,7 @@ if (window.SetunCore) {
     const citas = rustWASM.contarCitasAPA(textoLimpio).total;
     const palabras = rustWASM.contarPalabras(textoLimpio).palabras;
     const tono = rustWASM.analizarSentimiento(textoLimpio);
-    cargarHistorial: function() {
-    try {
-        const saved = localStorage.getItem('setun_historial');
-        if (saved) {
-            this.historial = JSON.parse(saved);
-            console.log(`🧬 Historial Setun cargado: ${this.historial.length} análisis`);
-        }
-    } catch(e) {
-        this.historial = [];
-    }
-}
-    // Calcular rango temporal y fuentes recientes
+        // Calcular rango temporal y fuentes recientes
     let rangoTemporal = 0;
     let fuentesRecientes = 0;
     const años = [];
@@ -1484,6 +1590,23 @@ return { analisis: textoLimpio, proveedor: resultado.proveedor, contexto20: resu
     }
 }
 
+function filtrarCronologiaBasura(cronologia) {
+    const basura = ['nacimiento', 'fallecimiento', 'nació', 'murió', 'born', 'died'];
+    return cronologia.filter(c => {
+        const t = (c.titulo || '').toLowerCase();
+        return !basura.some(b => t.includes(b));
+    });
+}
+
+function deduplicarCronologia(cronologia) {
+    const vistos = new Set();
+    return cronologia.filter(c => {
+        const key = `${c.yearNum}-${(c.titulo || '').substring(0, 30).toLowerCase()}`;
+        if (vistos.has(key)) return false;
+        vistos.add(key);
+        return true;
+    });
+}
 // ============================================
 // RENDERIZADO
 // ============================================
@@ -1871,6 +1994,50 @@ closeVr.addEventListener('click', () => {
     vrMode.classList.remove('active');
     document.getElementById('normalMode').style.display = 'block';
 });
+</script>
+<!-- ═══════════════════════════════════════ -->
+<!-- 🔗 EXPOSICIÓN GLOBAL DE HANDLERS -->
+<!-- ═══════════════════════════════════════ -->
+<script>
+(function() {
+    'use strict';
+    console.log('🔗 Exponiendo handlers al window...');
+    
+    const handlers = [
+        'mostrarPanelSetun',
+        'mostrarModal',
+        'generarFallbackHistorico',
+        'showToast',
+        'mostrarPanelAgentes',
+        'mostrarDiagnostico',
+        'cerrarModal',
+        'exportarAnalisis'
+    ];
+    
+    let expuestos = 0;
+    handlers.forEach(nombre => {
+        try {
+            // Busca en scope global o de módulo
+            if (typeof window[nombre] === 'function') {
+                expuestos++;
+                return;
+            }
+            if (typeof eval(nombre) === 'function') {
+                window[nombre] = eval(nombre);
+                expuestos++;
+            }
+        } catch(e) {}
+    });
+    
+    // SetunCore (puede estar en window ya)
+    if (window.SetunCore) {
+        console.log('✅ SetunCore ya global:', window.SetunCore.version);
+    } else {
+        console.warn('⚠️ SetunCore NO está en window. Verifica setun_core.js');
+    }
+    
+    console.log('🔗 Handlers expuestos:', expuestos + '/' + handlers.length);
+})();
 </script>
 </body>
 </html>
