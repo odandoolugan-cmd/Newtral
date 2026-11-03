@@ -395,6 +395,67 @@ const evaluacion = {
         return html;
     },
 
+    responder: function(pregunta, evaluacion) {
+        if (!evaluacion) {
+            return 'Primero necesitas un análisis. Realiza uno y vuelve a preguntar.';
+        }
+        
+        const p = pregunta.toLowerCase().trim();
+        
+        if (p.includes('falta')) return this.responderQueFalta(evaluacion);
+        if (p.includes('confiable') || p.includes('confianza') || p.includes('creer')) return this.responderConfianza(evaluacion);
+        if (p.includes('mejorar') || p.includes('mejora') || p.includes('arreglar')) return this.responderMejorar(evaluacion);
+        if (p.includes('tendencioso') || p.includes('sesgo') || p.includes('parcial')) return this.responderSesgo(evaluacion);
+        if (p.includes('epoca') || p.includes('época') || p.includes('cuando') || p.includes('año')) return this.responderEpoca(evaluacion);
+        if (p.includes('resumen') || p.includes('resume')) return this.responderResumen(evaluacion);
+        if (p.includes('parametros') || p.includes('parámetros')) return this.responderParametros(evaluacion);
+        
+        return this.responderGenerica(evaluacion);
+    },
+    
+    responderQueFalta: function(e) {
+        const fallos = e.parametros ? e.parametros.filter(p => p.ternario === -1) : [];
+        if (fallos.length === 0) return 'No le falta nada crítico. ✅';
+        return 'Le falta: ' + fallos.slice(0, 5).map(p => p.nombre).join(', ') + '.';
+    },
+    
+    responderConfianza: function(e) {
+        return 'Confianza ' + e.nivelConfianza + '. ' + e.mensaje;
+    },
+    
+    responderMejorar: function(e) {
+        const neutros = e.parametros ? e.parametros.filter(p => p.ternario === 0) : [];
+        if (neutros.length === 0) return 'No hay nada que mejorar, todo está positivo. ✅';
+        return 'Podrías mejorar: ' + neutros.slice(0, 5).map(p => p.nombre).join(', ') + '.';
+    },
+    
+    responderSesgo: function(e) {
+        const tono = e.parametros ? e.parametros.find(p => p.clave === 'tono') : null;
+        if (!tono) return 'No puedo determinar sesgo sin datos de tono.';
+        if (tono.valor === 'Optimista') return '⚠️ Tono OPTIMISTA. Podría ser sesgado. Considera buscar fuentes críticas.';
+        if (tono.valor === 'Crítico') return '⚠️ Tono CRÍTICO. Podría ser sesgado. Considera buscar fuentes optimistas.';
+        return 'Tono EQUILIBRADO. No se detecta sesgo evidente.';
+    },
+    
+    responderEpoca: function(e) {
+        const rango = e.parametros ? e.parametros.find(p => p.clave === 'rangoTemporal') : null;
+        const eventos = e.parametros ? e.parametros.find(p => p.clave === 'eventosCronologia') : null;
+        return 'Época: ' + (rango ? rango.valor : '?') + ' años. ' + (eventos ? eventos.valor : 0) + ' eventos cronológicos.';
+    },
+    
+    responderResumen: function(e) {
+        return 'Análisis ' + e.estado + '. ' + e.sumaPositiva + ' positivos, ' + e.sumaNeutra + ' neutros, ' + e.sumaNegativa + ' negativos. Completitud: ' + e.completitud + '%.';
+    },
+    
+    responderParametros: function(e) {
+        const masivo = e.modo === 'masivo';
+        return 'Total: ' + e.totalParametros.toLocaleString() + ' parámetros' + (masivo ? ' (modo masivo)' : '') + '.';
+    },
+    
+    responderGenerica: function(e) {
+        return 'No entendí. Prueba con: "¿qué le falta?", "¿es confiable?", "¿qué mejorar?", "¿es tendencioso?", "¿de qué época?", "resumen", "parámetros".';
+    },
+    
     getEstadisticas: function() {
         if (this.historial.length === 0) return { total: 0, positivos: 0, negativos: 0, neutros: 0, porcentajePositivo: 0, porcentajeNeutro: 0, porcentajeNegativo: 0, completitudPromedio: 0 };
         const t = this.historial.length;
