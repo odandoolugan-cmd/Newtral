@@ -455,7 +455,7 @@ const evaluacion = {
             return 'Primero necesitas un análisis. Realiza uno y vuelve a preguntar.';
         }
         
-        const p = pregunta.toLowerCase().trim();
+        const p = pregunta.toLowerCase().trim().replace(/[¿?¡!.,;:]/g, '').trim();
         
         if (p.includes('falta')) return this.responderQueFalta(evaluacion);
         if (p.includes('confiable') || p.includes('confianza') || p.includes('creer')) return this.responderConfianza(evaluacion);
@@ -747,6 +747,46 @@ const evaluacion = {
             }
         });
         return parametros;
+    },
+    
+    evaluarAnalisisBinario: function(datos, params) {
+        if (!params) return null;
+        const { ternarios, pesos, N } = params;
+        
+        const datosClaves = Object.keys(datos);
+        const maxDatos = Math.min(datosClaves.length, 60);
+        for (let i = 0; i < maxDatos; i++) {
+            const clave = datosClaves[i];
+            const valor = datos[clave];
+            if (valor !== undefined && valor !== null) {
+                ternarios[i] = this.ternario(valor, 0, 1);
+            }
+        }
+        
+        let suma = 0;
+        for (let i = 0; i < N; i++) suma += ternarios[i] * pesos[i];
+        
+        let pos = 0, neg = 0, neu = 0;
+        for (let i = 0; i < N; i++) {
+            const t = ternarios[i];
+            if (t === 1) pos++;
+            else if (t === -1) neg++;
+            else neu++;
+        }
+        
+        const resultado = suma > 0.25 ? 1 : (suma < -0.25 ? -1 : 0);
+        
+        return {
+            valorTernario: resultado,
+            estado: resultado === 1 ? "POSITIVO (+1)" : (resultado === -1 ? "NEGATIVO (-1)" : "NEUTRO (0)"),
+            sumaPositiva: pos,
+            sumaNegativa: neg,
+            sumaNeutra: neu,
+            totalParametros: N,
+            modo: "binario",
+            resumenBloques: {},
+            timestamp: new Date().toISOString()
+        };
     },
     
     getEstadisticas: function() {
