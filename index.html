@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="es">
 <head>
 <script src="setun_core.js?v=3"></script>
@@ -1202,7 +1202,8 @@ function generarFallbackHistorico(titulo, era, hook, datos = {}) {
         cronologia.sort((a, b) => a.yearNum - b.yearNum);
         
         const cronologiaLimpia = deduplicarCronologia(filtrarCronologiaBasura(cronologia));
-        const figuras = entidades?.entidades?.slice(0, 12) || [];
+        const entidades = { entidades: [] };
+const figuras = entidades.entidades.slice(0, 12) || [];
         const citas = wikiquoteItems.filter(w => w.resumen).slice(0, 5);
         
         let analisis = '';
@@ -1418,6 +1419,7 @@ function generarFallbackHistorico(titulo, era, hook, datos = {}) {
         window._citas = citas;
         window._totalFuentes = totalFuentes;
         window._totalAgent = totalAgent;
+        window._entidades = entidades;
         return analisis;
         
     } catch (e) {
@@ -1600,7 +1602,7 @@ if (window.SetunCore) {
         fuentesActivas: fuentesArr.length,
         fuentesExitosas: fuentesArr.length,
         eventosCronologia: 0, // No hay cronología en flujo IA directo
-        entidades: figuras.length,
+        entidades: _figuras.length,
         citas: citas,
         rangoTemporal: rangoTemporal,
         totalReferencias: totalFuentes,
