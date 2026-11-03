@@ -456,6 +456,67 @@ const evaluacion = {
         return 'No entendí. Prueba con: "¿qué le falta?", "¿es confiable?", "¿qué mejorar?", "¿es tendencioso?", "¿de qué época?", "resumen", "parámetros".';
     },
     
+    evolucionar: function() {
+        const historial = this.historial;
+        if (historial.length < 10) {
+            return { error: 'Necesitas al menos 10 análisis (tienes ' + historial.length + ')' };
+        }
+        
+        // 1. Calcular varianza por parámetro (qué tanto discrimina)
+        const discriminacion = {};
+        
+        historial.forEach(ev => {
+            if (!ev.parametros) return;
+            ev.parametros.forEach(p => {
+                if (!discriminacion[p.clave]) {
+                    discriminacion[p.clave] = { valores: [], pesoOriginal: p.peso };
+                }
+                discriminacion[p.clave].valores.push(p.ternario);
+            });
+        });
+        
+        // 2. Calcular nuevos pesos (varianza alta = más peso)
+        const nuevosPesos = {};
+        Object.entries(discriminacion).forEach(([clave, d]) => {
+            const media = d.valores.reduce((a, b) => a + b, 0) / d.valores.length;
+            const varianza = d.valores.reduce((a, b) => a + Math.pow(b - media, 2), 0) / d.valores.length;
+            nuevosPesos[clave] = d.pesoOriginal * (1 + varianza * 2);
+        });
+        
+        // 3. Normalizar a 1.0
+        const total = Object.values(nuevosPesos).reduce((a, b) => a + b, 0);
+        Object.keys(nuevosPesos).forEach(k => nuevosPesos[k] /= total);
+        
+        // 4. Guardar
+        this.pesosEvolucionados = nuevosPesos;
+        this.evoluciones = (this.evoluciones || 0) + 1;
+        try {
+            localStorage.setItem('setun_pesos', JSON.stringify(nuevosPesos));
+            localStorage.setItem('setun_evoluciones', this.evoluciones);
+        } catch(e) {}
+        
+        return {
+            exito: true,
+            evoluciones: this.evoluciones,
+            cambios: Object.entries(nuevosPesos).map(([k, v]) => ({
+                clave: k,
+                pesoAnterior: discriminacion[k].pesoOriginal,
+                pesoNuevo: v,
+                cambio: ((v / discriminacion[k].pesoOriginal - 1) * 100).toFixed(0) + '%'
+            }))
+        };
+    },
+    
+    aplicarPesosEvolucionados: function(parametros) {
+        if (!this.pesosEvolucionados) return parametros;
+        Object.keys(parametros).forEach(k => {
+            if (this.pesosEvolucionados[k]) {
+                parametros[k].peso = this.pesosEvolucionados[k];
+            }
+        });
+        return parametros;
+    },
+    
     getEstadisticas: function() {
         if (this.historial.length === 0) return { total: 0, positivos: 0, negativos: 0, neutros: 0, porcentajePositivo: 0, porcentajeNeutro: 0, porcentajeNegativo: 0, completitudPromedio: 0 };
         const t = this.historial.length;

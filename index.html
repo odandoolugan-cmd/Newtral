@@ -489,6 +489,13 @@ function mostrarPanelSetun() {
         </div>
     </div>`;
     
+    // ─── Evolución ───
+    html += '<div style="margin-bottom:12px;padding:8px;background:rgba(139,92,246,0.15);border-radius:6px;border:1px solid rgba(139,92,246,0.3);display:flex;justify-content:space-between;align-items:center;">';
+    html += '<div><span style="font-size:11px;color:#8b5cf6;font-weight:bold;">🧬 Evolución</span>';
+    html += '<span style="font-size:10px;color:#aaa;margin-left:8px;">' + (window.SetunCore.evoluciones || 0) + ' evoluciones</span></div>';
+    html += '<button onclick="evolucionarSetun()" style="padding:4px 10px;background:rgba(139,92,246,0.3);border:1px solid rgba(139,92,246,0.5);border-radius:4px;color:#8b5cf6;font-size:10px;cursor:pointer;font-weight:bold;">🧬 Evolucionar</button>';
+    html += '</div>';
+    
     // ─── Botón limpiar ───
     html += `<div style="display:flex;gap:8px;margin-bottom:12px;">
         <button onclick="window.SetunCore.historial=[];localStorage.removeItem('setun_historial');mostrarPanelSetun();"
@@ -533,6 +540,23 @@ window.preguntarSetun = function(pregunta) {
     }
     
     if (input) input.value = '';
+};
+
+// Evolución de Setun
+window.evolucionarSetun = function() {
+    const result = window.SetunCore.evolucionar();
+    if (result.error) {
+        alert('⚠️ ' + result.error);
+        return;
+    }
+    
+    result.cambios.sort((a, b) => Math.abs(parseFloat(b.cambio)) - Math.abs(parseFloat(a.cambio)));
+    let msg = '✅ Evolucionado ' + result.evoluciones + ' vez/veces\n\nTop cambios:\n';
+    result.cambios.slice(0, 5).forEach(c => {
+        msg += c.clave + ': ' + c.pesoAnterior.toFixed(4) + ' → ' + c.pesoNuevo.toFixed(4) + ' (' + c.cambio + ')\n';
+    });
+    alert(msg);
+    mostrarPanelSetun();
 };
 
 const btnSetun = document.getElementById('btnSetunPanel');
