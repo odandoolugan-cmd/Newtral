@@ -228,7 +228,7 @@
     <span class="item">Estado: <strong id="setunStatus" style="color:#8b5cf6;">⏳</strong></span>
     <span class="item">Ternario: <strong id="setunTernario">0</strong></span>
     <span class="item">Análisis: <strong id="setunCount">0</strong></span>
-    <span class="item">v3.0-historia</span>
+    <span class="item">v3.2-historia</span>
 </div>        
     <span class="lbl">🦀 WASM Rust:</span>
             <span class="item">Estado: <strong id="wasmStatus">⏳</strong></span>
@@ -1410,7 +1410,14 @@ function generarFallbackHistorico(titulo, era, hook, datos = {}) {
         analisis += `Para una investigación histórica rigurosa, se recomienda consultar las fuentes primarias y secundarias citadas, así como ampliar la búsqueda en archivos especializados. Este análisis debe considerarse un punto de partida, no un producto final.\n\n`;
         
         analisis += `— Generado por Newtral · Fallback Historiográfico v3 · ${new Date().toLocaleString('es-ES')}`;
-        
+        window._ultimoAnalisis = analisis;
+        window._cronologiaLimpia = cronologiaLimpia;
+        window._fuentes = fuentes;
+        window._fuentesArr = fuentesArr;
+        window._figuras = figuras;
+        window._citas = citas;
+        window._totalFuentes = totalFuentes;
+        window._totalAgent = totalAgent;
         return analisis;
         
     } catch (e) {
@@ -1422,23 +1429,33 @@ function generarFallbackHistorico(titulo, era, hook, datos = {}) {
         
 // 🧬 EVALUACIÓN CON NÚCLEO SETUN 1958 v2
 if (window.SetunCore) {
-    // Extraer métricas reales del análisis
-    const palabrasTotales = rustWASM.contarPalabras(analisis).palabras;
-    const citas = rustWASM.contarCitasAPA(analisis).total;
-    const tono = rustWASM.analizarSentimiento(analisis);
+        let analisis = window._ultimoAnalisis || "";
+    const _textoParaAnalizar = window._ultimoAnalisis || "";
+    const _cronologiaLimpia = window._cronologiaLimpia || [];
+    const _fuentes = window._fuentes || {};
+    const _fuentesArr = window._fuentesArr || [];
+    const _figuras = window._figuras || [];
+    const _citas = window._citas || 0;
+    const _totalFuentes = window._totalFuentes || 0;
+    const _totalAgent = window._totalAgent || 0;
     
-    // Calcular rango temporal de la cronología
+    // Métricas del análisis
+    const palabrasTotales = rustWASM ? rustWASM.contarPalabras(_textoParaAnalizar).palabras : _textoParaAnalizar.split(/\s+/).length;
+    const citas = rustWASM ? rustWASM.contarCitasAPA(_textoParaAnalizar).total : 0;
+    const tono = rustWASM ? rustWASM.analizarSentimiento(_textoParaAnalizar) : 'Equilibrado';
+    
+    // Rango temporal
     let rangoTemporal = 0;
-    if (cronologiaLimpia.length > 1) {
-        const años = cronologiaLimpia.map(c => c.yearNum).filter(y => y > 0);
+    if (_cronologiaLimpia.length > 1) {
+        const años = _cronologiaLimpia.map(c => c.yearNum).filter(y => y > 0);
         if (años.length > 1) {
             rangoTemporal = Math.max(...años) - Math.min(...años);
         }
     }
     
-    // Contar fuentes recientes (siglos XX-XXI)
+    // Fuentes recientes
     let fuentesRecientes = 0;
-    Object.values(fuentes).forEach(f => {
+    Object.values(_fuentes).forEach(f => {
         if (f && f.data) {
             f.data.forEach(item => {
                 const yearMatch = String(item.year || '').match(/\d{3,4}/);
@@ -1448,16 +1465,16 @@ if (window.SetunCore) {
     });
     
     const evaluacionSetun = window.SetunCore.evaluarAnalisis({
-        fuentesActivas: fuentesArr.length,
-        fuentesExitosas: fuentesArr.length,
-        eventosCronologia: cronologiaLimpia.length,
-        entidades: figuras.length,
+        fuentesActivas: _fuentesArr.length,
+        fuentesExitosas: _fuentesArr.length,
+        eventosCronologia: _cronologiaLimpia.length,
+        entidades: _figuras.length,
         citas: citas,
         rangoTemporal: rangoTemporal,
-        totalReferencias: totalFuentes,
+        totalReferencias: _totalFuentes,
         palabras: palabrasTotales,
         tono: tono,
-        agentReach: totalAgent,
+        agentReach: _totalAgent,
         fuentesRecientes: fuentesRecientes
     });
     
@@ -1487,6 +1504,7 @@ if (window.SetunCore) {
     }
     
     // Guardar para el bloque visual HTML
+        window._ultimoAnalisis = analisis;
     window._ultimaEvaluacionSetun = evaluacionSetun;
 }
 
