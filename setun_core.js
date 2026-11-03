@@ -2,6 +2,19 @@
 // 30 parámetros · Datos ausentes → neutro · Pesos normalizados a 1.0
 
 window.SetunCore = {
+    winkNLP: null,
+    winkInit: function() {
+        if (typeof window.winkNLP !== 'undefined') {
+            try {
+                this.winkNLP = window.winkNLP;
+                console.log('✅ wink-nlp inicializado');
+                return true;
+            } catch(e) {
+                console.warn('⚠️ wink-nlp:', e.message);
+            }
+        }
+        return false;
+    },
     version: '3.2-historia',
     historial: [],
 
@@ -449,6 +462,21 @@ const evaluacion = {
         if (p.includes('mejorar') || p.includes('mejora') || p.includes('arreglar')) return this.responderMejorar(evaluacion);
         if (p.includes('tendencioso') || p.includes('sesgo') || p.includes('parcial')) return this.responderSesgo(evaluacion);
         if (p.includes('epoca') || p.includes('época') || p.includes('cuando') || p.includes('año')) return this.responderEpoca(evaluacion);
+        if (p.includes('pais') || p.includes('país') || p.includes('donde') || p.includes('lugar')) return this.responderPais(evaluacion);
+        if (p.includes('quien') || p.includes('quiénes') || p.includes('personaje')) return this.responderQuienes(evaluacion);
+        if (p.includes('por que') || p.includes('porque') || p.includes('causa')) return this.responderPorQue(evaluacion);
+        if (p.includes('consecuencia') || p.includes('resultado')) return this.responderConsecuencias(evaluacion);
+        if (p.includes('por que') || p.includes('porque') || p.includes('causa')) return this.responderPorQue(evaluacion);
+        if (p.includes('trillon') || p.includes('trillón') || p.includes('millon')) return this.responderParametros(evaluacion);
+        if (p.includes('por que') || p.includes('porque') || p.includes('causa')) return this.responderPorQue(evaluacion);
+        if (p.includes('trillon') || p.includes('trillón') || p.includes('millon')) return this.responderParametros(evaluacion);
+        if (p.includes('resume') || p.includes('resumen breve')) return this.responderResumenWASM(evaluacion);
+        if (p.includes('idioma') || p.includes('lengua')) return this.responderIdioma(evaluacion);
+        if (p.includes('clickbait') || p.includes('amarillista')) return this.responderClickbait(evaluacion);
+        if (p.includes('fecha') || p.includes('cronologia')) return this.responderFechas(evaluacion);
+        if (p.includes('hash') || p.includes('integridad')) return this.responderHash(evaluacion);
+        if (p.includes('por que') || p.includes('porque') || p.includes('causa')) return this.responderPorQue(evaluacion);
+        if (p.includes('trillon') || p.includes('trillón') || p.includes('millon')) return this.responderParametros(evaluacion);
         if (p.includes('resumen') || p.includes('resume')) return this.responderResumen(evaluacion);
         if (p.includes('parametros') || p.includes('parámetros')) return this.responderParametros(evaluacion);
         
@@ -482,7 +510,9 @@ const evaluacion = {
     responderEpoca: function(e) {
         const rango = e.parametros ? e.parametros.find(p => p.clave === 'rangoTemporal') : null;
         const eventos = e.parametros ? e.parametros.find(p => p.clave === 'eventosCronologia') : null;
-        return 'Época: ' + (rango ? rango.valor : '?') + ' años. ' + (eventos ? eventos.valor : 0) + ' eventos cronológicos.';
+        const años = rango ? rango.valor : '?';
+        const url = 'https://www.google.com/search?q=' + encodeURIComponent('época ' + años);
+        return 'Época: ' + años + ' años. ' + (eventos ? eventos.valor : 0) + ' eventos cronológicos. 📅 ' + url;
     },
     
     responderResumen: function(e) {
@@ -491,7 +521,167 @@ const evaluacion = {
     
     responderParametros: function(e) {
         const masivo = e.modo === 'masivo';
-        return 'Total: ' + e.totalParametros.toLocaleString() + ' parámetros' + (masivo ? ' (modo masivo)' : '') + '.';
+        let resp = 'Total: ' + e.totalParametros.toLocaleString() + ' parámetros' + (masivo ? ' (modo masivo)' : '') + '.';
+        if (e.totalParametros >= 1000000) {
+            resp += ' El máximo realista es 1,000,000 (5 MB, 116ms). 1 trillón necesitaría 5 exabytes.';
+        }
+        return resp;
+    },
+    
+
+    extraerLugares: function(texto) {
+        if (!texto) return [];
+        
+        // Usar WASM si está disponible
+        if (window.rustWASM && window.rustWASM.cargado) {
+            try {
+                const ents = window.rustWASM.extraerEntidades(texto);
+                if (ents && ents.entidades && ents.entidades.length > 0) {
+                    return ents.entidades.filter(e => e.length > 2).slice(0, 10);
+                }
+            } catch(e) {}
+        }
+        
+        // Fallback: regex
+        const regex = /(?:en|de|desde|hacia|por)\s+([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*)/g;
+        const matches = [...texto.matchAll(regex)];
+        const lugares = matches.map(m => m[1]).filter(l => l.length > 3 && l.length < 30);
+        return [...new Set(lugares)].slice(0, 10);
+    },
+    
+    extraerPersonajes: function(texto) {
+        if (!texto) return [];
+        
+        // Usar WASM si está disponible
+        if (window.rustWASM && window.rustWASM.cargado) {
+            try {
+                const ents = window.rustWASM.extraerEntidades(texto);
+                if (ents && ents.entidades && ents.entidades.length > 0) {
+                    return ents.entidades.filter(e => e.length > 3 && e.length < 40).slice(0, 10);
+                }
+            } catch(e) {}
+        }
+        
+        // Fallback: regex
+        const regex = /([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){1,3})/g;
+        const matches = [...texto.matchAll(regex)];
+        const personajes = matches.map(m => m[1]).filter(p => p.length > 5 && p.length < 40);
+        return [...new Set(personajes)].slice(0, 10);
+    },
+    
+    responderPais: function(e) {
+        const texto = window._ultimoAnalisis || '';
+        const lugares = this.extraerLugares(texto);
+        const lugarParam = e.parametros ? e.parametros.find(p => p.clave === 'lugares') : null;
+        const total = lugarParam ? lugarParam.valor : lugares.length;
+        
+        if (lugares.length === 0) {
+            return 'Ubicación no detectada en el análisis. (' + total + ' lugares mencionados)';
+        }
+        
+        const url = 'https://www.google.com/search?q=' + encodeURIComponent(lugares.slice(0, 3).join(' '));
+        return '📍 Lugares detectados: ' + lugares.slice(0, 5).join(', ') + '. 🔗 ' + url;
+    },
+    
+    responderQuienes: function(e) {
+        const texto = window._ultimoAnalisis || '';
+        const personajes = this.extraerPersonajes(texto);
+        const personajesParam = e.parametros ? e.parametros.find(p => p.clave === 'personajes') : null;
+        const total = personajesParam ? personajesParam.valor : personajes.length;
+        
+        if (personajes.length === 0) {
+            return 'No se detectaron personajes clave. (' + total + ' mencionados)';
+        }
+        
+        const url = 'https://www.google.com/search?q=' + encodeURIComponent(personajes.slice(0, 3).join(' '));
+        return '👥 Personajes: ' + personajes.slice(0, 5).join(', ') + '. 🔗 ' + url;
+    },
+    
+    responderPorQue: function(e) {
+        const texto = window._ultimoAnalisis || '';
+        const falta = e.parametros ? e.parametros.filter(p => p.ternario === -1).slice(0, 3) : [];
+        
+        // Extraer causas del texto (buscar "porque", "debido a", "causa")
+        const causas = [];
+        const regexCausa = /(?:porque|debido a|causa|razón|motivo|consecuencia de)\s+([^.,;]{20,150})/gi;
+        const matches = [...texto.matchAll(regexCausa)];
+        matches.forEach(m => causas.push(m[1].trim()));
+        
+        if (causas.length === 0 && falta.length === 0) {
+            return 'No se detectaron causas negativas. El análisis es equilibrado.';
+        }
+        
+        let resp = '🔍 Causas detectadas: ';
+        if (causas.length > 0) {
+            resp += causas.slice(0, 2).join(' | ');
+        } else {
+            resp += falta.map(p => p.nombre).join(', ');
+        }
+        
+        const url = 'https://www.google.com/search?q=' + encodeURIComponent(causas[0] || falta.map(p => p.nombre).join(' '));
+        return resp + '. 🔗 ' + url;
+    },
+    
+    responderConsecuencias: function(e) {
+        return 'Consecuencias: ' + e.sumaNegativa + ' negativas, ' + e.sumaPositiva + ' positivas, ' + e.sumaNeutra + ' neutras.';
+    },
+    
+    responderResumenWASM: function(e) {
+        const texto = window._ultimoAnalisis || '';
+        if (!texto) return 'No hay texto para resumir.';
+        if (window.rustWASM && window.rustWASM.cargado) {
+            try {
+                const resumen = window.rustWASM.resumirTexto(texto, 3);
+                return '📝 Resumen WASM: ' + resumen;
+            } catch(e) {}
+        }
+        return 'Resumen: ' + texto.substring(0, 200) + '...';
+    },
+    
+    responderIdioma: function(e) {
+        const texto = window._ultimoAnalisis || '';
+        if (window.rustWASM && window.rustWASM.cargado) {
+            try {
+                const idioma = window.rustWASM.detectarIdioma(texto);
+                return '🌐 Idioma detectado: ' + idioma;
+            } catch(e) {}
+        }
+        return 'Idioma: español (por defecto)';
+    },
+    
+    responderClickbait: function(e) {
+        const texto = window._ultimoAnalisis || '';
+        if (window.rustWASM && window.rustWASM.cargado) {
+            try {
+                const cb = window.rustWASM.detectarClickbait(texto);
+                return '⚠️ Clickbait: ' + (cb.score ? cb.score + '%' : cb) + ' - ' + (cb.nivel || 'desconocido');
+            } catch(e) {}
+        }
+        return 'Clickbait: no detectado';
+    },
+    
+    responderFechas: function(e) {
+        const texto = window._ultimoAnalisis || '';
+        if (window.rustWASM && window.rustWASM.cargado) {
+            try {
+                const fechas = window.rustWASM.extraerFechas(texto);
+                if (fechas && fechas.length > 0) {
+                    return '📅 Fechas: ' + fechas.slice(0, 5).join(', ');
+                }
+            } catch(e) {}
+        }
+        return 'Fechas: no detectadas';
+    },
+    
+    responderHash: function(e) {
+        const texto = window._ultimoAnalisis || '';
+        if (window.rustWASM && window.rustWASM.cargado) {
+            try {
+                const hash = window.rustWASM.calcularHash(texto);
+                return '🔐 Hash SHA-256: ' + (hash ? hash.substring(0, 32) + '...' : 'no disponible');
+            } catch(e) {}
+        }
+        return 'Hash: no disponible';
     },
     
     responderGenerica: function(e) {
