@@ -98,6 +98,48 @@ window.SetunCore = {
         add('relevancia', datos.relevancia, 50, 80, 0.03, 'Índice relevancia (%)');
         add('citasBienFormadas', datos.citasBienFormadas, 0, 3, 0.03, 'Citas bien formadas');
 
+        // ─── BLOQUE 7: GEOPOLÍTICA (5 params) ───
+        add('contextoInternacional', datos.contextoInternacional, 1, 4, 0.02, 'Contexto internacional');
+        add('conflictosActivos', datos.conflictosActivos, 0, 2, 0.02, 'Conflictos activos');
+        add('alianzas', datos.alianzas, 1, 3, 0.02, 'Alianzas');
+        add('tratados', datos.tratados, 0, 2, 0.02, 'Tratados');
+        add('fronteras', datos.fronteras, 0, 2, 0.02, 'Fronteras');
+        
+        // ─── BLOQUE 8: ECONOMÍA (5 params) ───
+        add('pibEpoca', datos.pibEpoca, 1, 5, 0.02, 'PIB época');
+        add('comercio', datos.comercio, 1, 4, 0.02, 'Comercio');
+        add('moneda', datos.moneda, 1, 3, 0.02, 'Moneda');
+        add('recursos', datos.recursos, 1, 3, 0.02, 'Recursos');
+        add('desigualdad', datos.desigualdad, 0, 2, 0.02, 'Desigualdad');
+        
+        // ─── BLOQUE 9: CULTURA (5 params) ───
+        add('arteEpoca', datos.arteEpoca, 1, 3, 0.02, 'Arte época');
+        add('literatura', datos.literatura, 1, 3, 0.02, 'Literatura');
+        add('religion', datos.religion, 1, 3, 0.02, 'Religión');
+        add('educacion', datos.educacion, 1, 3, 0.02, 'Educación');
+        add('medios', datos.medios, 0, 2, 0.02, 'Medios');
+        
+        // ─── BLOQUE 10: SOCIEDAD (5 params) ───
+        add('clasesSociales', datos.clasesSociales, 1, 3, 0.02, 'Clases sociales');
+        add('genero', datos.genero, 0, 2, 0.02, 'Género');
+        add('etnia', datos.etnia, 0, 2, 0.02, 'Etnia');
+        add('migracion', datos.migracion, 0, 2, 0.02, 'Migración');
+        add('urbanizacion', datos.urbanizacion, 0, 2, 0.02, 'Urbanización');
+        
+        // ─── BLOQUE 11: TECNOLOGÍA (5 params) ───
+        add('innovaciones', datos.innovaciones, 1, 3, 0.02, 'Innovaciones');
+        add('transportes', datos.transportes, 1, 3, 0.02, 'Transportes');
+        add('comunicaciones', datos.comunicaciones, 1, 3, 0.02, 'Comunicaciones');
+        add('armamento', datos.armamento, 0, 2, 0.02, 'Armamento');
+        add('medicina', datos.medicina, 0, 2, 0.02, 'Medicina');
+        
+        // ─── BLOQUE 12: MEDIO AMBIENTE (5 params) ───
+        add('clima', datos.clima, 0, 2, 0.02, 'Clima');
+        add('recursosNaturales', datos.recursosNaturales, 1, 3, 0.02, 'Recursos naturales');
+        add('desastres', datos.desastres, 0, 2, 0.02, 'Desastres');
+        add('ecosistemas', datos.ecosistemas, 0, 2, 0.02, 'Ecosistemas');
+        add('agricultura', datos.agricultura, 0, 2, 0.02, 'Agricultura');
+        
         // ─── Normalizar pesos a 1.0 ───
         const totalPeso = Object.values(p).reduce((s, x) => s + x.peso, 0);
         Object.values(p).forEach(x => { x.peso = +(x.peso / totalPeso).toFixed(4); });
@@ -181,7 +223,7 @@ window.SetunCore = {
         
         // Resumen por bloque
         const resumenBloques = {};
-        const bloquesLista = ['Fuentes', 'Cronología', 'Entidades', 'Contenido', 'Calidad', 'Meta', 'Geopolítica', 'Economía', 'Cultura', 'Sociedad'];
+        const bloquesLista = ['Fuentes', 'Cronología', 'Entidades', 'Contenido', 'Calidad', 'Meta', 'Geopolítica', 'Economía', 'Cultura', 'Sociedad', 'Tecnología', 'Medio ambiente'];
         bloquesLista.forEach(b => { resumenBloques[b] = { pos: 0, neu: 0, neg: 0, total: 0, peso: 0 }; });
         for (let i = 0; i < n; i++) {
             const bloque = bloquesLista[i % bloquesLista.length];
@@ -301,7 +343,7 @@ window.SetunCore = {
         
                 // Resumen por bloque (para panel jerárquico)
         const resumenBloques = {};
-        const bloquesLista = ['Fuentes', 'Cronología', 'Entidades', 'Contenido', 'Calidad', 'Meta', 'Geopolítica', 'Economía', 'Cultura', 'Sociedad'];
+        const bloquesLista = ['Fuentes', 'Cronología', 'Entidades', 'Contenido', 'Calidad', 'Meta', 'Geopolítica', 'Economía', 'Cultura', 'Sociedad', 'Tecnología', 'Medio ambiente'];
         bloquesLista.forEach(b => { resumenBloques[b] = { pos: 0, neu: 0, neg: 0, total: 0, peso: 0 }; });
         detalle.forEach((p, i) => {
             const bloque = p.bloque || bloquesLista[i % bloquesLista.length];
