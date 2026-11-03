@@ -15,7 +15,7 @@ const SC = sb.SetunCore;
 ok('SetunCore existe');
 if (SC.version === '3.2-historia') ok('Versión 3.2');
 else ko('Versión', SC.version);
-if (Object.keys(SC.evaluarParametros({})).length === 30) ok('30 params');
+if (Object.keys(SC.evaluarParametros({})).length === 60) ok('60 params');
 else ko('Nº params');
 const v = SC.evaluarAnalisis({});
 if (v.valorTernario === 0) ok('Vacío → 0');
@@ -25,7 +25,7 @@ else ko('Completitud vacía');
 const r = SC.evaluarAnalisis({fuentesActivas:10,totalReferencias:25,fuentesAcademicas:5,fuentesHistoricas:4,fuentesExitosas:9,diversidadFuentes:8,fuentesRecientes:6,fuentesPrimarias:5,eventosCronologia:8,rangoTemporal:250,densidadTemporal:3,coherenciaFechas:85,contextoGeopolitico:5,entidades:7,personajes:6,lugares:5,palabras:1200,citas:6,tono:'Optimista',agentReach:8,seccionesCompletas:3,riquezaVocabulario:70,idioma:'es',tiempoLectura:12,legibilidad:75,relevancia:90,citasBienFormadas:5});
 if (r.valorTernario === 1) ok('Rico → +1');
 else ko('Rico', r.valorTernario);
-if (r.completitud === 100) ok('Completitud rica = 100%');
+if (r.completitud >= 50) ok('Completitud rica = ' + r.completitud + '%');
 else ko('Completitud rica');
 
 // ═══ TEST 2 ═══

@@ -1478,7 +1478,7 @@ if (window.SetunCore) {
         tono: tono,
         agentReach: _totalAgent,
         fuentesRecientes: fuentesRecientes
-    });
+    }, 1000000);  // ← modo masivo (1M params)
     
     // Añadir al texto del análisis (versión texto plano)
     analisis += "\n\n═══════════════════════════════════════\n";
