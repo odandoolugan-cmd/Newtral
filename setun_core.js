@@ -789,6 +789,89 @@ const evaluacion = {
         };
     },
     
+    // ═══ FUNCIONES MATEMÁTICAS DE ESCRITURA ═══
+    probabilidadEscribir: function(evaluacion) {
+        if (!evaluacion) return 0;
+        const completitud = Number(evaluacion.completitud) || 0;
+        const positivos = Number(evaluacion.sumaPositiva) || 0;
+        const totalParams = Number(evaluacion.totalParametros) || 1;
+        const citas = (evaluacion.parametros && Array.isArray(evaluacion.parametros)) 
+            ? (evaluacion.parametros.find(p => p.clave === "citas")?.valor || 0) 
+            : 0;
+        const nCompletitud = Math.min(1, Math.max(0, completitud / 100));
+        const nPositivos = Math.min(1, positivos / totalParams);
+        const nCitas = Math.min(1, citas / 4);
+        const sCompletitud = 1 / (1 + Math.exp(-(nCompletitud - 0.5) * 8));
+        const sPositivos = 1 / (1 + Math.exp(-(nPositivos - 0.3) * 10));
+        const sCitas = 1 / (1 + Math.exp(-(nCitas - 0.3) * 6));
+        const resultado = (sCompletitud * 0.4 + sPositivos * 0.3 + sCitas * 0.3);
+        return isNaN(resultado) ? 0 : resultado;
+    },
+    
+    decisionTernaria: function(evaluacion) {
+        // Lógica ternaria: -1, 0, +1
+        const p = this.probabilidadEscribir(evaluacion);
+        
+        if (p < 0.3) return -1;   // No escribir (datos insuficientes)
+        if (p < 0.7) return 0;    // Escribir resumen (incertidumbre)
+        return 1;                  // Escribir completo
+    },
+    
+    densidadEscritura: function(evaluacion) {
+        // Cuántas secciones escribir (1-11)
+        const p = this.probabilidadEscribir(evaluacion);
+        return Math.max(1, Math.round(p * 11));
+    },
+    
+    palabrasAEscribir: function(evaluacion) {
+        if (!evaluacion) return 100;
+        const p = this.probabilidadEscribir(evaluacion);
+        const base = 100 + p * 2900;
+        let citas = 0;
+        if (evaluacion.parametros && Array.isArray(evaluacion.parametros)) {
+            const citasParam = evaluacion.parametros.find(p2 => p2.clave === "citas");
+            if (citasParam && typeof citasParam.valor === "number") {
+                citas = citasParam.valor;
+            }
+        }
+        let entidades = 0;
+        if (evaluacion.parametros && Array.isArray(evaluacion.parametros)) {
+            const entParam = evaluacion.parametros.find(p2 => p2.clave === "entidades");
+            if (entParam && typeof entParam.valor === "number") {
+                entidades = entParam.valor;
+            }
+        }
+        const resultado = Math.round(base + citas * 50 + entidades * 20);
+        return isNaN(resultado) ? 100 : resultado;
+    },
+    
+    responderAdaptativo: function(pregunta, evaluacion) {
+        // Responder SIEMPRE, pero con calidad variable
+        const decision = this.decisionTernaria(evaluacion);
+        const p = this.probabilidadEscribir(evaluacion);
+        
+        if (decision === -1) {
+            return '📉 Datos insuficientes. Respuesta mínima: ' + this.responderMinima(pregunta, evaluacion);
+        } else if (decision === 0) {
+            return '📊 Respuesta parcial (' + (p * 100).toFixed(0) + '%): ' + this.responderGenerica(evaluacion);
+        } else {
+            return this.responderCompleto(pregunta, evaluacion);
+        }
+    },
+    
+    responderMinima: function(pregunta, evaluacion) {
+        return evaluacion.estado + ' (' + evaluacion.completitud + '% completitud).';
+    },
+    
+    responderCompleto: function(pregunta, evaluacion) {
+        // Responder con todo el detalle
+        const p = pregunta.toLowerCase().trim().replace(/[¿?¡!.,;:]/g, '').trim();
+        if (p.includes('falta')) return this.responderQueFalta(evaluacion);
+        if (p.includes('confiable')) return this.responderConfianza(evaluacion);
+        if (p.includes('resumen')) return this.responderResumen(evaluacion);
+        return this.responderGenerica(evaluacion);
+    },
+    
     getEstadisticas: function() {
         if (this.historial.length === 0) return { total: 0, positivos: 0, negativos: 0, neutros: 0, porcentajePositivo: 0, porcentajeNeutro: 0, porcentajeNegativo: 0, completitudPromedio: 0 };
         const t = this.historial.length;
