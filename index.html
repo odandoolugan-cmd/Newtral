@@ -563,7 +563,7 @@ window.preguntarSetun = function(pregunta) {
     }
     
     const ultima = historial[historial.length - 1];
-    const respuesta = window.SetunCore.responder(q, ultima);
+    const respuesta = window.SetunCore.responderAdaptativo(q, ultima);
     
     const chatHistory = document.getElementById('setunChatHistory');
     if (chatHistory) {
