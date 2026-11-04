@@ -1191,6 +1191,51 @@ function generarResumenExtendidoHistorico(datos) {
 // ============================================
 // 🔬 FALLBACK HISTÓRICO
 // ============================================
+// ═══ FALLBACK ADAPTATIVO (usa densidadEscritura) ═══
+function generarFallbackAdaptativo(titulo, era, hook, datos = {}) {
+    let evaluacion;
+    try {
+        evaluacion = window.SetunCore ? window.SetunCore.evaluarAnalisis(datos) : null;
+    } catch(e) {
+        console.warn("⚠️ evaluarAnalisis falla:", e.message);
+    }
+    
+    const densidad = (evaluacion && window.SetunCore) 
+        ? window.SetunCore.densidadEscritura(evaluacion) 
+        : 11;
+    const probabilidad = (evaluacion && window.SetunCore) 
+        ? window.SetunCore.probabilidadEscribir(evaluacion) 
+        : 0;
+    
+    console.log("📝 Densidad:", densidad, "/11 | Probabilidad:", (probabilidad * 100).toFixed(1) + "%");
+    
+    if (densidad < 4) {
+        return "Resumen de " + titulo + " (" + era + "):\n\n" +
+            hook + "\n\n" +
+            "Estado: " + (evaluacion ? evaluacion.estado : "SIN EVALUAR") + "\n" +
+            "Completitud: " + (evaluacion ? evaluacion.completitud : 0) + "%\n" +
+            "Probabilidad: " + (probabilidad * 100).toFixed(1) + "%\n\n" +
+            "— Análisis mínimo (densidad: " + densidad + "/11)\n\n" +
+            "💡 Para un análisis completo, se necesitan más fuentes, citas y entidades.";
+    }
+    
+    if (densidad < 8) {
+        let parcial = "Análisis parcial de " + titulo + " (" + era + "):\n\n";
+        parcial += "Contexto: " + hook + "\n\n";
+        parcial += "Estado: " + (evaluacion ? evaluacion.estado : "SIN EVALUAR") + "\n";
+        parcial += "Completitud: " + (evaluacion ? evaluacion.completitud : 0) + "%\n";
+        parcial += "Positivos: " + (evaluacion ? evaluacion.sumaPositiva : 0) + "\n";
+        parcial += "Neutros: " + (evaluacion ? evaluacion.sumaNeutra : 0) + "\n";
+        parcial += "Negativos: " + (evaluacion ? evaluacion.sumaNegativa : 0) + "\n\n";
+        parcial += "— Análisis parcial (densidad: " + densidad + "/11)\n\n";
+        parcial += "💡 Añade más fuentes, cronología y entidades para un análisis completo.";
+        return parcial;
+    }
+    
+    console.log("✅ Densidad alta, generando análisis completo");
+    return generarFallbackHistorico(titulo, era, hook, datos);
+}
+
 function generarFallbackHistorico(titulo, era, hook, datos = {}) {
     try {
         const fuentes = datos?.fuentes || {};
@@ -1725,7 +1770,7 @@ return { analisis: textoLimpio, proveedor: resultado.proveedor, contexto20: resu
         
         Diagnostico.log(`🧠 Fallback con ${Object.keys(datos.fuentes).length} fuentes · Agent-Reach G${datos.agentReach.github.length} R${datos.agentReach.reddit.length} W${datos.agentReach.wiki.length}`, 'info');
         
-        const fallback = generarFallbackHistorico(titulo, era, hook, datos);
+        const fallback = generarFallbackAdaptativo(titulo, era, hook, datos);
         return { 
             analisis: fallback, 
             proveedor: 'Fallback 20 fuentes', 
