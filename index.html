@@ -1191,8 +1191,55 @@ function generarResumenExtendidoHistorico(datos) {
 // ============================================
 // 🔬 FALLBACK HISTÓRICO
 // ============================================
+// ═══ EXTRACCIÓN DE INTERNET ═══
+async function extraerDeWikipedia(titulo) {
+    try {
+        const url = 'https://es.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(titulo);
+        const response = await fetch(url, {
+            headers: {
+                'Api-User-Agent': 'Newtral/1.0 (https://github.com/odandoolugan-cmd/Newtral)'
+            }
+        });
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        const data = await response.json();
+        console.log('✅ Wikipedia:', data.title);
+        return {
+            titulo: data.title,
+            resumen: data.extract,
+            descripcion: data.description,
+            url: data.content_urls?.desktop?.page
+        };
+    } catch(e) {
+        console.warn('⚠️ Wikipedia falla:', e.message);
+        return null;
+    }
+}
+
+async function extraerDeAtlasPI(titulo, era) {
+    try {
+        const yearMatch = String(era).match(/(\d{3,4})/);
+        const year = yearMatch ? parseInt(yearMatch[0]) : 0;
+        if (year <= 0) return null;
+        
+        const url = 'https://atlaspi.it/api/snapshot?year=' + year;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        const data = await response.json();
+        
+        console.log('✅ AtlasPI:', year, '→', data.periods?.items?.length || 0, 'entidades');
+        return {
+            year: year,
+            entidades: data.periods?.items || []
+        };
+    } catch(e) {
+        console.warn('⚠️ AtlasPI falla:', e.message);
+        return null;
+    }
+}
+
 // ═══ FALLBACK ADAPTATIVO (usa densidadEscritura) ═══
-function generarFallbackAdaptativo(titulo, era, hook, datos = {}) {
+async function generarFallbackAdaptativo(titulo, era, hook, datos = {}) {
+    // Calcular densidad
     let evaluacion;
     try {
         evaluacion = window.SetunCore ? window.SetunCore.evaluarAnalisis(datos) : null;
@@ -1209,19 +1256,36 @@ function generarFallbackAdaptativo(titulo, era, hook, datos = {}) {
     
     console.log("📝 Densidad:", densidad, "/11 | Probabilidad:", (probabilidad * 100).toFixed(1) + "%");
     
-    if (densidad < 4) {
-        return "Resumen de " + titulo + " (" + era + "):\n\n" +
-            hook + "\n\n" +
-            "Estado: " + (evaluacion ? evaluacion.estado : "SIN EVALUAR") + "\n" +
-            "Completitud: " + (evaluacion ? evaluacion.completitud : 0) + "%\n" +
-            "Probabilidad: " + (probabilidad * 100).toFixed(1) + "%\n\n" +
-            "— Análisis mínimo (densidad: " + densidad + "/11)\n\n" +
-            "💡 Para un análisis completo, se necesitan más fuentes, citas y entidades.";
+    // Densidad alta: análisis completo (sin internet)
+    if (densidad >= 8) {
+        console.log("✅ Densidad alta, generando análisis completo");
+        return generarFallbackHistorico(titulo, era, hook, datos);
     }
     
-    if (densidad < 8) {
+    // Densidad media: análisis parcial + internet
+    if (densidad >= 4) {
+        console.log("📊 Densidad media, extrayendo de internet...");
+        const [wiki, atlas] = await Promise.all([
+            extraerDeWikipedia(titulo),
+            extraerDeAtlasPI(titulo, era)
+        ]);
+        
         let parcial = "Análisis parcial de " + titulo + " (" + era + "):\n\n";
         parcial += "Contexto: " + hook + "\n\n";
+        
+        if (wiki && wiki.resumen) {
+            parcial += "📖 Wikipedia: " + wiki.resumen.substring(0, 800) + "...\n\n";
+            parcial += "🔗 " + wiki.url + "\n\n";
+        }
+        
+        if (atlas && atlas.entidades.length > 0) {
+            parcial += "🌍 AtlasPI (" + atlas.year + "): " + atlas.entidades.length + " entidades históricas\n\n";
+            atlas.entidades.slice(0, 5).forEach(e => {
+                parcial += "  • " + e.name + " (" + e.region + ")\n";
+            });
+            parcial += "\n";
+        }
+        
         parcial += "Estado: " + (evaluacion ? evaluacion.estado : "SIN EVALUAR") + "\n";
         parcial += "Completitud: " + (evaluacion ? evaluacion.completitud : 0) + "%\n";
         parcial += "Positivos: " + (evaluacion ? evaluacion.sumaPositiva : 0) + "\n";
@@ -1229,11 +1293,56 @@ function generarFallbackAdaptativo(titulo, era, hook, datos = {}) {
         parcial += "Negativos: " + (evaluacion ? evaluacion.sumaNegativa : 0) + "\n\n";
         parcial += "— Análisis parcial (densidad: " + densidad + "/11)\n\n";
         parcial += "💡 Añade más fuentes, cronología y entidades para un análisis completo.";
+        
+        // Actualizar panel Setun
+        if (window.SetunCore && evaluacion) {
+            window.SetunCore.historial.push(evaluacion);
+            if (window.SetunCore.historial.length > 50) window.SetunCore.historial.shift();
+            const setunStatus = document.getElementById("setunStatus");
+            const setunTernario = document.getElementById("setunTernario");
+            const setunCount = document.getElementById("setunCount");
+            if (setunStatus) { setunStatus.textContent = "✅ " + evaluacion.estado; setunStatus.style.color = evaluacion.color || "#10b981"; }
+            if (setunTernario) setunTernario.textContent = evaluacion.valorTernario;
+            if (setunCount) setunCount.textContent = window.SetunCore.historial.length;
+        }
+        
         return parcial;
     }
     
-    console.log("✅ Densidad alta, generando análisis completo");
-        // Actualizar panel Setun
+    // Densidad baja: resumen mínimo + internet
+    console.log("📉 Densidad baja, extrayendo de internet...");
+    const [wiki, atlas] = await Promise.all([
+        extraerDeWikipedia(titulo),
+        extraerDeAtlasPI(titulo, era)
+    ]);
+    
+    let resumen = "Resumen de " + titulo + " (" + era + "):\n\n";
+    resumen += hook + "\n\n";
+    
+    if (wiki && wiki.resumen) {
+        resumen += "📖 Wikipedia: " + wiki.resumen.substring(0, 800) + "...\n\n";
+        resumen += "🔗 " + wiki.url + "\n\n";
+    } else {
+        resumen += "📖 Wikipedia: No se encontró información.\n\n";
+    }
+    
+    if (atlas && atlas.entidades.length > 0) {
+        resumen += "🌍 AtlasPI (" + atlas.year + "): " + atlas.entidades.length + " entidades históricas\n\n";
+        atlas.entidades.slice(0, 5).forEach(e => {
+            resumen += "  • " + e.name + " (" + e.region + ")\n";
+        });
+        resumen += "\n";
+    } else {
+        resumen += "🌍 AtlasPI: No se encontraron entidades para " + era + ".\n\n";
+    }
+    
+    resumen += "Estado: " + (evaluacion ? evaluacion.estado : "SIN EVALUAR") + "\n";
+    resumen += "Completitud: " + (evaluacion ? evaluacion.completitud : 0) + "%\n";
+    resumen += "Probabilidad: " + (probabilidad * 100).toFixed(1) + "%\n\n";
+    resumen += "— Análisis mínimo (densidad: " + densidad + "/11)\n\n";
+    resumen += "💡 Para un análisis completo, se necesitan más fuentes, citas y entidades.";
+    
+    // Actualizar panel Setun
     if (window.SetunCore && evaluacion) {
         window.SetunCore.historial.push(evaluacion);
         if (window.SetunCore.historial.length > 50) window.SetunCore.historial.shift();
@@ -1244,20 +1353,8 @@ function generarFallbackAdaptativo(titulo, era, hook, datos = {}) {
         if (setunTernario) setunTernario.textContent = evaluacion.valorTernario;
         if (setunCount) setunCount.textContent = window.SetunCore.historial.length;
     }
-
-        // Actualizar panel Setun
-    if (window.SetunCore && evaluacion) {
-        window.SetunCore.historial.push(evaluacion);
-        if (window.SetunCore.historial.length > 50) window.SetunCore.historial.shift();
-        const setunStatus = document.getElementById("setunStatus");
-        const setunTernario = document.getElementById("setunTernario");
-        const setunCount = document.getElementById("setunCount");
-        if (setunStatus) { setunStatus.textContent = "✅ " + evaluacion.estado; setunStatus.style.color = evaluacion.color || "#10b981"; }
-        if (setunTernario) setunTernario.textContent = evaluacion.valorTernario;
-        if (setunCount) setunCount.textContent = window.SetunCore.historial.length;
-    }
-
-    return generarFallbackHistorico(titulo, era, hook, datos);
+    
+    return resumen;
 }
 
 function generarFallbackHistorico(titulo, era, hook, datos = {}) {
