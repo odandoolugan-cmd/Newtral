@@ -1891,7 +1891,7 @@ return { analisis: textoLimpio, proveedor: resultado.proveedor, contexto20: resu
         
         Diagnostico.log(`🧠 Fallback con ${Object.keys(datos.fuentes).length} fuentes · Agent-Reach G${datos.agentReach.github.length} R${datos.agentReach.reddit.length} W${datos.agentReach.wiki.length}`, 'info');
         
-        const fallback = generarFallbackAdaptativo(titulo, era, hook, datos);
+        const fallback = await generarFallbackAdaptativo(titulo, era, hook, datos);
         return { 
             analisis: fallback, 
             proveedor: 'Fallback 20 fuentes', 
