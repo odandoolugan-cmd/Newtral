@@ -1667,10 +1667,10 @@ if (window.SetunCore) {
     
     // ═══ EVALUAR CON SETUN (binario 10M o masivo 1M) ═══
     const datosEvaluacion = {
-        fuentesActivas: _fuentesArr.length,
-        fuentesExitosas: _fuentesArr.length,
-        eventosCronologia: _cronologiaLimpia.length,
-        entidades: _figuras.length,
+        fuentesActivas: (window._fuentesArr || []).length,
+        fuentesExitosas: (window._fuentesArr || []).length,
+        eventosCronologia: 0,
+        entidades: (window._figuras || []).length,
         citas: citas,
         rangoTemporal: rangoTemporal,
         totalReferencias: _totalFuentes,
@@ -1810,10 +1810,10 @@ if (window.SetunCore) {
     const agentReachTotal = (resultadosAgentReach?.github?.length || 0) + (resultadosAgentReach?.reddit?.length || 0) + (resultadosAgentReach?.wiki?.length || 0);
     
     const evaluacionSetun = window.SetunCore.evaluarAnalisis({
-        fuentesActivas: fuentesArr.length,
-        fuentesExitosas: fuentesArr.length,
+        fuentesActivas: (window._fuentesArr || []).length,
+        fuentesExitosas: (window._fuentesArr || []).length,
         eventosCronologia: 0, // No hay cronología en flujo IA directo
-        entidades: _figuras.length,
+        entidades: (window._figuras || []).length,
         citas: citas,
         rangoTemporal: rangoTemporal,
         totalReferencias: totalFuentes,
