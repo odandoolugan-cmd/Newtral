@@ -1233,6 +1233,30 @@ function generarFallbackAdaptativo(titulo, era, hook, datos = {}) {
     }
     
     console.log("✅ Densidad alta, generando análisis completo");
+        // Actualizar panel Setun
+    if (window.SetunCore && evaluacion) {
+        window.SetunCore.historial.push(evaluacion);
+        if (window.SetunCore.historial.length > 50) window.SetunCore.historial.shift();
+        const setunStatus = document.getElementById("setunStatus");
+        const setunTernario = document.getElementById("setunTernario");
+        const setunCount = document.getElementById("setunCount");
+        if (setunStatus) { setunStatus.textContent = "✅ " + evaluacion.estado; setunStatus.style.color = evaluacion.color || "#10b981"; }
+        if (setunTernario) setunTernario.textContent = evaluacion.valorTernario;
+        if (setunCount) setunCount.textContent = window.SetunCore.historial.length;
+    }
+
+        // Actualizar panel Setun
+    if (window.SetunCore && evaluacion) {
+        window.SetunCore.historial.push(evaluacion);
+        if (window.SetunCore.historial.length > 50) window.SetunCore.historial.shift();
+        const setunStatus = document.getElementById("setunStatus");
+        const setunTernario = document.getElementById("setunTernario");
+        const setunCount = document.getElementById("setunCount");
+        if (setunStatus) { setunStatus.textContent = "✅ " + evaluacion.estado; setunStatus.style.color = evaluacion.color || "#10b981"; }
+        if (setunTernario) setunTernario.textContent = evaluacion.valorTernario;
+        if (setunCount) setunCount.textContent = window.SetunCore.historial.length;
+    }
+
     return generarFallbackHistorico(titulo, era, hook, datos);
 }
 
