@@ -1194,21 +1194,38 @@ function generarResumenExtendidoHistorico(datos) {
 // ═══ EXTRACCIÓN DE INTERNET ═══
 async function extraerDeWikipedia(titulo) {
     try {
+        // 1. Intentar con el título exacto
         const url = 'https://es.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(titulo);
         const response = await fetch(url, {
-            headers: {
-                'Api-User-Agent': 'Newtral/1.0 (https://github.com/odandoolugan-cmd/Newtral)'
-            }
+            headers: { 'Api-User-Agent': 'Newtral/1.0 (https://github.com/odandoolugan-cmd/Newtral)' }
         });
-        if (!response.ok) throw new Error('HTTP ' + response.status);
-        const data = await response.json();
-        console.log('✅ Wikipedia:', data.title);
-        return {
-            titulo: data.title,
-            resumen: data.extract,
-            descripcion: data.description,
-            url: data.content_urls?.desktop?.page
-        };
+        
+        if (response.ok) {
+            const data = await response.json();
+            if (data.extract && data.extract.length > 50) {
+                console.log('✅ Wikipedia (exacto):', data.title);
+                return { titulo: data.title, resumen: data.extract, url: data.content_urls?.desktop?.page };
+            }
+        }
+        
+        // 2. Si falla, buscar con opensearch
+        const searchUrl = 'https://es.wikipedia.org/w/api.php?action=opensearch&search=' + encodeURIComponent(titulo) + '&limit=1&format=json&origin=*';
+        const searchResponse = await fetch(searchUrl);
+        const searchData = await searchResponse.json();
+        
+        if (searchData[1] && searchData[1].length > 0) {
+            const mejorTitulo = searchData[1][0];
+            console.log('✅ Wikipedia (búsqueda):', mejorTitulo);
+            const url2 = 'https://es.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(mejorTitulo);
+            const response2 = await fetch(url2, { headers: { 'Api-User-Agent': 'Newtral/1.0' } });
+            if (response2.ok) {
+                const data2 = await response2.json();
+                return { titulo: data2.title, resumen: data2.extract, url: data2.content_urls?.desktop?.page };
+            }
+        }
+        
+        console.warn('⚠️ Wikipedia: sin resultados para', titulo);
+        return null;
     } catch(e) {
         console.warn('⚠️ Wikipedia falla:', e.message);
         return null;
@@ -1217,9 +1234,23 @@ async function extraerDeWikipedia(titulo) {
 
 async function extraerDeAtlasPI(titulo, era) {
     try {
-        const yearMatch = String(era).match(/(\d{3,4})/);
-        const year = yearMatch ? parseInt(yearMatch[0]) : 0;
-        if (year <= 0) return null;
+        let year = 0;
+        const eraStr = String(era);
+        const matchAC = eraStr.match(/(\d{1,4})\s*(a\.?\s*c\.?|AC|BCE|BC)/i);
+        const matchDC = eraStr.match(/(\d{1,4})\s*(d\.?\s*c\.?|DC|CE)/i);
+        
+        if (matchAC) {
+            year = -parseInt(matchAC[1]);
+        } else if (matchDC) {
+            year = parseInt(matchDC[1]);
+        } else {
+            const matchAny = eraStr.match(/(\d{1,4})/);
+            year = matchAny ? parseInt(matchAny[1]) : 0;
+        }
+        
+        if (year === 0) return null;
+        
+        console.log('🌍 AtlasPI buscando año:', year);
         
         const url = 'https://atlaspi.it/api/snapshot?year=' + year;
         const response = await fetch(url);
@@ -1227,10 +1258,7 @@ async function extraerDeAtlasPI(titulo, era) {
         const data = await response.json();
         
         console.log('✅ AtlasPI:', year, '→', data.periods?.items?.length || 0, 'entidades');
-        return {
-            year: year,
-            entidades: data.periods?.items || []
-        };
+        return { year: year, entidades: data.periods?.items || [] };
     } catch(e) {
         console.warn('⚠️ AtlasPI falla:', e.message);
         return null;
