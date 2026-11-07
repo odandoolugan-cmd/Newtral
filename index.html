@@ -1,6 +1,7 @@
 
 <html lang="es">
 <head>
+<script src="https://unpkg.com/compromise@14.14.0/builds/compromise.min.js"></script>
 <script src="setun_core.js?v=3"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
@@ -1265,6 +1266,79 @@ async function extraerDeAtlasPI(titulo, era) {
     }
 }
 
+// ═══ SETUN NLP (compromise) ═══
+window.SetunNLP = {
+    nlp: null,
+    init: function() {
+        if (typeof window.nlp !== "undefined") {
+            this.nlp = window.nlp;
+            console.log("✅ compromise cargado");
+            return true;
+        }
+        console.warn("⚠️ compromise no disponible");
+        return false;
+    },
+    
+    extraerPersonas: function(texto) {
+        if (!this.nlp) return [];
+        try {
+            const doc = this.nlp(texto);
+            return doc.people().out("array").slice(0, 20);
+        } catch(e) { return []; }
+    },
+    
+    extraerLugares: function(texto) {
+        if (!this.nlp) return [];
+        try {
+            const doc = this.nlp(texto);
+            return doc.places().out("array").slice(0, 20);
+        } catch(e) { return []; }
+    },
+    
+    extraerOrganizaciones: function(texto) {
+        if (!this.nlp) return [];
+        try {
+            const doc = this.nlp(texto);
+            return doc.organizations().out("array").slice(0, 20);
+        } catch(e) { return []; }
+    },
+    
+    extraerFechas: function(texto) {
+        if (!this.nlp) return [];
+        try {
+            const doc = this.nlp(texto);
+            return doc.dates().out("array").slice(0, 20);
+        } catch(e) { return []; }
+    },
+    
+    extraerVerbos: function(texto) {
+        if (!this.nlp) return [];
+        try {
+            const doc = this.nlp(texto);
+            return doc.verbs().out("array").slice(0, 20);
+        } catch(e) { return []; }
+    },
+    
+    extraerSustantivos: function(texto) {
+        if (!this.nlp) return [];
+        try {
+            const doc = this.nlp(texto);
+            return doc.nouns().out("array").slice(0, 20);
+        } catch(e) { return []; }
+    },
+    
+    extraerTodo: function(texto) {
+        return {
+            personas: this.extraerPersonas(texto),
+            lugares: this.extraerLugares(texto),
+            organizaciones: this.extraerOrganizaciones(texto),
+            fechas: this.extraerFechas(texto),
+            verbos: this.extraerVerbos(texto),
+            sustantivos: this.extraerSustantivos(texto)
+        };
+    }
+};
+
 // ═══ FALLBACK COMPLETO (Rust + Wikipedia + AtlasPI + 11 secciones) ═══
 async function generarFallbackCompleto(titulo, era, hook, datos = {}) {
     console.log('🔬 Fallback completo con Rust + Wikipedia + AtlasPI');
@@ -1289,6 +1363,16 @@ async function generarFallbackCompleto(titulo, era, hook, datos = {}) {
             .flatMap(([_, f]) => f.data || [])
             .map(d => (d.titulo || '') + ' ' + (d.resumen || ''))
             .join(' ');
+        
+        // Usar SetunNLP (compromise) para extraer entidades
+        if (window.SetunNLP) {
+            const nlpData = window.SetunNLP.extraerTodo(textoFuentes);
+            window._nlpPersonas = nlpData.personas;
+            window._nlpLugares = nlpData.lugares;
+            window._nlpOrganizaciones = nlpData.organizaciones;
+            window._nlpFechas = nlpData.fechas;
+            console.log("✅ NLP: " + nlpData.personas.length + " personas, " + nlpData.lugares.length + " lugares, " + nlpData.organizaciones.length + " organizaciones, " + nlpData.fechas.length + " fechas");
+        }
         
         if (rustWASM && rustWASM.cargado && textoFuentes) {
             entidadesRust = rustWASM.extraerEntidades(textoFuentes)?.entidades || [];
