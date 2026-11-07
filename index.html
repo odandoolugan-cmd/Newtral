@@ -1265,6 +1265,257 @@ async function extraerDeAtlasPI(titulo, era) {
     }
 }
 
+// ═══ FALLBACK COMPLETO (Rust + Wikipedia + AtlasPI + 11 secciones) ═══
+async function generarFallbackCompleto(titulo, era, hook, datos = {}) {
+    console.log('🔬 Fallback completo con Rust + Wikipedia + AtlasPI');
+    
+    // 1. Extraer datos de las 20 fuentes
+    const fuentes = datos.fuentes || {};
+    const agentReach = datos.agentReach || {};
+    const fuentesArr = Object.entries(fuentes).filter(([_, f]) => f && f.count > 0);
+    const totalFuentes = fuentesArr.reduce((sum, [_, f]) => sum + f.count, 0);
+    const totalAgent = (agentReach.github?.length || 0) + (agentReach.reddit?.length || 0) + (agentReach.wiki?.length || 0);
+    
+    // 2. Extraer entidades con Rust/WASM
+    let entidadesRust = [];
+    let citasRust = 0;
+    let palabrasRust = 0;
+    let tonoRust = 'Equilibrado';
+    let cronologiaRust = [];
+    
+    try {
+        // Concatenar todo el texto de las fuentes
+        const textoFuentes = fuentesArr
+            .flatMap(([_, f]) => f.data || [])
+            .map(d => (d.titulo || '') + ' ' + (d.resumen || ''))
+            .join(' ');
+        
+        if (rustWASM && rustWASM.cargado && textoFuentes) {
+            entidadesRust = rustWASM.extraerEntidades(textoFuentes)?.entidades || [];
+            citasRust = rustWASM.contarCitasAPA(textoFuentes)?.total || 0;
+            palabrasRust = rustWASM.contarPalabras(textoFuentes)?.palabras || 0;
+            tonoRust = rustWASM.analizarSentimiento(textoFuentes) || 'Equilibrado';
+            console.log('✅ Rust: ' + entidadesRust.length + ' entidades, ' + palabrasRust + ' palabras, tono: ' + tonoRust);
+        }
+    } catch(e) {
+        console.warn('⚠️ Rust falla:', e.message);
+    }
+    
+    // 3. Buscar en Wikipedia
+    let wiki = null;
+    try {
+        wiki = await extraerDeWikipedia(titulo);
+        if (wiki && wiki.resumen) {
+            console.log('✅ Wikipedia: ' + wiki.resumen.length + ' chars');
+        }
+    } catch(e) {
+        console.warn('⚠️ Wikipedia falla:', e.message);
+    }
+    
+    // 4. Buscar en AtlasPI
+    let atlas = null;
+    try {
+        atlas = await extraerDeAtlasPI(titulo, era);
+        if (atlas && atlas.entidades.length > 0) {
+            console.log('✅ AtlasPI: ' + atlas.entidades.length + ' entidades');
+        }
+    } catch(e) {
+        console.warn('⚠️ AtlasPI falla:', e.message);
+    }
+    
+    // 5. Extraer cronología
+    const cronologia = [];
+    ['Wikidata Timeline', 'Wikidata', 'Internet Archive', 'DBpedia', 'Gutenberg'].forEach(fuente => {
+        const items = fuentes[fuente]?.data || [];
+        items.forEach(item => {
+            if (item.year && item.year !== 's.f.') {
+                const match = String(item.year).match(/\d{3,4}/);
+                if (match) {
+                    const yearNum = parseInt(match[0]);
+                    if (yearNum > 0 && yearNum < 2100) {
+                        cronologia.push({ year: match[0], yearNum, titulo: item.titulo, fuente });
+                    }
+                }
+            }
+        });
+    });
+    cronologia.sort((a, b) => a.yearNum - b.yearNum);
+    const cronologiaLimpia = cronologia.slice(0, 15);
+    
+    // 6. Calcular rango temporal
+    let rangoTemporal = 0;
+    if (cronologiaLimpia.length > 1) {
+        const años = cronologiaLimpia.map(c => c.yearNum).filter(y => y > 0);
+        if (años.length > 1) {
+            rangoTemporal = Math.max(...años) - Math.min(...años);
+        }
+    }
+    
+    // 7. Construir análisis de 11 secciones
+    let analisis = '';
+    
+    // SECCIÓN 1: Contexto Histórico
+    analisis += 'Contexto Histórico:\n\n';
+    analisis += titulo + ' (' + era + ') representa un momento crucial en la historia universal. ' + hook + '\n\n';
+    
+    if (wiki && wiki.resumen) {
+        analisis += '📖 Según Wikipedia: ' + wiki.resumen.substring(0, 800) + '...\n';
+        analisis += '🔗 ' + wiki.url + '\n\n';
+    }
+    
+    if (atlas && atlas.entidades.length > 0) {
+        analisis += '🌍 Según AtlasPI (' + atlas.year + '): ' + atlas.entidades.length + ' entidades históricas\n';
+        atlas.entidades.slice(0, 5).forEach(e => {
+            analisis += '  • ' + e.name + ' (' + e.region + ')\n';
+        });
+        analisis += '\n';
+    }
+    
+    analisis += 'El análisis debe abordar múltiples dimensiones. En el plano político, ' + titulo + ' revela tensiones entre el poder establecido y las fuerzas de cambio. En el ámbito económico, expone contradicciones de un sistema que priorizaba ciertos intereses. En lo social, evidencia fracturas y desigualdades. Y en lo cultural, muestra cómo el conocimiento, la memoria y la identidad se convirtieron en campos de batalla.\n\n';
+    
+    // SECCIÓN 2: Cronología
+    if (cronologiaLimpia.length > 0) {
+        analisis += 'Cronología Detallada (' + cronologiaLimpia.length + ' eventos):\n\n';
+        cronologiaLimpia.forEach((c, i) => {
+            analisis += (i + 1) + '. ' + c.year + ': ' + c.titulo + ' [Fuente: ' + c.fuente + ']\n';
+        });
+        analisis += '\n';
+    }
+    
+    // SECCIÓN 3: Figuras y Entidades
+    if (entidadesRust.length > 0) {
+        analisis += 'Figuras y Entidades (' + entidadesRust.length + ' identificadas):\n\n';
+        entidadesRust.slice(0, 15).forEach(e => {
+            analisis += '• ' + e + '\n';
+        });
+        analisis += '\nEl estudio prosopográfico de estas entidades permite reconstruir las redes de poder, influencia y resistencia que operaban en ' + era + '.\n\n';
+    }
+    
+    // SECCIÓN 4: Citas y Referencias
+    const wikiquoteItems = fuentes['Wikiquote']?.data || [];
+    if (wikiquoteItems.length > 0) {
+        analisis += 'Citas y Referencias Textuales:\n\n';
+        wikiquoteItems.slice(0, 3).forEach(c => {
+            if (c.resumen) {
+                analisis += '💭 "' + c.resumen.substring(0, 250) + '" — ' + c.titulo + '\n\n';
+            }
+        });
+    } else if (citasRust > 0) {
+        analisis += 'Citas y Referencias Textuales:\n\n';
+        analisis += '📚 Rust/WASM detectó ' + citasRust + ' citas en las fuentes.\n\n';
+    }
+    
+    // SECCIÓN 5: Hechos Clave
+    analisis += 'Hechos Clave:\n\n';
+    analisis += '1. Origen y detonantes: ' + titulo + ' se desarrolló en ' + era + ', en un contexto de transformaciones profundas.\n\n';
+    analisis += '2. Desarrollo y protagonistas: ' + (entidadesRust.length > 0 ? 'Se identificaron ' + entidadesRust.length + ' entidades clave.' : 'Los protagonistas documentaron los sucesos en fuentes primarias.') + '\n\n';
+    analisis += '3. Consecuencias: Las consecuencias se extendieron por décadas, afectando generaciones enteras.\n\n';
+    analisis += '4. Interpretaciones: La historiografía sobre ' + titulo + ' ha generado intensos debates.\n\n';
+    
+    // SECCIÓN 6: Fuentes Académicas
+    if (fuentesArr.length > 0) {
+        analisis += 'Fuentes Académicas (' + totalFuentes + ' referencias de ' + fuentesArr.length + ' repositorios):\n\n';
+        fuentesArr.forEach(([nombre, f]) => {
+            analisis += '📚 [' + nombre + '] ' + f.count + ' referencias:\n';
+            (f.data || []).slice(0, 3).forEach(r => {
+                analisis += '  • ' + (r.titulo || '').substring(0, 100) + '\n';
+            });
+            analisis += '\n';
+        });
+    }
+    
+    // SECCIÓN 7: Recursos Históricos
+    const recursos = ['Europeana', 'LOC Chronicling', 'Internet Archive', 'Gutenberg'];
+    const recursosPresentes = recursos.filter(r => (fuentes[r]?.data || []).length > 0);
+    if (recursosPresentes.length > 0) {
+        analisis += 'Recursos Históricos Especiales:\n\n';
+        recursosPresentes.forEach(r => {
+            const items = fuentes[r]?.data || [];
+            analisis += '🏛️ ' + r + ' (' + items.length + '):\n';
+            items.slice(0, 3).forEach(item => {
+                analisis += '  • ' + item.titulo + (item.year ? ' (' + item.year + ')' : '') + '\n';
+            });
+            analisis += '\n';
+        });
+    }
+    
+    // SECCIÓN 8: Agent-Reach
+    if (totalAgent > 0) {
+        analisis += 'Datos en Tiempo Real (Agent-Reach · ' + totalAgent + '):\n\n';
+        if (agentReach.wiki?.length > 0) {
+            analisis += '🌐 Wikipedia:\n';
+            agentReach.wiki.slice(0, 5).forEach(r => {
+                analisis += '  • ' + r.titulo + '\n';
+            });
+            analisis += '\n';
+        }
+    }
+    
+    // SECCIÓN 9: Evaluación Setun (con 60 params)
+    let evaluacionSetun = null;
+    try {
+        if (window.SetunCore) {
+            evaluacionSetun = window.SetunCore.evaluarAnalisis({
+                fuentesActivas: fuentesArr.length,
+                fuentesExitosas: fuentesArr.length,
+                eventosCronologia: cronologiaLimpia.length,
+                entidades: entidadesRust.length,
+                citas: citasRust,
+                rangoTemporal: rangoTemporal,
+                totalReferencias: totalFuentes,
+                palabras: palabrasRust,
+                tono: tonoRust,
+                agentReach: totalAgent,
+                fuentesRecientes: 0
+            });
+            console.log('✅ Setun: ' + evaluacionSetun.estado);
+        }
+    } catch(e) {
+        console.warn('⚠️ Setun falla:', e.message);
+    }
+    
+    if (evaluacionSetun) {
+        analisis += '═══════════════════════════════════════\n';
+        analisis += '🧬 EVALUACIÓN SETUN 1958 - LÓGICA TERNARIA\n';
+        analisis += '═══════════════════════════════════════\n';
+        analisis += 'Estado: ' + evaluacionSetun.estado + '\n';
+        analisis += 'Completitud: ' + evaluacionSetun.completitud + '%\n';
+        analisis += 'Confianza: ' + evaluacionSetun.nivelConfianza + '\n';
+        analisis += 'Positivos: ' + evaluacionSetun.sumaPositiva + ' | Neutros: ' + evaluacionSetun.sumaNeutra + ' | Negativos: ' + evaluacionSetun.sumaNegativa + '\n';
+        analisis += '───────────────────────────────────────\n';
+        analisis += 'Parámetros evaluados:\n';
+        evaluacionSetun.parametros.slice(0, 10).forEach(p => {
+            const flecha = p.ternario === 1 ? '▲' : (p.ternario === -1 ? '▼' : '●');
+            analisis += '  ' + flecha + ' ' + p.nombre + ': ' + p.valor + ' → ' + p.ternario + '\n';
+        });
+        analisis += '═══════════════════════════════════════\n\n';
+        
+        // Actualizar panel Setun
+        if (window.SetunCore) {
+            window.SetunCore.historial.push(evaluacionSetun);
+            if (window.SetunCore.historial.length > 50) window.SetunCore.historial.shift();
+            const setunStatus = document.getElementById('setunStatus');
+            const setunTernario = document.getElementById('setunTernario');
+            const setunCount = document.getElementById('setunCount');
+            if (setunStatus) { setunStatus.textContent = '✅ ' + evaluacionSetun.estado; setunStatus.style.color = evaluacionSetun.color || '#10b981'; }
+            if (setunTernario) setunTernario.textContent = evaluacionSetun.valorTernario;
+            if (setunCount) setunCount.textContent = window.SetunCore.historial.length;
+        }
+    }
+    
+    // SECCIÓN 10: Conclusiones
+    analisis += 'Conclusiones:\n\n';
+    analisis += titulo + ' constituye un episodio fundamental para comprender la historia universal. A lo largo de este análisis, hemos examinado sus orígenes, desarrollo, consecuencias e interpretaciones, recurriendo a ' + totalFuentes + ' referencias de ' + fuentesArr.length + ' repositorios académicos.\n\n';
+    analisis += 'La investigación histórica sobre ' + titulo + ' no está cerrada. Nuevas fuentes, nuevas metodologías y nuevas preguntas siguen enriqueciendo nuestra comprensión del evento.\n\n';
+    
+    // SECCIÓN 11: Nota Metodológica
+    analisis += 'Nota Metodológica:\n\n';
+    analisis += 'Este análisis fue generado por Newtral en modo fallback, utilizando exclusivamente las fuentes disponibles en el momento de la consulta. Se usaron Rust/WASM para extraer entidades y analizar sentimiento, Wikipedia para contexto enciclopédico, y AtlasPI para entidades históricas.\n\n';
+    analisis += '— Generado por Newtral · Fallback Completo v3 · ' + new Date().toLocaleString('es-ES');
+    
+    return analisis;
+}
+
 // ═══ FALLBACK ADAPTATIVO (usa densidadEscritura) ═══
 async function generarFallbackAdaptativo(titulo, era, hook, datos = {}) {
     // Calcular densidad
@@ -1382,7 +1633,9 @@ async function generarFallbackAdaptativo(titulo, era, hook, datos = {}) {
         if (setunCount) setunCount.textContent = window.SetunCore.historial.length;
     }
     
-    return resumen;
+        // Usar fallback completo con Rust + Wikipedia + AtlasPI
+    console.log("🚀 Usando generarFallbackCompleto...");
+    return await generarFallbackCompleto(titulo, era, hook, datos);
 }
 
 function generarFallbackHistorico(titulo, era, hook, datos = {}) {
