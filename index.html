@@ -1,7 +1,8 @@
 
 <html lang="es">
 <head>
-<script src="https://cdn.jsdelivr.net/npm/compromise@14.14.0/builds/compromise.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/compromise@14.14.0/builds/compromise.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/compromise-dates@3.10.0/builds/compromise-dates.min.js"></script>
 <script src="setun_core.js?v=3"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
@@ -198,6 +199,11 @@
         
         @media (max-width: 700px) { .normal-mode { padding: 0.5rem; } .case-grid { grid-template-columns: 1fr; } .widget-container { grid-template-columns: 1fr; } .connector-metrics { grid-template-columns: 1fr 1fr; } h1 { font-size: 1.4rem; } .stats { gap: 0.4rem; } .stat { padding: 0.3rem 0.8rem; } .stat-num { font-size: 1rem; } }
     </style>
+
+    <!-- Readability: extrae contenido principal (Mozilla) -->
+    <script src="https://cdn.jsdelivr.net/npm/@mozilla/readability@0.5.0/Readability.js"></script>
+    <!-- Turndown: HTML → Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/turndown@7.2.0/dist/turndown.js"></script>
 </head>
 <body>
 
@@ -1194,41 +1200,69 @@ function generarResumenExtendidoHistorico(datos) {
 // ============================================
 // ═══ EXTRACCIÓN DE INTERNET ═══
 async function extraerDeWikipedia(titulo) {
+    // FIX: Usar API extracts (texto completo) con fallback a summary
     try {
-        // 1. Intentar con el título exacto
-        const url = 'https://es.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(titulo);
-        const response = await fetch(url, {
-            headers: { 'Api-User-Agent': 'Newtral/1.0 (https://github.com/odandoolugan-cmd/Newtral)' }
-        });
-        
-        if (response.ok) {
-            const data = await response.json();
-            if (data.extract && data.extract.length > 50) {
-                console.log('✅ Wikipedia (exacto):', data.title);
-                return { titulo: data.title, resumen: data.extract, url: data.content_urls?.desktop?.page };
+        // 1. Intentar con extracts (texto completo del articulo)
+        const urlExtracts = "https://es.wikipedia.org/w/api.php?action=query&prop=extracts&explaintext=1&format=json&origin=*&titles=" + encodeURIComponent(titulo);
+        const respExtracts = await fetch(urlExtracts);
+        const dataExtracts = await respExtracts.json();
+
+        if (dataExtracts.query && dataExtracts.query.pages) {
+            const pages = dataExtracts.query.pages;
+            const pageId = Object.keys(pages)[0];
+            const page = pages[pageId];
+            if (page && page.extract && page.extract.length > 100) {
+                console.log("OK Wikipedia (extracts):", page.title, "·", page.extract.length, "chars");
+                return {
+                    titulo: page.title,
+                    resumen: page.extract,
+                    url: "https://es.wikipedia.org/wiki/" + encodeURIComponent(page.title)
+                };
             }
         }
-        
-        // 2. Si falla, buscar con opensearch
-        const searchUrl = 'https://es.wikipedia.org/w/api.php?action=opensearch&search=' + encodeURIComponent(titulo) + '&limit=1&format=json&origin=*';
-        const searchResponse = await fetch(searchUrl);
-        const searchData = await searchResponse.json();
-        
+
+        // 2. Fallback: summary (resumen corto)
+        const urlSummary = "https://es.wikipedia.org/api/rest_v1/page/summary/" + encodeURIComponent(titulo);
+        const respSummary = await fetch(urlSummary, {
+            headers: { "Api-User-Agent": "Newtral/1.0" }
+        });
+        if (respSummary.ok) {
+            const dataSummary = await respSummary.json();
+            if (dataSummary.extract && dataSummary.extract.length > 50) {
+                console.log("OK Wikipedia (summary):", dataSummary.title, "·", dataSummary.extract.length, "chars");
+                return {
+                    titulo: dataSummary.title,
+                    resumen: dataSummary.extract,
+                    url: dataSummary.content_urls?.desktop?.page
+                };
+            }
+        }
+
+        // 3. Fallback: opensearch + extracts
+        const searchUrl = "https://es.wikipedia.org/w/api.php?action=opensearch&search=" + encodeURIComponent(titulo) + "&limit=1&format=json&origin=*";
+        const searchResp = await fetch(searchUrl);
+        const searchData = await searchResp.json();
         if (searchData[1] && searchData[1].length > 0) {
             const mejorTitulo = searchData[1][0];
-            console.log('✅ Wikipedia (búsqueda):', mejorTitulo);
-            const url2 = 'https://es.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(mejorTitulo);
-            const response2 = await fetch(url2, { headers: { 'Api-User-Agent': 'Newtral/1.0' } });
-            if (response2.ok) {
-                const data2 = await response2.json();
-                return { titulo: data2.title, resumen: data2.extract, url: data2.content_urls?.desktop?.page };
+            console.log("OK Wikipedia (busqueda):", mejorTitulo);
+            const url2 = "https://es.wikipedia.org/w/api.php?action=query&prop=extracts&explaintext=1&format=json&origin=*&titles=" + encodeURIComponent(mejorTitulo);
+            const resp2 = await fetch(url2);
+            const data2 = await resp2.json();
+            if (data2.query && data2.query.pages) {
+                const p = data2.query.pages[Object.keys(data2.query.pages)[0]];
+                if (p && p.extract) {
+                    return {
+                        titulo: p.title,
+                        resumen: p.extract,
+                        url: "https://es.wikipedia.org/wiki/" + encodeURIComponent(p.title)
+                    };
+                }
             }
         }
-        
-        console.warn('⚠️ Wikipedia: sin resultados para', titulo);
+
         return null;
     } catch(e) {
-        console.warn('⚠️ Wikipedia falla:', e.message);
+        console.warn("WARN Wikipedia falla:", e.message);
         return null;
     }
 }
@@ -1272,6 +1306,17 @@ window.SetunNLP = {
     init: function() {
         if (typeof window.nlp !== "undefined") {
             this.nlp = window.nlp;
+            // Registrar compromise-dates si está disponible
+            if (window.compromiseDates) {
+                try {
+                    this.nlp.plugin(window.compromiseDates);
+                    console.log("✅ compromise-dates registrado");
+                } catch(e) {
+                    console.warn("⚠️ No se pudo registrar compromise-dates:", e.message);
+                }
+            } else {
+                console.warn("⚠️ compromise-dates no disponible");
+            }
             console.log("✅ compromise cargado");
             return true;
         }
@@ -1283,6 +1328,7 @@ window.SetunNLP = {
         if (!this.nlp) return [];
         try {
             const doc = this.nlp(texto);
+            if (window.DEBUG_NLP) console.log("🔬 NLP doc:", doc ? "OK" : "NULL");
             return doc.people().out("array").slice(0, 20);
         } catch(e) { return []; }
     },
@@ -1364,15 +1410,30 @@ async function generarFallbackCompleto(titulo, era, hook, datos = {}) {
             .map(d => (d.titulo || '') + ' ' + (d.resumen || ''))
             .join(' ');
         
-        // Usar SetunNLP (compromise) para extraer entidades
-        if (window.SetunNLP) {
-            const nlpData = window.SetunNLP.extraerTodo(textoFuentes);
-            window._nlpPersonas = nlpData.personas;
-            window._nlpLugares = nlpData.lugares;
-            window._nlpOrganizaciones = nlpData.organizaciones;
-            window._nlpFechas = nlpData.fechas;
-            console.log("✅ NLP: " + nlpData.personas.length + " personas, " + nlpData.lugares.length + " lugares, " + nlpData.organizaciones.length + " organizaciones, " + nlpData.fechas.length + " fechas");
-        }
+        // Usar SetunNLP_UNIVERSAL (multi-idioma: compromise + ES + genérico)
+            let personas = [], lugares = [], organizaciones = [], fechas = [];
+            if (window.SetunNLP_UNIVERSAL) {
+                const uniData = window.SetunNLP_UNIVERSAL.analizar(textoFuentes);
+                personas = uniData.personas || [];
+                lugares = uniData.lugares || [];
+                organizaciones = uniData.organizaciones || [];
+                fechas = uniData.fechas || [];
+                console.log("🌐 Idioma detectado: " + uniData.idioma);
+            } else if (window.SetunNLP) {
+                const nlpData = window.SetunNLP.extraerTodo(textoFuentes);
+                personas = nlpData.personas || [];
+                lugares = nlpData.lugares || [];
+                organizaciones = nlpData.organizaciones || [];
+                fechas = nlpData.fechas || [];
+            }
+            window._nlpPersonas = personas;
+            window._nlpLugares = lugares;
+            window._nlpOrganizaciones = organizaciones;
+            window._nlpFechas = fechas;
+            console.log("✅ NLP: " + personas.length + " personas, " + lugares.length + " lugares, " + organizaciones.length + " organizaciones, " + fechas.length + " fechas");
+            if (personas.length > 0) console.log("   👤 Personas:", personas.slice(0, 5).join(", "));
+            if (lugares.length > 0) console.log("   📍 Lugares:", lugares.slice(0, 5).join(", "));
+            if (fechas.length > 0) console.log("   📅 Fechas:", fechas.slice(0, 5).join(", "));
         
         if (rustWASM && rustWASM.cargado && textoFuentes) {
             entidadesRust = rustWASM.extraerEntidades(textoFuentes)?.entidades || [];
@@ -1466,8 +1527,31 @@ async function generarFallbackCompleto(titulo, era, hook, datos = {}) {
         analisis += '\n';
     }
     
-    // SECCIÓN 3: Figuras y Entidades
-    if (entidadesRust.length > 0) {
+    // FIX USAR NLP EN ANÁLISIS: usar personas/lugares del NLP (limpio)
+    const figurasNLP = (window._nlpPersonas || []).slice(0, 10);
+    const lugaresNLP = (window._nlpLugares || []).slice(0, 10);
+    const fechasNLP = (window._nlpFechas || []).slice(0, 10);
+    const totalFiguras = figurasNLP.length + lugaresNLP.length + fechasNLP.length;
+
+    if (totalFiguras > 0) {
+        analisis += 'Figuras y Entidades (' + totalFiguras + ' identificadas):\n\n';
+        if (figurasNLP.length > 0) {
+            analisis += '👤 Personas:\n';
+            figurasNLP.forEach(e => { analisis += '  • ' + e + '\n'; });
+            analisis += '\n';
+        }
+        if (lugaresNLP.length > 0) {
+            analisis += '📍 Lugares:\n';
+            lugaresNLP.forEach(e => { analisis += '  • ' + e + '\n'; });
+            analisis += '\n';
+        }
+        if (fechasNLP.length > 0) {
+            analisis += '📅 Fechas:\n';
+            fechasNLP.forEach(e => { analisis += '  • ' + e + '\n'; });
+            analisis += '\n';
+        }
+        analisis += 'El estudio prosopográfico de estas entidades permite reconstruir las redes de poder, influencia y resistencia que operaban en ' + era + '.\n\n';
+    } else if (entidadesRust.length > 0) {
         analisis += 'Figuras y Entidades (' + entidadesRust.length + ' identificadas):\n\n';
         entidadesRust.slice(0, 15).forEach(e => {
             analisis += '• ' + e + '\n';
@@ -1489,12 +1573,46 @@ async function generarFallbackCompleto(titulo, era, hook, datos = {}) {
         analisis += '📚 Rust/WASM detectó ' + citasRust + ' citas en las fuentes.\n\n';
     }
     
-    // SECCIÓN 5: Hechos Clave
-    analisis += 'Hechos Clave:\n\n';
-    analisis += '1. Origen y detonantes: ' + titulo + ' se desarrolló en ' + era + ', en un contexto de transformaciones profundas.\n\n';
-    analisis += '2. Desarrollo y protagonistas: ' + (entidadesRust.length > 0 ? 'Se identificaron ' + entidadesRust.length + ' entidades clave.' : 'Los protagonistas documentaron los sucesos en fuentes primarias.') + '\n\n';
-    analisis += '3. Consecuencias: Las consecuencias se extendieron por décadas, afectando generaciones enteras.\n\n';
-    analisis += '4. Interpretaciones: La historiografía sobre ' + titulo + ' ha generado intensos debates.\n\n';
+    // SECCIÓN 5: Hechos Clave (extraídos de las fuentes)
+    const textoFuentesHechos = (datos.fuentes ? Object.values(datos.fuentes).flatMap(f => f?.data || []).map(d => (d.titulo || '') + ' ' + (d.resumen || '')).join(' ') : '') + ' ' + (wiki?.resumen || '');
+    
+    if (window.SetunHechos) {
+        const hechosData = window.SetunHechos.analizar(textoFuentesHechos);
+        
+        if (hechosData.hechos.length > 0) {
+            analisis += 'Hechos Clave (' + hechosData.hechos.length + ' extraídos):\n\n';
+            hechosData.hechos.slice(0, 6).forEach((h, i) => {
+                analisis += (i + 1) + '. ' + h + '\n';
+            });
+            analisis += '\n';
+        } else {
+            analisis += 'Hechos Clave:\n\n';
+            analisis += '1. Origen y detonantes: ' + titulo + ' se desarrolló en ' + era + '.\n';
+            analisis += '2. Desarrollo y protagonistas: Se identificaron ' + (entidadesRust.length || 0) + ' entidades clave.\n';
+            analisis += '3. Consecuencias: Las consecuencias se extendieron por décadas.\n\n';
+        }
+        
+        if (hechosData.consecuencias.length > 0) {
+            analisis += 'Consecuencias (' + hechosData.consecuencias.length + '):\n\n';
+            hechosData.consecuencias.slice(0, 4).forEach(c => {
+                analisis += '• ' + c + '\n';
+            });
+            analisis += '\n';
+        }
+        
+        if (hechosData.lecciones.length > 0) {
+            analisis += 'Lecciones (' + hechosData.lecciones.length + '):\n\n';
+            hechosData.lecciones.slice(0, 4).forEach(l => {
+                analisis += '• ' + l + '\n';
+            });
+            analisis += '\n';
+        }
+    } else {
+        analisis += 'Hechos Clave:\n\n';
+        analisis += '1. Origen y detonantes: ' + titulo + ' se desarrolló en ' + era + '.\n';
+        analisis += '2. Desarrollo y protagonistas: Se identificaron ' + (entidadesRust.length || 0) + ' entidades clave.\n';
+        analisis += '3. Consecuencias: Las consecuencias se extendieron por décadas.\n\n';
+    }
     
     // SECCIÓN 6: Fuentes Académicas
     if (fuentesArr.length > 0) {
@@ -2715,6 +2833,555 @@ closeVr.addEventListener('click', () => {
     }
     
     console.log('🔗 Handlers expuestos:', expuestos + '/' + handlers.length);
+})();
+</script>
+<div id="debugPanel" style="position:fixed;bottom:0;left:0;right:0;max-height:250px;overflow-y:auto;background:#000;color:#0f0;font-family:monospace;font-size:10px;padding:8px;z-index:99999;display:none;"></div>
+<button id="debugToggle" style="position:fixed;bottom:260px;right:10px;z-index:100000;background:#8b5cf6;color:#fff;border:none;padding:6px 12px;border-radius:6px;font-size:11px;cursor:pointer;">🔍 Debug</button>
+<script>
+(function() {
+    const panel = document.getElementById("debugPanel");
+    const toggle = document.getElementById("debugToggle");
+    let visible = false;
+    
+    toggle.onclick = () => {
+        visible = !visible;
+        panel.style.display = visible ? "block" : "none";
+    };
+    
+    const originalLog = console.log;
+    console.log = function(...args) {
+        originalLog.apply(console, args);
+        if (panel) {
+            panel.innerHTML += args.join(" ") + "<br>";
+            panel.scrollTop = panel.scrollHeight;
+        }
+    };
+    
+    const originalError = console.error;
+    console.error = function(...args) {
+        originalError.apply(console, args);
+        if (panel) {
+            panel.innerHTML += "<span style=\"color:#f00;\">ERR: " + args.join(" ") + "</span><br>";
+            panel.scrollTop = panel.scrollHeight;
+        }
+    };
+    
+    const originalWarn = console.warn;
+    console.warn = function(...args) {
+        originalWarn.apply(console, args);
+        if (panel) {
+            panel.innerHTML += "<span style=\"color:#ff0;\">WARN: " + args.join(" ") + "</span><br>";
+            panel.scrollTop = panel.scrollHeight;
+        }
+    };
+    
+    
+    // ✅ FIX: Inicializar SetunNLP con compromise
+    if (window.SetunNLP && typeof window.SetunNLP.init === "function") {
+        const initResult = window.SetunNLP.init();
+        console.log("🧠 SetunNLP.init(): " + initResult);
+        if (initResult) {
+            console.log("✅ NLP activo con compromise");
+        } else {
+            console.warn("⚠️ NLP no disponible (compromise no cargó)");
+        }
+    } else {
+        console.warn("⚠️ SetunNLP no tiene init()");
+    }
+    
+    
+    // ═══════════════════════════════════════════════════════════
+    // SetunNLP_ES: Reglas para español (complementa compromise)
+    // ═══════════════════════════════════════════════════════════
+    (function() {
+        if (window.SetunNLP_ES) return;
+
+        // Diccionarios
+        const PAISES = ["España", "Francia", "Alemania", "Italia", "Portugal", "Inglaterra", "Reino Unido", "Rusia", "China", "Japón", "India", "Egipto", "Grecia", "Roma", "Turquía", "Bizancio", "Imperio Bizantino", "Imperio Romano", "Imperio Otomano", "Persia", "Mongolia", "América", "Europa", "Asia", "África", "Oceanía", "Estados Unidos", "México", "Argentina", "Brasil", "Colombia", "Perú", "Chile", "Cuba", "Venezuela"];
+
+        const CIUDADES = ["Madrid", "Barcelona", "Sevilla", "Toledo", "Granada", "Córdoba", "Valencia", "Roma", "Atenas", "Constantinopla", "Estambul", "Jerusalén", "Alejandría", "El Cairo", "Bagdad", "Damasco", "París", "Londres", "Berlín", "Moscú", "Pekín", "Kioto", "Tokio", "Delhi", "Tenochtitlán", "Cuzco", "Cartagena", "Cartago", "Tiro", "Sidón", "Babilonia", "Nínive", "Persépolis", "Tebas", "Esparta", "Corinto", "Éfeso", "Antioquía", "Nicea", "Rávena", "Venecia", "Génova", "Florencia", "Milán", "Nápoles", "Viena", "Praga", "Varsovia", "Kiev", "Novgorod"];
+
+        const RIOS_MONTANAS = ["Nilo", "Éufrates", "Tigris", "Danubio", "Rin", "Ródano", "Támesis", "Sena", "Ebro", "Guadalquivir", "Tajo", "Duero", "Río Amarillo", "Yangtsé", "Ganges", "Indo", "Amazonas", "Orinoco", "Paraná", "Misisipi", "Alpes", "Pirineos", "Cárpatos", "Balcanes", "Himalaya", "Andes", "Urales", "Cáucaso", "Apeninos", "Atlas"];
+
+        const ORGANIZACIONES = ["ONU", "UNESCO", "OTAN", "Unión Europea", "Iglesia Católica", "Vaticano", "Cruz Roja", "OMS", "FMI", "Banco Mundial", "OPEP", "Interpol", "NASA", "CERN", "Google", "Microsoft", "Apple", "Amazon", "Meta", "Facebook", "Twitter", "OpenAI", "Universidad de Oxford", "Universidad de Cambridge", "Universidad de Salamanca", "Universidad de Bolonia", "Real Academia Española"];
+
+        const MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+
+        // Regex para fechas
+        const RE_ANIO = /\b(\d{3,4})\s*(a\.?\s*C\.?|d\.?\s*C\.?|AC|DC|a\.C\.|d\.C\.)?\b/g;
+        const RE_SIGLO = /\bsiglo\s+([IVXLCDM]+)\b/gi;
+        const RE_MES_ANIO = new RegExp("\\b(" + MESES.join("|") + ")\\s+(?:de\\s+)?(\\d{4})\\b", "gi");
+        const RE_FECHA_ES = /\b(\d{1,2})\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\s+(?:de\s+)?(\d{3,4})\b/gi;
+
+        // Extraer personas: nombres propios (mayúscula inicial, 2+ palabras)
+        // Excluye lugares conocidos
+        function extraerPersonasES(texto) {
+            const personas = new Set();
+            // Nombres con 2-4 palabras, primera mayúscula, no en listas de lugares
+            const re = /\b([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){1,3})\b/g;
+            let m;
+            while ((m = re.exec(texto)) !== null) {
+                const nombre = m[1].trim();
+                if (nombre.length < 5) continue;
+                if (PAISES.includes(nombre) || CIUDADES.includes(nombre)) continue;
+                if (ORGANIZACIONES.includes(nombre)) continue;
+                if (nombre.split(/\s+/).some(p => PAISES.includes(p) || CIUDADES.includes(p))) continue;
+                personas.add(nombre);
+            }
+            return Array.from(personas);
+        }
+
+        function extraerLugaresES(texto) {
+            const lugares = new Set();
+            for (const p of PAISES) if (texto.includes(p)) lugares.add(p);
+            for (const c of CIUDADES) if (texto.includes(c)) lugares.add(c);
+            for (const r of RIOS_MONTANAS) if (texto.includes(r)) lugares.add(r);
+            return Array.from(lugares);
+        }
+
+        function extraerOrganizacionesES(texto) {
+            const orgs = new Set();
+            for (const o of ORGANIZACIONES) if (texto.includes(o)) orgs.add(o);
+            return Array.from(orgs);
+        }
+
+        function extraerFechasES(texto) {
+            const fechas = new Set();
+            let m;
+            // Años con a.C./d.C.
+            while ((m = RE_ANIO.exec(texto)) !== null) {
+                const anio = m[1];
+                const era = m[2] ? m[2].replace(/\s+/g, "") : "";
+                fechas.add(anio + (era ? " " + era : ""));
+            }
+            // Siglos
+            while ((m = RE_SIGLO.exec(texto)) !== null) {
+                fechas.add("siglo " + m[1].toUpperCase());
+            }
+            // Mes + año
+            while ((m = RE_MES_ANIO.exec(texto)) !== null) {
+                fechas.add(m[1] + " " + m[2]);
+            }
+            // Fecha completa
+            while ((m = RE_FECHA_ES.exec(texto)) !== null) {
+                fechas.add(m[1] + " de " + m[2] + " de " + m[3]);
+            }
+            return Array.from(fechas);
+        }
+
+        window.SetunNLP_ES = {
+            extraerPersonas: extraerPersonasES,
+            extraerLugares: extraerLugaresES,
+            extraerOrganizaciones: extraerOrganizacionesES,
+            extraerFechas: extraerFechasES,
+            analizar: function(texto) {
+                return {
+                    personas: extraerPersonasES(texto),
+                    lugares: extraerLugaresES(texto),
+                    organizaciones: extraerOrganizacionesES(texto),
+                    fechas: extraerFechasES(texto)
+                };
+            }
+        };
+
+        console.log("✅ SetunNLP_ES cargado (reglas español)");
+    })();
+
+    
+    // ═══════════════════════════════════════════════════════════
+    // SetunNLP_UNIVERSAL: NLP multi-idioma (español + inglés + genérico)
+    // ═══════════════════════════════════════════════════════════
+    (function() {
+        if (window.SetunNLP_UNIVERSAL) return;
+
+        // Detección de idioma simple (reglas)
+        function detectarIdioma(texto) {
+            const t = (texto || "").toLowerCase();
+            // Palabras comunes español
+            const es = (t.match(/\b(el|la|los|las|de|del|que|en|un|una|por|para|con|sin|sobre|entre|durante|según|seg.n|también|tambi.n|pero|sino|porque|aunque|mientras|cuando|donde|como)\b/g) || []).length;
+            // Palabras comunes inglés
+            const en = (t.match(/\b(the|of|and|to|in|is|was|were|are|been|being|have|has|had|do|does|did|will|would|could|should|may|might|must|can|this|that|these|those|with|from|by|for|on|at|as|but|or|if|then|than|so|such|into|through|during|before|after|above|below|between|under|over)\b/g) || []).length;
+            if (es > en * 1.2) return "es";
+            if (en > es * 1.2) return "en";
+            return "multi"; // mezcla o desconocido
+        }
+
+        // Reglas genéricas multi-idioma (fechas, números, mayúsculas)
+        const MESES_ES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+        const MESES_EN = ["january","february","march","april","may","june","july","august","september","october","november","december"];
+
+        function extraerFechasUniversal(texto) {
+            const fechas = new Set();
+            let m;
+            // Años con a.C./d.C./BC/AD
+            const reAnio = /\b(\d{3,4})\s*(a\.?\s*C\.?|d\.?\s*C\.?|AC|DC|BC|AD|a\.C\.|d\.C\.|B\.C\.|A\.D\.)?\b/gi;
+            while ((m = reAnio.exec(texto)) !== null) {
+                const anio = parseInt(m[1]);
+                if (anio > 0 && anio < 2100) fechas.add(m[1] + (m[2] ? " " + m[2].replace(/\s+/g, "") : ""));
+            }
+            // Siglos (español e inglés)
+            const reSiglo = /\b(siglo|century)\s+([IVXLCDM]+|\d{1,2})\b/gi;
+            while ((m = reSiglo.exec(texto)) !== null) {
+                fechas.add(m[1] + " " + m[2].toUpperCase());
+            }
+            // Mes + año (español)
+            const reMesES = new RegExp("\\b(" + MESES_ES.join("|") + ")\\s+(?:de\\s+)?(\\d{4})\\b", "gi");
+            while ((m = reMesES.exec(texto)) !== null) {
+                fechas.add(m[1] + " " + m[2]);
+            }
+            // Mes + año (inglés)
+            const reMesEN = new RegExp("\\b(" + MESES_EN.join("|") + ")\\s+(\\d{4})\\b", "gi");
+            while ((m = reMesEN.exec(texto)) !== null) {
+                fechas.add(m[1] + " " + m[2]);
+            }
+            // Fechas tipo "12 de noviembre de 1778" o "November 12, 1778"
+            const reFechaES = /\b(\d{1,2})\s+de\s+([a-záéíóúñ]+)\s+(?:de\s+)?(\d{3,4})\b/gi;
+            while ((m = reFechaES.exec(texto)) !== null) {
+                fechas.add(m[1] + " de " + m[2] + " de " + m[3]);
+            }
+            return Array.from(fechas);
+        }
+
+        // Limpiar entidades (quitar puntuación, espacios extra)
+        function limpiarEntidad(s) {
+            return String(s || "")
+                .replace(/[.,:;!?¿¡"'"'()[\]{}]+$/g, "")
+                .replace(/^[.,:;!?¿¡"'"'()[\]{}]+/g, "")
+                .replace(/\s+/g, " ")
+                .trim();
+        }
+
+        // Filtrar falsos positivos comunes
+        const STOPWORDS = new Set([
+            "el","la","los","las","un","una","unos","unas","de","del","al","a","en","por","para","con","sin","sobre","entre","durante","según","como","que","y","o","pero","sino","porque","aunque","mientras","cuando","donde","este","esta","estos","estas","ese","esa","esos","esas","aquel","aquella","aquellos","aquellas","mi","tu","su","nuestro","vuestro","su","the","a","an","of","and","or","but","in","on","at","to","from","by","for","with","without","about","between","during","after","before","above","below","under","over","this","that","these","those","my","your","his","her","its","our","their"
+        ]);
+
+        function filtrarEntidades(arr) {
+            const seen = new Set();
+            const out = [];
+            for (const item of (arr || [])) {
+                const limpio = limpiarEntidad(item);
+                if (!limpio) continue;
+                if (limpio.length < 2) continue;
+                if (STOPWORDS.has(limpio.toLowerCase())) continue;
+                const key = limpio.toLowerCase();
+                if (seen.has(key)) continue;
+                seen.add(key);
+                out.push(limpio);
+            }
+            return out.slice(0, 30);
+        }
+
+        // Analizar texto multilingüe
+        function analizar(texto) {
+            const idioma = detectarIdioma(texto);
+            let personas = [], lugares = [], organizaciones = [], fechas = [];
+
+            // 1. Siempre usar compromise (inglés, pero extrae nombres propios)
+            if (window.SetunNLP && window.SetunNLP.nlp) {
+                try {
+                    const nlpData = window.SetunNLP.extraerTodo(texto);
+                    personas = personas.concat(nlpData.personas || []);
+                    lugares = lugares.concat(nlpData.lugares || []);
+                    organizaciones = organizaciones.concat(nlpData.organizaciones || []);
+                    fechas = fechas.concat(nlpData.fechas || []);
+                } catch(e) {}
+            }
+
+            // 2. Si es español o multi, usar SetunNLP_ES
+            if ((idioma === "es" || idioma === "multi") && window.SetunNLP_ES) {
+                try {
+                    const esData = window.SetunNLP_ES.analizar(texto);
+                    personas = personas.concat(esData.personas || []);
+                    lugares = lugares.concat(esData.lugares || []);
+                    organizaciones = organizaciones.concat(esData.organizaciones || []);
+                    fechas = fechas.concat(esData.fechas || []);
+                } catch(e) {}
+            }
+
+            // 3. Reglas genéricas (fechas, siempre)
+            try {
+                fechas = fechas.concat(extraerFechasUniversal(texto));
+            } catch(e) {}
+
+            // FIX LIMPIEZA NLP: filtrar ruido agresivamente
+            // FIX FILTRO AGRESIVO: solo nombres propios reales
+            function esPersonaValida(s) {
+                if (!s || s.length < 3 || s.length > 40) return false;
+                // Debe empezar con mayúscula (nombre propio)
+                if (!/^[A-ZÁÉÍÓÚÑ]/.test(s)) return false;
+                // No debe terminar con puntuación
+                if (/[.,:;!?¿¡]\s*$/.test(s)) return false;
+                // No debe contener ":" o "." en medio
+                if (/[:.]/.test(s)) return false;
+                // No debe ser una frase con palabras comunes (de, la, el, los, las, y, o, para, que, en, con, por, del, al)
+                if (/\b(de|del|la|el|los|las|y|o|para|que|en|con|por|al)\b/i.test(s)) {
+                    // Excepción: "de" en apellidos compuestos como "García de la Torre"
+                    // Pero si hay 2+ palabras comunes, es frase
+                    const comunesCount = (s.match(/\b(de|del|la|el|los|las|y|o|para|que|en|con|por|al)\b/gi) || []).length;
+                    if (comunesCount >= 2) return false;
+                }
+                // No debe ser palabra común sola
+                const comunes = ["guerra","paz","amor","odio","vida","muerte","tiempo","mundo","historia","siglo","año","día","noche","hombre","mujer","niño","ciudad","país","tierra","agua","fuego","aire","biblioteca","reunión","comisión","directores","consejo","asamblea","grupo","equipo","partido","iglesia","estado","gobierno","imperio","reino","dinastía","cultura","arte","ciencia","literatura","filosofía","religión","educación","medios","clases","género","etnia","migración","urbanización"];
+                if (comunes.includes(s.toLowerCase())) return false;
+                // No debe ser 2+ palabras comunes (indica frase, no nombre)
+                const palabras = s.split(/\s+/);
+                if (palabras.length >= 2) {
+                    const comunesEnFrase = palabras.filter(p => comunes.includes(p.toLowerCase())).length;
+                    if (comunesEnFrase >= 2) return false;
+                }
+                // Si tiene 3+ palabras y contiene "de", es probablemente lugar/organización
+                if (palabras.length >= 3 && /\bde\b/i.test(s)) return false;
+                return true;
+            }
+            function esLugarValido(s) {
+                if (!s || s.length < 3) return false;
+                if (!/^[A-ZÁÉÍÓÚÑ]/.test(s)) return false;
+                const comunes = ["para que","las","los","la","el","un","una","de","del","en","con","por"];
+                if (comunes.includes(s.toLowerCase())) return false;
+                return true;
+            }
+            function esFechaValida(s) {
+                if (!s || s.length < 2) return false;
+                // Debe contener al menos 3 dígitos o "siglo"
+                if (/\d{3,4}/.test(s)) return true;
+                if (/siglo/i.test(s)) return true;
+                if (/a\.?\s*C\.?|d\.?\s*C\.?|AC|DC/i.test(s)) return true;
+                return false;
+            }
+
+            return {
+                idioma: idioma,
+                personas: filtrarEntidades(personas).filter(esPersonaValida),
+                lugares: filtrarEntidades(lugares).filter(esLugarValido),
+                organizaciones: filtrarEntidades(organizaciones).filter(esPersonaValida),
+                fechas: filtrarEntidades(fechas).filter(esFechaValida)
+            };
+        }
+
+        window.SetunNLP_UNIVERSAL = {
+            detectarIdioma: detectarIdioma,
+            analizar: analizar,
+            extraerFechas: extraerFechasUniversal
+        };
+
+        console.log("✅ SetunNLP_UNIVERSAL cargado (multi-idioma)");
+    })();
+
+    
+    // ═══════════════════════════════════════════════════════════
+    // SetunHechos: extraer hechos reales de las fuentes
+    // ═══════════════════════════════════════════════════════════
+    (function() {
+        if (window.SetunHechos) return;
+
+        // Verbos de acción histórica
+        const VERBOS_ACCION = [
+            "ordenó", "ordenó", "decretó", "proclamó", "declaró", "estableció",
+            "fundó", "construyó", "destruyó", "quemó", "saqueó", "conquistó",
+            "invadió", "asesinó", "ejecutó", "encarceló", "exilió", "derrotó",
+            "venció", "firmó", "promulgó", "derogó", "reformó", "cambió",
+            "inició", "comenzó", "terminó", "finalizó", "colapsó", "cayó",
+            "surgió", "nació", "murió", "falleció", "sucedió", "heredó",
+            "reinó", "gobernó", "dirigió", "lideró", "comandó", "organizó"
+        ];
+
+        // Verbos de consecuencia
+        const VERBOS_CONSECUENCIA = [
+            "provocó", "causó", "generó", "produjo", "ocasionó", "desencadenó",
+            "conllevó", "implicó", "significó", "representó", "supuso",
+            "permitió", "facilitó", "dificultó", "impidió", "evitó"
+        ];
+
+        // Extraer oraciones con hechos
+        function extraerHechos(texto, maxHechos = 10) {
+            if (!texto) return [];
+            
+            // Dividir en oraciones
+            const oraciones = texto
+                .replace(/([.!?])\s+/g, "$1|")
+                .split("|")
+                .map(s => s.trim())
+                .filter(s => s.length > 30 && s.length < 300);
+
+            const hechos = [];
+            const seen = new Set();
+
+            for (const oracion of oraciones) {
+                // Debe contener un verbo de acción o consecuencia
+                const tieneVerbo = VERBOS_ACCION.some(v => oracion.toLowerCase().includes(v)) ||
+                                  VERBOS_CONSECUENCIA.some(v => oracion.toLowerCase().includes(v));
+                
+                // Debe contener una fecha o año
+                const tieneFecha = /\b\d{3,4}\s*(a\.?\s*C\.?|d\.?\s*C\.?)?\b/.test(oracion) ||
+                                  /\bsiglo\s+[IVXLCDM]+\b/i.test(oracion);
+                
+                // Debe contener una entidad (mayúscula)
+                const tieneEntidad = /[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+/.test(oracion);
+
+                if (tieneVerbo && (tieneFecha || tieneEntidad)) {
+                    const key = oracion.toLowerCase().substring(0, 50);
+                    if (!seen.has(key)) {
+                        seen.add(key);
+                        hechos.push(oracion);
+                    }
+                }
+
+                if (hechos.length >= maxHechos) break;
+            }
+
+            return hechos;
+        }
+
+        // Extraer consecuencias
+        function extraerConsecuencias(texto) {
+            if (!texto) return [];
+            
+            const oraciones = texto
+                .replace(/([.!?])\s+/g, "$1|")
+                .split("|")
+                .map(s => s.trim())
+                .filter(s => s.length > 30 && s.length < 300);
+
+            const consecuencias = [];
+            const seen = new Set();
+
+            for (const oracion of oraciones) {
+                const tieneConsecuencia = VERBOS_CONSECUENCIA.some(v => oracion.toLowerCase().includes(v)) ||
+                                          /\b(como resultado|por lo tanto|en consecuencia|debido a|a causa de|gracias a)\b/i.test(oracion);
+                
+                if (tieneConsecuencia) {
+                    const key = oracion.toLowerCase().substring(0, 50);
+                    if (!seen.has(key)) {
+                        seen.add(key);
+                        consecuencias.push(oracion);
+                    }
+                }
+
+                if (consecuencias.length >= 5) break;
+            }
+
+            return consecuencias;
+        }
+
+        // Extraer lecciones (oraciones con "lección", "enseñanza", "aprendizaje")
+        function extraerLecciones(texto) {
+            if (!texto) return [];
+            
+            const oraciones = texto
+                .replace(/([.!?])\s+/g, "$1|")
+                .split("|")
+                .map(s => s.trim())
+                .filter(s => s.length > 30 && s.length < 300);
+
+            const lecciones = [];
+            const seen = new Set();
+
+            for (const oracion of oraciones) {
+                const tieneLeccion = /\b(lección|enseñanza|aprendizaje|moraleja|conclusión|reflexión|nos enseña|demuestra que|muestra que|revela que)\b/i.test(oracion);
+                
+                if (tieneLeccion) {
+                    const key = oracion.toLowerCase().substring(0, 50);
+                    if (!seen.has(key)) {
+                        seen.add(key);
+                        lecciones.push(oracion);
+                    }
+                }
+
+                if (lecciones.length >= 5) break;
+            }
+
+            return lecciones;
+        }
+
+        window.SetunHechos = {
+            extraerHechos: extraerHechos,
+            extraerConsecuencias: extraerConsecuencias,
+            extraerLecciones: extraerLecciones,
+            analizar: function(texto) {
+                return {
+                    hechos: extraerHechos(texto),
+                    consecuencias: extraerConsecuencias(texto),
+                    lecciones: extraerLecciones(texto)
+                };
+            }
+        };
+
+        console.log("✅ SetunHechos cargado (extrae hechos reales)");
+    })();
+
+    
+    // ═══════════════════════════════════════════════════════════
+    // SetunScraper: scraping cliente con Readability + Turndown
+    // ═══════════════════════════════════════════════════════════
+    (function() {
+        if (window.SetunScraper) return;
+
+        window.SetunScraper = {
+            async scrape(url, options = {}) {
+                try {
+                    const resp = await fetch(url, {
+                        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Newtral/1.0)' }
+                    });
+                    if (!resp.ok) return null;
+                    const html = await resp.text();
+                    const doc = new DOMParser().parseFromString(html, 'text/html');
+
+                    // Readability (config optimizada para más texto)
+                    let article = null;
+                    if (window.Readability) {
+                        try {
+                            const reader = new Readability(doc, {
+                                charThreshold: 100,
+                                keepClasses: false,
+                                nbTopCandidates: 5,
+                                classesToPreserve: []
+                            });
+                            article = reader.parse();
+                        } catch(e) {}
+                    }
+
+                    // Turndown
+                    let markdown = '';
+                    if (window.TurndownService && article) {
+                        try {
+                            const turndown = new TurndownService({
+                                headingStyle: 'atx',
+                                codeBlockStyle: 'fenced'
+                            });
+                            markdown = turndown.turndown(article.content);
+                        } catch(e) {}
+                    }
+
+                    return {
+                        title: article?.title || doc.title,
+                        textContent: article?.textContent || doc.body?.textContent || '',
+                        markdown: markdown,
+                        length: article?.length || 0,
+                        url: url
+                    };
+                } catch(e) {
+                    console.warn('⚠️ SetunScraper falla:', e.message);
+                    return null;
+                }
+            }
+        };
+
+        console.log("✅ SetunScraper cargado (Readability + Turndown)");
+    })();
+
+    console.log("🔍 Panel de debug activado");
+    
+    // Diagnóstico inicial
+    setTimeout(() => {
+        
+        
+        console.log("=== DIAGNÓSTICO ===");
+        console.log("nlp:", typeof window.nlp);
+        console.log("SetunNLP:", typeof window.SetunNLP);
+        console.log("SetunCore:", typeof window.SetunCore);
+        console.log("generarFallbackCompleto:", typeof window.generarFallbackCompleto);
+    }, 3000);
 })();
 </script>
 </body>
